@@ -40,7 +40,7 @@
 
     shellAliases = {
       # Core Replacements
-      cat = "bat --style=plain";
+      cat = "bat"; # --style=plain?
       grep = "rg";
       find = "fd";
       top = "btop";

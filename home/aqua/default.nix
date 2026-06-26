@@ -10,7 +10,6 @@
     ./apps/zed.nix
     ./apps/firefox.nix
     ./apps/ghostty.nix
-    ./app-folders.nix
     ./cli/packages.nix
     ./cli/fish.nix
     ./cli/fastfetch.nix
@@ -88,7 +87,6 @@
     videos      = "/saved/home/${config.home.username}/Videos";
     projects      = "/saved/home/${config.home.username}/Projects";
   };
-
 
   # Let home-manager manage these
   programs.home-manager.enable = true;

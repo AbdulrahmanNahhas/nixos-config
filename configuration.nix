@@ -8,10 +8,13 @@
 
 {
   imports = [
-	# Razer Blade 14 2025 config
-	inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
-	# Modules
-    ./modules/hardware.nix
+    # Razer Blade 14 (2025) — owns all NVIDIA/AMD hybrid config
+    inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
+
+    # Auto-generated hardware probe (nixos-generate-config)
+    ./hardware-configuration.nix
+
+    # Modules
     ./modules/disko.nix
     ./modules/boot.nix
     ./modules/desktop.nix
@@ -74,11 +77,21 @@
     };
   };
 
-  # ── Hardware toggles ─────────────────────────────────────
+  # ── Hardware toggles ─────────────────────────────────
   nixpkgs.config.allowUnfree = true;
   hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
   hardware.acpilight.enable = true;
+
+  # ── GPU env vars (not covered by nixos-hardware) ────────
+  # Hybrid laptop: AMD iGPU drives the panel, NVIDIA dGPU is for
+  # Prime render-offload (configured by nixos-hardware).
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "radeonsi";  # video decode on the AMD iGPU
+    NVD_BACKEND = "direct";
+    WLR_NO_HARDWARE_CURSORS = "1";
+    __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
+  };
 
   system.stateVersion = "26.05";
 }

@@ -30,14 +30,13 @@ surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
 ```
 configuration.nix        # Top-level system module — imports everything below
 flake.nix                # Inputs: nixpkgs-unstable, home-manager, disko, preservation, nix-flatpak, firefox-gnome-theme
-hardware-configuration.nix # Auto-generated probe output — currently unused (modules/hardware.nix supersedes it)
+hardware-configuration.nix # Auto-generated hardware probe (nixos-generate-config) — used
 home.nix                 # home-manager hook → delegates to home/aqua/
 modules/
   boot.nix               # systemd-boot, kernel params, GPU module preload
   desktop.nix            # GNOME + fonts + Wayland env vars
   disko.nix              # tmpfs / + LUKS2 + btrfs subvolumes @nix @saved @swap
   flatpak.nix            # Declarative Flatpak apps via nix-flatpak
-  hardware.nix           # NVIDIA/AMD hybrid graphics, not-detected.nix, bus IDs
   packages.nix           # System-wide packages (git, curl, …)
   preservation.nix       # /saved = persistent layer; lists everything kept across reboots
   services.nix           # PipeWire, Bluetooth, upower, openssh, sudo
@@ -126,7 +125,8 @@ in the initrd.)
 - `nh.flake = "/etc/nixos"` is set in `configuration.nix`. After install, the
   expected layout is `/etc/nixos` pointing at this repo (e.g.
   `sudo ln -sfn /saved/nixos-config /etc/nixos`).
-- `hardware-configuration.nix` at the repo root is left over from
-  `nixos-generate-config`; the live version lives in `modules/hardware.nix`.
-  The root-level file can be removed once you’ve confirmed nothing references it.
+- `hardware-configuration.nix` (repo root) is the auto-generated probe file from
+  `nixos-generate-config`, imported by `configuration.nix`. All NVIDIA/AMD hybrid
+  graphics quirks live in the `nixos-hardware` Razer Blade 14 module, so the only
+  hand-maintained hardware code here is the GPU env-var block in `configuration.nix`.
 - This config follows `nixpkgs/nixos-unstable` and pins `stateVersion = "26.05"`.

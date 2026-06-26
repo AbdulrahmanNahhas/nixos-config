@@ -1,13 +1,11 @@
-# Firefox — GNOME theme (Master) + addons + search
+# Firefox — GNOME theme + add-ons + search.
 #
-# The Firefox profile (cookies, saved logins, sessions, history) is
-# preserved across reboots by storing the profile path directly on the
-# persistent /saved btrfs subvolume (see `profiles.aqua.path` below).
-# modules/preservation.nix creates a symlink ~/.mozilla → /saved/home/aqua/.mozilla
-# so profiles.ini and the whole Firefox tree lives on persistent storage.
-# No activation hack needed.
+# The profile lives at ~/.mozilla/firefox/aqua (home-manager's Linux
+# configPath is ".mozilla/firefox"; the profile dir defaults to the
+# profile key). The whole ~/.mozilla tree is bind-mounted on /saved by
+# modules/preservation.nix, so history, logins, cookies and sessions
+# survive reboots.
 {
-  # config,
   username,
   inputs,
   ...
@@ -17,29 +15,21 @@
   programs.firefox = {
     enable = true;
 
-    # ── Declarative Add-ons (via Policies) ───────────────
-    policies = {
-      ExtensionSettings = {
-        # uBlock Origin
-        "uBlock0@raymondhill.net" = {
-          install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
-          installation_mode = "force_installed";
-        };
-        # TODO: Add more extensions here by grabbing their IDs from about:support
+    # ── Add-ons (forced via enterprise policies) ──────────
+    policies.ExtensionSettings = {
+      # uBlock Origin
+      "uBlock0@raymondhill.net" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+        installation_mode = "force_installed";
       };
+      # Add more here — grab the extension ID from about:support.
     };
 
     profiles.aqua = {
       isDefault = true;
       name = "${username}";
 
-      # Store profile directly on the persistent volume (/saved) so history,
-      # logins, sessions, and cookies survive the tmpfs root being wiped.
-      # This avoids any timing races between preservation (systemd-tmpfiles)
-      # and home-manager activation competing over a ~/.mozilla symlink.
-      path = "/saved/home/aqua/.mozilla/firefox/aqua";
-
-      # ── Search Engine Settings ────────────────────────
+      # ── Search engines ───────────────────────────────────
       search = {
         force = true;
         default = "ddg";
@@ -49,16 +39,21 @@
             icon = "https://nixos.org/favicon.png";
             definedAliases = [ "@np" ];
           };
-          # Hides clutter search providers
+          # Hide clutter providers.
           "bing".metaData.hidden = true;
           "ebay".metaData.hidden = true;
         };
       };
 
-      # ── Required about:config prefs for the GNOME theme ──
+      # ── about:config prefs ───────────────────────────────
       settings = {
+        # Required for the GNOME theme's userChrome/userContent CSS.
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "svg.context-properties.content.enabled" = true;
+
+        # Force dark UI so the GNOME theme renders dark (Firefox may
+        # otherwise stay light even under a dark GTK theme).
+        "ui.systemUsesDarkTheme" = 1;
 
         "gnomeTheme.hideSingleTab" = false;
         "gnomeTheme.tabsAsHeaderbar" = true;
@@ -68,7 +63,7 @@
         "gnomeTheme.systemIcons" = false;
         "gnomeTheme.bookmarksToolbarUnderTabs" = false;
 
-        # ── Firefox behavior preferences ──────────────────
+        # ── Behaviour ──────────────────────────────────────
         "browser.startup.homepage" = "about:home";
         "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
         "browser.newtabpage.activity-stream.feeds.topsites" = false;
@@ -81,16 +76,15 @@
         "browser.urlbar.trimURLs" = false;
         "browser.download.useDownloadDir" = true;
         "dom.security.https_only_mode" = true;
-        "extensions.autoDisableScopes" = 0; # Essential: Autolocks extensions on without confirmation popups
+        "extensions.autoDisableScopes" = 0; # enable force-installed add-ons without the popup
         "widget.use-xdg-desktop-portal.file-picker" = 1;
       };
 
-      # ── userChrome.css — Dynamic Master Branch via Flakes ─
+      # ── GNOME theme CSS (pulled from the flake input) ────
       userChrome = ''
         @import "${inputs.firefox-gnome-theme}/userChrome.css";
       '';
 
-      # ── userContent.css — Dynamic Master Branch via Flakes ─
       userContent = ''
         @import "${inputs.firefox-gnome-theme}/userContent.css";
       '';

@@ -25,14 +25,14 @@
         { file = "/etc/ssh/ssh_host_ed25519_key";     how = "symlink"; configureParent = true; }
         { file = "/etc/ssh/ssh_host_ed25519_key.pub"; how = "symlink"; configureParent = true; }
 
-        # Preserve the random seed so the entropy pool doesn’t stall on boot.
+        # Preserve the random seed so the entropy pool doesn't stall on boot.
         { file = "/var/lib/systemd/random-seed"; how = "symlink"; inInitrd = true; configureParent = true; }
       ];
 
       directories = [
         { directory = "/var/lib/nixos"; inInitrd = true; }
         "/var/log"
-	"/var/lib/flatpak"
+        "/var/lib/flatpak"
         "/var/lib/bluetooth"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
@@ -54,12 +54,12 @@
           # ── Identity / secrets ───────────────────────────────
           { directory = ".ssh";   mode = "0700"; }
           { directory = ".gnupg"; mode = "0700"; }
-
-          # ── Web browser / sessions ───────────────────────────
-          { directory = ".mozilla"; mode = "0700"; }  # Firefox profile, cookies, saved logins
           { directory = ".local/share/keyrings"; mode = "0700"; }
-            # GNOME Keyring 'login' store — Zed & many apps keep their auth token here.
-            # Without this, Zed logs you out on every reboot.
+            # GNOME Keyring 'login' store — Zed & other apps keep auth tokens here.
+
+          # ── Web browser ───────────────────────────────────────
+          { directory = ".mozilla"; mode = "0700"; }
+            # Firefox profile — history, logins, cookies, sessions, add-on state.
 
           # ── Flatpak application data ─────────────────────────
           ".var"
@@ -74,7 +74,7 @@
 
           # ── Shell history & state ────────────────────────────
           ".config/fish"
-		  ".config/zed"
+          ".config/zed"
           ".local/share/fish"        # fish_history (shell history)
           ".local/state/nix"
           ".config/atuin"
