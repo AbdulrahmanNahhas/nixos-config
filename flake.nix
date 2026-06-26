@@ -1,0 +1,58 @@
+{
+  description = "Shadow - NixOS on Razer Blade 14";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    preservation = {
+      url = "github:nix-community/preservation";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
+
+    firefox-gnome-theme = {
+      url = "github:rafaelmardojai/firefox-gnome-theme";
+      flake = false;
+    };
+  };
+
+  outputs =
+    {
+      # self,
+      nixpkgs,
+      home-manager,
+      nix-flatpak,
+      preservation,
+      ...
+    }@inputs:
+    let
+      system = "x86_64-linux";
+      hostname = "shadow";
+      username = "aqua";
+    in
+    {
+      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = { inherit inputs username; };
+
+        modules = [
+          ./configuration.nix
+          inputs.disko.nixosModules.disko
+          preservation.nixosModules.default
+          home-manager.nixosModules.home-manager
+          nix-flatpak.nixosModules.nix-flatpak
+        ];
+      };
+    };
+}
