@@ -47,7 +47,7 @@
 
       # ── Required about:config prefs for the GNOME theme ──
       settings = {
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
         "svg.context-properties.content.enabled" = true;
 
         "gnomeTheme.hideSingleTab" = false;

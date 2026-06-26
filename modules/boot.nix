@@ -10,33 +10,33 @@
 
   boot.kernelPackages = pkgs.linuxPackages; # Change to Latest
 
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  # boot.initrd.kernelModules = [ "amdgpu" ];
 
   boot.kernelParams = [
-	# Black Screen Problem
-	"module_blacklist=nouveau"
+  	# Black Screen Problem
+  	"modeset module_blacklist=nouveau"
 
-	# Nvidia DRM/KMS
+  	# Nvidia DRM/KMS
     "nvidia_drm.modeset=1"
     "nvidia_drm.fbdev=1"
 
-	# AMD
-	"amdgpu.dc=1"
+  	# AMD
+  	"amdgpu.dc=1"
 
-	# Power
-	"mem_sleep_default=deep"
-	"amd_pstate=active"
+  	# Power
+  	"mem_sleep_default=deep"
+  	"amd_pstate=active"
 
-	# Nvidia runtime D3cold power gate
-	"nvidia.NVreg_DynamicPowerManagement=0x02"
-	# Allow PCIs power maangement to remove power from idle NVIDIA GPU
-	"nvidia.NVreg_EnableGpuFirmware=0"
+  	# Nvidia runtime D3cold power gate
+  	"nvidia.NVreg_DynamicPowerManagement=0x02"
+  	# Allow PCIs power maangement to remove power from idle NVIDIA GPU
+  	"nvidia.NVreg_EnableGpuFirmware=0"
   ];
 
   boot.blacklistedKernelModules = [
   	"nouveau"
-	"nvidiafb"
-	"rivafb"
-	"rivatv"
+  	"nvidiafb"
+  	"rivafb"
+  	"rivatv"
   ];
 }
