@@ -20,7 +20,8 @@
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-
+	nix-hardware.url = "github:NixOS/nixos-hardware/master";
+	
     firefox-gnome-theme = {
       url = "github:rafaelmardojai/firefox-gnome-theme";
       flake = false;
@@ -33,8 +34,9 @@
       nixpkgs,
       home-manager,
       nix-flatpak,
+	  nixos-hardware,
       preservation,
-      ...
+	  ...
     }@inputs:
     let
       system = "x86_64-linux";

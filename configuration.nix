@@ -1,6 +1,6 @@
 {
   # config,
-  # lib,
+  inputs,
   pkgs,
   username,
   ...
@@ -8,6 +8,9 @@
 
 {
   imports = [
+	# Razer Blade 14 2025 config
+	inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
+	# Modules
     ./modules/hardware.nix
     ./modules/disko.nix
     ./modules/boot.nix
@@ -16,7 +19,7 @@
     ./modules/flatpak.nix
     ./modules/services.nix
     ./modules/preservation.nix
-    # ./modules/specialisation.nix
+    # Home
     ./home.nix
   ];
 
@@ -56,15 +59,14 @@
     allowedUDPPortRanges = [ {from = 1714; to = 1764; }];
   };
 
-  # ── Nix / nh ─────────────────────────────────────────────
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  # ── Nix / nh ────────────────────────────────────────────
+  nix.settings = {
+  	experimental-features = [ "nix-command" "flakes" ];
+  	# Allow user to use nix commands and binary caches without sudo
+  	trusted-users = [ "root" "@wheel" ];
+  };
   programs.nh = {
     enable = true;
-    # The flake lives on the persistent /saved subvolume (tmpfs root wipes
-    # /etc on every reboot, so /etc/nixos is not a safe place for it).
     flake = "/saved/nixos-config";
     clean = {
       enable = true;

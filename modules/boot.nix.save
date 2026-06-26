@@ -10,15 +10,15 @@
 
   boot.kernelPackages = pkgs.linuxPackages; # Change to Latest
 
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  # boot.initrd.kernelModules = [ "amdgpu" ]; # Handeled by NixOS-Hardware
 
   boot.kernelParams = [
 	# Black Screen Problem
 	"module_blacklist=nouveau"
 
 	# Nvidia DRM/KMS
-    "nvidia_drm.modeset=1"
-    "nvidia_drm.fbdev=1"
+    	"nvidia_drm.modeset=1"
+    	"nvidia_drm.fbdev=1"
 
 	# AMD
 	"amdgpu.dc=1"
