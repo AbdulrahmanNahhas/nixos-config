@@ -7,12 +7,12 @@
 
 {
   imports = [
-    ./packages.nix
-    ./zed.nix
-    ./firefox.nix
-    ./fish.nix
-    ./ghostty.nix
-    ./fastfetch.nix
+    ./apps/zed.nix
+    ./apps/firefox.nix
+    ./apps/ghostty.nix
+    ./cli/packages.nix
+    ./cli/fish.nix
+    ./cli/fastfetch.nix
     ./gnome-extensions.nix
   ];
 

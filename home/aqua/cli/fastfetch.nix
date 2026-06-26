@@ -5,13 +5,13 @@
 }:
 
 {
-  xdg.configFile."fastfetch/nixos.txt".source = ./nixos.txt;
+  xdg.configFile."fastfetch/fastfetch.txt".source = ./fastfetch.txt;
 
   xdg.configFile."fastfetch/config.jsonc".text = ''
     {
       "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
       "logo": {
-        "source": "~/.config/fastfetch/nixos.txt",
+        "source": "~/.config/fastfetch/cli/fastfetch.txt",
         "type": "file",
         "padding": {
           "top": 0,
