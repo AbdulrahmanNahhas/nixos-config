@@ -10,6 +10,7 @@
     ./apps/zed.nix
     ./apps/firefox.nix
     ./apps/ghostty.nix
+    ./app-folders.nix
     ./cli/packages.nix
     ./cli/fish.nix
     ./cli/fastfetch.nix

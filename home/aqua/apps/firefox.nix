@@ -1,7 +1,11 @@
 # Firefox — GNOME theme (Master) + addons + search
+#
 # The Firefox profile (cookies, saved logins, sessions, history) is
-# preserved across reboots via modules/preservation.nix, which links
-# ~/.mozilla → /saved/home/aqua/.mozilla. No activation hack needed here.
+# preserved across reboots by storing the profile path directly on the
+# persistent /saved btrfs subvolume (see `profiles.aqua.path` below).
+# modules/preservation.nix creates a symlink ~/.mozilla → /saved/home/aqua/.mozilla
+# so profiles.ini and the whole Firefox tree lives on persistent storage.
+# No activation hack needed.
 {
   # config,
   username,
@@ -29,6 +33,12 @@
       isDefault = true;
       name = "${username}";
 
+      # Store profile directly on the persistent volume (/saved) so history,
+      # logins, sessions, and cookies survive the tmpfs root being wiped.
+      # This avoids any timing races between preservation (systemd-tmpfiles)
+      # and home-manager activation competing over a ~/.mozilla symlink.
+      path = "/saved/home/aqua/.mozilla/firefox/aqua";
+
       # ── Search Engine Settings ────────────────────────
       search = {
         force = true;
@@ -47,7 +57,7 @@
 
       # ── Required about:config prefs for the GNOME theme ──
       settings = {
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = false;
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "svg.context-properties.content.enabled" = true;
 
         "gnomeTheme.hideSingleTab" = false;

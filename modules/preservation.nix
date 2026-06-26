@@ -32,7 +32,7 @@
       directories = [
         { directory = "/var/lib/nixos"; inInitrd = true; }
         "/var/log"
-	"var/lib/flatpak"
+	"/var/lib/flatpak"
         "/var/lib/bluetooth"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
@@ -56,7 +56,7 @@
           { directory = ".gnupg"; mode = "0700"; }
 
           # ── Web browser / sessions ───────────────────────────
-          ".mozilla"                  # Firefox profile, cookies, saved logins, addons
+          { directory = ".mozilla"; mode = "0700"; }  # Firefox profile, cookies, saved logins
           { directory = ".local/share/keyrings"; mode = "0700"; }
             # GNOME Keyring 'login' store — Zed & many apps keep their auth token here.
             # Without this, Zed logs you out on every reboot.
@@ -74,10 +74,10 @@
 
           # ── Shell history & state ────────────────────────────
           ".config/fish"
-	  ".config/zed"
+		  ".config/zed"
+		  ".config/dconf"           # GNOME dconf database (app grid layout, settings)
           ".local/share/fish"        # fish_history (shell history)
           ".local/state/nix"
-	  ".local/share/zed"
           ".config/atuin"
           ".local/share/atuin"       # atuin encrypted shell-history DB
 

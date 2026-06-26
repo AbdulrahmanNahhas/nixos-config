@@ -13,6 +13,18 @@ surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
 - 16 GB LPDDR5X RAM
 - ~953 GiB NVMe (single `nvme0n1`)
 
+## Todo List:
+
+- [X] NixOS/nixpkgs/nixos-unstable
+- [X] nix-community/home-manager
+- [X] nix-community/disko
+- [X] gmodena/nix-flatpak
+- [X] rafaelmardojai/firefox-gnome-them
+- [X] nix-community/preservation
+- [X] nix-community/nixos-hardware
+- [ ] nix-community/lanzaboote
+- [ ] nix-community/stylix
+
 ## Repository layout
 
 ```

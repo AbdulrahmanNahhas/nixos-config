@@ -5,10 +5,10 @@
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
-    systemd-boot.configurationLimit = 12;
+    systemd-boot.configurationLimit = 8;
   };
 
-  boot.kernelPackages = pkgs.linuxPackages; # Change to Latest
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # boot.initrd.kernelModules = [ "amdgpu" ];
 
