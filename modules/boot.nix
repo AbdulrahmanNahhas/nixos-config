@@ -14,7 +14,8 @@
 
   boot.kernelParams = [
   	# Black Screen Problem
-  	"modeset module_blacklist=nouveau"
+   "modeset=1"
+   "module_blacklist=nouveau"
 
   	# Nvidia DRM/KMS
     "nvidia_drm.modeset=1"
