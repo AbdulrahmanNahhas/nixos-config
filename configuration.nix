@@ -29,8 +29,11 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # ── User ─────────────────────────────────────────────────
+  # users.mutableUsers = false;
+  users.users.root.initialPassword = "changeme";
   users.users.${username} = {
     isNormalUser = true;
+    initialPassword = "changeme";
     extraGroups = [
       "wheel"
       "networkmanager"

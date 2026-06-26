@@ -32,6 +32,7 @@
       directories = [
         { directory = "/var/lib/nixos"; inInitrd = true; }
         "/var/log"
+	"var/lib/flatpak"
         "/var/lib/bluetooth"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
@@ -73,8 +74,10 @@
 
           # ── Shell history & state ────────────────────────────
           ".config/fish"
+	  ".config/zed"
           ".local/share/fish"        # fish_history (shell history)
           ".local/state/nix"
+	  ".local/share/zed"
           ".config/atuin"
           ".local/share/atuin"       # atuin encrypted shell-history DB
 
