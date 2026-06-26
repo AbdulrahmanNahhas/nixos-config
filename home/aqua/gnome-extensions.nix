@@ -1,24 +1,46 @@
 # GNOME Shell extensions — installed AND configured declaratively
-# Dumped from live system via: dconf dump /org/gnome/shell/extensions/<uuid>/
-{ config, lib, pkgs, ... }:
+#
+# How to capture live extension settings after tweaking via GUI:
+#   1. gnome-extensions list
+#      → copy the UUID of the extension you tweaked
+#   2. dconf dump /org/gnome/shell/extensions/<uuid>/
+#      → paste the output into this file as dconf.settings attrs
+#   3. If step 2 returns nothing, try:
+#      gsettings list-recursively org.gnome.shell.extensions.<uuid with dots>
+#      → map each key: dot-separated path → dconf path with slashes
+#   4. Check enabled/disabled lists:
+#      dconf dump /org/gnome/shell/
+#   5. For tuple values like (0,2,0) use lib.hm.gvariant.mkTuple in Nix
+#
+# How to find a package's UUID without installing:
+#   nix eval nixpkgs#gnomeExtensions.<attr>.extensionUuid
+#
+{
+  # config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  extensionUuids = with pkgs.gnomeExtensions; [
-    user-themes.extensionUuid
-    appindicator.extensionUuid
-    dash-to-dock.extensionUuid
-    blur-my-shell.extensionUuid
-    wallpaper-slideshow.extensionUuid
-    clipboard-indicator.extensionUuid
-    caffeine.extensionUuid
-    just-perfection.extensionUuid
-    status-area-horizontal-spacing.extensionUuid
+  extensionPackages = with pkgs.gnomeExtensions; [
+    user-themes
+    appindicator
+    dash-to-dock
+    blur-my-shell
+    wallpaper-slideshow
+    clipboard-indicator
+    caffeine
+    just-perfection
+    status-area-horizontal-spacing
   ];
+
+  extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
 in
 
 {
   # ── Install extension packages ────────────────────────────
-  home.packages = extensionUuids;
+  home.packages = extensionPackages;
 
   # ── Enable & configure every extension ────────────────────
   dconf.settings = {
@@ -164,7 +186,7 @@ in
       slideshow-directory = "/home/aqua/Pictures/Wallpapers/Scenes";
       slideshow-pause = true;
       slideshow-pause-on-fullscreen = true;
-      slideshow-slide-duration = config.lib.hm.gvariant.mkTuple [
+      slideshow-slide-duration = lib.hm.gvariant.mkTuple [
         0  # hours
         2  # minutes
         0  # seconds
