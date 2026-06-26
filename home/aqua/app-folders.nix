@@ -76,6 +76,32 @@ let
 
 in
 {
+  # ── Persist dconf database (GNOME settings, app grid layout, etc.) ─
+  # We create both the target dir and the symlink ourselves (not via
+  # preservation.nix or home.file) so ownership is always correct.
+  home.activation.ensureDconfDir = lib.hm.dag.entryBefore ["writeBoundary"] ''
+    DST=/saved/home/aqua/.config/dconf
+    LINK="$HOME/.config/dconf"
+
+    # If a previous (failed) preservation attempt left a root-owned directory,
+    # the rebuild will fail here. One-time fix:
+    #   sudo rm -rf /saved/home/aqua/.config/dconf
+    if [ -d "$DST" ] && [ ! -w "$DST" ]; then
+      echo >&2 "!!! $DST is root-owned - run: sudo rm -rf $DST && rebuild"
+      exit 1
+    fi
+
+    mkdir -p "$DST"
+    chmod 0700 "$DST"
+
+    # Replace any real directory with a symlink to the persistent copy
+    if [ ! -L "$LINK" ] && [ -e "$LINK" ]; then
+      mv "$LINK" "$LINK.bak.$(date +%s)"
+    fi
+    ln -sfn "$DST" "$LINK"
+  '';
+
+  # ── App folders ────────────────────────────────────────────
   home.activation.setupAppFolders = lib.hm.dag.entryAfter ["writeBoundary"] ''
     DCONF="${pkgs.dconf}/bin/dconf"
 

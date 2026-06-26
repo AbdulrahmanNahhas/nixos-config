@@ -75,7 +75,6 @@
           # ── Shell history & state ────────────────────────────
           ".config/fish"
 		  ".config/zed"
-		  ".config/dconf"           # GNOME dconf database (app grid layout, settings)
           ".local/share/fish"        # fish_history (shell history)
           ".local/state/nix"
           ".config/atuin"
