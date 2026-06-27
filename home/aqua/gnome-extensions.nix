@@ -1,22 +1,13 @@
-# GNOME Shell extensions — installed AND configured declaratively
+# ────────────────────────────────────────────────────────────────
+# GNOME Shell Extensions Configuration
 #
-# How to capture live extension settings after tweaking via GUI:
-#   1. gnome-extensions list
-#      → copy the UUID of the extension you tweaked
-#   2. dconf dump /org/gnome/shell/extensions/<uuid>/
-#      → paste the output into this file as dconf.settings attrs
-#   3. If step 2 returns nothing, try:
-#      gsettings list-recursively org.gnome.shell.extensions.<uuid with dots>
-#      → map each key: dot-separated path → dconf path with slashes
-#   4. Check enabled/disabled lists:
-#      dconf dump /org/gnome/shell/
-#   5. For tuple values like (0,2,0) use lib.hm.gvariant.mkTuple in Nix
-#
-# How to find a package's UUID without installing:
-#   nix eval nixpkgs#gnomeExtensions.<attr>.extensionUuid
-#
+# To update extension settings declaratively:
+# 1. Tweak the extension natively via the GUI.
+# 2. Run: dconf dump /org/gnome/shell/extensions/<uuid>/
+# 3. Paste the output into the dconf.settings block below.
+# ────────────────────────────────────────────────────────────────
+
 {
-  # config,
   lib,
   pkgs,
   ...
@@ -33,23 +24,75 @@ let
     caffeine
     just-perfection
     status-area-horizontal-spacing
-    gsconnect # KDE Connect protocol, GNOME-native (firewall opened in configuration.nix)
+    gsconnect
   ];
 
   extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
 
-  # Installed but not enabled on boot
   disabledUuids = [ pkgs.gnomeExtensions.gsconnect.extensionUuid ];
   enabledUuids = builtins.filter (u: !(builtins.elem u disabledUuids)) extensionUuids;
+
+  # ═══════════════════════════════════════════════════════════════
+  #  App-picker-layout helpers (GVariant type aa{sv})
+  # ═══════════════════════════════════════════════════════════════
+
+  svEntryType = lib.hm.gvariant.type.dictionaryEntryOf [
+    lib.hm.gvariant.type.string
+    lib.hm.gvariant.type.variant
+  ];
+
+  mkEntry = key: value:
+    lib.hm.gvariant.mkDictionaryEntry [
+      (lib.hm.gvariant.mkString key)
+      (lib.hm.gvariant.mkVariant value)
+    ];
+
+  mkVardict = entries:
+    lib.hm.gvariant.mkArray svEntryType
+      (map (e: mkEntry e.name e.value) entries);
+
+  # Takes a list of App IDs and builds a SINGLE page containing all of them,
+  # automatically calculating their zero-indexed grid position.
+  mkPage = apps:
+    mkVardict (lib.imap0 (pos: id: {
+      name = id;
+      value = mkVardict [ { name = "position"; value = lib.hm.gvariant.mkInt32 pos; } ];
+    }) apps);
+
+  # The app grid array. Wrapping mkPage inside a single list item
+  # forces GNOME to put all of these on Page 1, fixing the "20+ pages" bug.
+  appPickerLayout = lib.hm.gvariant.mkArray
+    (lib.hm.gvariant.type.arrayOf svEntryType)
+    [
+      (mkPage [
+        "System"
+        "Utilities"
+        "351e0451-6bef-4f3d-95e2-16c13fd65f91"
+        "com.belmoussaoui.Authenticator.desktop"
+        "com.brave.Browser.desktop"
+        "org.gnome.Fractal.desktop"
+        "de.wwwtech.gitte.desktop"
+        "org.keepassxc.KeePassXC.desktop"
+        "io.github.sniper1720.khushu.desktop"
+        "org.gnome.Settings.desktop"
+        "io.gitlab.news_flash.NewsFlash.desktop"
+        "nixos-manual.desktop"
+        "obsidian.desktop"
+        "org.onlyoffice.desktopeditors.desktop"
+        "opencode-desktop.desktop"
+        "org.gnome.World.Secrets.desktop"
+        "chat.simplex.simplex.desktop"
+        "org.telegram.desktop.desktop"
+        "dev.geopjr.Tuba.desktop"
+        "dev.vencord.Vesktop.desktop"
+      ])
+    ];
 in
 
 {
-  # ── Install extension packages ────────────────────────────
   home.packages = extensionPackages;
 
-  # ── Enable & configure every extension ────────────────────
   dconf.settings = {
-    # GNOME 45+ requires explicit enablement
     "org/gnome/shell" = {
       enabled-extensions = enabledUuids;
       disabled-extensions = disabledUuids;
@@ -61,6 +104,8 @@ in
         "org.gnome.Nautilus.desktop"
         "org.signal.Signal.desktop"
       ];
+
+      app-picker-layout = appPickerLayout;
     };
 
     # ────────────── Dash to Dock ────────────────────────────
@@ -86,7 +131,6 @@ in
     };
 
     # ────────────── Blur my Shell ───────────────────────────
-    # pipelines key omitted — defaults are recreated automatically by the extension
     "org/gnome/shell/extensions/blur-my-shell" = {
       rounded-blur-found = false;
       settings-version = 2;
@@ -195,16 +239,11 @@ in
     };
 
     # ────────────── Wallpaper Slideshow ─────────────────────
-    # Runtime state (slideshow-queue, current-slide-index, etc.) is omitted
     "org/gnome/shell/extensions/azwallpaper" = {
       slideshow-directory = "/home/aqua/Pictures/Wallpapers/Scenes";
       slideshow-pause = true;
       slideshow-pause-on-fullscreen = true;
-      slideshow-slide-duration = lib.hm.gvariant.mkTuple [
-        0  # hours
-        2  # minutes
-        0  # seconds
-      ];
+      slideshow-slide-duration = lib.hm.gvariant.mkTuple [ 0 2 0 ];
       slideshow-use-absolute-time-for-duration = false;
     };
 
@@ -221,8 +260,5 @@ in
       icon-saturation = 0.0;
       icon-size = 0;
     };
-
-    # ────────────── User Themes ─────────────────────────────
-    # No dconf settings — reads shell theme from ~/.themes or ~/.local/share/themes
   };
 }
