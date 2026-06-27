@@ -73,5 +73,7 @@
 
     # android-tools    # adb & fastboot
 
+    # ─── Obsidian ───────────────────────────────── #
+    obsidian
   ];
 }
