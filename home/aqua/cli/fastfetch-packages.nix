@@ -1,310 +1,131 @@
 # Fastfetch – Software Version Tracker
 # Usage: fastfetch -c packages
 {
-  pkgs,
-  lib,
   ...
 }:
 
 let
-  # Extract version from a Nix package (or "—" if unavailable)
-  ver = pkg: if (pkg ? version) && builtins.isString pkg.version then pkg.version else "—";
+  # Section header module
+  section = { color, label }: {
+    type = "custom";
+    key = label;
+    keyColor = color;
+    format = "{1}";
+  };
 
-  # Flatpak installation check (runtime)
-  fpInstalled = id: "flatpak info " + id + " 2>/dev/null >/dev/null && echo 'flatpak' || echo '—'";
+  # Build an array of modules
+  modules = [
+    # ═══ FOUNDATION ═══
+    (section { color = "bright_blue"; label = "❄️  FOUNDATION"; })
+    { type = "os";       key = "  ◆ OS     "; keyColor = "bright_blue"; }
+    { type = "kernel";   key = "  ◆ Kernel "; keyColor = "bright_blue"; }
+    { type = "de";       key = "  ◆ Desktop"; keyColor = "bright_blue"; }
+    { type = "wm";       key = "  ◆ WM     "; keyColor = "bright_blue"; }
+    { type = "custom";   key = "  ◆ Shell  "; keyColor = "bright_blue";
+      command = "fish --version 2>/dev/null | awk '{print $NF}' || echo '—'"; }
+    "break"
+
+    # ═══ TERMINAL & DEV ═══
+    (section { color = "bright_cyan"; label = "💻  TERMINAL & DEV"; })
+    { type = "custom";   key = "  ◆ Terminal"; keyColor = "bright_cyan";
+      command = "ghostty --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "terminalfont"; key = "  ◆ Font    "; keyColor = "bright_cyan"; }
+    { type = "custom";   key = "  ◆ Prompt  "; keyColor = "bright_cyan";
+      command = "starship --version 2>/dev/null | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ Editor  "; keyColor = "bright_cyan";
+      command = "micro --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ Git     "; keyColor = "bright_cyan";
+      command = "git --version 2>/dev/null | awk '{print $3}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ GitHub  "; keyColor = "bright_cyan";
+      command = "gh --version 2>/dev/null | head -1 | awk '{print $3}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ Git TUI "; keyColor = "bright_cyan";
+      command = "lazygit --version 2>/dev/null | head -1 | grep -o 'version=[0-9.]*' | cut -d= -f2 || echo '—'"; }
+    { type = "custom";   key = "  ◆ Nix     "; keyColor = "bright_cyan";
+      command = "nix --version 2>/dev/null | awk '{print $3}' || echo '—'"; }
+    "break"
+
+    # ═══ CLI TOOLKIT ═══
+    (section { color = "bright_magenta"; label = "📦  CLI TOOLKIT"; })
+    { type = "custom";   key = "  ◆ eza     "; keyColor = "bright_magenta";
+      command = "eza --version 2>/dev/null | head -1 | grep -oE '[0-9]+[.][0-9]+([.][0-9]+)?' || echo '—'"; }
+    { type = "custom";   key = "  ◆ bat     "; keyColor = "bright_magenta";
+      command = "bat --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ ripgrep "; keyColor = "bright_magenta";
+      command = "rg --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ fd      "; keyColor = "bright_magenta";
+      command = "fd --version 2>/dev/null | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ fzf     "; keyColor = "bright_magenta";
+      command = "fzf --version 2>/dev/null | awk '{print $1}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ yazi    "; keyColor = "bright_magenta";
+      command = "yazi --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ btop    "; keyColor = "bright_magenta";
+      command = "btop --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ atuin   "; keyColor = "bright_magenta";
+      command = "atuin --version 2>/dev/null | head -1 | awk '{print $2}' || echo '—'"; }
+    "break"
+
+    # ═══ APPS & MEDIA ═══
+    (section { color = "bright_green"; label = "🌐  APPS & MEDIA"; })
+    { type = "custom";   key = "  ◆ Firefox "; keyColor = "bright_green";
+      command = "firefox --version 2>/dev/null | awk '{print $3}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ Brave   "; keyColor = "bright_green";
+      command = "flatpak info com.brave.Browser >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+    { type = "custom";   key = "  ◆ Zed     "; keyColor = "bright_green";
+      command = "zeditor --version 2>/dev/null | head -1 | grep -oE '[0-9]+[.][0-9]+[.][0-9]+' || echo '—'"; }
+    { type = "custom";   key = "  ◆ Obsidian"; keyColor = "bright_green";
+      command = "obsidian --version 2>/dev/null | head -1 | awk '{print $NF}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ OpenCode"; keyColor = "bright_green";
+      command = "opencode --version 2>/dev/null | head -1 | awk '{print $NF}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ ffmpeg  "; keyColor = "bright_green";
+      command = "ffmpeg -version 2>/dev/null | head -1 | awk '{print $3}' || echo '—'"; }
+    "break"
+
+    # ═══ COMMUNICATION ═══
+    (section { color = "bright_yellow"; label = "💬  COMMUNICATION"; })
+    { type = "custom";   key = "  ◆ Signal  "; keyColor = "bright_yellow";
+      command = "flatpak info org.signal.Signal >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+    { type = "custom";   key = "  ◆ Telegram"; keyColor = "bright_yellow";
+      command = "flatpak info org.telegram.desktop >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+    { type = "custom";   key = "  ◆ Discord "; keyColor = "bright_yellow";
+      command = "flatpak info dev.vencord.Vesktop >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+    { type = "custom";   key = "  ◆ SimpleX "; keyColor = "bright_yellow";
+      command = "flatpak info chat.simplex.simplex >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+    "break"
+
+    # ═══ SECURITY ═══
+    (section { color = "bright_red"; label = "🔐  SECURITY"; })
+    { type = "custom";   key = "  ◆ age     "; keyColor = "bright_red";
+      command = "age --version 2>/dev/null | head -1 | awk '{print $NF}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ sops    "; keyColor = "bright_red";
+      command = "sops --version 2>/dev/null | head -1 | awk '{print $NF}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ GPG     "; keyColor = "bright_red";
+      command = "gpg --version 2>/dev/null | head -1 | awk '{print $NF}' || echo '—'"; }
+    { type = "custom";   key = "  ◆ KeePass "; keyColor = "bright_red";
+      command = "flatpak info org.keepassxc.KeePassXC >/dev/null 2>/dev/null && echo flatpak || echo —"; }
+  ];
 in
 {
   # ── ASCII logo ──────────────────────────────────────────────────
   xdg.configFile."fastfetch/fastfetch-packages.txt".source = ./fastfetch-packages.txt;
 
   # ── JSON config (loaded via `fastfetch -c packages`) ────────────
-  xdg.configFile."fastfetch/packages.jsonc".text = ''
-    {
-      "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
-      "logo": {
-        "source": "~/.config/fastfetch/fastfetch-packages.txt",
-        "type": "file",
-        "padding": {
-          "top": 0,
-          "left": 2
-        },
-        "color": {
-          "1": "bright_blue",
-          "2": "bright_magenta",
-          "3": "bright_cyan",
-          "4": "bright_green"
-        }
-      },
-      "display": {
-        "separator": " · ",
-        "color": "white"
-      },
-      "modules": [
-
-        /* ═══════════════════════════════════════════════════════
-           ❄️  FOUNDATION
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#34}❄️  FOUNDATION{##}",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "os",
-          "key": "  ◆ OS     ",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "kernel",
-          "key": "  ◆ Kernel ",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "de",
-          "key": "  ◆ Desktop",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "wm",
-          "key": "  ◆ WM     ",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Shell  ",
-          "command": "echo 'fish '${ver pkgs.fish}'",
-          "keyColor": "bright_blue"
-        },
-        "break",
-
-        /* ═══════════════════════════════════════════════════════
-           💻  TERMINAL & DEV
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#36}💻  TERMINAL & DEV{##}",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Terminal",
-          "command": "echo 'Ghostty '${ver pkgs.ghostty}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "terminalfont",
-          "key": "  ◆ Font    ",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Prompt  ",
-          "command": "echo 'starship '${ver pkgs.starship}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Editor  ",
-          "command": "echo 'micro '${ver pkgs.micro}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Git     ",
-          "command": "echo '${ver pkgs.git}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ GitHub  ",
-          "command": "echo 'gh '${ver pkgs.gh}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Git TUI ",
-          "command": "echo 'lazygit '${ver pkgs.lazygit}'",
-          "keyColor": "bright_cyan"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Nix     ",
-          "command": "nix --version 2>/dev/null | awk '{print $3}' || echo '—'",
-          "keyColor": "bright_cyan"
-        },
-        "break",
-
-        /* ═══════════════════════════════════════════════════════
-           📦  CLI TOOLKIT
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#35}📦  CLI TOOLKIT{##}",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ eza     ",
-          "command": "echo '${ver pkgs.eza}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ bat     ",
-          "command": "echo '${ver pkgs.bat}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ ripgrep ",
-          "command": "echo '${ver pkgs.ripgrep}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ fd      ",
-          "command": "echo '${ver pkgs.fd}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ fzf     ",
-          "command": "echo '${ver pkgs.fzf}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ yazi    ",
-          "command": "echo '${ver pkgs.yazi}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ btop    ",
-          "command": "echo '${ver pkgs.btop}'",
-          "keyColor": "bright_magenta"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ atuin   ",
-          "command": "echo '${ver pkgs.atuin}'",
-          "keyColor": "bright_magenta"
-        },
-        "break",
-
-        /* ═══════════════════════════════════════════════════════
-           🌐  APPS & MEDIA
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#32}🌐  APPS & MEDIA{##}",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Firefox ",
-          "command": "echo '${ver pkgs.firefox}'",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Brave   ",
-          "command": "${fpInstalled "com.brave.Browser"}",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Zed     ",
-          "command": "zeditor --version 2>/dev/null | head -1 | grep -oE '[0-9]+\\.[0-9]+\\.[0-9]+' || echo '—'",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Obsidian",
-          "command": "echo '${ver pkgs.obsidian}'",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ OpenCode",
-          "command": "echo '${ver pkgs.opencode}'",
-          "keyColor": "bright_green"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ ffmpeg  ",
-          "command": "echo '${ver pkgs.ffmpeg}'",
-          "keyColor": "bright_green"
-        },
-        "break",
-
-        /* ═══════════════════════════════════════════════════════
-           💬  COMMUNICATION
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#33}💬  COMMUNICATION{##}",
-          "keyColor": "bright_yellow"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Signal  ",
-          "command": "${fpInstalled "org.signal.Signal"}",
-          "keyColor": "bright_yellow"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Telegram",
-          "command": "${fpInstalled "org.telegram.desktop"}",
-          "keyColor": "bright_yellow"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ Discord ",
-          "command": "${fpInstalled "dev.vencord.Vesktop"}",
-          "keyColor": "bright_yellow"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ SimpleX ",
-          "command": "${fpInstalled "chat.simplex.simplex"}",
-          "keyColor": "bright_yellow"
-        },
-        "break",
-
-        /* ═══════════════════════════════════════════════════════
-           🔐  SECURITY
-           ═══════════════════════════════════════════════════════ */
-        {
-          "type": "custom",
-          "key": "{#31}🔐  SECURITY{##}",
-          "keyColor": "bright_red"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ age     ",
-          "command": "echo '${ver pkgs.age}'",
-          "keyColor": "bright_red"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ sops    ",
-          "command": "echo '${ver pkgs.sops}'",
-          "keyColor": "bright_red"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ GPG     ",
-          "command": "echo '${ver pkgs.gnupg}'",
-          "keyColor": "bright_red"
-        },
-        {
-          "type": "custom",
-          "key": "  ◆ KeePass ",
-          "command": "${fpInstalled "org.keepassxc.KeePassXC"}",
-          "keyColor": "bright_red"
-        }
-      ]
-    }
-  '';
+  xdg.configFile."fastfetch/packages.jsonc".text =
+    builtins.toJSON {
+      logo = {
+        source = "~/.config/fastfetch/fastfetch-packages.txt";
+        type = "file";
+        padding = { top = 0; left = 2; };
+        color = {
+          "1" = "bright_blue";
+          "2" = "bright_magenta";
+          "3" = "bright_cyan";
+          "4" = "bright_green";
+        };
+      };
+      display = {
+        separator = " · ";
+        color = "white";
+      };
+      modules = modules;
+    };
 }
