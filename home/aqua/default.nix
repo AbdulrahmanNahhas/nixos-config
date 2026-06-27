@@ -58,7 +58,7 @@
 
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
-    size = 24;
+    size = 26;
   };
 
   # ── XDG user directories ────────────────────────────────────────────────

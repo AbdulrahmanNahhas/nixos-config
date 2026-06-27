@@ -40,8 +40,6 @@ in
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
       icon-theme = "Papirus-Dark";
-      cursor-theme = "Bibata-Modern-Ice";
-      cursor-size = 26;
 
       # ── Fonts ──────────────────────────────────────────
       font-name = "Adwaita Sans 12";
