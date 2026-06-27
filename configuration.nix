@@ -89,5 +89,9 @@
     __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
   };
 
+  # ── OpenRazer ──────────────────────────────────────────
+  hardware.openrazer.enable = true;
+  environment.systemPackages = [ pkgs.polychromatic ];
+
   system.stateVersion = "26.05";
 }
