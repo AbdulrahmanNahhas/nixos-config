@@ -13,6 +13,7 @@
     ./cli/packages.nix
     ./cli/fish.nix
     ./cli/fastfetch.nix
+    ./cli/fastfetch-packages.nix
     ./gnome-extensions.nix
     ./gnome.nix
   ];
