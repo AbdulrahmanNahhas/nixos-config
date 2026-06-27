@@ -69,6 +69,16 @@
       document-font-name = "Cantarell 11";
       monospace-font-name = "GeistMono Nerd Font Mono 11";
     };
+    # GNOME settings
+    "org/gnome/shell" = {
+      favorite-apps = [
+        "com.mitchellh.ghostty.desktop"
+        "zed.desktop"
+        "firefox.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.signal.Signal.desktop"
+      ];
+    };
   };
 
   # ── XDG user directories ────────────────────────────────────────────────
