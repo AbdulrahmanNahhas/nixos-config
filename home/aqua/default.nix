@@ -14,6 +14,7 @@
     ./cli/fish.nix
     ./cli/fastfetch.nix
     ./gnome-extensions.nix
+    ./gnome.nix
   ];
 
   home = {
@@ -58,27 +59,6 @@
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
     size = 24;
-  };
-
-  dconf.settings = {
-    "org/gnome/desktop/interface" = {
-      gtk-theme = "adw-gtk3-dark";
-      color-scheme = "prefer-dark";
-
-      font-name = "Cantarell 11";
-      document-font-name = "Cantarell 11";
-      monospace-font-name = "GeistMono Nerd Font Mono 11";
-    };
-    # GNOME settings
-    "org/gnome/shell" = {
-      favorite-apps = [
-        "com.mitchellh.ghostty.desktop"
-        "zed.desktop"
-        "firefox.desktop"
-        "org.gnome.Nautilus.desktop"
-        "org.signal.Signal.desktop"
-      ];
-    };
   };
 
   # ── XDG user directories ────────────────────────────────────────────────
