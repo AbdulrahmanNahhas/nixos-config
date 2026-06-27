@@ -2,7 +2,10 @@
 #
 # The root filesystem (`/`) is tmpfs; anything NOT listed here is lost on reboot.
 # Add folders/files here when introducing new software requiring persistent state.
-{ ... }:
+{
+  lib,
+  ...
+}:
 {
   preservation = {
     enable = true;
@@ -103,10 +106,11 @@
 
   # Set up base directories with appropriate user ownership before app creation loops.
   systemd.tmpfiles.settings.preservation = {
-    "/home/aqua/.config".d       = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local".d        = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local/share".d  = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local/state".d  = { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.config".d         = { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.config/dconf".d   = lib.mkForce { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.local".d          = { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.local/share".d    = { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.local/state".d    = { user = "aqua"; group = "users"; mode = "0755"; };
 
     # Isolated secret runtime directory used by explicit out-of-store home configurations.
     "/saved/secrets".d           = { user = "aqua"; group = "users"; mode = "0700"; };
@@ -115,11 +119,9 @@
   # Commits the transient tmpfs machine-id down to the persistent /saved partition.
   systemd.services.systemd-machine-id-commit = {
     unitConfig.ConditionPathIsMountPoint = [
-      ""
       "/saved/etc/machine-id"
     ];
     serviceConfig.ExecStart = [
-      ""
       "systemd-machine-id-setup --commit --root /saved"
     ];
   };
