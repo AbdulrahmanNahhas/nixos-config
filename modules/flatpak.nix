@@ -19,7 +19,8 @@
     # ── Packages ───────────────────────────────────────────
     packages = [
       # System
-      "com.github.tchx84.Flatseal" # permissions manager
+      "com.github.tchx84.Flatseal"
+      "com.brave.Browser"
 
       # Social Media Communication
       "chat.simplex.simplex"
