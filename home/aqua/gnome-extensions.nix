@@ -53,6 +53,14 @@ in
     "org/gnome/shell" = {
       enabled-extensions = enabledUuids;
       disabled-extensions = disabledUuids;
+
+      favorite-apps = [
+        "com.mitchellh.ghostty.desktop"
+        "dev.zed.Zed.desktop"
+        "firefox.desktop"
+        "org.gnome.Nautilus.desktop"
+        "org.signal.Signal.desktop"
+      ];
     };
 
     # ────────────── Dash to Dock ────────────────────────────

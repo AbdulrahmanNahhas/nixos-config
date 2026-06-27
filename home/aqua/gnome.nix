@@ -230,19 +230,6 @@ in
     };
 
     # ═══════════════════════════════════════════════════════════════
-    #  Shell — Top-level settings
-    # ═══════════════════════════════════════════════════════════════
-    "org/gnome/shell" = {
-      favorite-apps = [
-        "com.mitchellh.ghostty.desktop"
-        "dev.zed.Zed.desktop"
-        "firefox.desktop"
-        "org.gnome.Nautilus.desktop"
-        "org.signal.Signal.desktop"
-      ];
-    };
-
-    # ═══════════════════════════════════════════════════════════════
     #  NOTE: app-picker-layout is intentionally omitted
     #
     #  The app-picker-layout value is a deeply nested GVariant
