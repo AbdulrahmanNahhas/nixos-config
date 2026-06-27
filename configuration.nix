@@ -91,6 +91,7 @@
 
   # ── OpenRazer ──────────────────────────────────────────
   hardware.openrazer.enable = true;
+  hardware.openrazer.users = [ "${username}" ] ;
   environment.systemPackages = [ pkgs.polychromatic ];
 
   system.stateVersion = "26.05";
