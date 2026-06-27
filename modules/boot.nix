@@ -10,7 +10,9 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # boot.initrd.kernelModules = [ "amdgpu" ];
+  # Load amdgpu in initrd for early KMS (nixos-hardware also sets
+  # hardware.amdgpu.initrd.enable which covers this, but explicit is safe).
+  boot.initrd.kernelModules = [ "amdgpu" ];
 
   boot.kernelParams = [
    	# # Black Screen Problem
@@ -18,8 +20,9 @@
     # "module_blacklist=nouveau"
 
     # NVIDIA DRM/KMS (must pair with hardware.nvidia.modesetting.enable).
+    # fbdev=1 is harmful on muxless hybrid: the NVIDIA dGPU has no
+    # physical panel — the eDP panel is wired to the AMD iGPU.
     "nvidia_drm.modeset=1"
-    "nvidia_drm.fbdev=1"
 
     # AMD Display Core (RDNA 3.5 requires this).
     "amdgpu.dc=1"

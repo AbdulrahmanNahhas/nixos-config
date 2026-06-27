@@ -71,23 +71,35 @@
     };
   };
 
-  # ── XDG user directories ────────────────────────────────
-  # All user data lives on /saved (persistent across wipes)
+  # ── XDG user directories ────────────────────────────────────────────────
+  # persistence.nix bind-mounts the persistent copies that physically live
+  # under /saved/home/aqua back onto these standard ~/ paths. So you access
+  # data at ~/Documents etc.; the /saved backing store is kept out of GNOME
+  # Files via `x-gvfs-hide` (see preservation.nix + disko.nix).
+  #
+  # Downloads intentionally stays on the tmpfs root → wiped on every reboot.
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
 
-    desktop     = "/saved/home/${config.home.username}/Desktop";
-    documents   = "/saved/home/${config.home.username}/Documents";
-    download    = "${config.home.homeDirectory}/Downloads"; # tmpfs — intentionally wiped on reboot
-    music       = "/saved/home/${config.home.username}/Music";
-    pictures    = "/saved/home/${config.home.username}/Pictures";
-    publicShare = "/saved/home/${config.home.username}/Public";
-    templates   = "/saved/home/${config.home.username}/Templates";
-    videos      = "/saved/home/${config.home.username}/Videos";
-    projects      = "/saved/home/${config.home.username}/Projects";
+    desktop     = "${config.home.homeDirectory}/Desktop";
+    documents   = "${config.home.homeDirectory}/Documents";
+    download    = "${config.home.homeDirectory}/Downloads"; # tmpfs — wiped on reboot
+    music       = "${config.home.homeDirectory}/Music";
+    pictures    = "${config.home.homeDirectory}/Pictures";
+    publicShare = "${config.home.homeDirectory}/Public";
+    templates   = "${config.home.homeDirectory}/Templates";
+    videos      = "${config.home.homeDirectory}/Videos";
+    projects    = "${config.home.homeDirectory}/Projects";
   };
 
   # Let home-manager manage these
   programs.home-manager.enable = true;
+
+  # ── Nix user config → /saved/secrets/nix.conf ─────────────
+  # Points ~/.config/nix/nix.conf to the persistent secrets file
+  # (access-tokens for GitHub API, etc.). The file lives in /saved
+  # (btrfs subvolume) so it survives tmpfs wipes.
+  home.file.".config/nix/nix.conf".source =
+    config.lib.file.mkOutOfStoreSymlink "/saved/secrets/nix.conf";
 }

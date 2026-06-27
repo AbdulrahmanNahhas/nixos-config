@@ -52,14 +52,10 @@
     packages = with pkgs; [ tree ];
   };
 
-  # --- KDE Connect --------------------------------------------------
-  programs.kdeconnect = {
-    enable = true;
-    package = pkgs.gnomeExtensions.gsconnect;
-  };
+  # ── GSConnect (KDE Connect protocol, GNOME-native) ────────────────
   networking.firewall = {
-    allowedTCPPortRanges = [ {from = 1714; to = 1764; }];
-    allowedUDPPortRanges = [ {from = 1714; to = 1764; }];
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
   };
 
   # ── Nix / nh ────────────────────────────────────────────

@@ -19,7 +19,7 @@
     };
 
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
-	nix-hardware.url = "github:NixOS/nixos-hardware/master";
+	nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     firefox-gnome-theme = {
       url = "github:rafaelmardojai/firefox-gnome-theme";

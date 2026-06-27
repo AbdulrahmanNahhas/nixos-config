@@ -1,11 +1,13 @@
 # Firefox — GNOME theme + add-ons + search.
 #
-# The profile lives at ~/.mozilla/firefox/aqua (home-manager's Linux
-# configPath is ".mozilla/firefox"; the profile dir defaults to the
-# profile key). The whole ~/.mozilla tree is bind-mounted on /saved by
-# modules/preservation.nix, so history, logins, cookies and sessions
-# survive reboots.
+# Home-manager writes profiles.ini + user.js to the XDG path
+# (~/.config/mozilla/firefox). Firefox reads them from the legacy path
+# (~/.mozilla/firefox). The activation hook below syncs the managed
+# files on every rebuild. Profile data (sqlite, logins, cookies) lives
+# under the legacy path and is bind-mounted on /saved by preservation.nix.
 {
+  config,
+  lib,
   username,
   inputs,
   ...
@@ -90,4 +92,40 @@
       '';
     };
   };
+
+  # ── Sync home-manager's XDG files to Firefox's legacy path ─────
+  # Firefox reads profiles.ini + user.js from ~/.mozilla/firefox (legacy).
+  # Home-manager writes them to ~/.config/mozilla/firefox (XDG).
+  # We copy profiles.ini (not symlink — IsRelative=1 must resolve against
+  # the legacy dir where profile data lives) and symlink user.js.
+  home.activation.syncFirefoxLegacy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    XDG_DIR="$HOME/.config/mozilla/firefox"
+    LEGACY_DIR="$HOME/.mozilla/firefox"
+
+    if [ -d "$XDG_DIR" ]; then
+      # profiles.ini: must be a real file under LEGACY_DIR so that
+      # IsRelative=1 + Path=aqua resolves to ~/.mozilla/firefox/aqua/.
+      # `cp -f` unlinks a pre-existing read-only destination (Firefox/HM may
+      # leave it 0444) before writing, avoiding a spurious 'Permission denied'.
+      if [ -f "$XDG_DIR/profiles.ini" ]; then
+        cp -f "$XDG_DIR/profiles.ini" "$LEGACY_DIR/profiles.ini"
+        chmod 0644 "$LEGACY_DIR/profiles.ini"
+      fi
+
+      # user.js: symlink each profile's managed prefs into the legacy path
+      for profile_dir in "$XDG_DIR"/*/; do
+        name=$(basename "$profile_dir")
+        case "$name" in
+          "Crash Reports"|"Profile Groups") continue ;;
+        esac
+
+        mkdir -p "$LEGACY_DIR/$name"
+
+        if [ -L "$XDG_DIR/$name/user.js" ]; then
+          target=$(readlink "$XDG_DIR/$name/user.js")
+          ln -sf "$target" "$LEGACY_DIR/$name/user.js"
+        fi
+      done
+    fi
+  '';
 }

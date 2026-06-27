@@ -27,6 +27,11 @@
 
         # Preserve the random seed so the entropy pool doesn't stall on boot.
         { file = "/var/lib/systemd/random-seed"; how = "symlink"; inInitrd = true; configureParent = true; }
+
+        # Git global config — user.name, user.email, signing keys.
+        # Same idea as other forge CLI tool configs below under users.aqua.
+        { file = "/home/aqua/.gitconfig"; how = "symlink"; }
+
       ];
 
       directories = [
@@ -40,6 +45,11 @@
       ];
 
       users.aqua = {
+        # Hide every per-user bind mount from GNOME Files / gvfs so each ~/dir
+        # is shown only once (not also as a separately-mounted volume). This is
+        # the upstream-documented option for impermanence-style setups.
+        commonMountOptions = [ "x-gvfs-hide" ];
+
         directories = [
           # ── XDG user dirs (kept in sync with home/aqua/default.nix) ──
           "Desktop"
@@ -54,6 +64,11 @@
           # ── Identity / secrets ───────────────────────────────
           { directory = ".ssh";   mode = "0700"; }
           { directory = ".gnupg"; mode = "0700"; }
+
+          # ── Git & forge CLI tools ────────────────────────────
+          ".config/gh"
+            # GitHub CLI (gh) auth — hosts.yml, config.yml.
+            # When you add GitLab: add ".config/glab-cli" here too.
           { directory = ".local/share/keyrings"; mode = "0700"; }
             # GNOME Keyring 'login' store — Zed & other apps keep auth tokens here.
 
@@ -97,6 +112,11 @@
     "/home/aqua/.local".d        = { user = "aqua"; group = "users"; mode = "0755"; };
     "/home/aqua/.local/share".d  = { user = "aqua"; group = "users"; mode = "0755"; };
     "/home/aqua/.local/state".d  = { user = "aqua"; group = "users"; mode = "0755"; };
+
+    # Persistent, aqua-owned secrets dir on /saved (holds nix.conf with
+    # access tokens — see home/aqua/default.nix out-of-store symlink). 0700 so
+    # only aqua can read it. Declared here so it exists on first boot.
+    "/saved/secrets".d           = { user = "aqua"; group = "users"; mode = "0700"; };
   };
 
   # Adapt the upstream systemd service so the transient machine-id

@@ -33,9 +33,14 @@ let
     caffeine
     just-perfection
     status-area-horizontal-spacing
+    gsconnect # KDE Connect protocol, GNOME-native (firewall opened in configuration.nix)
   ];
 
   extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
+
+  # Installed but not enabled on boot
+  disabledUuids = [ pkgs.gnomeExtensions.gsconnect.extensionUuid ];
+  enabledUuids = builtins.filter (u: !(builtins.elem u disabledUuids)) extensionUuids;
 in
 
 {
@@ -46,7 +51,8 @@ in
   dconf.settings = {
     # GNOME 45+ requires explicit enablement
     "org/gnome/shell" = {
-      enabled-extensions = extensionUuids;
+      enabled-extensions = enabledUuids;
+      disabled-extensions = disabledUuids;
     };
 
     # ────────────── Dash to Dock ────────────────────────────

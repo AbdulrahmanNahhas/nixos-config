@@ -32,7 +32,9 @@
               type       = "filesystem";
               format     = "vfat";
               mountpoint = "/boot";
-              mountOptions = [ "umask=0077" ];
+              # umask=0077 keeps the ESP readable only by root; x-gvfs-hide
+              # stops GNOME Files from listing the ESP as a removable device.
+              mountOptions = [ "umask=0077" "x-gvfs-hide" ];
             };
           };
 
@@ -58,13 +60,15 @@
                   # Nix store — large, read-heavy, never wiped
                   "/nix" = {
                     mountpoint   = "/nix";
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                    # x-gvfs-hide keeps /nix out of the GNOME Files sidebar.
+                    mountOptions = [ "compress=zstd" "noatime" "x-gvfs-hide" ];
                   };
 
-                  # Your persistence layer — everything you explicitly keep
+                  # Your persistence layer — everything you explicitly keep.
+                  # x-gvfs-hide so /saved never appears as a mounted drive.
                   "/saved" = {
                     mountpoint   = "/saved";
-                    mountOptions = [ "compress=zstd" "noatime" ];
+                    mountOptions = [ "compress=zstd" "noatime" "x-gvfs-hide" ];
                   };
 
                   # Swap as a btrfs swapfile.
@@ -72,6 +76,7 @@
                   # Use RAM/2 if you only care about suspend-to-RAM.
                   "/swap" = {
                     mountpoint = "/swap";
+                    mountOptions = [ "x-gvfs-hide" ];
                     swap.swapfile.size = "16G";
                   };
 
