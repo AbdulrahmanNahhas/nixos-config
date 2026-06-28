@@ -22,6 +22,7 @@ surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
 - [X] rafaelmardojai/firefox-gnome-them
 - [X] nix-community/preservation
 - [X] nix-community/nixos-hardware
+- [X] Jovian-Experiments/Jovian-NixOS (Steam Deck Gaming Mode + Decky)
 - [ ] nix-community/lanzaboote
 - [ ] nix-community/stylix
 
@@ -29,7 +30,7 @@ surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
 
 ```
 configuration.nix        # Top-level system module — imports everything below
-flake.nix                # Inputs: nixpkgs-unstable, home-manager, disko, preservation, nix-flatpak, firefox-gnome-theme
+flake.nix                # Inputs: nixpkgs-unstable, home-manager, disko, preservation, nix-flatpak, nixos-hardware, jovian, firefox-gnome-theme
 hardware-configuration.nix # Auto-generated hardware probe (nixos-generate-config) — used
 home.nix                 # home-manager hook → delegates to home/aqua/
 modules/
@@ -37,6 +38,7 @@ modules/
   desktop.nix            # GNOME + fonts + Wayland env vars
   disko.nix              # tmpfs / + LUKS2 + btrfs subvolumes @nix @saved @swap
   flatpak.nix            # Declarative Flatpak apps via nix-flatpak
+  gaming.nix             # Steam Deck Gaming Mode (Jovian) + Proton GE + Decky + GameMode
   packages.nix           # System-wide packages (git, curl, …)
   preservation.nix       # /saved = persistent layer; lists everything kept across reboots
   services.nix           # PipeWire, Bluetooth, upower, openssh, sudo

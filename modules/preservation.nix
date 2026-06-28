@@ -41,6 +41,7 @@
         "/var/log"
         "/var/lib/flatpak"
         "/var/lib/bluetooth"
+        "/var/lib/decky-loader" # Decky Loader plugins + data (Steam Deck UI)
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
         "/etc/NetworkManager/system-connections"
@@ -99,6 +100,12 @@
           ".config/opencode"
           ".local/share/opencode"
           ".config/ai.opencode.desktop"
+
+          # ── Steam (library, Proton prefixes, compat tools, game saves) ───
+          # Lives on the persistent /saved btrfs subvolume; the tmpfs root
+          # would otherwise wipe every installed game on reboot.
+          ".local/share/Steam"
+          ".steam"
         ];
       };
     };

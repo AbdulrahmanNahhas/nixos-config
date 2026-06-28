@@ -21,6 +21,7 @@
     ./modules/packages.nix
     ./modules/flatpak.nix
     ./modules/services.nix
+    ./modules/gaming.nix
     ./modules/preservation.nix
     # Home
     ./home.nix
@@ -47,6 +48,7 @@
       "input"
       "audio"
       "render"
+      "gamemode" # lets GameMode switch the CPU governor to `performance`
     ];
     shell = pkgs.fish;
     packages = with pkgs; [ tree ];

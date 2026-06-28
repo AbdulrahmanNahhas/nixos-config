@@ -21,6 +21,13 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
 	nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    # Steam Deck "Gaming Mode" UI + Decky Loader on NixOS.
+    # Tracks nixos-unstable, same as us, so it follows our nixpkgs (one eval).
+    jovian = {
+      url = "github:Jovian-Experiments/Jovian-NixOS";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     firefox-gnome-theme = {
       url = "github:rafaelmardojai/firefox-gnome-theme";
       flake = false;
