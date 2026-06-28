@@ -8,6 +8,12 @@
     enable = true;
 
     shellAbbrs = {
+      # NVIDIA dGPU Offload
+      # Usage:
+      # if flatpak: `nv flatpak run org.blender.Blender` (flatpak list)
+      # if nix pkg: `nv blender` (blender = name of pkg)
+      nv = "nvidia-offload";
+
       # NixOS System Management
       # Flake lives on /saved (persistent) — see configuration.nix `programs.nh.flake`.
       nx-rebuild = "nh os switch /saved/nixos-config";

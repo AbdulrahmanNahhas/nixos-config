@@ -1,21 +1,7 @@
-# Gaming — Steam Deck "Gaming Mode" (Jovian) + Proton GE + Decky + GameMode.
-#
-# NVIDIA/PRIME offload, bus IDs, modesetting and power management are owned by
-# the nixos-hardware Razer Blade 14 module — not duplicated here. Desktop/work
-# runs on the AMD iGPU (GNOME stays the default GDM session); the dGPU is only
-# engaged inside Gaming Mode via the PRIME env vars below.
 { inputs, pkgs, lib, ... }:
 
 {
-  # Jovian overlay: gamescope-session, steamos-manager, decky-loader,
-  # gamescope-wsi, scx schedulers, etc.
-  #
-  # The second overlay fixes a Jovian build bug: Jovian backports two mangohud
-  # patches, but the overlay is applied twice for pkgsi686Linux (32-bit), so
-  # the i686 mangohud ends up with duplicated patches and fails in patchPhase
-  # with "Reversed (or previously applied) patch detected". lib.unique
-  # deduplicates the patches list — fetchpatch is a fixed-output derivation so
-  # identical URL+hash produce identical store paths.
+  # Fix Jovian's 32-bit mangohud double-patching build bug.
   nixpkgs.overlays = [
     inputs.jovian.overlays.default
     (_final: prev: {
@@ -29,41 +15,35 @@
 
   jovian = {
     steam = {
-      # Registers a "Gaming Mode" (gamescope) session in GDM. autoStart is
-      # intentionally off — GNOME stays default for daily work; pick Gaming
-      # Mode from the GDM gear menu to play.
+      # GNOME stays default. Launch "Gaming Mode" from GDM menu.
       enable = true;
 
-      # Render games on the NVIDIA dGPU via PRIME offload (nixos-hardware
-      # already set up offload + the `nvidia-offload` wrapper). The dGPU
-      # renders; frames present to the AMD-driven panel. If a game fails to
-      # launch in Gaming Mode, drop this block and use
-      # `nvidia-offload %command%` per-game from desktop Steam instead.
+      # Auto-offload Steam and all games to the NVIDIA dGPU in Gaming Mode.
+      # Gamescope itself stays on the AMD iGPU to prevent muxless display glitches.
       environment = {
         __NV_PRIME_RENDER_OFFLOAD = "1";
-        __NV_PRIME_RENDER_OFFLOAD_PROVIDER = "NVIDIA-G0";
         __GLX_VENDOR_LIBRARY_NAME = "nvidia";
         __VK_LAYER_NV_optimus = "NVIDIA_only";
       };
     };
 
-    # Decky Loader → Decky store (CSSLoader/DeckThemes, AudioLoader,
-    # PowerTools, ...). State in /var/lib/decky-loader (persisted).
+    # Decky Loader plugins. State persists in /var/lib/decky-loader.
     decky-loader.enable = true;
   };
 
-  # Steam (desktop client + 32-bit libs) + latest GE-Proton.
-  # jovian.steam.enable already sets programs.steam.enable = mkDefault true.
+  # Steam client + GE-Proton tweaks.
   programs.steam = {
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
-    extraCompatPackages = with pkgs; [ proton-ge-bin ]; # auto-updated with nixpkgs
-    protontricks.enable = true; # fixes/inspects Proton prefixes
+    extraCompatPackages = with pkgs; [ proton-ge-bin ];
+    protontricks.enable = true;
   };
 
-  # GameMode: on-demand CPU governor → performance, renice, ioprio, GPU opts.
-  # Use `gamemoderun %command%` in desktop Steam launch options. The aqua user
-  # is added to the `gamemode` group in configuration.nix so the governor can
-  # actually switch.
+  # On-demand CPU/GPU performance optimizations.
   programs.gamemode.enable = true;
+
+  # Persistent game library on btrfs @saved subvolume.
+  systemd.tmpfiles.rules = [
+    "d /saved/games 0755 aqua users -"
+  ];
 }

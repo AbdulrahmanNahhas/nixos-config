@@ -1,20 +1,19 @@
-{
-  # config,
-  inputs,
-  pkgs,
-  username,
-  ...
-}:
+{ inputs, pkgs, username, ... }:
 
+let
+  # Manual wrapper to run specific work apps on the NVIDIA dGPU
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec "$@"
+  '';
+in
 {
   imports = [
-    # Razer Blade 14 (2025) — owns all NVIDIA/AMD hybrid config
     inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
-
-    # Auto-generated hardware probe (nixos-generate-config)
     ./hardware-configuration.nix
-
-    # Modules
     ./modules/disko.nix
     ./modules/boot.nix
     ./modules/desktop.nix
@@ -23,64 +22,35 @@
     ./modules/services.nix
     ./modules/gaming.nix
     ./modules/preservation.nix
-    # Home
     ./home.nix
   ];
 
-  # ── Network ──────────────────────────────────────────────
+  # ── Network & Locale ───────────────────────────────────
   networking.hostName = "shadow";
   networking.networkmanager.enable = true;
-
-  # ── Locale ───────────────────────────────────────────────
   time.timeZone = "Europe/Istanbul";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # ── User ─────────────────────────────────────────────────
-  # users.mutableUsers = false;
+  # ── User Configuration ─────────────────────────────────
   users.users.root.initialPassword = "changeme";
   users.users.${username} = {
     isNormalUser = true;
     initialPassword = "changeme";
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "video"
-      "input"
-      "audio"
-      "render"
-      "gamemode" # lets GameMode switch the CPU governor to `performance`
-    ];
+    extraGroups = [ "wheel" "networkmanager" "video" "input" "audio" "render" "gamemode" ];
     shell = pkgs.fish;
     packages = with pkgs; [ tree ];
   };
 
-  # ── GSConnect (KDE Connect protocol, GNOME-native) ────────────────
+  # ── GSConnect Firewall ─────────────────────────────────
   networking.firewall = {
-    allowedTCPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      }
-    ];
-    allowedUDPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      }
-    ];
+    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
   };
 
-  # ── Nix / nh ────────────────────────────────────────────
+  # ── Nix / nh Package Manager ───────────────────────────
   nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    # Allow user to use nix commands and binary caches without sudo
-    trusted-users = [
-      "root"
-      "@wheel"
-    ];
+    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = [ "root" "@wheel" ];
   };
   programs.nh = {
     enable = true;
@@ -91,26 +61,27 @@
     };
   };
 
-  # ── Hardware toggles ─────────────────────────────────
+  # ── Hardware & Drivers ─────────────────────────────────
   nixpkgs.config.allowUnfree = true;
   hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
   hardware.acpilight.enable = true;
 
-  # ── GPU env vars (not covered by nixos-hardware) ────────
-  # Hybrid laptop: AMD iGPU drives the panel, NVIDIA dGPU is for
-  # Prime render-offload (configured by nixos-hardware).
+  # Force desktop environment to stick strictly to AMD iGPU
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "radeonsi"; # video decode on the AMD iGPU
+    LIBVA_DRIVER_NAME = "radeonsi";
     NVD_BACKEND = "direct";
-    WLR_NO_HARDWARE_CURSORS = "1";
     __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
   };
 
-  # ── OpenRazer ──────────────────────────────────────────
+  # ── OpenRazer & Tools ──────────────────────────────────
   hardware.openrazer.enable = true;
   hardware.openrazer.users = [ "${username}" ];
-  environment.systemPackages = [ pkgs.polychromatic ];
+
+  environment.systemPackages = [
+    pkgs.polychromatic
+    nvidia-offload # Added wrapper: run `nvidia-offload <app>` in terminal
+  ];
 
   system.stateVersion = "26.05";
 }
