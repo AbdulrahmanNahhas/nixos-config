@@ -175,7 +175,6 @@
         font_size = 14.0;
         font_family = "GeistMono Nerd Font";
         toolbar.breadcrumbs = true;
-        # was /opt/homebrew/bin/fish on macOS
         shell.program = "fish";
         env.TERM_PROGRAM = "zed";
       };

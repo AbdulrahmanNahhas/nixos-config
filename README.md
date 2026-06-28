@@ -43,14 +43,17 @@ modules/
   preservation.nix       # /saved = persistent layer; lists everything kept across reboots
   services.nix           # PipeWire, Bluetooth, upower, openssh, sudo
 home/aqua/                # Everything per-user (managed by home-manager)
-  default.nix            # GTK, cursor, fonts, XDG dirs, terminal routing
-  packages.nix           # User CLI tools (eza, bat, fd, ripgrep, yazi, …)
-  firefox.nix            # Firefox profile, search engines, GNOME theme
-  fish.nix               # Fish + starship + aliases/functions
-  ghostty.nix            # Ghostty terminal config
-  gnome-extensions.nix   # GNOME Shell extensions as user packages
-  fastfetch.nix          # fastfetch system info
-  zed.nix                # Zed editor settings
+  default.nix             # GTK, cursor, XDG dirs, terminal/browser routing
+  gnome.nix               # dconf: monitor layout, fonts, night-light, app folders
+  gnome-extensions.nix    # GNOME Shell extensions + dconf settings
+  apps/
+    firefox.nix           # Firefox profile, search engines, GNOME theme
+    ghostty.nix           # Ghostty terminal config
+    zed.nix               # Zed editor settings
+  cli/
+    fish.nix              # Fish + starship + aliases/functions
+    fastfetch.nix         # fastfetch system info
+    packages.nix          # User CLI tools (eza, bat, fd, ripgrep, yazi, …)
 ```
 
 ## Disk layout (declared by `modules/disko.nix`)

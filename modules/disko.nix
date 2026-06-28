@@ -8,13 +8,13 @@
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
-        "size=4G"   # cap tmpfs at 4 GiB; bump higher only if you run memory-hungry daemons in /
+        "size=4G" # cap tmpfs at 4 GiB; bump higher only if you run memory-hungry daemons in /
         "mode=755"
       ];
     };
 
     disk.main = {
-      type   = "disk";
+      type = "disk";
       device = "/dev/nvme0n1";
 
       content = {
@@ -25,22 +25,25 @@
           # ── EFI System Partition ─────────────────────────────────────────
           ESP = {
             priority = 1;
-            name     = "ESP";
-            size     = "1G";
-            type     = "EF00";
-            content  = {
-              type       = "filesystem";
-              format     = "vfat";
+            name = "ESP";
+            size = "1G";
+            type = "EF00";
+            content = {
+              type = "filesystem";
+              format = "vfat";
               mountpoint = "/boot";
               # umask=0077 keeps the ESP readable only by root; x-gvfs-hide
               # stops GNOME Files from listing the ESP as a removable device.
-              mountOptions = [ "umask=0077" "x-gvfs-hide" ];
+              mountOptions = [
+                "umask=0077"
+                "x-gvfs-hide"
+              ];
             };
           };
 
           # ── LUKS2 encrypted container (rest of disk) ─────────────────────
           luks = {
-            size    = "100%";
+            size = "100%";
             content = {
               type = "luks";
               name = "crypted";
@@ -52,23 +55,31 @@
               };
 
               content = {
-                type      = "btrfs";
+                type = "btrfs";
                 extraArgs = [ "-f" ];
 
                 subvolumes = {
 
                   # Nix store — large, read-heavy, never wiped
                   "/nix" = {
-                    mountpoint   = "/nix";
+                    mountpoint = "/nix";
                     # x-gvfs-hide keeps /nix out of the GNOME Files sidebar.
-                    mountOptions = [ "compress=zstd" "noatime" "x-gvfs-hide" ];
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "x-gvfs-hide"
+                    ];
                   };
 
                   # Your persistence layer — everything you explicitly keep.
                   # x-gvfs-hide so /saved never appears as a mounted drive.
                   "/saved" = {
-                    mountpoint   = "/saved";
-                    mountOptions = [ "compress=zstd" "noatime" "x-gvfs-hide" ];
+                    mountpoint = "/saved";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "x-gvfs-hide"
+                    ];
                   };
 
                   # Swap as a btrfs swapfile.
@@ -91,6 +102,6 @@
   };
 
   # Tell NixOS these must be mounted before pivot_root
-  fileSystems."/nix".neededForBoot        = true;
+  fileSystems."/nix".neededForBoot = true;
   fileSystems."/saved".neededForBoot = true;
 }

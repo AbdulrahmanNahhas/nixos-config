@@ -37,7 +37,7 @@
         default = "ddg";
         engines = {
           "Nix Packages" = {
-            urls = [{ template = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}"; }];
+            urls = [ { template = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}"; } ];
             icon = "https://nixos.org/favicon.png";
             definedAliases = [ "@np" ];
           };

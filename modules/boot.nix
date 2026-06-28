@@ -18,25 +18,23 @@
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   boot.kernelParams = [
-   	# Black Screen Problem
+    # Black screen fix on this muxless hybrid panel.
     "modeset=1"
     "module_blacklist=nouveau"
 
-    # NVIDIA DRM/KMS (must pair with hardware.nvidia.modesetting.enable).
-    # fbdev=1 is harmful on muxless hybrid: the NVIDIA dGPU has no
-    # physical panel — the eDP panel is wired to the AMD iGPU.
+    # NVIDIA DRM/KMS (pairs with hardware.nvidia.modesetting.enable from
+    # nixos-hardware). fbdev=1 would be wrong here: the eDP panel is wired to
+    # the AMD iGPU, not the dGPU.
     "nvidia_drm.modeset=1"
 
-    # AMD Display Core (RDNA 3.5 requires this).
+    # AMD Display Core (RDNA 3.5 needs this).
     "amdgpu.dc=1"
 
-    # Prevent amdgpu runtime suspend → fixes eDP panel not being
-    # detected after initrd→root pivot ("Cannot find any crtc or sizes").
-    # Strix Point DMCUB firmware loses the internal panel across
-    # runtime-suspend cycles on this laptop.
-    "amdgpu.runpm=0" # Didn't fix black screen problem
+    # Keep amdgpu awake: Strix Point DMCUB firmware loses the internal panel
+    # across runtime-suspend cycles, breaking eDP detection after pivot_root.
+    "amdgpu.runpm=0"
 
-    # Power
+    # Power.
     "mem_sleep_default=deep"
     "amd_pstate=active"
 
@@ -45,9 +43,9 @@
   ];
 
   boot.blacklistedKernelModules = [
-  	"nouveau"
-  	"nvidiafb"
-  	"rivafb"
-  	"rivatv"
+    "nouveau"
+    "nvidiafb"
+    "rivafb"
+    "rivatv"
   ];
 }

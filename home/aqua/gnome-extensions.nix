@@ -41,52 +41,57 @@ let
     lib.hm.gvariant.type.variant
   ];
 
-  mkEntry = key: value:
+  mkEntry =
+    key: value:
     lib.hm.gvariant.mkDictionaryEntry [
       (lib.hm.gvariant.mkString key)
       (lib.hm.gvariant.mkVariant value)
     ];
 
-  mkVardict = entries:
-    lib.hm.gvariant.mkArray svEntryType
-      (map (e: mkEntry e.name e.value) entries);
+  mkVardict = entries: lib.hm.gvariant.mkArray svEntryType (map (e: mkEntry e.name e.value) entries);
 
   # Takes a list of App IDs and builds a SINGLE page containing all of them,
   # automatically calculating their zero-indexed grid position.
-  mkPage = apps:
-    mkVardict (lib.imap0 (pos: id: {
-      name = id;
-      value = mkVardict [ { name = "position"; value = lib.hm.gvariant.mkInt32 pos; } ];
-    }) apps);
+  mkPage =
+    apps:
+    mkVardict (
+      lib.imap0 (pos: id: {
+        name = id;
+        value = mkVardict [
+          {
+            name = "position";
+            value = lib.hm.gvariant.mkInt32 pos;
+          }
+        ];
+      }) apps
+    );
 
   # The app grid array. Wrapping mkPage inside a single list item
   # forces GNOME to put all of these on Page 1, fixing the "20+ pages" bug.
-  appPickerLayout = lib.hm.gvariant.mkArray
-    (lib.hm.gvariant.type.arrayOf svEntryType)
-    [
-      (mkPage [
-        "System"
-        "Utilities"
-        "351e0451-6bef-4f3d-95e2-16c13fd65f91"
-        "com.belmoussaoui.Authenticator.desktop"
-        "com.brave.Browser.desktop"
-        "org.gnome.Fractal.desktop"
-        "de.wwwtech.gitte.desktop"
-        "org.keepassxc.KeePassXC.desktop"
-        "io.github.sniper1720.khushu.desktop"
-        "org.gnome.Settings.desktop"
-        "io.gitlab.news_flash.NewsFlash.desktop"
-        "nixos-manual.desktop"
-        "obsidian.desktop"
-        "org.onlyoffice.desktopeditors.desktop"
-        "opencode-desktop.desktop"
-        "org.gnome.World.Secrets.desktop"
-        "chat.simplex.simplex.desktop"
-        "org.telegram.desktop.desktop"
-        "dev.geopjr.Tuba.desktop"
-        "dev.vencord.Vesktop.desktop"
-      ])
-    ];
+  appPickerLayout = lib.hm.gvariant.mkArray (lib.hm.gvariant.type.arrayOf svEntryType) [
+    (mkPage [
+      "System"
+      "Utilities"
+      "351e0451-6bef-4f3d-95e2-16c13fd65f91"
+      "com.belmoussaoui.Authenticator.desktop"
+      "com.brave.Browser.desktop"
+      "org.gnome.Fractal.desktop"
+      "de.wwwtech.gitte.desktop"
+      "org.keepassxc.KeePassXC.desktop"
+      "io.github.sniper1720.khushu.desktop"
+      "org.gnome.Settings.desktop"
+      "io.gitlab.news_flash.NewsFlash.desktop"
+      "nixos-manual.desktop"
+      "obsidian.desktop"
+      "org.onlyoffice.desktopeditors.desktop"
+      "opencode-desktop.desktop"
+      "org.gnome.World.Secrets.desktop"
+      "chat.simplex.simplex.desktop"
+      "org.telegram.desktop.desktop"
+      "dev.geopjr.Tuba.desktop"
+      "dev.vencord.Vesktop.desktop"
+    ])
+  ];
 in
 
 {
@@ -243,7 +248,11 @@ in
       slideshow-directory = "/home/aqua/Pictures/Wallpapers/Scenes";
       slideshow-pause = true;
       slideshow-pause-on-fullscreen = true;
-      slideshow-slide-duration = lib.hm.gvariant.mkTuple [ 0 2 0 ];
+      slideshow-slide-duration = lib.hm.gvariant.mkTuple [
+        0
+        2
+        0
+      ];
       slideshow-use-absolute-time-for-duration = false;
     };
 

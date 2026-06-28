@@ -38,7 +38,6 @@
       "com.github.ADBeveridge.Raider"
       "de.wwwtech.gitte"
       "io.github.sniper1720.khushu" # Prayer Times
-      # "dev.qwery.AddWater" # Firefox Gnome Theme
       "org.keepassxc.KeePassXC"
       "com.belmoussaoui.Authenticator"
       "org.gnome.World.Secrets"

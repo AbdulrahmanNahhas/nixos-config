@@ -21,23 +21,46 @@
         }
 
         # SSH host keys — prevents remote clients getting "host key changed" warnings.
-        { file = "/etc/ssh/ssh_host_ed25519_key";     how = "symlink"; configureParent = true; }
-        { file = "/etc/ssh/ssh_host_ed25519_key.pub"; how = "symlink"; configureParent = true; }
+        {
+          file = "/etc/ssh/ssh_host_ed25519_key";
+          how = "symlink";
+          configureParent = true;
+        }
+        {
+          file = "/etc/ssh/ssh_host_ed25519_key.pub";
+          how = "symlink";
+          configureParent = true;
+        }
 
         # Systemd random seed — prevents entropy pool stalling on system boot.
-        { file = "/var/lib/systemd/random-seed"; how = "symlink"; inInitrd = true; configureParent = true; }
+        {
+          file = "/var/lib/systemd/random-seed";
+          how = "symlink";
+          inInitrd = true;
+          configureParent = true;
+        }
 
         # Git global config — user details and global settings.
-        { file = "/home/aqua/.gitconfig"; how = "symlink"; }
+        {
+          file = "/home/aqua/.gitconfig";
+          how = "symlink";
+        }
 
         # ── GNOME desktop state ──────────────────────────────
         # dconf uses a single binary database file to store all runtime state.
         # Persisting via symlink avoids bind-mount locks when Home Manager writes to it.
-        { file = "/home/aqua/.config/dconf/user"; how = "symlink"; configureParent = true; }
+        {
+          file = "/home/aqua/.config/dconf/user";
+          how = "symlink";
+          configureParent = true;
+        }
       ];
 
       directories = [
-        { directory = "/var/lib/nixos"; inInitrd = true; }
+        {
+          directory = "/var/lib/nixos";
+          inInitrd = true;
+        }
         "/var/log"
         "/var/lib/flatpak"
         "/var/lib/bluetooth"
@@ -63,15 +86,27 @@
           "Videos"
 
           # ── Identity / Secrets ───────────────────────────────
-          { directory = ".ssh";   mode = "0700"; }
-          { directory = ".gnupg"; mode = "0700"; }
+          {
+            directory = ".ssh";
+            mode = "0700";
+          }
+          {
+            directory = ".gnupg";
+            mode = "0700";
+          }
 
           # ── Git & Forge CLI Tools ────────────────────────────
           ".config/gh" # GitHub CLI auth state
-          { directory = ".local/share/keyrings"; mode = "0700"; } # GNOME Keyring credentials
+          {
+            directory = ".local/share/keyrings";
+            mode = "0700";
+          } # GNOME Keyring credentials
 
           # ── Web Browser ──────────────────────────────────────
-          { directory = ".mozilla"; mode = "0700"; } # Firefox history, profile, and cookies
+          {
+            directory = ".mozilla";
+            mode = "0700";
+          } # Firefox history, profile, and cookies
 
           # ── Flatpak Application Data ─────────────────────────
           ".var" # Flatpak app state (Signal, Telegram, Vesktop, Fractal, Tuba, etc.)
@@ -113,14 +148,38 @@
 
   # Set up base directories with appropriate user ownership before app creation loops.
   systemd.tmpfiles.settings.preservation = {
-    "/home/aqua/.config".d         = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.config/dconf".d   = lib.mkForce { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local".d          = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local/share".d    = { user = "aqua"; group = "users"; mode = "0755"; };
-    "/home/aqua/.local/state".d    = { user = "aqua"; group = "users"; mode = "0755"; };
+    "/home/aqua/.config".d = {
+      user = "aqua";
+      group = "users";
+      mode = "0755";
+    };
+    "/home/aqua/.config/dconf".d = lib.mkForce {
+      user = "aqua";
+      group = "users";
+      mode = "0755";
+    };
+    "/home/aqua/.local".d = {
+      user = "aqua";
+      group = "users";
+      mode = "0755";
+    };
+    "/home/aqua/.local/share".d = {
+      user = "aqua";
+      group = "users";
+      mode = "0755";
+    };
+    "/home/aqua/.local/state".d = {
+      user = "aqua";
+      group = "users";
+      mode = "0755";
+    };
 
     # Isolated secret runtime directory used by explicit out-of-store home configurations.
-    "/saved/secrets".d           = { user = "aqua"; group = "users"; mode = "0700"; };
+    "/saved/secrets".d = {
+      user = "aqua";
+      group = "users";
+      mode = "0700";
+    };
   };
 
   # Commits the transient tmpfs machine-id down to the persistent /saved partition.

@@ -56,15 +56,31 @@
 
   # ── GSConnect (KDE Connect protocol, GNOME-native) ────────────────
   networking.firewall = {
-    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
-    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+    allowedTCPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
+    allowedUDPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
   };
 
   # ── Nix / nh ────────────────────────────────────────────
   nix.settings = {
-  	experimental-features = [ "nix-command" "flakes" ];
-  	# Allow user to use nix commands and binary caches without sudo
-  	trusted-users = [ "root" "@wheel" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    # Allow user to use nix commands and binary caches without sudo
+    trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
   programs.nh = {
     enable = true;
@@ -85,7 +101,7 @@
   # Hybrid laptop: AMD iGPU drives the panel, NVIDIA dGPU is for
   # Prime render-offload (configured by nixos-hardware).
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "radeonsi";  # video decode on the AMD iGPU
+    LIBVA_DRIVER_NAME = "radeonsi"; # video decode on the AMD iGPU
     NVD_BACKEND = "direct";
     WLR_NO_HARDWARE_CURSORS = "1";
     __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
@@ -93,7 +109,7 @@
 
   # ── OpenRazer ──────────────────────────────────────────
   hardware.openrazer.enable = true;
-  hardware.openrazer.users = [ "${username}" ] ;
+  hardware.openrazer.users = [ "${username}" ];
   environment.systemPackages = [ pkgs.polychromatic ];
 
   system.stateVersion = "26.05";

@@ -10,7 +10,7 @@ let
   ];
 in
 {
-  # ── Geberate Monitor Settings ───────────
+  # ── Generate Monitor Settings ───────────
   xdg.configFile."monitors.xml".text = ''
     <monitors version="2">
       <configuration>
@@ -60,12 +60,24 @@ in
     "org/gnome/desktop/input-sources" = {
       show-all-sources = false;
       sources = lib.hm.gvariant.mkArray strTupleType [
-        (lib.hm.gvariant.mkTuple [ "xkb" "us" ])
-        (lib.hm.gvariant.mkTuple [ "xkb" "ara" ])
+        (lib.hm.gvariant.mkTuple [
+          "xkb"
+          "us"
+        ])
+        (lib.hm.gvariant.mkTuple [
+          "xkb"
+          "ara"
+        ])
       ];
       mru-sources = lib.hm.gvariant.mkArray strTupleType [
-        (lib.hm.gvariant.mkTuple [ "xkb" "us" ])
-        (lib.hm.gvariant.mkTuple [ "xkb" "ara" ])
+        (lib.hm.gvariant.mkTuple [
+          "xkb"
+          "us"
+        ])
+        (lib.hm.gvariant.mkTuple [
+          "xkb"
+          "ara"
+        ])
       ];
       xkb-options = lib.hm.gvariant.mkArray lib.hm.gvariant.type.string [ ];
     };
@@ -161,7 +173,10 @@ in
     };
 
     "org/gnome/desktop/break-reminders" = {
-      selected-breaks = [ "eyesight" "movement" ];
+      selected-breaks = [
+        "eyesight"
+        "movement"
+      ];
     };
 
     "org/gnome/desktop/break-reminders/eyesight" = {
