@@ -1,4 +1,3 @@
-# Bootloader + kernel parameters (systemd-boot)
 { pkgs, ... }:
 
 {
@@ -10,38 +9,35 @@
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # ── Plymouth: smooth initrd → GDM transition (fixes blank screen after LUKS) ──
-  boot.plymouth.enable = true;
+  # TEST: Temporarily disable Plymouth if the black screen persists.
+  # Plymouth frequently hangs during the GDM handoff on hybrid layouts.
+  # boot.plymouth.enable = false;
 
-  # Load amdgpu in initrd for early KMS (nixos-hardware also sets
-  # hardware.amdgpu.initrd.enable which covers this, but explicit is safe).
+  # Force AMD iGPU drivers to load inside initrd for early KMS
   boot.initrd.kernelModules = [ "amdgpu" ];
 
   boot.kernelParams = [
-    # Black screen fix on this muxless hybrid panel.
-    "modeset=1"
-    "module_blacklist=nouveau"
+    # "modeset=1"
+    # "module_blacklist=nouveau"
 
-    # NVIDIA DRM/KMS (pairs with hardware.nvidia.modesetting.enable from
-    # nixos-hardware). fbdev=1 would be wrong here: the eDP panel is wired to
-    # the AMD iGPU, not the dGPU.
+    # NVIDIA DRM/KMS configuration (paired with nixos-hardware)
     "nvidia_drm.modeset=1"
 
-    # AMD Display Core (RDNA 3.5 needs this).
+    # AMD Display Core initialization
     "amdgpu.dc=1"
 
-    # Keep amdgpu awake: Strix Point DMCUB firmware loses the internal panel
-    # across runtime-suspend cycles, breaking eDP detection after pivot_root.
+    # Prevent Strix Point DMCUB firmware panel drop bugs across power cycles
     "amdgpu.runpm=0"
 
-    # Power.
+    # Power Management configurations
     "mem_sleep_default=deep"
     "amd_pstate=active"
 
-    # Fine-grained NVIDIA dynamic power management (D3cold when idle).
+    # Force NVIDIA dGPU into D3cold state when idle
     "nvidia.NVreg_DynamicPowerManagement=0x02"
   ];
 
+  # Block open-source Nouveau drivers to prevent conflicts with proprietary NVIDIA
   boot.blacklistedKernelModules = [
     "nouveau"
     "nvidiafb"

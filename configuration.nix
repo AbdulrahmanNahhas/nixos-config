@@ -9,6 +9,7 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec "$@"
   '';
+
 in
 {
   imports = [
@@ -65,14 +66,18 @@ in
   nixpkgs.config.allowUnfree = true;
   hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
-  hardware.acpilight.enable = true;
+  # hardware.acpilight.enable = true;
 
   # Force desktop environment to stick strictly to AMD iGPU
+  services.xserver.videoDrivers = [ "amdgpu" "nvidia" ];
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "radeonsi";
     NVD_BACKEND = "direct";
     __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
   };
+  services.udev.extraRules = ''
+    KERNEL=="card[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x1002", TAG+="mutter-device-preferred-primary"
+  '';
 
   # ── OpenRazer & Tools ──────────────────────────────────
   hardware.openrazer.enable = true;
