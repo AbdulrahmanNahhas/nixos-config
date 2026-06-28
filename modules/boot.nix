@@ -7,37 +7,25 @@
     systemd-boot.configurationLimit = 8;
   };
 
+  # Use the latest kernel for the best support for Strix Point and RTX 50-series
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # TEST: Temporarily disable Plymouth if the black screen persists.
-  # Plymouth frequently hangs during the GDM handoff on hybrid layouts.
-  # boot.plymouth.enable = false;
-
-  # Force AMD iGPU drivers to load inside initrd for early KMS
-  boot.initrd.kernelModules = [ "amdgpu" ];
+  # Plymouth (Beatiful Booting UI)
+  boot.plymouth.enable = false;
 
   boot.kernelParams = [
-    # "modeset=1"
-    # "module_blacklist=nouveau"
-
-    # NVIDIA DRM/KMS configuration (paired with nixos-hardware)
-    "nvidia_drm.modeset=1"
-
     # AMD Display Core initialization
     "amdgpu.dc=1"
 
-    # Prevent Strix Point DMCUB firmware panel drop bugs across power cycles
+    # Prevent Strix Point DMCUB firmware panel drop
     "amdgpu.runpm=0"
 
     # Power Management configurations
-    "mem_sleep_default=deep"
+    # "mem_sleep_default=deep" # Uses Legacy S3 Sleep
     "amd_pstate=active"
-
-    # Force NVIDIA dGPU into D3cold state when idle
-    "nvidia.NVreg_DynamicPowerManagement=0x02"
   ];
 
-  # Block open-source Nouveau drivers to prevent conflicts with proprietary NVIDIA
+  # Blacklist conflicting modules
   boot.blacklistedKernelModules = [
     "nouveau"
     "nvidiafb"

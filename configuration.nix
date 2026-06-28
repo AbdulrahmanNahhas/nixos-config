@@ -1,16 +1,5 @@
 { inputs, pkgs, username, ... }:
 
-let
-  # Manual wrapper to run specific work apps on the NVIDIA dGPU
-  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
-    export __NV_PRIME_RENDER_OFFLOAD=1
-    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
-    export __GLX_VENDOR_LIBRARY_NAME=nvidia
-    export __VK_LAYER_NV_optimus=NVIDIA_only
-    exec "$@"
-  '';
-
-in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
@@ -63,18 +52,18 @@ in
   };
 
   # ── Hardware & Drivers ─────────────────────────────────
+  services.power-profiles-daemon.enable = true;
   nixpkgs.config.allowUnfree = true;
-  hardware.enableRedistributableFirmware = true;
   hardware.bluetooth.enable = true;
-  # hardware.acpilight.enable = true;
 
-  # Force desktop environment to stick strictly to AMD iGPU
-  services.xserver.videoDrivers = [ "amdgpu" "nvidia" ];
+  # Hardware acceleration variables (Sync Display strictly removed)
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "radeonsi";
     NVD_BACKEND = "direct";
-    __GL_SYNC_DISPLAY_DEVICE = "eDP-1";
   };
+
+  # Force desktop environment (Mutter) to prefer AMD iGPU for rendering
+  # but DO NOT ignore NVIDIA, ensuring HDMI hotplugging remains functional.
   services.udev.extraRules = ''
     KERNEL=="card[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x1002", TAG+="mutter-device-preferred-primary"
   '';
@@ -85,7 +74,6 @@ in
 
   environment.systemPackages = [
     pkgs.polychromatic
-    nvidia-offload # Added wrapper: run `nvidia-offload <app>` in terminal
   ];
 
   system.stateVersion = "26.05";
