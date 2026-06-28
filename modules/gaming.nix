@@ -4,12 +4,26 @@
 # the nixos-hardware Razer Blade 14 module — not duplicated here. Desktop/work
 # runs on the AMD iGPU (GNOME stays the default GDM session); the dGPU is only
 # engaged inside Gaming Mode via the PRIME env vars below.
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, lib, ... }:
 
 {
   # Jovian overlay: gamescope-session, steamos-manager, decky-loader,
   # gamescope-wsi, scx schedulers, etc.
-  nixpkgs.overlays = [ inputs.jovian.overlays.default ];
+  #
+  # The second overlay fixes a Jovian build bug: Jovian backports two mangohud
+  # patches, but the overlay is applied twice for pkgsi686Linux (32-bit), so
+  # the i686 mangohud ends up with duplicated patches and fails in patchPhase
+  # with "Reversed (or previously applied) patch detected". lib.unique
+  # deduplicates the patches list — fetchpatch is a fixed-output derivation so
+  # identical URL+hash produce identical store paths.
+  nixpkgs.overlays = [
+    inputs.jovian.overlays.default
+    (_final: prev: {
+      mangohud = prev.mangohud.overrideAttrs (old: {
+        patches = lib.unique (old.patches or [ ]);
+      });
+    })
+  ];
 
   imports = [ inputs.jovian.nixosModules.jovian ];
 
