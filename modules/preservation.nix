@@ -1,26 +1,18 @@
-# preservation.nix — /saved is the persistent btrfs subvolume
-#
-# The root filesystem (`/`) is tmpfs; anything NOT listed here is lost on reboot.
-# Add folders/files here when introducing new software requiring persistent state.
-{
-  lib,
-  ...
-}:
+{ lib, ... }:
 {
   preservation = {
     enable = true;
 
     preserveAt."/saved" = {
       files = [
-        # System machine-id — survives reboots for journald, machinectl, NetworkManager.
+        # System machine-id
         {
           file = "/etc/machine-id";
           inInitrd = true;
           how = "symlink";
           configureParent = true;
         }
-
-        # SSH host keys — prevents remote clients getting "host key changed" warnings.
+        # SSH host keys
         {
           file = "/etc/ssh/ssh_host_ed25519_key";
           how = "symlink";
@@ -31,24 +23,20 @@
           how = "symlink";
           configureParent = true;
         }
-
-        # Systemd random seed — prevents entropy pool stalling on system boot.
+        # Systemd random seed
         {
           file = "/var/lib/systemd/random-seed";
           how = "symlink";
           inInitrd = true;
           configureParent = true;
         }
-
-        # Git global config — user details and global settings.
+        # Git global config
         {
           file = "/home/aqua/.gitconfig";
           how = "symlink";
         }
 
         # ── GNOME desktop state ──────────────────────────────
-        # dconf uses a single binary database file to store all runtime state.
-        # Persisting via symlink avoids bind-mount locks when Home Manager writes to it.
         {
           file = "/home/aqua/.config/dconf/user";
           how = "symlink";
@@ -64,14 +52,13 @@
         "/var/log"
         "/var/lib/flatpak"
         "/var/lib/bluetooth"
-        "/var/lib/decky-loader" # Decky Loader plugins + data (Steam Deck UI)
+        "/var/lib/decky-loader"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
         "/etc/NetworkManager/system-connections"
       ];
 
       users.aqua = {
-        # Hides per-user bind mounts from gvfs/GNOME Files to prevent duplicate sidebar items.
         commonMountOptions = [ "x-gvfs-hide" ];
 
         directories = [
@@ -96,11 +83,11 @@
           }
 
           # ── Git & Forge CLI Tools ────────────────────────────
-          ".config/gh" # GitHub CLI auth state
+          ".config/gh"
           {
             directory = ".local/share/keyrings";
             mode = "0700";
-          } # GNOME Keyring credentials
+          }
 
           # ── Web Browser ──────────────────────────────────────
           {
@@ -109,17 +96,17 @@
           } # Firefox history, profile, and cookies
 
           # ── Flatpak Application Data ─────────────────────────
-          ".var" # Flatpak app state (Signal, Telegram, Vesktop, Fractal, Tuba, etc.)
+          ".var"
 
           # ── Editor / IDE State ───────────────────────────────
-          ".local/share/zed" # Zed login tokens, workspace database, and histories
+          ".local/share/zed"
           ".config/zed"
           ".config/nvim"
           ".local/state/nvim"
 
           # ── Shell History & State ────────────────────────────
           ".config/fish"
-          ".local/share/fish" # Shell interactive history
+          ".local/share/fish"
           ".local/state/nix"
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
@@ -135,12 +122,12 @@
           ".config/opencode"
           ".local/share/opencode"
           ".config/ai.opencode.desktop"
-
-          # ── Steam (library, Proton prefixes, compat tools, game saves) ───
-          # Lives on the persistent /saved btrfs subvolume; the tmpfs root
-          # would otherwise wipe every installed game on reboot.
           ".local/share/Steam"
           ".steam"
+          ".config/openrazer"
+          ".local/share/openrazer"
+          ".config/polychromatic"
+          ".local/share/polychromatic"
         ];
       };
     };

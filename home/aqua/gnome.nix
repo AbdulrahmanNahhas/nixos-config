@@ -1,8 +1,4 @@
-{
-  lib,
-  ...
-}:
-
+{ lib, ... }:
 let
   strTupleType = lib.hm.gvariant.type.tupleOf [
     lib.hm.gvariant.type.string
@@ -39,7 +35,6 @@ in
   '';
 
   dconf.settings = {
-
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
@@ -60,24 +55,12 @@ in
     "org/gnome/desktop/input-sources" = {
       show-all-sources = false;
       sources = lib.hm.gvariant.mkArray strTupleType [
-        (lib.hm.gvariant.mkTuple [
-          "xkb"
-          "us"
-        ])
-        (lib.hm.gvariant.mkTuple [
-          "xkb"
-          "ara"
-        ])
+        (lib.hm.gvariant.mkTuple [ "xkb" "us" ])
+        (lib.hm.gvariant.mkTuple [ "xkb" "ara" ])
       ];
       mru-sources = lib.hm.gvariant.mkArray strTupleType [
-        (lib.hm.gvariant.mkTuple [
-          "xkb"
-          "us"
-        ])
-        (lib.hm.gvariant.mkTuple [
-          "xkb"
-          "ara"
-        ])
+        (lib.hm.gvariant.mkTuple [ "xkb" "us" ])
+        (lib.hm.gvariant.mkTuple [ "xkb" "ara" ])
       ];
       xkb-options = lib.hm.gvariant.mkArray lib.hm.gvariant.type.string [ ];
     };
@@ -132,6 +115,7 @@ in
         "yazi.desktop"
         "org.gnome.Extensions.desktop"
         "polychromatic.desktop"
+        "protontricks.desktop"
       ];
       name = "Utils";
       translate = false;

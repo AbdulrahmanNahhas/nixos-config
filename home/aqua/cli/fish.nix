@@ -1,8 +1,4 @@
-# Fish shell configuration
-{
-  ...
-}:
-
+{ ... }:
 {
   programs.fish = {
     enable = true;
@@ -14,7 +10,6 @@
       nv = "nvidia-offload";
 
       # NixOS System Management
-      # Flake lives on /saved (persistent) — see configuration.nix `programs.nh.flake`.
       nx-rebuild = "nh os switch /saved/nixos-config";
       nx-test = "nh os test /saved/nixos-config";
       nx-clean = "nh clean all --keep-since 14d --keep 10";
@@ -84,9 +79,7 @@
 
       y = ''
         set -l tmp (mktemp -t "yazi-cwd.XXXXXX")
-
         yazi --cwd-file="$tmp" $argv
-
         if test -f "$tmp"
           set -l cwd (command cat "$tmp")
           if test -n "$cwd"
@@ -95,7 +88,6 @@
             end
           end
         end
-
         rm -f -- "$tmp"
       '';
     };

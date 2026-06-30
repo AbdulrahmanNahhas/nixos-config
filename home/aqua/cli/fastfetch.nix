@@ -1,9 +1,6 @@
-# Fastfetch system info display
 {
-  # pkgs,
   ...
 }:
-
 {
   xdg.configFile."fastfetch/fastfetch.txt".source = ./fastfetch.txt;
 

@@ -1,6 +1,4 @@
-# System-wide packages
 { pkgs, ... }:
-
 {
   programs.fish.enable = true;
 

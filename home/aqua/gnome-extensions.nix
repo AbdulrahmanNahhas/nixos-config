@@ -1,18 +1,4 @@
-# ────────────────────────────────────────────────────────────────
-# GNOME Shell Extensions Configuration
-#
-# To update extension settings declaratively:
-# 1. Tweak the extension natively via the GUI.
-# 2. Run: dconf dump /org/gnome/shell/extensions/<uuid>/
-# 3. Paste the output into the dconf.settings block below.
-# ────────────────────────────────────────────────────────────────
-
-{
-  lib,
-  pkgs,
-  ...
-}:
-
+{ lib, pkgs, ... }:
 let
   extensionPackages = with pkgs.gnomeExtensions; [
     user-themes
@@ -25,16 +11,12 @@ let
     just-perfection
     status-area-horizontal-spacing
     gsconnect
+    dynamic-music-pill
   ];
 
   extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
-
   disabledUuids = [ pkgs.gnomeExtensions.gsconnect.extensionUuid ];
   enabledUuids = builtins.filter (u: !(builtins.elem u disabledUuids)) extensionUuids;
-
-  # ═══════════════════════════════════════════════════════════════
-  #  App-picker-layout helpers (GVariant type aa{sv})
-  # ═══════════════════════════════════════════════════════════════
 
   svEntryType = lib.hm.gvariant.type.dictionaryEntryOf [
     lib.hm.gvariant.type.string
@@ -50,8 +32,6 @@ let
 
   mkVardict = entries: lib.hm.gvariant.mkArray svEntryType (map (e: mkEntry e.name e.value) entries);
 
-  # Takes a list of App IDs and builds a SINGLE page containing all of them,
-  # automatically calculating their zero-indexed grid position.
   mkPage =
     apps:
     mkVardict (
@@ -66,8 +46,6 @@ let
       }) apps
     );
 
-  # The app grid array. Wrapping mkPage inside a single list item
-  # forces GNOME to put all of these on Page 1, fixing the "20+ pages" bug.
   appPickerLayout = lib.hm.gvariant.mkArray (lib.hm.gvariant.type.arrayOf svEntryType) [
     (mkPage [
       "System"
@@ -93,7 +71,6 @@ let
     ])
   ];
 in
-
 {
   home.packages = extensionPackages;
 
@@ -101,7 +78,6 @@ in
     "org/gnome/shell" = {
       enabled-extensions = enabledUuids;
       disabled-extensions = disabledUuids;
-
       favorite-apps = [
         "com.mitchellh.ghostty.desktop"
         "dev.zed.Zed.desktop"
@@ -109,7 +85,6 @@ in
         "org.gnome.Nautilus.desktop"
         "org.signal.Signal.desktop"
       ];
-
       app-picker-layout = appPickerLayout;
     };
 

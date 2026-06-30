@@ -1,9 +1,6 @@
-# Ghostty terminal emulator config
 { ... }:
-
 {
   xdg.configFile."ghostty/config".text = ''
-    # ── Font ───────────────────────────────────────────────
     font-family = "GeistMono Nerd Font"
     font-size = 16
     font-feature = "calt liga zero"
@@ -14,11 +11,9 @@
     window-padding-y = 4
     window-width = 800
     window-height = 500
-
     window-decoration = auto
     window-theme = auto
     gtk-titlebar = true
-
     background-opacity = 0.92
 
     # ── Theme ──────────────────────────────────────────────

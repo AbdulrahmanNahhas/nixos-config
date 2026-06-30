@@ -1,32 +1,49 @@
 # Background services
-# (Flatpak remotes + packages live in flatpak.nix — don't re-enable the service here.)
-{ ... }:
-
+{ pkgs, ... }:
 {
-  # ── Power ────────────────────────────────────────────────
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
+  # services.logind.settings.Login = {
+  #   # HandleSuspendKey = "ignore";
+  #   # HandleHibernateKey = "ignore";
+  #   # HandlePowerKey = "ignore";
+  #   LidSwitch = "ignore";
+  #   LidSwitchDocked = "ignore";
+  #   LidSwitchExternalPower = "ignore";
+  # };
+  services.xserver.excludePackages = [ pkgs.xterm ];
 
-  # ── Firmware updates (LVFS) & Thunderbolt security ───────
-  # fwupd delivers BIOS/firmware updates; bolt manages Thunderbolt 4 device
-  # authorization. Both are standard on a 2025 laptop and have no downside.
+  services.xserver.enable = true;
+  services.displayManager.gdm = {
+    enable = true;
+    autoSuspend = false;
+  };
+  services.desktopManager.gnome.enable = true;
+
+  services.gnome.gnome-keyring.enable = true;
+  services.gnome.gnome-software.enable = false;
+
   services.fwupd.enable = true;
   services.hardware.bolt.enable = true;
 
-  # ── SSH ──────────────────────────────────────────────────
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      epson-escpr
+    ];
+  };
+
   services.openssh.enable = true;
 
-  # ── Audio (PipeWire + WirePlumber) ───────────────────────
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    wireplumber.enable = true; # session manager — default-on, spelled out for clarity
+    wireplumber.enable = true;
   };
   security.rtkit.enable = true;
 
-  # ── SUDO editor passthrough ──────────────────────────────
   security.sudo.extraConfig = ''
     Defaults env_keep += "EDITOR VISUAL"
   '';

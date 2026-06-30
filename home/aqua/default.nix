@@ -1,10 +1,4 @@
-# Home-manager config for aqua
-{
-  config,
-  pkgs,
-  ...
-}:
-
+{ config, pkgs, ... }:
 {
   imports = [
     ./apps/zed.nix
@@ -59,7 +53,6 @@
   # ── GTK  ────────────────────────────────────
   gtk = {
     enable = true;
-
     theme = {
       name = "adw-gtk3-dark";
       package = pkgs.adw-gtk3;
@@ -74,23 +67,15 @@
   home.pointerCursor = {
     gtk.enable = true;
     x11.enable = true;
-
     package = pkgs.bibata-cursors;
     name = "Bibata-Modern-Ice";
     size = 26;
   };
 
   # ── XDG user directories ────────────────────────────────────────────────
-  # persistence.nix bind-mounts the persistent copies that physically live
-  # under /saved/home/aqua back onto these standard ~/ paths. So you access
-  # data at ~/Documents etc.; the /saved backing store is kept out of GNOME
-  # Files via `x-gvfs-hide` (see preservation.nix + disko.nix).
-  #
-  # Downloads intentionally stays on the tmpfs root → wiped on every reboot.
   xdg.userDirs = {
     enable = true;
     createDirectories = true;
-
     desktop = "${config.home.homeDirectory}/Desktop";
     documents = "${config.home.homeDirectory}/Documents";
     download = "${config.home.homeDirectory}/Downloads"; # tmpfs — wiped on reboot
@@ -102,13 +87,8 @@
     projects = "${config.home.homeDirectory}/Projects";
   };
 
-  # Let home-manager manage these
   programs.home-manager.enable = true;
 
-  # ── Nix user config → /saved/secrets/nix.conf ─────────────
-  # Points ~/.config/nix/nix.conf to the persistent secrets file
-  # (access-tokens for GitHub API, etc.). The file lives in /saved
-  # (btrfs subvolume) so it survives tmpfs wipes.
   home.file.".config/nix/nix.conf".source =
     config.lib.file.mkOutOfStoreSymlink "/saved/secrets/nix.conf";
 }

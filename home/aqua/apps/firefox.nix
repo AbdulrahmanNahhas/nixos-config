@@ -1,30 +1,16 @@
-# Firefox — GNOME theme + add-ons + search.
-#
-# Home-manager writes profiles.ini + user.js to the XDG path
-# (~/.config/mozilla/firefox). Firefox reads them from the legacy path
-# (~/.mozilla/firefox). The activation hook below syncs the managed
-# files on every rebuild. Profile data (sqlite, logins, cookies) lives
-# under the legacy path and is bind-mounted on /saved by preservation.nix.
-{
-  config,
-  lib,
-  username,
-  inputs,
-  ...
-}:
-
+{ lib, username, inputs, ... }:
 {
   programs.firefox = {
     enable = true;
 
-    # ── Add-ons (forced via enterprise policies) ──────────
+    # ── Add-ons ──────────
     policies.ExtensionSettings = {
       # uBlock Origin
       "uBlock0@raymondhill.net" = {
         install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
         installation_mode = "force_installed";
       };
-      # Add more here — grab the extension ID from about:support.
+      # extension ID from about:support.
     };
 
     profiles.aqua = {
@@ -41,7 +27,6 @@
             icon = "https://nixos.org/favicon.png";
             definedAliases = [ "@np" ];
           };
-          # Hide clutter providers.
           "bing".metaData.hidden = true;
           "ebay".metaData.hidden = true;
         };
@@ -49,14 +34,9 @@
 
       # ── about:config prefs ───────────────────────────────
       settings = {
-        # Required for the GNOME theme's userChrome/userContent CSS.
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
         "svg.context-properties.content.enabled" = true;
-
-        # Force dark UI so the GNOME theme renders dark (Firefox may
-        # otherwise stay light even under a dark GTK theme).
         "ui.systemUsesDarkTheme" = 1;
-
         "gnomeTheme.hideSingleTab" = false;
         "gnomeTheme.tabsAsHeaderbar" = true;
         "gnomeTheme.normalWidthTabs" = false;
@@ -64,8 +44,6 @@
         "gnomeTheme.hideWebrtcIndicator" = true;
         "gnomeTheme.systemIcons" = false;
         "gnomeTheme.bookmarksToolbarUnderTabs" = false;
-
-        # ── Behaviour ──────────────────────────────────────
         "browser.startup.homepage" = "about:home";
         "browser.newtabpage.activity-stream.feeds.section.topstories" = false;
         "browser.newtabpage.activity-stream.feeds.topsites" = false;
@@ -78,11 +56,11 @@
         "browser.urlbar.trimURLs" = false;
         "browser.download.useDownloadDir" = true;
         "dom.security.https_only_mode" = true;
-        "extensions.autoDisableScopes" = 0; # enable force-installed add-ons without the popup
+        "extensions.autoDisableScopes" = 0;
         "widget.use-xdg-desktop-portal.file-picker" = 1;
       };
 
-      # ── GNOME theme CSS (pulled from the flake input) ────
+      # ── GNOME theme CSS ────
       userChrome = ''
         @import "${inputs.firefox-gnome-theme}/userChrome.css";
       '';
@@ -93,26 +71,16 @@
     };
   };
 
-  # ── Sync home-manager's XDG files to Firefox's legacy path ─────
-  # Firefox reads profiles.ini + user.js from ~/.mozilla/firefox (legacy).
-  # Home-manager writes them to ~/.config/mozilla/firefox (XDG).
-  # We copy profiles.ini (not symlink — IsRelative=1 must resolve against
-  # the legacy dir where profile data lives) and symlink user.js.
   home.activation.syncFirefoxLegacy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     XDG_DIR="$HOME/.config/mozilla/firefox"
     LEGACY_DIR="$HOME/.mozilla/firefox"
 
     if [ -d "$XDG_DIR" ]; then
-      # profiles.ini: must be a real file under LEGACY_DIR so that
-      # IsRelative=1 + Path=aqua resolves to ~/.mozilla/firefox/aqua/.
-      # `cp -f` unlinks a pre-existing read-only destination (Firefox/HM may
-      # leave it 0444) before writing, avoiding a spurious 'Permission denied'.
       if [ -f "$XDG_DIR/profiles.ini" ]; then
         cp -f "$XDG_DIR/profiles.ini" "$LEGACY_DIR/profiles.ini"
         chmod 0644 "$LEGACY_DIR/profiles.ini"
       fi
 
-      # user.js: symlink each profile's managed prefs into the legacy path
       for profile_dir in "$XDG_DIR"/*/; do
         name=$(basename "$profile_dir")
         case "$name" in

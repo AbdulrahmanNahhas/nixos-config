@@ -1,5 +1,4 @@
 { inputs, pkgs, username, ... }:
-
 {
   imports = [
     inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
@@ -31,10 +30,20 @@
     packages = with pkgs; [ tree ];
   };
 
-  # ── GSConnect Firewall ─────────────────────────────────
-  networking.firewall = {
-    allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
-    allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+  # ── Hardware & Drivers ─────────────────────────────────
+  nixpkgs.config.allowUnfree = true;
+  hardware.bluetooth.enable = true;
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "radeonsi";
+    NVD_BACKEND = "direct";
+  };
+
+  # Printer
+  hardware.sane = {
+    enable = true;
+    extraBackends = with pkgs; [
+      epsonscan2
+    ];
   };
 
   # ── Nix / nh Package Manager ───────────────────────────
@@ -51,29 +60,27 @@
     };
   };
 
-  # ── Hardware & Drivers ─────────────────────────────────
-  services.power-profiles-daemon.enable = true;
-  nixpkgs.config.allowUnfree = true;
-  hardware.bluetooth.enable = true;
-
-  # Hardware acceleration variables (Sync Display strictly removed)
-  environment.sessionVariables = {
-    LIBVA_DRIVER_NAME = "radeonsi";
-    NVD_BACKEND = "direct";
+  # ── GSConnect Firewall ─────────────────────────────────
+  networking.firewall = {
+    allowedTCPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+    ];
+    allowedUDPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      }
+  ];
   };
-
-  # Force desktop environment (Mutter) to prefer AMD iGPU for rendering
-  # but DO NOT ignore NVIDIA, ensuring HDMI hotplugging remains functional.
-  services.udev.extraRules = ''
-    KERNEL=="card[0-9]", SUBSYSTEM=="drm", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x1002", TAG+="mutter-device-preferred-primary"
-  '';
 
   # ── OpenRazer & Tools ──────────────────────────────────
   hardware.openrazer.enable = true;
   hardware.openrazer.users = [ "${username}" ];
-
-  environment.systemPackages = [
-    pkgs.polychromatic
+  environment.systemPackages = with pkgs; [
+    polychromatic
   ];
 
   system.stateVersion = "26.05";

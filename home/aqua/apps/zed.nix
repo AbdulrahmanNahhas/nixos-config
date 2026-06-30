@@ -1,12 +1,9 @@
-# Zed editor configuration
 { pkgs, ... }:
-
 {
   programs.zed-editor = {
     enable = true;
     package = pkgs.zed-editor.fhs;
 
-    # Extensions to auto-install on first run.
     extensions = [
       "nix"
       "toml"

@@ -21,7 +21,6 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # Steam Deck "Gaming Mode" UI + Decky Loader on NixOS.
     jovian = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,7 +34,6 @@
 
   outputs =
     {
-      # self,
       nixpkgs,
       home-manager,
       nix-flatpak,

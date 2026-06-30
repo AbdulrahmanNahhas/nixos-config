@@ -1,10 +1,4 @@
-# Home-manager hook — delegates to home/aqua/
-{
-  inputs,
-  username,
-  ...
-}:
-
+{ inputs, username, ... }:
 {
   home-manager = {
     useGlobalPkgs = true;

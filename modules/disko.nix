@@ -1,4 +1,4 @@
-# disko.nix — tmpfs root + LUKS + btrfs
+# tmpfs root + LUKS + btrfs
 {
   disko.devices = {
 
@@ -8,7 +8,7 @@
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
-        "size=4G" # cap tmpfs at 4 GiB; bump higher only if you run memory-hungry daemons in /
+        "size=4G"
         "mode=755"
       ];
     };
@@ -32,8 +32,6 @@
               type = "filesystem";
               format = "vfat";
               mountpoint = "/boot";
-              # umask=0077 keeps the ESP readable only by root; x-gvfs-hide
-              # stops GNOME Files from listing the ESP as a removable device.
               mountOptions = [
                 "umask=0077"
                 "x-gvfs-hide"
@@ -63,7 +61,6 @@
                   # Nix store — large, read-heavy, never wiped
                   "/nix" = {
                     mountpoint = "/nix";
-                    # x-gvfs-hide keeps /nix out of the GNOME Files sidebar.
                     mountOptions = [
                       "compress=zstd"
                       "noatime"
@@ -71,8 +68,6 @@
                     ];
                   };
 
-                  # Your persistence layer — everything you explicitly keep.
-                  # x-gvfs-hide so /saved never appears as a mounted drive.
                   "/saved" = {
                     mountpoint = "/saved";
                     mountOptions = [
