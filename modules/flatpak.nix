@@ -30,6 +30,7 @@
       "com.belmoussaoui.Authenticator"
       "org.gnome.World.Secrets"
       "io.bassi.Amberol"
+      "io.gitlab.theevilskeleton.Upscaler"
     ];
   };
 }
