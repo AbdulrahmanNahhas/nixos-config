@@ -48,8 +48,8 @@ in
     };
 
     "org/gnome/desktop/background" = {
-      picture-uri = "file:///home/aqua/Pictures/Wallpapers/Scenes/weathering-you.png";
-      picture-uri-dark = "file:///home/aqua/Pictures/Wallpapers/Scenes/weathering-you.png";
+      picture-uri = "file:///home/aqua/Pictures/Wallpapers/my-neighbor-totoro-sunflowers.png";
+      picture-uri-dark = "file:///home/aqua/Pictures/Wallpapers/my-neighbor-totoro-sunflowers.png";
     };
 
     "org/gnome/desktop/input-sources" = {

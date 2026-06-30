@@ -220,7 +220,7 @@ in
 
     # ────────────── Wallpaper Slideshow ─────────────────────
     "org/gnome/shell/extensions/azwallpaper" = {
-      slideshow-directory = "/home/aqua/Pictures/Wallpapers/Scenes";
+      slideshow-directory = "/home/aqua/Pictures/Wallpapers";
       slideshow-pause = true;
       slideshow-pause-on-fullscreen = true;
       slideshow-slide-duration = lib.hm.gvariant.mkTuple [
