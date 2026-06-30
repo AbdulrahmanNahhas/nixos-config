@@ -116,6 +116,8 @@ in
         "org.gnome.Extensions.desktop"
         "polychromatic.desktop"
         "protontricks.desktop"
+        "epsonscan2.desktop"
+        "cups.desktop"
       ];
       name = "Utils";
       translate = false;
