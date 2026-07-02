@@ -351,7 +351,7 @@
 | **Zed state** | `/saved/home/aqua/.local/share/zed` + `.config/zed` |
 | **Steam games** | `/saved/home/aqua/.local/share/Steam` |
 | **Flatpak data** | `/var/lib/flatpak` (bind-mounted) |
-| **Decky Loader** | `/var/lib/decky-loader` (bind-mounted) |
+<!--| **Decky Loader** | `/var/lib/decky-loader` (bind-mounted) |-->
 | **Bluetooth pairings** | `/var/lib/bluetooth` |
 | **Wi-Fi passwords** | `/etc/NetworkManager/system-connections` |
 | **Machine ID** | `/saved/etc/machine-id` → `/etc/machine-id` (symlink) |

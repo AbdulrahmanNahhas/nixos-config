@@ -1,32 +1,33 @@
-# GNOME desktop + fonts + environment
+# desktop.nix
 { pkgs, ... }:
 {
-  # ── Remove unwanted GNOME apps ───────────────────────────
+  # ── Remove Unwanted GNOME Bloat ──────────────────────────
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
     gnome-connections
-    gnome-console       # replaced by ghostty
+    gnome-console       # Replaced by Ghostty
     gnome-characters
-    yelp                # gnome help
-    epiphany            # gnome web
-    geary               # gnome mail
+    yelp                # GNOME Help
+    epiphany            # GNOME Web Browser
+    geary               # GNOME Mail Client
   ];
 
+  # ── System Packages & Tools ──────────────────────────────
+  environment.systemPackages = with pkgs; [
+    gnome-tweaks
+  ];
+
+  # Modern GNOME credential manager integration
   programs.seahorse.enable = true;
 
-  environment.systemPackages = with pkgs; [ gnome-tweaks ];
-
-  # ── Wayland / GPU session variables ──────────────────────
-  # LIBVA: video decode goes to AMD iGPU by default
-  # GLX vendor: pin Mesa (AMD) so libglvnd never silently hands
-  # GLX off to NVIDIA. `nvidia-offload <cmd>` and the Jovian Steam
-  # session override these per-process / per-session as needed.
+  # ── Modern Wayland Environment Variables ─────────────────
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";
-    MOZ_ENABLE_WAYLAND = "1";
-    LIBVA_DRIVER_NAME = "radeonsi";
-    __GLX_VENDOR_LIBRARY_NAME = "mesa";
+    NIXOS_OZONE_WL = "1";     # Forces Chromium/Electron apps to run natively on Wayland
+    MOZ_ENABLE_WAYLAND = "1"; # Forces Firefox to run natively on Wayland
   };
 
-  fonts.packages = with pkgs.nerd-fonts; [ geist-mono ];
+  # ── Typography ───────────────────────────────────────────
+  fonts.packages = with pkgs.nerd-fonts; [
+    geist-mono
+  ];
 }

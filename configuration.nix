@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, username, ... }:
+{ inputs, pkgs, username, ... }:
 {
   imports = [
     inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
@@ -23,26 +23,14 @@
   users.users.${username} = {
     isNormalUser = true;
     initialPassword = "changeme";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" "audio" "render" "gamemode" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "input" "audio" "render" "gamemode" "openrazer" ];
     shell = pkgs.fish;
     packages = with pkgs; [ tree ];
   };
 
-  # ── Hardware ────────────────────────────────────────────
   nixpkgs.config.allowUnfree = true;
-  hardware.bluetooth.enable = true;
 
-  # AMD iGPU drives the panel by default; NVIDIA dGPU is available via
-  # `nvidia-offload <cmd>` or the Jovian Steam session, otherwise held in
-  # runtime D3. The `battery-saver` boot specialisation unloads NVIDIA
-  # entirely (modules blacklisted, PCI devices removed) for max battery
-  # during pure work/study sessions.
-  hardware.nvidia.primeBatterySaverSpecialisation = true;
-  # Patch nixos-hardware's specialisation: it forces offload off but leaves
-  # enableOffloadCmd on (set as mkDefault by the razer module), which trips
-  # the NixOS NVIDIA assertion ("Offload command requires offloading…").
-  specialisation.battery-saver.configuration.hardware.nvidia.prime.offload.enableOffloadCmd = lib.mkForce false;
-
+  # ── Hardware ────────────────────────────────────────────
   # Printer / scanner
   hardware.sane = {
     enable = true;
@@ -69,8 +57,10 @@
   networking.firewall.allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
 
   # Laptop hardware control (Razer Blade lighting / fans via OpenRazer)
-  hardware.openrazer.enable = true;
-  hardware.openrazer.users = [ "${username}" ];
+  hardware.openrazer = {
+    enable = true;
+    users = [ "${username}" ];
+  };
   environment.systemPackages = with pkgs; [ polychromatic ];
 
   system.stateVersion = "26.05";

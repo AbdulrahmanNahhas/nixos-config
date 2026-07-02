@@ -1,24 +1,20 @@
+# boot.nix
 { pkgs, ... }:
 {
+  # Bootloader Configuration
   boot.loader = {
     systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
     systemd-boot.configurationLimit = 8;
   };
 
-  # Latest kernel recommended by nixos-hardware for MT7925 WiFi stability
+  # Latest kernel for Zen 5 / RTX 50-series support
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.plymouth.enable = false;
 
+  # Modern Performance and Graphics Flags
   boot.kernelParams = [
-    "amd_pstate=active"   # AMD active P-state CPU frequency scaling
-  ];
-
-  # Block drivers we don't want (nouveau = community NV, nvidiafb = console
-  # framebuffer on NV, amdxdna = NPU, currently problematic on this SoC)
-  boot.blacklistedKernelModules = [
-    "nouveau"
-    "nvidiafb"
-    "amdxdna"
+    "amd_pstate=active"    # Forces autonomous EPP frequency tuning for Zen 5
+    # "nvidia-drm.fbdev=1"   # Hands off the framebuffer smoothly to GDM/Wayland
   ];
 }

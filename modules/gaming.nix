@@ -29,7 +29,7 @@
       __VK_LAYER_NV_optimus = "NVIDIA_only";
     };
   };
-  jovian.decky-loader.enable = true;
+  jovian.decky-loader.enable = false;
 
   programs.steam = {
     remotePlay.openFirewall = true;
