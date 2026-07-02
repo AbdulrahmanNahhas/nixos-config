@@ -45,6 +45,7 @@
     nixfmt # Official Nix formatter
     statix # Nix linter (alias nixlint)
     deadnix # Find unused Nix code
+    devenv
 
     # ─── Git ───────────────────────────────────── #
 
