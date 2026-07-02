@@ -5,6 +5,7 @@
     ./hardware-configuration.nix
     ./modules/disko.nix
     ./modules/boot.nix
+    ./modules/graphics.nix
     ./modules/desktop.nix
     ./modules/packages.nix
     ./modules/flatpak.nix
