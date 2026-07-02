@@ -51,6 +51,11 @@
       extraArgs = "--keep-since-14d --keep 10";
     };
   };
+  # Modern Developer Environments: automatically loads devenv when entering directories
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   # ── Misc services ───────────────────────────────────────
   # GSConnect firewall ports
