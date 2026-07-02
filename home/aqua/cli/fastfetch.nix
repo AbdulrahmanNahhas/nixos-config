@@ -1,6 +1,4 @@
-{
-  ...
-}:
+{ ... }:
 {
   xdg.configFile."fastfetch/fastfetch.txt".source = ./fastfetch.txt;
 
@@ -37,7 +35,8 @@
         {
           "type": "gpu",
           "key": "\u251C\u2500 \uF1FC GPU  ",
-          "keyColor": "bright_blue"
+          "keyColor": "bright_blue",
+          "hideType": "integrated"
         },
         {
           "type": "memory",
@@ -52,7 +51,8 @@
         {
           "type": "disk",
           "key": "\u251C\u2500 \uF0A0 DSK  ",
-          "keyColor": "bright_blue"
+          "keyColor": "bright_blue",
+          "format": "{size-used} / {size-total} ({size-percentage}) - {mountpoint} ({filesystem})"
         },
         {
           "type": "battery",
@@ -72,6 +72,34 @@
         "break",
         {
           "type": "custom",
+          "key": "{#7} [SYSTEM CORE] {#}{#34}\uE0B0",
+          "keyColor": "bright_blue"
+        },
+        {
+          "type": "kernel",
+          "key": "\u251C\u2500 \uF17C KER  ",
+          "keyColor": "bright_blue"
+        },
+        {
+          "type": "gpu",
+          "key": "\u251C\u2500 \uF0AD DRV  ",
+          "keyColor": "bright_blue",
+          "driverSpecific": true,
+          "format": "{driver}"
+        },
+        {
+          "type": "wm",
+          "key": "\u251C\u2500 \uF2D0 WM   ",
+          "keyColor": "bright_blue"
+        },
+        {
+          "type": "de",
+          "key": "\u2514\u2500 \uF26C DE   ",
+          "keyColor": "bright_blue"
+        },
+        "break",
+        {
+          "type": "custom",
           "key": "{#7} [SYSTEM & UI] {#}{#34}\uE0B0",
           "keyColor": "bright_blue"
         },
@@ -81,23 +109,13 @@
           "keyColor": "bright_blue"
         },
         {
-          "type": "kernel",
-          "key": "\u251C\u2500 \uF17C KER  ",
-          "keyColor": "bright_blue"
-        },
-        {
           "type": "host",
           "key": "\u251C\u2500 \uF109 HOST ",
           "keyColor": "bright_blue"
         },
         {
-          "type": "wm",
-          "key": "\u251C\u2500 \uF2D0 WM   ",
-          "keyColor": "bright_blue"
-        },
-        {
-          "type": "de",
-          "key": "\u251C\u2500 \uF26C DE   ",
+          "type": "bootloader",
+          "key": "\u251C\u2500 \uF013 BOOT ",
           "keyColor": "bright_blue"
         },
         {
