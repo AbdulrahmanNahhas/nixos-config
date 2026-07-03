@@ -204,31 +204,8 @@
       # ── AI / Agent (current "agent" schema, formerly "assistant") ──
       disable_ai = false;
 
-      # NOTE: opencode is not a `language_models` provider. If you want to use
-      # OpenCode's own model routing inside Zed, install it as an External Agent
-      # (ACP) via `zed: acp registry` in the command palette, then start threads
-      # from the Agent Panel/Threads Sidebar. It manages its own auth/model list.
-      #
-      # If instead you have an OpenAI-compatible *gateway* that exposes those
-      # go/deepseek-v4-flash-style model names, configure it here as a custom
-      # openai_compatible provider (fill in the real api_url):
-      #
-      # language_models = {
-      #   openai_compatible = {
-      #     "MyGateway" = {
-      #       api_url = "https://your-gateway.example.com/v1";
-      #       available_models = [
-      #         { name = "go/deepseek-v4-flash"; display_name = "DeepSeek V4 Flash"; max_tokens = 128000; }
-      #       ];
-      #     };
-      #   };
-      # };
-
       agent = {
         default_profile = "ask";
-        # Set this to whatever model you actually have provider access to.
-        # "zed.dev" only works with a Zed subscription; otherwise point it at
-        # anthropic / openai / openai_compatible / etc. per LLM Providers docs.
         default_model = {
           provider = "zed.dev";
           model = "claude-sonnet-4-5";
