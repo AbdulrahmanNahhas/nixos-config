@@ -92,6 +92,9 @@
     }
   ];
 
+  # Kavita
+  networking.firewall.allowedTCPPorts = [ 8083 ];
+
   # Laptop hardware control (Razer Blade lighting / fans via OpenRazer)
   hardware.openrazer = {
     enable = true;
