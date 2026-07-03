@@ -1,5 +1,5 @@
 # services.nix
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # Core System Controls
   services.upower.enable = true;
@@ -32,6 +32,25 @@
     alsa.enable = true;
     alsa.support32Bit = true; # Essential for older 32-bit Steam games
     pulse.enable = true;
+  };
+
+  # Kavita
+  services.kavita = {
+    enable = true;
+    package = pkgs.kavita;
+    dataDir = "/var/lib/kavita";
+    user = "kavita";
+    tokenKeyFile = "/var/lib/kavita/token_key";
+    settings = {
+      IpAddresses = "0.0.0.0,::";
+      Port = 8083;
+    };
+  };
+  systemd.services.kavita = {
+    serviceConfig = {
+      BindPaths = [ "/home/aqua/Books:/books" ];
+    };
+    wantedBy = lib.mkForce [ ];
   };
 
   # Modern environment hand-off to sudo sessions

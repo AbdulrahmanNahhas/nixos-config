@@ -53,9 +53,6 @@
       du = "dust";
       lazy = "lazygit";
       http = "xh";
-
-      phone-on = "gnome-extensions enable gsconnect@andyholmes.github.io";
-      phone-off = "gnome-extensions disable gsconnect@andyholmes.github.io && pkill -f gsconnect";
     };
 
     functions = {
@@ -68,27 +65,30 @@
         end
       '';
 
-      take = ''
-        if test (count $argv) -gt 0
-          mkdir -p -- $argv[1]
-          and cd -- $argv[1]
-        else
-          echo "Usage: take <directory>"
+      book_library = ''
+        switch $argv[1]
+          case on
+            sudo systemctl start kavita --no-pager
+          case off
+            sudo systemctl stop kavita --no-pager
+          case status
+            sudo systemctl status kavita.service --no-pager
+          case '*'
+            echo "Usage: book_library on|off|status"
         end
       '';
 
-      y = ''
-        set -l tmp (mktemp -t "yazi-cwd.XXXXXX")
-        yazi --cwd-file="$tmp" $argv
-        if test -f "$tmp"
-          set -l cwd (command cat "$tmp")
-          if test -n "$cwd"
-            if test "$cwd" != "$PWD"
-              cd -- "$cwd"
-            end
-          end
+      phone = ''
+        switch $argv[1]
+          case on
+            gnome-extensions enable gsconnect@andyholmes.github.io
+          case off
+          gnome-extensions disable gsconnect@andyholmes.github.io && pkill -f gsconnect
+          case info
+            gnome-extensions info gsconnect@andyholmes.github.io
+          case '*'
+            echo "Usage: phone on|off|status"
         end
-        rm -f -- "$tmp"
       '';
     };
 

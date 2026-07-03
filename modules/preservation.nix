@@ -55,7 +55,9 @@
         "/var/lib/decky-loader"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
+        "/var/lib/kavita"
         "/etc/NetworkManager/system-connections"
+        "/etc/nixos"
       ];
 
       users.aqua = {
@@ -71,6 +73,7 @@
           "Public"
           "Templates"
           "Videos"
+          "Books"
 
           # ── Identity / Secrets ───────────────────────────────
           {
