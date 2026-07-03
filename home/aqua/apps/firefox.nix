@@ -1,4 +1,9 @@
-{ lib, username, inputs, ... }:
+{
+  lib,
+  username,
+  inputs,
+  ...
+}:
 {
   programs.firefox = {
     enable = true;

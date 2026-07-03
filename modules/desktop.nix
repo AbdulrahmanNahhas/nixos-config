@@ -5,11 +5,11 @@
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour
     gnome-connections
-    gnome-console       # Replaced by Ghostty
+    gnome-console # Replaced by Ghostty
     gnome-characters
-    yelp                # GNOME Help
-    epiphany            # GNOME Web Browser
-    geary               # GNOME Mail Client
+    yelp # GNOME Help
+    epiphany # GNOME Web Browser
+    geary # GNOME Mail Client
   ];
 
   # ── System Packages & Tools ──────────────────────────────
@@ -22,7 +22,7 @@
 
   # ── Modern Wayland Environment Variables ─────────────────
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1";     # Forces Chromium/Electron apps to run natively on Wayland
+    NIXOS_OZONE_WL = "1"; # Forces Chromium/Electron apps to run natively on Wayland
     MOZ_ENABLE_WAYLAND = "1"; # Forces Firefox to run natively on Wayland
   };
 

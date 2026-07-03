@@ -1,4 +1,9 @@
-{ inputs, pkgs, username, ... }:
+{
+  inputs,
+  pkgs,
+  username,
+  ...
+}:
 {
   imports = [
     inputs.nixos-hardware.nixosModules.razer-blade-14-RZ09-0530
@@ -24,7 +29,16 @@
   users.users.${username} = {
     isNormalUser = true;
     initialPassword = "changeme";
-    extraGroups = [ "wheel" "networkmanager" "video" "input" "audio" "render" "gamemode" "openrazer" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "input"
+      "audio"
+      "render"
+      "gamemode"
+      "openrazer"
+    ];
     shell = pkgs.fish;
     packages = with pkgs; [ tree ];
   };
@@ -40,8 +54,14 @@
 
   # ── Nix / nh ────────────────────────────────────────────
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    trusted-users = [ "root" "@wheel" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    trusted-users = [
+      "root"
+      "@wheel"
+    ];
   };
   programs.nh = {
     enable = true;
@@ -59,8 +79,18 @@
 
   # ── Misc services ───────────────────────────────────────
   # GSConnect firewall ports
-  networking.firewall.allowedTCPPortRanges = [ { from = 1714; to = 1764; } ];
-  networking.firewall.allowedUDPPortRanges = [ { from = 1714; to = 1764; } ];
+  networking.firewall.allowedTCPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 1714;
+      to = 1764;
+    }
+  ];
 
   # Laptop hardware control (Razer Blade lighting / fans via OpenRazer)
   hardware.openrazer = {

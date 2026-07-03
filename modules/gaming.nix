@@ -1,4 +1,10 @@
-{ inputs, pkgs, lib, username, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  username,
+  ...
+}:
 {
   nixpkgs.overlays = [
     # Fix Jovian's 32-bit mangohud double-patching build bug.
