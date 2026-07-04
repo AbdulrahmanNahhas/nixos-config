@@ -135,3 +135,91 @@ in the initrd.)
   graphics quirks live in the `nixos-hardware` Razer Blade 14 module, so the only
   hand-maintained hardware code here is the GPU env-var block in `configuration.nix`.
 - This config follows `nixpkgs/nixos-unstable` and pins `stateVersion = "26.05"`.
+
+
+## NOTESSS:
+# ────────────────────────────────────────────────────────────────
+# Shared builder for "fetch a GNOME Shell extension from GitHub and
+# drop it into the correct UUID-named folder" — avoids repeating the
+# same mkDerivation boilerplate for every extension not in nixpkgs.
+# ────────────────────────────────────────────────────────────────
+mkGnomeExtension =
+  {
+    pname,
+    owner,
+    repo,
+    rev,
+    hash,
+    uuid,
+  }:
+  pkgs.stdenv.mkDerivation {
+    inherit pname;
+    version = rev;
+
+    src = pkgs.fetchFromGitHub {
+      inherit
+        owner
+        repo
+        rev
+        hash
+        ;
+    };
+
+    nativeBuildInputs = [ pkgs.glib ];
+    dontBuild = true;
+    dontConfigure = true;
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/share/gnome-shell/extensions/${uuid}
+      cp -r . $out/share/gnome-shell/extensions/${uuid}
+
+      if [ -d $out/share/gnome-shell/extensions/${uuid}/schemas ]; then
+        glib-compile-schemas $out/share/gnome-shell/extensions/${uuid}/schemas
+      fi
+      runHook postInstall
+    '';
+
+    passthru.extensionUuid = uuid;
+  };
+
+chromaleon = mkGnomeExtension {
+  pname = "gnome-shell-extension-chromaleon";
+  owner = "Fabito02";
+  repo = "ChromaLeon";
+  rev = "91add7c0138a8f3cd05ad598ad24a15767ca8293";
+  hash = "sha256-OYbVG91js7tejdc+TqRU6ZYRUR53KOYb7GhNP410ipo=";
+  uuid = "user-accent-colors@fabito02";
+};
+
+# o-tiling = pkgs.stdenv.mkDerivation rec {
+#   pname = "gnome-shell-extension-o-tiling";
+#   version = "2.9.5";
+#   uuid = "o-tiling@oliwebd.github.com";
+
+#   src = pkgs.fetchurl {
+#     url = "https://github.com/oliwebd/o-tiling/releases/download/v${version}/o-tiling@oliwebd.github.com-v${version}.zip";
+#     hash = "sha256-DEBm9+mvRuccTbgQXfC4aJxQ0g04FGanaj9Gmi2gr30=";
+#     name = "o-tiling-v${version}.zip";
+#   };
+
+#   nativeBuildInputs = [
+#     pkgs.unzip
+#     pkgs.glib
+#   ];
+#   dontUnpack = true;
+#   dontBuild = true;
+#   dontConfigure = true;
+
+#   installPhase = ''
+#     runHook preInstall
+#     mkdir -p $out/share/gnome-shell/extensions/${uuid}
+#     unzip -o $src -d $out/share/gnome-shell/extensions/${uuid}
+#     if [ -d $out/share/gnome-shell/extensions/${uuid}/schemas ]; then
+#       glib-compile-schemas $out/share/gnome-shell/extensions/${uuid}/schemas
+#     fi
+#     runHook postInstall
+#   '';
+
+#   passthru.extensionUuid = uuid;
+# };

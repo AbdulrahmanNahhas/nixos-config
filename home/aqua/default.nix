@@ -6,6 +6,8 @@
     ./apps/ghostty.nix
     ./cli/packages.nix
     ./cli/fish.nix
+    ./cli/fish/functions.nix
+    ./cli/yazi.nix
     ./cli/fastfetch.nix
     ./gnome-extensions.nix
     ./gnome.nix
@@ -58,10 +60,10 @@
       package = pkgs.adw-gtk3;
     };
 
-    # iconTheme = {
-    #   name = "Papirus-Dark";
-    #   package = pkgs.papirus-icon-theme;
-    # };
+    iconTheme = {
+      name = "MoreWaita";
+      package = pkgs.morewaita-icon-theme;
+    };
   };
 
   home.pointerCursor = {

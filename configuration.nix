@@ -17,7 +17,6 @@
     ./modules/services.nix
     ./modules/gaming.nix
     ./modules/preservation.nix
-    ./home.nix
   ];
 
   networking.hostName = "shadow";

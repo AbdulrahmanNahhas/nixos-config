@@ -20,7 +20,7 @@
     bat # Better cat (alias: cat)
     fd # Better find (alias: find)
     ripgrep # Better grep (alias: grep, command: rg)
-    yazi # Terminal file manager (run: yazi)
+    # yazi is now managed by programs.yazi.enable in yazi.nix
     zoxide # Smart cd with history (alias: cd or z)
     atuin # Shell history search & sync
 
@@ -77,5 +77,8 @@
 
     # ─── Obsidian ───────────────────────────────── #
     obsidian
+
+    # Tools
+    wallutils
   ];
 }

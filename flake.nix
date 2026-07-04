@@ -53,6 +53,7 @@
 
         modules = [
           ./configuration.nix
+          ./home.nix
           inputs.disko.nixosModules.disko
           preservation.nixosModules.default
           home-manager.nixosModules.home-manager

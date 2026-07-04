@@ -8,6 +8,7 @@
       # - if flatpak: `nv flatpak run org.blender.Blender` (flatpak list)
       # - if nix pkg: `nv blender` (blender = name of pkg)
       nv = "nvidia-offload";
+      wp = "wallpapers";
 
       # NixOS System Management
       nx-rebuild = "nh os switch /saved/nixos-config";
@@ -53,43 +54,6 @@
       du = "dust";
       lazy = "lazygit";
       http = "xh";
-    };
-
-    functions = {
-      mkcd = ''
-        if test (count $argv) -gt 0
-          mkdir -p -- $argv[1]
-          and cd -- $argv[1]
-        else
-          echo "Usage: mkcd <directory>"
-        end
-      '';
-
-      book_library = ''
-        switch $argv[1]
-          case on
-            sudo systemctl start kavita --no-pager
-          case off
-            sudo systemctl stop kavita --no-pager
-          case status
-            sudo systemctl status kavita.service --no-pager
-          case '*'
-            echo "Usage: book_library on|off|status"
-        end
-      '';
-
-      phone = ''
-        switch $argv[1]
-          case on
-            gnome-extensions enable gsconnect@andyholmes.github.io
-          case off
-          gnome-extensions disable gsconnect@andyholmes.github.io && pkill -f gsconnect
-          case info
-            gnome-extensions info gsconnect@andyholmes.github.io
-          case '*'
-            echo "Usage: phone on|off|status"
-        end
-      '';
     };
 
     interactiveShellInit = ''

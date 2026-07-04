@@ -5,13 +5,13 @@ let
     appindicator
     dash-to-dock
     blur-my-shell
-    wallpaper-slideshow
+    # wallpaper-slideshow # not needed - for now
     clipboard-indicator
     caffeine
     just-perfection
     status-area-horizontal-spacing
     gsconnect
-    dynamic-music-pill
+    auto-accent-colour
   ];
 
   extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
@@ -72,6 +72,53 @@ let
   ];
 in
 {
+  # ──────────────────────────────────────────────────────────────────
+  # HOW TO SYNC LIVE SETTINGS BACK INTO THIS FILE
+  #
+  # Workflow: tweak an extension's settings in the "Extensions" app (or
+  # its own preferences window), then dump the relevant dconf path and
+  # diff it against what's declared below.
+  #
+  # 1) Dump ALL current GNOME Shell + extension settings to a file:
+  #
+  #      dconf dump /org/gnome/shell/ > /tmp/shell-settings-before.ini
+  #
+  #    Tweak something in the Extensions app / prefs window, then:
+  #
+  #      dconf dump /org/gnome/shell/ > /tmp/shell-settings-after.ini
+  #      diff /tmp/shell-settings-before.ini /tmp/shell-settings-after.ini
+  #
+  #    The diff shows you exactly which keys changed and their new
+  #    values — copy those into the matching attrset below.
+  #
+  # 2) Or dump just one extension's settings directly (faster, if you
+  #    already know which extension you touched), e.g. for dash-to-dock:
+  #
+  #      dconf dump /org/gnome/shell/extensions/dash-to-dock/
+  #
+  #    This prints an INI-style block like:
+  #
+  #      [/]
+  #      dash-max-icon-size=48
+  #      dock-position='BOTTOM'
+  #
+  #    Translate `key=value` -> `key = value;` (strip quotes on enums
+  #    Nix already treats as strings, booleans/ints copy as-is).
+  #
+  # 3) To read a single key instead of a whole subtree:
+  #
+  #      dconf read /org/gnome/shell/extensions/just-perfection/animation
+  #
+  # 4) After editing this file, rebuild and re-check with `dconf dump`
+  #    again to confirm the declared config actually took effect:
+  #
+  #      home-manager switch
+  #      dconf dump /org/gnome/shell/ > /tmp/shell-settings-rebuilt.ini
+  #      diff /tmp/shell-settings-after.ini /tmp/shell-settings-rebuilt.ini
+  #
+  #    (should be empty/no diff if everything was captured correctly)
+  # ──────────────────────────────────────────────────────────────────
+
   home.packages = extensionPackages;
 
   dconf.settings = {
@@ -90,6 +137,7 @@ in
 
     # ────────────── Dash to Dock ────────────────────────────
     "org/gnome/shell/extensions/dash-to-dock" = {
+      always-center-icons = true;
       apply-custom-theme = true;
       background-opacity = 0.80;
       custom-theme-shrink = true;
@@ -103,7 +151,7 @@ in
       multi-monitor = true;
       preferred-monitor = -2;
       preferred-monitor-by-connector = "eDP-2";
-      preview-size-scale = 0.0;
+      preview-size-scale = 0.45;
       scroll-action = "switch-workspace";
       scroll-to-focused-application = true;
       show-apps-at-top = true;
@@ -124,6 +172,7 @@ in
     };
 
     "org/gnome/shell/extensions/blur-my-shell/applications" = {
+      blur = false;
       pipeline = "pipeline_default";
     };
 
@@ -148,19 +197,29 @@ in
 
     "org/gnome/shell/extensions/blur-my-shell/overview" = {
       pipeline = "pipeline_default";
-      style-components = 2;
+      style-components = 3;
     };
 
     "org/gnome/shell/extensions/blur-my-shell/panel" = {
-      blur = false;
-      brightness = 0.60;
+      blur = true;
+      brightness = 1.0;
       corner-radius = 0;
       force-light-text = false;
-      override-background = false;
+      override-background = true;
       override-background-dynamically = true;
       pipeline = "pipeline_default";
-      sigma = 30;
-      static-blur = true;
+      sigma = 0;
+      static-blur = false;
+      style-panel = 3;
+      unblur-in-overview = true;
+    };
+
+    "org/gnome/shell/extensions/blur-my-shell/dash-to-panel" = {
+      blur-original-panel = true;
+    };
+
+    "org/gnome/shell/extensions/blur-my-shell/hidetopbar" = {
+      compatibility = true;
     };
 
     "org/gnome/shell/extensions/blur-my-shell/screenshot" = {
@@ -175,7 +234,8 @@ in
     # ────────────── Caffeine ─────────────────────────────────
     "org/gnome/shell/extensions/caffeine" = {
       cli-toggle = false;
-      indicator-position-max = 4;
+      indicator-position-max = 3;
+      user-enabled = false;
     };
 
     # ────────────── Clipboard Indicator ─────────────────────
@@ -197,39 +257,51 @@ in
       clock-menu = true;
       clock-menu-position = 0;
       clock-menu-position-offset = 0;
+      controls-manager-spacing-size = 0;
       dash = true;
       dash-separator = true;
       invert-calendar-column-items = false;
       keyboard-layout = true;
       panel = true;
+      panel-in-overview = true;
+      panel-size = 0;
+      power-icon = true;
       quick-settings = true;
-      quick-settings-airplane-mode = false;
+      quick-settings-airplane-mode = true;
       quick-settings-backlight = true;
       quick-settings-dark-mode = false;
-      startup-status = 1;
+      screen-recording-indicator = true;
+      startup-status = 0;
       support-notifier-showed-version = 36;
       support-notifier-type = 0;
+      theme = false;
+      top-panel-position = 0;
       type-to-search = true;
       weather = true;
       window-demands-attention-focus = true;
       window-maximized-on-create = true;
+      workspace = true;
+      workspace-background-corner-size = 0;
       workspace-switcher-should-show = true;
+      workspace-switcher-size = 0;
+      workspace-thumbnail-to-main-view = true;
       workspace-wrap-around = true;
-      world-clock = false;
+      workspaces-in-app-grid = true;
+      world-clock = true;
     };
 
     # ────────────── Wallpaper Slideshow ─────────────────────
-    "org/gnome/shell/extensions/azwallpaper" = {
-      slideshow-directory = "/home/aqua/Pictures/Wallpapers";
-      slideshow-pause = true;
-      slideshow-pause-on-fullscreen = true;
-      slideshow-slide-duration = lib.hm.gvariant.mkTuple [
-        0
-        2
-        0
-      ];
-      slideshow-use-absolute-time-for-duration = false;
-    };
+    # "org/gnome/shell/extensions/azwallpaper" = {
+    #   slideshow-directory = "/home/aqua/Pictures/Wallpapers";
+    #   slideshow-pause = true;
+    #   slideshow-pause-on-fullscreen = true;
+    #   slideshow-slide-duration = lib.hm.gvariant.mkTuple [
+    #     0
+    #     2
+    #     0
+    #   ];
+    #   slideshow-use-absolute-time-for-duration = false;
+    # };
 
     # ────────────── Status Area Horizontal Spacing ──────────
     "org/gnome/shell/extensions/status-area-horizontal-spacing" = {

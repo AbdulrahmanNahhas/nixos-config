@@ -14,8 +14,8 @@
 
   # Modern Performance and Graphics Flags
   boot.kernelParams = [
-    "amd_pstate=active"    # Forces autonomous EPP frequency tuning for Zen 5
+    "amd_pstate=active"
     "acpi_backlight=native"
-    # "nvidia-drm.fbdev=1"   # Hands off the framebuffer smoothly to GDM/Wayland
+    "nvidia_wmi_ec_backlight.force=1"
   ];
 }

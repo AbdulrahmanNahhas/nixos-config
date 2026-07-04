@@ -1,9 +1,9 @@
 {
-  lib,
   username,
   inputs,
   ...
 }:
+
 {
   programs.firefox = {
     enable = true;
@@ -21,6 +21,7 @@
     profiles.aqua = {
       isDefault = true;
       name = "${username}";
+      path = "aqua";
 
       # ── Search engines ───────────────────────────────────
       search = {
@@ -67,38 +68,17 @@
 
       # ── GNOME theme CSS ────
       userChrome = ''
-        @import "${inputs.firefox-gnome-theme}/userChrome.css";
+        @import "firefox-gnome-theme/userChrome.css";
       '';
 
       userContent = ''
-        @import "${inputs.firefox-gnome-theme}/userContent.css";
+        @import "firefox-gnome-theme/userContent.css";
       '';
     };
   };
 
-  home.activation.syncFirefoxLegacy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    XDG_DIR="$HOME/.config/mozilla/firefox"
-    LEGACY_DIR="$HOME/.mozilla/firefox"
-
-    if [ -d "$XDG_DIR" ]; then
-      if [ -f "$XDG_DIR/profiles.ini" ]; then
-        cp -f "$XDG_DIR/profiles.ini" "$LEGACY_DIR/profiles.ini"
-        chmod 0644 "$LEGACY_DIR/profiles.ini"
-      fi
-
-      for profile_dir in "$XDG_DIR"/*/; do
-        name=$(basename "$profile_dir")
-        case "$name" in
-          "Crash Reports"|"Profile Groups") continue ;;
-        esac
-
-        mkdir -p "$LEGACY_DIR/$name"
-
-        if [ -L "$XDG_DIR/$name/user.js" ]; then
-          target=$(readlink "$XDG_DIR/$name/user.js")
-          ln -sf "$target" "$LEGACY_DIR/$name/user.js"
-        fi
-      done
-    fi
-  '';
+  # ── Symlink the Theme into the Profile ──────────────────
+  # This physically places the theme assets inside your profile's chrome directory
+  # where Firefox is legally allowed to read them.
+  home.file.".mozilla/firefox/aqua/chrome/firefox-gnome-theme".source = inputs.firefox-gnome-theme;
 }

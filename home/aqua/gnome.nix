@@ -50,7 +50,7 @@ in
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
-      icon-theme = "Adwaita";
+      icon-theme = "MoreWaita";
       font-name = "Adwaita Sans 12";
       document-font-name = "Adwaita Sans 12";
       monospace-font-name = "GeistMono Nerd Font Mono 12";
