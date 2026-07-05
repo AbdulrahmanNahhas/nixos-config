@@ -3,6 +3,10 @@
 {
   home.packages = with pkgs; [
 
+    # ─── Apps ──────────────────────────────────── #
+
+    plezy
+
     # ─── Terminal & Editor ─────────────────────── #
 
     ghostty # Modern GPU terminal (run: ghostty)
