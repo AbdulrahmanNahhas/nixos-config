@@ -1,4 +1,8 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 let
   extensionPackages = with pkgs.gnomeExtensions; [
     user-themes
@@ -12,6 +16,7 @@ let
     status-area-horizontal-spacing
     gsconnect
     auto-accent-colour
+    accent-directories
   ];
 
   extensionUuids = builtins.map (p: p.extensionUuid) extensionPackages;
@@ -305,7 +310,7 @@ in
 
     # ────────────── Status Area Horizontal Spacing ──────────
     "org/gnome/shell/extensions/status-area-horizontal-spacing" = {
-      hpadding = 0;
+      hpadding = 3;
     };
 
     # ────────────── AppIndicator ────────────────────────────

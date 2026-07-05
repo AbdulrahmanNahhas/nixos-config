@@ -5,6 +5,9 @@
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
+  # For Auto Accent Color Extension
+  services.desktopManager.gnome.sessionPath = [ pkgs.gjs ];
+
   # Display & Graphical Environment (GDM + Wayland GNOME)
   services.xserver.excludePackages = [ pkgs.xterm ];
   services.displayManager.gdm = {

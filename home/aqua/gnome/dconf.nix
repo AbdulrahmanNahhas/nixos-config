@@ -6,47 +6,8 @@ let
   ];
 in
 {
-  # ── Generate Monitor Settings ───────────
-  xdg.configFile."monitors.xml".text = ''
-    <monitors version="2">
-      <configuration>
-        <layoutmode>logical</layoutmode>
-        <logicalmonitor>
-          <x>0</x>
-          <y>0</y>
-          <scale>2</scale>
-          <primary>yes</primary>
-          <monitor>
-            <monitorspec>
-              <connector>eDP-2</connector>
-              <vendor>SDC</vendor>
-              <product>ATNA40CU05-0 </product>
-              <serial>0x00000000</serial>
-            </monitorspec>
-            <mode>
-              <width>2880</width>
-              <height>1800</height>
-              <rate>60.001</rate>
-            </mode>
-          </monitor>
-        </logicalmonitor>
-      </configuration>
-    </monitors>
-  '';
-
-  # Gnome Files - Sidebar
-  xdg.configFile."gtk-3.0/bookmarks".text = ''
-    file:///home/aqua/Documents Documents
-    file:///home/aqua/Projects Projects
-    file:///home/aqua/Music Music
-    file:///home/aqua/Pictures Pictures
-    file:///home/aqua/Videos Videos
-    file:///home/aqua/Books Books
-    file:///home/aqua/Downloads Downloads
-    file:///saved/nixos-config nixos-config
-  '';
-
   dconf.settings = {
+    # ── Look & feel ────────────────────────────────────────
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       gtk-theme = "adw-gtk3-dark";
@@ -64,6 +25,7 @@ in
       picture-uri-dark = "file:///home/aqua/Pictures/Wallpapers/my-neighbor-totoro-sunflowers.png";
     };
 
+    # ── Input sources ──────────────────────────────────────
     "org/gnome/desktop/input-sources" = {
       show-all-sources = false;
       sources = lib.hm.gvariant.mkArray strTupleType [
@@ -89,29 +51,31 @@ in
       xkb-options = lib.hm.gvariant.mkArray lib.hm.gvariant.type.string [ ];
     };
 
+    # ── Peripherals ──────────────────────────────────────
     "org/gnome/desktop/peripherals/mouse" = {
       speed = 0.6;
     };
-
     "org/gnome/desktop/peripherals/touchpad" = {
       two-finger-scrolling-enabled = true;
     };
 
+    # ── Privacy ───────────────────────────────────────────
     "org/gnome/desktop/privacy" = {
       disable-camera = true;
       remove-old-temp-files = true;
       remove-old-trash-files = true;
     };
 
+    # ── Notifications ────────────────────────────────────
     "org/gnome/desktop/notifications" = {
       show-in-lock-screen = true;
       application-children = [ "org-gnome-tweaks" ];
     };
-
     "org/gnome/desktop/notifications/application/org-gnome-tweaks" = {
       application-id = "org.gnome.tweaks.desktop";
     };
 
+    # ── Search providers ──────────────────────────────────
     "org/gnome/desktop/search-providers" = {
       enabled = [ "com.belmoussaoui.Authenticator.desktop" ];
       sort-order = [
@@ -121,6 +85,7 @@ in
       ];
     };
 
+    # ── App folders ───────────────────────────────────────
     "org/gnome/desktop/app-folders" = {
       folder-children = [
         "System"
@@ -182,23 +147,23 @@ in
       translate = false;
     };
 
+    # ── Break reminders ───────────────────────────────────
     "org/gnome/desktop/break-reminders" = {
       selected-breaks = [
         "eyesight"
         "movement"
       ];
     };
-
     "org/gnome/desktop/break-reminders/eyesight" = {
       play-sound = false;
     };
-
     "org/gnome/desktop/break-reminders/movement" = {
       duration-seconds = lib.hm.gvariant.mkUint32 300;
       interval-seconds = lib.hm.gvariant.mkUint32 1800;
       play-sound = false;
     };
 
+    # ── Night light ──────────────────────────────────────
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
       night-light-schedule-automatic = false;
@@ -207,6 +172,7 @@ in
       night-light-temperature = lib.hm.gvariant.mkUint32 3291;
     };
 
+    # ── Mutter ────────────────────────────────────────────
     "org/gnome/mutter" = {
       overlay-key = "Super_L";
       workspaces-only-on-primary = true;

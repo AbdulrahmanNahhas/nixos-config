@@ -43,17 +43,41 @@ modules/
   preservation.nix       # /saved = persistent layer; lists everything kept across reboots
   services.nix           # PipeWire, Bluetooth, upower, openssh, sudo
 home/aqua/                # Everything per-user (managed by home-manager)
-  default.nix             # GTK, cursor, XDG dirs, terminal/browser routing
-  gnome.nix               # dconf: monitor layout, fonts, night-light, app folders
-  gnome-extensions.nix    # GNOME Shell extensions + dconf settings
+  default.nix             # Imports, home basics, out-of-store nix.conf
+  desktop.nix             # GTK, cursor, XDG dirs, terminal/browser routing
+  scripts.nix             # User helper scripts (setwallpaper)
   apps/
-    firefox.nix           # Firefox profile, search engines, GNOME theme
+    default.nix           # Aggregates firefox/ghostty/zed
     ghostty.nix           # Ghostty terminal config
-    zed.nix               # Zed editor settings
+    firefox/              # Firefox split into focused modules
+      default.nix         #   enable + profile basename
+      search.nix          #   search engines
+      policies.nix        #   enterprise policies (uBlock…)
+      settings.nix        #   about:config prefs (theme toggles + extras)
+      theme.nix           #   userChrome/userContent + gnome-theme symlink
+    zed/                  # Zed editor, userSettings merged across files
+      default.nix         #   enable + extensions
+      settings.nix        #   core editor / UI / terminal / AI settings
+      languages.nix       #   per-language formatter + format-on-save
+      lsp.nix             #   rust-analyzer / vtsls / clangd options
   cli/
-    fish.nix              # Fish + starship + aliases/functions
-    fastfetch.nix         # fastfetch system info
+    default.nix           # Aggregates packages/fish/yazi/fastfetch
     packages.nix          # User CLI tools (eza, bat, fd, ripgrep, yazi, …)
+    yazi.nix              # Yazi file manager + keymap
+    fastfetch.nix         # fastfetch system info (config.jsonc + logo)
+    fastfetch.txt         # ASCII logo
+    fish/                 # Fish split into focused modules
+      default.nix         #   enable + interactive init (starship/zoxide/atuin)
+      abbrs.nix           #   abbreviations
+      aliases.nix         #   shell aliases
+      functions.nix       #   mkcd, wallpapers, wallpaper-next/prev, phone…
+      starship.nix        #   starship prompt config
+  gnome/
+    default.nix           # Aggregates gnome submodules
+    monitors.nix          # monitors.xml (eDP-2 layout/scale)
+    bookmarks.nix         # Nautilus sidebar bookmarks
+    dconf.nix             # dconf: interface, background, input, privacy, mutter…
+    extensions.nix        # GNOME Shell extensions + per-extension dconf
 ```
 
 ## Disk layout (declared by `modules/disko.nix`)
