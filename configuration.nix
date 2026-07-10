@@ -77,22 +77,33 @@
   };
 
   # ── Misc services ───────────────────────────────────────
-  # GSConnect firewall ports
-  networking.firewall.allowedTCPPortRanges = [
-    {
-      from = 1714;
-      to = 1764;
-    }
-  ];
-  networking.firewall.allowedUDPPortRanges = [
-    {
-      from = 1714;
-      to = 1764;
-    }
-  ];
+  # Firewall Configuration
+  networking.firewall = {
+    enable = true; # Optional, but good practice to ensure it's explicitly on
 
-  # Kavita
-  networking.firewall.allowedTCPPorts = [ 8083 ];
+    allowedTCPPorts = [
+      8083 # Kavita (Books)
+      36679 # SimpleX
+    ];
+
+    allowedUDPPorts = [
+      36679 # SimpleX
+    ];
+
+    allowedTCPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      } # GSConnect
+    ];
+
+    allowedUDPPortRanges = [
+      {
+        from = 1714;
+        to = 1764;
+      } # GSConnect
+    ];
+  };
 
   # Laptop hardware control (Razer Blade lighting / fans via OpenRazer)
   hardware.openrazer = {

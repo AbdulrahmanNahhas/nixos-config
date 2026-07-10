@@ -33,7 +33,7 @@
     theme = {
       mode = "dark";
       light = "Vercel Light";
-      dark = "Vercel Dark";
+      dark = "Carbonfox - blurred";
     };
     # theme_overrides take real theme keys (syntax token names), not dotted strings.
     theme_overrides = {

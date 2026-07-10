@@ -2,20 +2,8 @@
 { config, ... }:
 {
   hardware.nvidia = {
-    # Diagnostic step: the combo of open kernel modules (mandatory for
-    # Blackwell/RTX 50-series) + experimental finegrained runtime PM is a
-    # known source of GPU/GSP-firmware hangs on very new hardware.
-    # Turning this off keeps the dGPU in low-power idle instead of fully
-    # suspending/resuming it on every offload call — costs a little battery,
-    # buys a lot of stability. Try this first.
     powerManagement.finegrained = false;
-
-    # Bleeding-edge laptop GPU (RTX 5060 Max-Q / Blackwell) benefits from
-    # the newest driver branch rather than "stable", which lags on
-    # Blackwell-specific fixes.
     package = config.boot.kernelPackages.nvidiaPackages.latest;
-
-    # Dynamic Boost 2.0 support (Razer explicitly advertises this)
     dynamicBoost.enable = true;
   };
 

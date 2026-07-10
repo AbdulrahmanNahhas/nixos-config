@@ -12,7 +12,7 @@
   services.xserver.excludePackages = [ pkgs.xterm ];
   services.displayManager.gdm = {
     enable = true;
-    autoSuspend = false; # Prevents login screen from sleeping your machine
+    autoSuspend = false;
   };
   services.desktopManager.gnome.enable = true;
   services.gnome.gnome-keyring.enable = true;

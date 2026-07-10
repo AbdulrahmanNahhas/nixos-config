@@ -1,6 +1,9 @@
 # desktop.nix
 { pkgs, ... }:
 {
+  # ── Niri ─────────────────────────────────────────────────
+  programs.niri.enable = true;
+
   # ── Remove Unwanted GNOME Bloat ──────────────────────────
   environment.gnome.excludePackages = with pkgs; [
     gnome-tour

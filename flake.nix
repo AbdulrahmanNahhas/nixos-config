@@ -30,6 +30,11 @@
       url = "github:rafaelmardojai/firefox-gnome-theme";
       flake = false;
     };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -58,6 +63,7 @@
           preservation.nixosModules.default
           home-manager.nixosModules.home-manager
           nix-flatpak.nixosModules.nix-flatpak
+          inputs.noctalia.nixosModules.default
         ];
       };
     };
