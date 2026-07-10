@@ -10,7 +10,7 @@ in
     # ── Look & feel ────────────────────────────────────────
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
-      gtk-theme = "adw-gtk3-dark";
+      # gtk-theme = "adw-gtk3-dark";
       icon-theme = "MoreWaita";
       font-name = "Adwaita Sans 12";
       document-font-name = "Adwaita Sans 12";
