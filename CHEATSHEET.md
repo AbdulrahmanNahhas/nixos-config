@@ -343,7 +343,6 @@
 | **System config (flake)** | `/saved/nixos-config` |
 | **Fish history** | `/saved/home/aqua/.local/share/fish` |
 | **Atuin DB** | `/saved/home/aqua/.local/share/atuin` |
-| **Firefox profile** | `/saved/home/aqua/.mozilla` |
 | **SSH keys** | `/saved/home/aqua/.ssh` |
 | **GPG keys** | `/saved/home/aqua/.gnupg` |
 | **GitHub CLI auth** | `/saved/home/aqua/.config/gh` |

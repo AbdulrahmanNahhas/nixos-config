@@ -14,10 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    preservation = {
-      url = "github:nix-community/preservation";
-    };
-
+    preservation.url = "github:nix-community/preservation";
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -26,14 +23,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    firefox-gnome-theme = {
-      url = "github:rafaelmardojai/firefox-gnome-theme";
-      flake = false;
-    };
-
     noctalia = {
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
     };
   };
 
@@ -43,6 +41,7 @@
       home-manager,
       nix-flatpak,
       nixos-hardware,
+      zen-browser,
       preservation,
       ...
     }@inputs:

@@ -19,7 +19,6 @@ surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
 - [X] nix-community/home-manager
 - [X] nix-community/disko
 - [X] gmodena/nix-flatpak
-- [X] rafaelmardojai/firefox-gnome-them
 - [X] nix-community/preservation
 - [X] nix-community/nixos-hardware
 - [X] Jovian-Experiments/Jovian-NixOS (Steam Deck Gaming Mode + Decky (Disabled Now))

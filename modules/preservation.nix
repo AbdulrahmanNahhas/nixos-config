@@ -94,9 +94,13 @@
 
           # ── Web Browser ──────────────────────────────────────
           {
-            directory = ".mozilla";
+            directory = ".config/zen";
             mode = "0700";
-          } # Firefox history, profile, and cookies
+          } # Zen history, profile, workspace setups, and cookies
+          {
+            directory = ".cache/zen";
+            mode = "0700";
+          } # Zen web cache (stops sites from lagging on a fresh reboot)
 
           # ── Flatpak Application Data ─────────────────────────
           ".var"

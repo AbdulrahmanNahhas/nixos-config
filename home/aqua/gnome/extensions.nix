@@ -133,7 +133,7 @@ in
       favorite-apps = [
         "com.mitchellh.ghostty.desktop"
         "dev.zed.Zed.desktop"
-        "firefox.desktop"
+        "zen.desktop"
         "org.gnome.Nautilus.desktop"
         "org.signal.Signal.desktop"
       ];
