@@ -10,7 +10,7 @@ gestures {
 input {
     keyboard {
         xkb {
-            layout "us,ar"
+            layout "us,ara"
             options "grp:caps_toggle"
         }
         numlock
@@ -138,6 +138,8 @@ window-rule {
 }
 debug {
     honor-xdg-activation-with-invalid-serial
+    // Tell Niri to completely ignore the NVIDIA card at startup
+    ignore-drm-device "/dev/dri/renderD129"
 }
 recent-windows {
     binds {

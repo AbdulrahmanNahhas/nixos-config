@@ -114,13 +114,11 @@
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
 
-          # ── Niri & DankMaterialShell State ────────
+          # ── Niri & Noctalia State ────────
           ".config/niri"
-          ".config/noctalia" # cached settings, recent wallpapers, etc.
+          ".config/noctalia"
           ".local/share/noctalia"
-          # ".config/dms"
-          # ".local/share/dms"
-          # ".local/share/cliphist" # SAVE Clipboard after reboot
+          ".cache/noctalia"
 
           # ── Audio Per-App State ──────────────────────────────
           ".local/state/wireplumber" # Audio volumes and default device selections

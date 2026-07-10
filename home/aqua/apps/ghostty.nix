@@ -17,7 +17,7 @@
     background-opacity = 0.92
 
     # ── Theme ──────────────────────────────────────────────
-    theme = Adwaita Dark
+    theme = noctalia
 
     # ── Behavior ───────────────────────────────────────────
     confirm-close-surface = false

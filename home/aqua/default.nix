@@ -1,6 +1,7 @@
 {
   config,
   username,
+  # lib,
   ...
 }:
 {
@@ -9,6 +10,7 @@
     ./apps
     ./cli
     ./gnome
+    ./wm
   ];
 
   home = {
