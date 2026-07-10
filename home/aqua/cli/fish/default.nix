@@ -14,9 +14,9 @@
       set fish_greeting ""
 
       # Fastfetch — ONLY trigger when running inside Ghostty
-      if test "$TERM_PROGRAM" = "ghostty"
-          fastfetch
-      end
+      # if test "$TERM_PROGRAM" = "ghostty"
+      #     fastfetch
+      # end
 
       # Initialize starship prompt
       starship init fish | source
