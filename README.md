@@ -1,248 +1,321 @@
 # Shadow — NixOS on a Razer Blade 14 (2025)
 
-Lightweight, opinionated NixOS config built around an **impermanent**, fully
-encrypted setup: tmpfs root + LUKS2 + btrfs, with only `/nix` and `/saved`
-surviving reboots. Desktop is GNOME on Wayland; editor is Zed; shell is fish.
+Impermanent, encrypted NixOS config for a Razer Blade 14 laptop.
+
+- **Root**: tmpfs — wiped every reboot.
+- **Disk**: LUKS2 + btrfs. Only `/nix` (store) and `/saved` (persistent state) survive.
+- **Desktop**: Niri (scrollable-tiling compositor) + Noctalia 5 (shell, bar, launcher, notifications, wallpaper engine). GNOME is secondary.
+- **Editor**: Zed &nbsp;·&nbsp; **Shell**: fish &nbsp;·&nbsp; **Browser**: Zen
+
+---
 
 ## Hardware
 
-- Razer Blade 14 (2025)
-- AMD Ryzen AI 9 365 — 10 cores / 20 threads, base 2.00 GHz, boost up to 5.0 GHz
-- AMD Radeon 880M  — integrated GPU
-- NVIDIA GeForce RTX 5060 Max-Q (Mobile) — discrete GPU (Prime offload)
-- 16 GB LPDDR5X RAM
-- ~953 GiB NVMe (single `nvme0n1`)
+| Component | Detail |
+|---|---|
+| Model | Razer Blade 14 (2025) |
+| CPU | AMD Ryzen AI 9 365 — 10C/20T @ 2.00–5.0 GHz |
+| iGPU | AMD Radeon 880M |
+| dGPU | NVIDIA GeForce RTX 5060 Max-Q (Prime offload) |
+| RAM | 16 GB LPDDR5X |
+| Storage | ~953 GiB NVMe (`nvme0n1`) |
 
-## Todo List:
+---
 
-- [X] NixOS/nixpkgs/nixos-unstable
-- [X] nix-community/home-manager
-- [X] nix-community/disko
-- [X] gmodena/nix-flatpak
-- [X] nix-community/preservation
-- [X] nix-community/nixos-hardware
-- [X] Jovian-Experiments/Jovian-NixOS (Steam Deck Gaming Mode + Decky (Disabled Now))
-- [ ] nix-community/lanzaboote
-- [ ] nix-community/stylix
+## Flake inputs
 
-## Repository layout
+| Input | Purpose |
+|---|---|
+| `nixpkgs` | `nixos-unstable` |
+| `home-manager` | Per-user dotfiles & packages |
+| `disko` | Declarative disk partitioning |
+| `preservation` | Impermanence — persists selected paths across reboots |
+| `nix-flatpak` | Declarative Flatpak management |
+| `nixos-hardware` | Razer Blade 14 (`RZ09-0530`) hardware quirks |
+| `jovian` | Steam Deck gaming mode + Proton GE |
+| `noctalia` | Shell, bar, launcher, notifications for Niri |
+| `zen-browser` | Zen Browser via home-manager module |
+
+| Status | Planned |
+|---|---|
+| &nbsp; | `lanzaboote` — Secure Boot support |
+| &nbsp; | `stylix` — System-wide theming |
+
+---
+
+## Repository structure
 
 ```
-configuration.nix        # Top-level system module — imports everything below
-flake.nix                # Inputs: nixpkgs-unstable, home-manager, disko, preservation, nix-flatpak, nixos-hardware, jovian, firefox-gnome-theme
-hardware-configuration.nix # Auto-generated hardware probe (nixos-generate-config) — used
-home.nix                 # home-manager hook → delegates to home/aqua/
+configuration.nix           # Top-level — imports all modules below
+flake.nix                   # Inputs → nixosSystem
+hardware-configuration.nix  # Auto-generated (nixos-generate-config)
+home.nix                    # home-manager hook → home/aqua/
+
 modules/
-  boot.nix               # systemd-boot, kernel params, GPU module preload
-  desktop.nix            # GNOME + fonts + Wayland env vars
-  disko.nix              # tmpfs / + LUKS2 + btrfs subvolumes @nix @saved @swap
-  flatpak.nix            # Declarative Flatpak apps via nix-flatpak
-  gaming.nix             # Steam Deck Gaming Mode (Jovian) + Proton GE + Decky + GameMode
-  packages.nix           # System-wide packages (git, curl, …)
-  preservation.nix       # /saved = persistent layer; lists everything kept across reboots
-  services.nix           # PipeWire, Bluetooth, upower, openssh, sudo
-home/aqua/                # Everything per-user (managed by home-manager)
-  default.nix             # Imports, home basics, out-of-store nix.conf
-  desktop.nix             # GTK, cursor, XDG dirs, terminal/browser routing
-  scripts.nix             # User helper scripts (setwallpaper)
-  apps/
-    default.nix           # Aggregates firefox/ghostty/zed
-    ghostty.nix           # Ghostty terminal config
-    firefox/              # Firefox split into focused modules
-      default.nix         #   enable + profile basename
-      search.nix          #   search engines
-      policies.nix        #   enterprise policies (uBlock…)
-      settings.nix        #   about:config prefs (theme toggles + extras)
-      theme.nix           #   userChrome/userContent + gnome-theme symlink
-    zed/                  # Zed editor, userSettings merged across files
-      default.nix         #   enable + extensions
-      settings.nix        #   core editor / UI / terminal / AI settings
-      languages.nix       #   per-language formatter + format-on-save
-      lsp.nix             #   rust-analyzer / vtsls / clangd options
-  cli/
-    default.nix           # Aggregates packages/fish/yazi/fastfetch
-    packages.nix          # User CLI tools (eza, bat, fd, ripgrep, yazi, …)
-    yazi.nix              # Yazi file manager + keymap
-    fastfetch.nix         # fastfetch system info (config.jsonc + logo)
-    fastfetch.txt         # ASCII logo
-    fish/                 # Fish split into focused modules
-      default.nix         #   enable + interactive init (starship/zoxide/atuin)
-      abbrs.nix           #   abbreviations
-      aliases.nix         #   shell aliases
-      functions.nix       #   mkcd, wallpapers, wallpaper-next/prev, phone…
-      starship.nix        #   starship prompt config
-  gnome/
-    default.nix           # Aggregates gnome submodules
-    monitors.nix          # monitors.xml (eDP-2 layout/scale)
-    bookmarks.nix         # Nautilus sidebar bookmarks
-    dconf.nix             # dconf: interface, background, input, privacy, mutter…
-    extensions.nix        # GNOME Shell extensions + per-extension dconf
+├── boot.nix                # systemd-boot, kernel params
+├── desktop.nix             # Niri, GNOME prune, fonts, Wayland env
+├── disko.nix               # tmpfs / + LUKS2 + btrfs subvolumes
+├── flatpak.nix             # Declarative Flatpaks
+├── gaming.nix              # Jovian, Steam, Proton GE, GameMode
+├── graphics.nix            # NVIDIA, Bluetooth, 32-bit Mesa, udev
+├── packages.nix            # System-wide packages
+├── preservation.nix        # Impermanence — what survives reboots
+└── services.nix            # GDM, GNOME, PipeWire, printing, Kavita, SSH, sudo
+
+home/aqua/
+├── default.nix             # Entry point — imports everything below
+├── desktop.nix             # GTK theme, cursor, XDG dirs, terminal/browser
+├── apps/
+│   ├── default.nix         # ghostty + zed + zen
+│   ├── ghostty.nix         # Terminal config
+│   ├── zed/
+│   │   ├── default.nix     #   Enable + extensions
+│   │   ├── settings.nix    #   Editor, UI, terminal, AI
+│   │   ├── languages.nix   #   Per-language formatters
+│   │   └── lsp.nix         #   rust-analyzer, vtsls, clangd
+│   └── zen/
+│       ├── default.nix     #   Enable + profile
+│       ├── search.nix      #   Search engines
+│       └── settings.nix    #   about:config preferences
+├── cli/
+│   ├── default.nix         # packages + fish + fastfetch
+│   ├── packages.nix        # eza, bat, fd, rg, yazi, opencode, obsidian…
+│   ├── fastfetch.nix       # Config + ASCII logo
+│   ├── fastfetch.txt
+│   └── fish/
+│       ├── default.nix     #   Enable + starship/zoxide/atuin init
+│       ├── abbrs.nix       #   Abbreviations
+│       ├── aliases.nix     #   Shell aliases
+│       ├── functions.nix   #   mkcd, wallpaper, book_library, phone, devenv-new
+│       └── starship.nix    #   Prompt styling
+├── gnome/
+│   ├── default.nix         # monitors + bookmarks + dconf + extensions
+│   ├── monitors.nix        #   eDP-2 @ 2880×1800, 2× scale
+│   ├── bookmarks.nix       #   Nautilus sidebar
+│   ├── dconf.nix           #   Interface, background, input, privacy, mutter…
+│   └── extensions.nix      #   Extensions + per-extension dconf
+└── wm/
+    ├── default.nix         # niri + noctalia
+    ├── niri/
+    │   ├── default.nix     #   Out-of-store symlinks
+    │   ├── config.kdl      #   Layout, animations, window rules
+    │   └── binds.kdl       #   Keybindings
+    └── noctalia/
+        ├── default.nix     #   Enable + systemd + symlink
+        ├── config.toml     #   Bar, widgets, theme, wallpaper, lockscreen
+        └── nixos.svg       #   Session widget logo
 ```
 
-## Disk layout (declared by `modules/disko.nix`)
+---
+
+## Disk layout
 
 ```
 /dev/nvme0n1
-├─ ESP             1 GiB   vfat   →  /boot        (EFI, umask=0077)
-└─ luks (LUKS2)    rest    btrfs  →  crypted
-   ├─ @nix   subvol  →  /nix    (compress=zstd, noatime)   [read-only-ish, never wiped]
-   ├─ @saved subvol  →  /saved  (compress=zstd, noatime)   [persistent state lives here]
-   └─ @swap  subvol  →  /swap   (16 GiB swapfile — full RAM, supports hibernate)
+├── ESP             1 GiB   vfat    →  /boot     (EFI)
+└── luks (LUKS2)    rest    btrfs   →  crypted
+    ├── @nix                   →  /nix       [compress=zstd, noatime]
+    ├── @saved                 →  /saved     [compress=zstd, noatime]
+    └── @swap  (16 GiB file)   →  /swap      [swapfile]
 ```
 
-The whole root (`/`) is **tmpfs**: anything not listed in `modules/preservation.nix`
-is wiped on reboot. Things that survive (configured in preservation.nix):
+`/` is **tmpfs** — empty after every reboot. See the table below for what survives.
 
-- System: machine-id, SSH host keys, entropy seed, NetworkManager connections,
-  Bluetooth pairings, NixOS uid/gid state, journald, coredumps, timers.
-- User `aqua`: XDG directories (`Desktop/`, `Documents/`, `Music/`, `Pictures/`,
-  `Projects/`, `Public/`, `Templates/`, `Videos/`; **`Downloads/` is intentionally
-  not persisted** — it lives on the tmpfs root and is wiped on reboot),
-  `~/.ssh`, `~/.gnupg`, `~/.mozilla` (Firefox session/logins),
-  `~/.local/share/zed` (Zed login + workspace state), `~/.local/share/keyrings`
-  (GNOME Keyring, where Zed keeps its auth token), `~/.var` (every Flatpak app's
-  session), `~/.local/share/atuin` (shell history), pipewire/wireplumber state.
+---
 
-> When you adopt a new app and want its login/state to survive reboots, add
-> its data directory to `modules/preservation.nix`.
+## 📦 Installation
 
-## ⚠ Important: how to actually format the disk
+> **`nixos-rebuild switch` does NOT format disks.** These commands do.
 
-`nixos-rebuild switch` does **NOT** format anything. Neither does `nix build`
-nor `nix flake check` — those only validate / build the config; they leave the
-disk untouched.
-
-To install onto a fresh `/dev/nvme0n1` (this **destroys** everything on it),
-boot a NixOS live USB, copy this repo into the live env, and either:
+Boot a NixOS live USB, clone this repo, then:
 
 ```sh
-# Option A — one-shot (disko + nixos-install in a single command):
+# One-shot: partition, format, mount, install
 sudo nix run github:nix-community/disko -- --impure \
   --mode=destroy,format,mount --flake .#shadow --disk main /dev/nvme0n1
 sudo nixos-install --flake .#shadow
-
-# Option B — same thing via disko-install:
-sudo nix run github:nix-community/disko#disko-install -- \
-  --flake .#shadow --disk main /dev/nvme0n1
 ```
 
-After the first install, day-to-day updates on the running system are:
+Day-to-day updates:
 
 ```sh
-sudo nh os switch /etc/nixos   # or: sudo nixos-rebuild switch --flake .#shadow
+sudo nh os switch /saved/nixos-config
 ```
 
-…which never touches the disk layout, only updates the system closure.
+---
 
-## TPM2 auto-unlock (future work)
+## 🔒 What survives reboots
 
-`modules/disko.nix` already passes `allowDiscards = true` (SSD TRIM through
-LUKS). After install, enroll the LUKS volume in the TPM and remove the
-passphrase prompt by setting `crypttabExtraOpts = [ "tpm2-device=auto" ]` in
-`disko.nix` (already stubbed out as a comment there) and running:
+Everything not listed here lives on tmpfs and is **gone** after reboot.
+
+### System paths
+
+| Path | Why |
+|---|---|
+| `/etc/machine-id` | Stable machine identity |
+| `/etc/ssh/ssh_host_ed25519_key*` | SSH host keys |
+| `/var/lib/systemd/random-seed` | Entropy seed (faster RNG on boot) |
+| `/var/lib/nixos` | UID/GID mappings |
+| `/var/log` | Persistent logs (journald) |
+| `/var/lib/systemd/coredump` | Crash dumps |
+| `/var/lib/systemd/timers` | Timer state |
+| `/var/lib/bluetooth` | Bluetooth pairings |
+| `/var/lib/flatpak` | Flatpak system data |
+| `/var/lib/decky-loader` | Decky Loader plugin state |
+| `/var/lib/kavita` | Kavita book library + token |
+| `/etc/NetworkManager/system-connections` | Saved Wi-Fi networks |
+
+### User `aqua` paths
+
+| Path | Why |
+|---|---|
+| `Desktop/` `Documents/` `Music/` `Pictures/` `Projects/` `Public/` `Templates/` `Videos/` `Books/` | XDG user directories |
+| `Downloads/` | **Not persisted** — wiped every reboot |
+| `~/.ssh` | SSH keys (`chmod 700`) |
+| `~/.gnupg` | GPG keys (`chmod 700`) |
+| `~/.gitconfig` | Git identity |
+| `~/.config/gh` | GitHub CLI auth |
+| `~/.local/share/keyrings` | GNOME Keyring (Zed auth token lives here) |
+| `~/.config/zen` · `~/.cache/zen` | Zen Browser profile + web cache |
+| `~/.config/zed` · `~/.local/share/zed` | Zed editor state + login |
+| `~/.config/nvim` · `~/.local/state/nvim` | Neovim state |
+| `~/.config/fish` · `~/.local/share/fish` | Fish shell history + config |
+| `~/.config/atuin` · `~/.local/share/atuin` | Atuin shell history DB |
+| `~/.config/niri` | Niri compositor state |
+| `~/.config/noctalia` · `~/.local/share/noctalia` · `~/.cache/noctalia` | Noctalia shell state |
+| `~/.local/state/pipewire` · `~/.local/state/wireplumber` | Per-app audio volumes |
+| `~/.local/share/Steam` · `~/.steam` | Steam library + Proton prefixes |
+| `~/.config/openrazer` · `~/.local/share/openrazer` | Razer hardware config |
+| `~/.config/polychromatic` · `~/.local/share/polychromatic` | Razer RGB profiles |
+| `~/.config/obsidian` | Obsidian preferences |
+| `~/.config/opencode` · `~/.local/share/opencode` | OpenCode AI editor state |
+| `~/.var` | Every Flatpak app's session data |
+
+---
+
+## 🖥️ Desktop
+
+### Niri + Noctalia 5 _(default session)_
+
+Niri is a scrollable-tiling Wayland compositor. Noctalia 5 layers on top:
+top bar, app launcher (`Mod+Space`), notification center, clipboard manager,
+wallpaper engine with auto-cycling, and lockscreen.
+
+Both configs are live-editable via out-of-store symlinks:
+
+| File | Reload |
+|---|---|
+| `home/aqua/wm/niri/config.kdl` | `niri msg action reload-config` |
+| `home/aqua/wm/niri/binds.kdl` | (included by config.kdl — same reload) |
+| `home/aqua/wm/noctalia/config.toml` | Noctalia watches for changes |
+
+Noctalia auto-generates Material You (M3 tonal spot) themes from the current
+wallpaper. Templates are pushed to: **GTK3, GTK4, Ghostty, Niri, Zen Browser,
+Zed** — all update when the wallpaper changes.
+
+### GNOME _(secondary session)_
+
+Enabled via GDM as a fallback. Also provides gnome-keyring and dconf.
+
+- 11 extensions: User Themes, AppIndicator, Dash to Dock, Blur my Shell,
+  Clipboard Indicator, Caffeine, Just Perfection, Status Area Spacing,
+  GSConnect, Auto Accent Colour, Accent Directories.
+- `services.gnome.gnome-software.enable = false` — Flatpaks are managed declaratively.
+- Bloat removed: tour, connections, console, characters, yelp, epiphany, geary.
+
+---
+
+## 🔧 Services & hardware
+
+| Service | Detail |
+|---|---|
+| **PipeWire** | Audio (ALSA, Pulse, JACK, 32-bit Steam) |
+| **GDM** | Display manager |
+| **NetworkManager** | Wi-Fi, ethernet |
+| **Bluetooth** | `powerOnBoot = false` |
+| **OpenRazer + Polychromatic** | Keyboard lighting, fan control |
+| **Kavita** | Book server on `:8083` — `book_library on\|off\|status` |
+| **Printing** | CUPS + Epson ESC/P-R drivers |
+| **Scanning** | SANE + `epsonscan2` backend |
+| **SSH** | OpenSSH server enabled |
+| **firmware** | `fwupd` for firmware updates |
+| **direnv** | `nix-direnv` integration |
+
+### Firewall
+
+| Port | For |
+|---|---|
+| `8083/tcp` | Kavita |
+| `36679/tcp+udp` | SimpleX |
+| `1714–1764/tcp+udp` | GSConnect |
+
+---
+
+## 🎮 Gaming
+
+- **Jovian** — Steam Deck gamescope session (selectable from GDM).
+- **Steam** — Native + Proton GE, remote play, dedicated server.
+- **GameMode** — `gamemoderun` wrapper; `gamemode` group for the user.
+- Decky Loader is installed but **disabled** (`jovian.decky-loader.enable = false`).
+- Steam library + prefixes persist in `/saved` via preservation.
+
+NVIDIA offload alias: `nv <command>` (uses `nvidia-offload`).
+
+---
+
+## 🛠️ Maintenance commands
+
+```sh
+# Rebuild system
+sudo nh os switch /saved/nixos-config
+
+# Test build (doesn't switch)
+sudo nh os test /saved/nixos-config
+
+# Garbage-collect old generations (keep 14d + last 10)
+nh clean all --keep-since 14d --keep 10
+
+# Update flake inputs
+nix flake update --flake /saved/nixos-config
+```
+
+### Fish shell quick-reference
+
+| Shortcut | Expands to |
+|---|---|
+| `nx-rebuild` | `nh os switch /saved/nixos-config` |
+| `nx-test` | `nh os test /saved/nixos-config` |
+| `nx-clean` | `nh clean all --keep-since 14d --keep 10` |
+| `nv` | `nvidia-offload` |
+| `wp` | `wallpaper` (set / random / info) |
+| `ls` | `eza --icons --group-directories-first` |
+| `ll` | `eza -l --icons --git` |
+| `cat` | `bat` |
+| `grep` | `rg` |
+| `find` | `fd` |
+| `top` | `btop` |
+
+---
+
+## 🔑 TPM2 auto-unlock _(future)_
+
+`disko.nix` already enables `allowDiscards` (SSD TRIM). To enroll the LUKS
+slot in the TPM and skip the boot passphrase:
 
 ```sh
 sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto /dev/nvme0n1p2
 ```
 
-(Also requires `boot.initrd.systemd.enable = true` and the `tpm2-tss` package
-in the initrd.)
+Then uncomment `crypttabExtraOpts = [ "tpm2-device=auto" ]` in `disko.nix`.
 
-## Notes
+Also needs: `boot.initrd.systemd.enable = true` + `tpm2-tss` in initrd.
 
-- `nh.flake = "/etc/nixos"` is set in `configuration.nix`. After install, the
-  expected layout is `/etc/nixos` pointing at this repo (e.g.
-  `sudo ln -sfn /saved/nixos-config /etc/nixos`).
-- `hardware-configuration.nix` (repo root) is the auto-generated probe file from
-  `nixos-generate-config`, imported by `configuration.nix`. All NVIDIA/AMD hybrid
-  graphics quirks live in the `nixos-hardware` Razer Blade 14 module, so the only
-  hand-maintained hardware code here is the GPU env-var block in `configuration.nix`.
-- This config follows `nixpkgs/nixos-unstable` and pins `stateVersion = "26.05"`.
+---
 
+## ℹ️ Notes
 
-## NOTESSS:
-# ────────────────────────────────────────────────────────────────
-# Shared builder for "fetch a GNOME Shell extension from GitHub and
-# drop it into the correct UUID-named folder" — avoids repeating the
-# same mkDerivation boilerplate for every extension not in nixpkgs.
-# ────────────────────────────────────────────────────────────────
-mkGnomeExtension =
-  {
-    pname,
-    owner,
-    repo,
-    rev,
-    hash,
-    uuid,
-  }:
-  pkgs.stdenv.mkDerivation {
-    inherit pname;
-    version = rev;
-
-    src = pkgs.fetchFromGitHub {
-      inherit
-        owner
-        repo
-        rev
-        hash
-        ;
-    };
-
-    nativeBuildInputs = [ pkgs.glib ];
-    dontBuild = true;
-    dontConfigure = true;
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share/gnome-shell/extensions/${uuid}
-      cp -r . $out/share/gnome-shell/extensions/${uuid}
-
-      if [ -d $out/share/gnome-shell/extensions/${uuid}/schemas ]; then
-        glib-compile-schemas $out/share/gnome-shell/extensions/${uuid}/schemas
-      fi
-      runHook postInstall
-    '';
-
-    passthru.extensionUuid = uuid;
-  };
-
-chromaleon = mkGnomeExtension {
-  pname = "gnome-shell-extension-chromaleon";
-  owner = "Fabito02";
-  repo = "ChromaLeon";
-  rev = "91add7c0138a8f3cd05ad598ad24a15767ca8293";
-  hash = "sha256-OYbVG91js7tejdc+TqRU6ZYRUR53KOYb7GhNP410ipo=";
-  uuid = "user-accent-colors@fabito02";
-};
-
-# o-tiling = pkgs.stdenv.mkDerivation rec {
-#   pname = "gnome-shell-extension-o-tiling";
-#   version = "2.9.5";
-#   uuid = "o-tiling@oliwebd.github.com";
-
-#   src = pkgs.fetchurl {
-#     url = "https://github.com/oliwebd/o-tiling/releases/download/v${version}/o-tiling@oliwebd.github.com-v${version}.zip";
-#     hash = "sha256-DEBm9+mvRuccTbgQXfC4aJxQ0g04FGanaj9Gmi2gr30=";
-#     name = "o-tiling-v${version}.zip";
-#   };
-
-#   nativeBuildInputs = [
-#     pkgs.unzip
-#     pkgs.glib
-#   ];
-#   dontUnpack = true;
-#   dontBuild = true;
-#   dontConfigure = true;
-
-#   installPhase = ''
-#     runHook preInstall
-#     mkdir -p $out/share/gnome-shell/extensions/${uuid}
-#     unzip -o $src -d $out/share/gnome-shell/extensions/${uuid}
-#     if [ -d $out/share/gnome-shell/extensions/${uuid}/schemas ]; then
-#       glib-compile-schemas $out/share/gnome-shell/extensions/${uuid}/schemas
-#     fi
-#     runHook postInstall
-#   '';
-
-#   passthru.extensionUuid = uuid;
-# };
+- Repo lives at `/saved/nixos-config`. `nh.flake` points there.
+- `hardware-configuration.nix` is auto-generated — don't hand-edit it.
+  `modules/graphics.nix` + `nixos-hardware` handle all GPU quirks.
+- `stateVersion = "26.05"` on `nixos-unstable`.
+- `EDITOR` = `micro` (set in `home/aqua/default.nix`).
