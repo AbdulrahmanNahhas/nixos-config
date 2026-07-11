@@ -119,6 +119,12 @@
           ".local/share/atuin" # Atuin history database
 
           # ── Niri & Noctalia State ────────
+          {
+            directory = ".local/state/noctalia";
+            user = "aqua";
+            group = "users";
+            mode = "0755";
+          }
           ".config/niri"
           ".config/noctalia"
           ".local/share/noctalia"

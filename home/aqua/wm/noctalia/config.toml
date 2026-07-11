@@ -119,8 +119,8 @@ source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
-builtin_ids = [ "gtk3", "gtk4", "ghostty", "niri", "zen" ]
-community_ids = [ "zed" ]
+builtin_ids = [ "gtk3", "gtk4", "ghostty", "niri", "zen-browser" ]
+community_ids = [ "zen-browser", "zed" ]
 
 [wallpaper]
 enabled = true
@@ -132,13 +132,13 @@ interval_seconds = 500
 recursive = false
 
 [wallpaper.default]
-path = "/home/aqua/Pictures/Wallpapers/Anime/A Silent Voice - 1.jpg"
+path = "/home/aqua/Pictures/Wallpapers/628308.jpg"
 
 [wallpaper.last]
-path = "/home/aqua/Pictures/Wallpapers/Anime/A Silent Voice - 1.jpg"
+path = "/home/aqua/Pictures/Wallpapers/628308.jpg"
 
 [wallpaper.monitors.eDP-2]
-path = "/home/aqua/Pictures/Wallpapers/Anime/A Silent Voice - 1.jpg"
+path = "/home/aqua/Pictures/Wallpapers/628308.jpg"
 
 [widget.battery]
 display_mode = "graphic"
