@@ -36,7 +36,7 @@
       end
     '';
 
-    programs.fish.functions.devenv-new = ''
+    devenv-new = ''
       devenv init
       echo "use devenv" > .envrc
       direnv allow
