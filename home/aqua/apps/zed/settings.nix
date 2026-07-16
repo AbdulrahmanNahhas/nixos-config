@@ -32,8 +32,8 @@
     # ── Theme / appearance ───────────────────────────────
     theme = {
       mode = "dark";
-      light = "Vercel Light";
-      dark = "Carbonfox - blurred";
+      light = "Carbonfox - blurred";
+      dark = "Modern Vesper";
     };
     # theme_overrides take real theme keys (syntax token names), not dotted strings.
     theme_overrides = {

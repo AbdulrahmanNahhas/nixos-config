@@ -24,7 +24,7 @@ binds {
 
     // === Security ===
     Mod+Alt+L hotkey-overlay-title="Lock Screen" {
-        spawn "noctalia" "msg" "session" "lock";            // confirmed
+        spawn "qylock-lock";                                  // qylock Quickshell lockscreen, theme last-of-us
     }
     Mod+Shift+E { quit; }
 

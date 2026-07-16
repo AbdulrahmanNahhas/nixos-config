@@ -8,12 +8,39 @@
   # For Auto Accent Color Extension
   services.desktopManager.gnome.sessionPath = [ pkgs.gjs ];
 
-  # Display & Graphical Environment (GDM + Wayland GNOME)
+  # Display & Graphical Environment (SDDM → Niri / GNOME fallback)
   services.xserver.excludePackages = [ pkgs.xterm ];
-  services.displayManager.gdm = {
+
+  services.displayManager.sddm = {
     enable = true;
-    autoSuspend = false;
+    wayland.enable = true;
+    autoNumlock = true;
+    settings = {
+      Wayland = {
+        EnableHiDPI = "true";
+      };
+    };
   };
+  services.displayManager.defaultSession = "niri";
+
+  # Cursor on hybrid-GPU: hw cursor plane renders on wrong GPU → invisible.
+  # WLR_NO_HARDWARE_CURSORS covers Weston, KWIN_FORCE_SW_CURSOR covers kwin_wayland.
+  environment.systemPackages = [ pkgs.bibata-cursors ];
+  systemd.services.display-manager.environment = {
+    WLR_NO_HARDWARE_CURSORS = "1";
+    KWIN_FORCE_SW_CURSOR = "1";
+    XCURSOR_THEME = "Bibata-Modern-Ice";
+    XCURSOR_SIZE = "48";
+  };
+
+  # qylock: SDDM login theme + Quickshell session lockscreen
+  programs.qylock = {
+    enable = true;
+    theme = "last-of-us";
+    sddm.enable = true;
+    quickshell.enable = true;
+  };
+
   services.desktopManager.gnome.enable = true;
   services.gnome.gnome-keyring.enable = true;
   services.gnome.gnome-software.enable = false; # Stops background flatpak store indexing

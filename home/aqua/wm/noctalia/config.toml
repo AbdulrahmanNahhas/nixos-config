@@ -1,5 +1,6 @@
 [audio]
 enable_sounds = true
+sound_volume = 1.0
 
 [backdrop]
 blur_intensity = 0.2
@@ -7,49 +8,105 @@ enabled = true
 tint_intensity = 0.4
 
 [bar.default]
-background_opacity = 0.79999998211860657
-center = [ "media", "clock", "notifications" ]
+background_opacity = 0.8
+capsule_foreground = "secondary"
+capsule_thickness = 0.75
+center = [ "notifications", "clock", "workspaces" ]
 contact_shadow = true
 end = [ "bluetooth", "volume", "brightness", "control-center", "network", "battery", "session" ]
 font_family = "GeistMono Nerd Font Mono"
 margin_ends = 0
-padding = 20
-panel_overlap = 0
+padding = 15
+panel_overlap = 2
 position = "bottom"
 radius = 80
 radius_bottom_left = 0
 radius_bottom_right = 0
 radius_top_left = 80
 radius_top_right = 80
-scale = 1.1000000089406967
-start = [ "launcher", "wallpaper", "workspaces", "animetracker", "clipboard", "tray", "wallhaven" ]
+scale = 1.2500000111758709
+start = [ "launcher", "wallpaper", "wallhaven", "clipboard", "media", "tray", "animetracker" ]
 thickness = 40
 widget_spacing = 10
+
+[battery]
+warning_threshold = 20
 
 [control_center]
 width = 900
 
 [desktop_widgets]
 enabled = false
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 192.0
+    box_width = 224.0
+    cx = 144.0
+    cy = 130.0
+    output = "eDP-2"
+    rotation = 0.0
+    type = "fancy_audio_visualizer"
+
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        bar_width = 0.20000000000000001
+        bloom_intensity = 1.0
+        fade_when_idle = true
+        inner_diameter = 0.5
+        ring_opacity = 1.0
+        rotation_speed = 0.5
+        sensitivity = 1.3
+        visualization_mode = "all"
+        wave_thickness = 1.0
 
 [hot_corners]
 enabled = true
 
+    [hot_corners.bottom_left]
+    action = "launcher"
+
     [hot_corners.bottom_right]
-    action = "command"
+    action = "control_center"
     command = "ghostty"
 
     [hot_corners.top_left]
-    action = "control_center"
+    action = "command"
+    command = "noctalia msg wallpaper-random"
 
     [hot_corners.top_right]
-    action = "launcher"
+    action = "window_switcher"
+
+[idle]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
+
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 900.0
+
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 660.0
 
 [location]
 address = "Homs, Syria"
 
 [lockscreen]
 blurred_desktop = true
+enabled = true
 
 [lockscreen_widgets]
 enabled = true
@@ -87,6 +144,11 @@ force = true
 temperature_day = 5000
 temperature_night = 3000
 
+[osd]
+background_opacity = 0.89999997988343239
+position = "bottom_center"
+position_vertical = "bottom_right"
+
 [plugin_settings."HotZi/anilistTracker"]
 anilistPanel_placement = "attached"
 anilistPanel_position = "center"
@@ -118,20 +180,28 @@ password_style = "random"
 screen_time_enabled = true
 ui_scale = 1.1500000096857548
 
+    [shell.animation]
+    speed = 2.0000000298023224
+
     [shell.launcher]
     app_grid = true
 
     [shell.panel]
     clipboard_placement = "attached"
+    launcher_placement = "attached"
     polkit_placement = "attached"
-    transparency_mode = "soft"
+    transparency_mode = "glass"
 
     [shell.screen_corners]
     enabled = true
-    size = 50
+    size = 40
 
     [shell.screenshot]
     directory = "/home/aqua/Pictures/Screenshots"
+
+    [shell.shadow]
+    alpha = 0.99999997764825821
+    direction = "center"
 
 [theme]
 builtin = "Catppuccin"
@@ -146,6 +216,7 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [wallpaper]
 enabled = true
+fill_color = "primary"
 transition_on_startup = true
 
     [wallpaper.automation]
@@ -154,13 +225,13 @@ transition_on_startup = true
     recursive = false
 
     [wallpaper.default]
-    path = "/home/aqua/Pictures/Wallpapers/a_tower_with_a_building_and_trees.jpg"
+    path = "/home/aqua/Pictures/Wallpapers/349969.jpg"
 
     [wallpaper.last]
-    path = "/home/aqua/Pictures/Wallpapers/a_tower_with_a_building_and_trees.jpg"
+    path = "/home/aqua/Pictures/Wallpapers/349969.jpg"
 
     [wallpaper.monitors.eDP-2]
-    path = "/home/aqua/Pictures/Wallpapers/a_tower_with_a_building_and_trees.jpg"
+    path = "/home/aqua/Pictures/Wallpapers/349969.jpg"
 
 [widget.animetracker]
 anilist_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjZkMWYxMGI1MTkxN2QzODBlMTM1N2EwNDQ1ZWM5ZDJlODc4MjJlZDc2Yjc3ZWM2NmJmNjNkYjBlODM0NmJmZmM1Y2Y4Y2U1NDNhM2NlNWVlIn0.eyJhdWQiOiI0NTU3OCIsImp0aSI6IjZkMWYxMGI1MTkxN2QzODBlMTM1N2EwNDQ1ZWM5ZDJlODc4MjJlZDc2Yjc3ZWM2NmJmNjNkYjBlODM0NmJmZmM1Y2Y4Y2U1NDNhM2NlNWVlIiwiaWF0IjoxNzgzNjk3Njk1LCJuYmYiOjE3ODM2OTc2OTUsImV4cCI6MTgxNTIzMzY5NSwic3ViIjoiNzUxOTE3OSIsInNjb3BlcyI6W119.rbMBdcbtcjjxO2H-La0RHeDA_Yxqb-ftyyNEteN4EUF9C0lDc1nvmmX1B5XbPWHgJT3SuI8WgcknFu6NYFNOfrL8spbEVX23DeGQ2A-mm8vpmq9G4AA7eQhQfIbmpWBp8BLZ9Rc_vv2qM9QTt3CM8mXEW8o2f9o35GVAn05-srnzSGgAw9OqdpApz-WEot7Ijw7TQUfkcstIZgK5Hu0d5rCulh99JfBdNmxWwyP-T7JxMLIoHIT6ENvqfr8Xy1AWZI8L6IYzlGO38jg0lTHX3Sihzr-0kay5tNAhFmiwa1iX2Qe1LJVaXKnxpsIQpd71tRtGhJ3aPfpSPJM6iH65yw9xKhg2DOjmJaMnsmL6Wzti5ivfr9p6IC_heq_q-Zqhbzs35ZJUATL0xqnCJ8dvS9tM1XDCw9hUnLSy1xL_z6UjEKY1bfbdZUbGtVBsp2Aj1AB4uMChCnM4yeP4PTo6lC9todk3l3VUgIl60ipFuj26Vx63uPtYg385C1u1bYZDuYPUK836BJ4XMip7XzcQmqDTWXAHRi02wzIpFC7xL6g1iL90qYIW76QX1ABaObekt8VVu7YRXXd32nOEBEl4tlRDd2N9-EYb_0tyAIx-QdEC9_Ltx2aQOq1pTBnFiTmOv0-mQQPWrEEy7muk83md8VSeDIkr2MCrwbFb8knfBg0"
@@ -180,8 +251,12 @@ show_label = false
 [widget.control-center]
 enabled = false
 
+[widget.launcher]
+capsule_padding = 4
+capsule_radius = 70
+
 [widget.media]
-anchor = true
+anchor = false
 hide_when_no_media = true
 title_scroll = "on_hover"
 
@@ -201,3 +276,8 @@ show_label = false
 
 [widget.wallhaven]
 type = "noctalia/wallhaven:wallhaven"
+
+[widget.workspaces]
+anchor = true
+capsule = true
+minimal = true

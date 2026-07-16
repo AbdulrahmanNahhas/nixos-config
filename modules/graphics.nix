@@ -2,7 +2,7 @@
 { config, ... }:
 {
   hardware.nvidia = {
-    powerManagement.finegrained = false;
+    powerManagement.finegrained = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
     dynamicBoost.enable = true;
   };
