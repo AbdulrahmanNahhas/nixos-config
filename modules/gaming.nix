@@ -21,6 +21,12 @@
           done
         '';
       });
+
+      # 1. PREVENT "BLACK WINDOW" BUG: Disables GPU compositing in Steam's
+      # CEF browser interface to prevent Nvidia/XWayland rendering bugs.
+      steam = prev.steam.override {
+        extraArgs = "-cef-disable-gpu-compositing";
+      };
     })
   ];
 
@@ -48,5 +54,14 @@
 
   systemd.tmpfiles.rules = [
     "d /saved/games 0755 ${username} users -"
+  ];
+
+  # 2. ENABLE XWAYLAND: Ensures the system-wide XWayland packages are ready.
+  programs.xwayland.enable = true;
+
+  # 3. ADD XWAYLAND-SATELLITE: Niri will automatically detect this in your
+  # PATH and spin it up on-demand when Steam tries to launch.
+  environment.systemPackages = with pkgs; [
+    xwayland-satellite
   ];
 }
