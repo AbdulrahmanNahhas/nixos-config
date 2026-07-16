@@ -20,6 +20,8 @@
     ./modules/networking.nix
   ];
 
+  system.autoUpgrade.enable = true;
+
   networking.hostName = "shadow";
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/Istanbul";
