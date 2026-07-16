@@ -17,6 +17,7 @@
     ./modules/services.nix
     ./modules/gaming.nix
     ./modules/preservation.nix
+    ./modules/networking.nix
   ];
 
   networking.hostName = "shadow";
@@ -77,34 +78,6 @@
   };
 
   # ── Misc services ───────────────────────────────────────
-  # Firewall Configuration
-  networking.firewall = {
-    enable = true; # Optional, but good practice to ensure it's explicitly on
-
-    allowedTCPPorts = [
-      8083 # Kavita (Books)
-      36679 # SimpleX
-    ];
-
-    allowedUDPPorts = [
-      36679 # SimpleX
-    ];
-
-    allowedTCPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      } # GSConnect
-    ];
-
-    allowedUDPPortRanges = [
-      {
-        from = 1714;
-        to = 1764;
-      } # GSConnect
-    ];
-  };
-
   # Laptop hardware control (Razer Blade lighting / fans via OpenRazer)
   hardware.openrazer = {
     enable = true;

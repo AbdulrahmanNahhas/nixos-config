@@ -47,12 +47,63 @@
 
   # Hardware / Local Networks
   services.fwupd.enable = true;
-  services.openssh.enable = true;
+
+  # enable if I want to connect from another laptop to my laptop
+  services.openssh.enable = false; # can enable with systemctl start sshd
+
+  # Networking
+  networking = {
+    nameservers = [
+      "127.0.0.1"
+      "::1"
+    ];
+    networkmanager = {
+      dns = "none";
+      # MAC address randomization
+      wifi.macAddress = "random";
+      wifi.scanRandMacAddress = true;
+    };
+    tempAddresses = "enabled";
+  };
+  services.resolved.enable = false;
+
+  # Firewall Configuration
+  networking.firewall = {
+    enable = true; # Optional, but good practice to ensure it's explicitly on
+
+    interfaces.wlan0.allowedTCPPorts = [
+      8083 # Kavita (Books)
+    ];
+
+    # allowedTCPPorts = [
+    #   36679 # SimpleX
+    # ];
+
+    # allowedUDPPorts = [
+    #   36679 # SimpleX
+    # ];
+
+    # allowedTCPPortRanges = [
+    #   {
+    #     from = 1714;
+    #     to = 1764;
+    #   } # GSConnect
+    # ];
+
+    # allowedUDPPortRanges = [
+    #   {
+    #     from = 1714;
+    #     to = 1764;
+    #   } # GSConnect
+    # ];
+  };
+
+  services.usbmuxd.enable = false;
 
   # Local Printing Support
   services.printing = {
-    enable = true;
-    drivers = with pkgs; [ epson-escpr ];
+    enable = false;
+    # drivers = with pkgs; [ epson-escpr ];
   };
 
   # Modern Audio Pipeline (Pipewire handles ALSA, Pulse, and Jack natively)
@@ -87,4 +138,8 @@
   security.sudo.extraConfig = ''
     Defaults env_keep += "EDITOR VISUAL"
   '';
+
+  # Disabled things not needed:
+  services.samba.enable = false;
+  services.avahi.enable = false;
 }
