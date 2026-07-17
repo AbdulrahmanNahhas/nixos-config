@@ -1,6 +1,20 @@
 # services.nix
 { pkgs, lib, ... }:
 {
+  # Weekly Garbage Collection
+  nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d"; # Deletes generations older than 14 days
+    };
+
+    # Storage Deduplication
+    settings = {
+      auto-optimise-store = true;
+    };
+  };
+
   # Core System Controls
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
