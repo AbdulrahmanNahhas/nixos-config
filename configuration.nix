@@ -63,14 +63,23 @@
       "@wheel"
     ];
   };
+
+  # Weekly Garbage Collection
+  nix.optimise = {
+    automatic = true;
+    dates = [ "Fri 04:00" ];
+  };
   programs.nh = {
     enable = true;
     flake = "/saved/nixos-config";
+
     clean = {
       enable = true;
-      extraArgs = "--keep-since-14d --keep 10";
+      dates = "Fri 03:00";
+      extraArgs = "--keep-since 7d --keep 5 --no-direnv";
     };
   };
+
   # Modern Developer Environments: automatically loads devenv when entering directories
   programs.direnv = {
     enable = true;
