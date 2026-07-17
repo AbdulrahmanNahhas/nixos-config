@@ -31,10 +31,10 @@
 
     # Background Video & Settings
     settings = {
-      background = {
-        path = "${../assets/background.mp4}";
-        fit = "Cover";
-      };
+      # background = {
+      #   path = "${../assets/background.mp4}";
+      #   fit = "Cover";
+      # };
       GTK = {
         application_prefer_dark_theme = true;
       };
