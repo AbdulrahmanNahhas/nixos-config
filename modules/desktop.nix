@@ -18,9 +18,9 @@
 
     # Font
     font = {
-      name = "Space Grotesk";
+      name = "Inter";
       size = 13;
-      package = pkgs.space-grotesk;
+      package = pkgs.inter;
     };
 
     # GTK Base Theme
