@@ -37,5 +37,9 @@
       __VK_LAYER_NV_optimus = "NVIDIA_only";
     };
   };
+  # This is a Razer laptop, not Steam Deck hardware. In particular, Jovian's
+  # SteamOS command line disables the IOMMU, which prevents the AMD XDNA/NPU
+  # driver from loading and weakens DMA isolation.
+  jovian.steamos.enableDefaultCmdlineConfig = false;
   jovian.decky-loader.enable = false;
 }
