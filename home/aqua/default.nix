@@ -1,20 +1,17 @@
 {
   config,
   username,
-  # lib,
   ...
 }:
 {
   imports = [
-    ./desktop.nix
-    ./apps
-    ./cli
-    ./gnome
-    ./wm
+    ../../profiles/home
+    ../../profiles/home/desktop.nix
+    ../../profiles/home/development.nix
   ];
 
   home = {
-    username = username;
+    inherit username;
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     sessionVariables = {

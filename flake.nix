@@ -15,7 +15,7 @@
     };
 
     preservation.url = "github:nix-community/preservation";
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=v0.7.0";
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     jovian = {
@@ -36,33 +36,36 @@
   };
 
   outputs =
-    {
-      nixpkgs,
-      home-manager,
-      nix-flatpak,
-      nixos-hardware,
-      zen-browser,
-      preservation,
-      ...
-    }@inputs:
+    inputs@{ nixpkgs, ... }:
     let
       system = "x86_64-linux";
       hostname = "shadow";
       username = "aqua";
     in
     {
+      formatter.${system} =
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.writeShellApplication {
+          name = "nixfmt-tree";
+          runtimeInputs = [
+            pkgs.fd
+            pkgs.nixfmt
+          ];
+          text = ''
+            fd --type f --extension nix --exec nixfmt {}
+          '';
+        };
+
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs username; };
+        specialArgs = {
+          inherit inputs hostname username;
+        };
 
         modules = [
-          ./configuration.nix
-          ./home.nix
-          inputs.disko.nixosModules.disko
-          preservation.nixosModules.default
-          home-manager.nixosModules.home-manager
-          nix-flatpak.nixosModules.nix-flatpak
-          inputs.noctalia.nixosModules.default
+          ./hosts/${hostname}
         ];
       };
     };
