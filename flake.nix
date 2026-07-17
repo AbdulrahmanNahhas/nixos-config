@@ -33,11 +33,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-
-    qylock = {
-      url = "github:Darkkal44/qylock";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -68,7 +63,6 @@
           home-manager.nixosModules.home-manager
           nix-flatpak.nixosModules.nix-flatpak
           inputs.noctalia.nixosModules.default
-          inputs.qylock.nixosModules.default
         ];
       };
     };
