@@ -51,7 +51,12 @@
         }
         "/var/log"
         "/var/lib/flatpak"
-        "/var/lib/bluetooth"
+        {
+          directory = "/var/lib/bluetooth";
+          user = "root";
+          group = "root";
+          mode = "0700";
+        }
         "/var/lib/decky-loader"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
@@ -82,6 +87,11 @@
           }
           {
             directory = ".gnupg";
+            mode = "0700";
+          }
+          {
+            # Codex credentials, conversations, settings, skills, and local state.
+            directory = ".codex";
             mode = "0700";
           }
 
