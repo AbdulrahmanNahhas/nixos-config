@@ -22,24 +22,92 @@ Impermanent, encrypted NixOS config for a Razer Blade 14 laptop.
 
 ---
 
-## Flake inputs
+## NixOS Security & System Stack
 
-| Input | Purpose |
-|---|---|
-| `nixpkgs` | `nixos-unstable` |
-| `home-manager` | Per-user dotfiles & packages |
-| `disko` | Declarative disk partitioning |
-| `preservation` | Impermanence — persists selected paths across reboots |
-| `nix-flatpak` | Declarative Flatpak management |
-| `nixos-hardware` | Razer Blade 14 (`RZ09-0530`) hardware quirks |
-| `jovian` | Steam Deck gaming mode + Proton GE |
-| `noctalia` | Shell, bar, launcher, notifications for Niri |
-| `zen-browser` | Zen Browser via home-manager module |
+- *Core System*
+  - [X] [systemd](https://systemd.io/)
+    - Base service manager already used.
+    - Future improvement: add systemd service hardening options.
+  - [x] [nixpkgs (unstable)](https://github.com/NixOS/nixpkgs)
+    - Rolling package source for latest software, kernels, NVIDIA drivers, and desktop components.
+  - [X] [Home Manager](https://github.com/nix-community/home-manager)
+    - Declarative management of user packages, configurations, dotfiles, and applications.
+  - [X] [Disko](https://github.com/nix-community/disko)
+    - Declarative disk partitioning and formatting.
+    - Current setup: LUKS + Btrfs.
+  - [X] [Preservation](https://github.com/nix-community/preservation)
+    - Keeps required persistent data while allowing the rest of the system to remain clean and reproducible.
+  - [X] [nixos-hardware](https://github.com/NixOS/nixos-hardware)
+    - Hardware-specific optimizations and compatibility modules.
+  - [X] [Noctalia](https://github.com/noctalia-dev/noctalia-shell)
+    - Modern Wayland shell integrated with the Niri desktop environment.
 
-| Status | Planned |
-|---|---|
-| &nbsp; | `lanzaboote` — Secure Boot support |
-| &nbsp; | `stylix` — System-wide theming |
+- *Boot & Kernel Security*
+  - [ ] [Lanzaboote](https://github.com/nix-community/lanzaboote)
+    - Secure Boot and measured boot solution for NixOS.
+    - Allows signing your boot chain with your own keys.
+  - [ ] [NixOS Specialisations](https://nixos.wiki/wiki/Specialisation)
+    - Native NixOS feature for multiple system profiles.
+    - Planned usage:
+      - Gaming profile:
+        - Latest kernel
+        - Latest NVIDIA drivers
+        - Steam/Jovian optimizations
+      - Security profile:
+        - Hardened kernel
+        - Niri
+        - Security-focused configuration
+  - [ ] [linux-hardened](https://github.com/anthraxx/linux-hardened)
+    - Hardened Linux kernel patches.
+    - Trusted project, but third-party kernel work.
+    - Need to verify NVIDIA compatibility.
+
+- *Application Isolation*
+  - [X] [Flatpak](https://flatpak.org/)
+    - Main application sandboxing layer.
+    - Used with Flatseal for permission control.
+
+  - [ ] [NixPak](https://github.com/nixpak/nixpak)
+    - Nix-native application sandboxing framework.
+    - Built around bubblewrap.
+    - Best option for sandboxing Nix-packaged applications.
+
+  - [ ] [Firejail](https://firejail.wordpress.com/)
+    - Mature Linux sandbox.
+    - Uses namespaces and seccomp.
+    - Useful fallback when NixPak is not practical.
+
+- *Access Control & Hardening*
+  - [ ] [AppArmor](https://wiki.nixos.org/wiki/AppArmor)
+    - Mandatory Access Control (MAC).
+    - Practical MAC solution for NixOS desktops.
+    - Alternative to SELinux in the NixOS ecosystem.
+  - [ ] [systemd Hardening](https://wiki.nixos.org/wiki/Systemd/Hardening)
+    - Harden services using systemd sandboxing:
+      - NoNewPrivileges
+      - ProtectSystem
+      - PrivateUsers
+      - PrivateNetwork
+      - Capability restrictions
+  - [ ] [OpenSnitch](https://github.com/evilsocket/opensnitch)
+    - Application-level firewall.
+    - Controls which programs can connect to the network.
+
+- *Storage & Recovery*
+  - [ ] [Btrfs Snapshots](https://wiki.nixos.org/wiki/Btrfs)
+    - Add snapshots to the existing Btrfs setup.
+    - Useful for rollback and recovery.
+  - [ ] [Btrbk](https://github.com/digint/btrbk)
+    - Automated Btrfs snapshot and backup management.
+    - Useful against accidental damage and ransomware.
+
+- *Secrets & Auditing*
+  - [ ] [sops-nix](https://github.com/Mic92/sops-nix)
+    - Declarative secret management.
+    - Encrypt secrets using age/GPG.
+  - [ ] [Lynis](https://cisofy.com/lynis/)
+    - Security auditing tool.
+    - Finds missing hardening steps and configuration issues.
 
 ---
 
@@ -60,7 +128,7 @@ modules/
 ├── graphics.nix            # NVIDIA, Bluetooth, 32-bit Mesa, udev
 ├── packages.nix            # System-wide packages
 ├── preservation.nix        # Impermanence — what survives reboots
-└── services.nix            # GDM, GNOME, PipeWire, printing, Kavita, SSH, sudo
+├── services.nix            # SDDM, GNOME, PipeWire, printing, Kavita, SSH, sudo, qylock
 
 home/aqua/
 ├── default.nix             # Entry point — imports everything below
@@ -197,9 +265,12 @@ Everything not listed here lives on tmpfs and is **gone** after reboot.
 
 ### Niri + Noctalia 5 _(default session)_
 
-Niri is a scrollable-tiling Wayland compositor. Noctalia 5 layers on top:
+Niri is the default session, auto-launched by SDDM on boot. Noctalia 5 layers on top:
 top bar, app launcher (`Mod+Space`), notification center, clipboard manager,
 wallpaper engine with auto-cycling, and lockscreen.
+
+SDDM runs in Wayland mode with the **qylock** `last-of-us` theme.
+Session lock (`Mod+Alt+L`) uses qylock's Quickshell lockscreen (`qylock-lock`).
 
 Both configs are live-editable via out-of-store symlinks:
 
@@ -215,7 +286,7 @@ Zed** — all update when the wallpaper changes.
 
 ### GNOME _(secondary session)_
 
-Enabled via GDM as a fallback. Also provides gnome-keyring and dconf.
+Available via SDDM as a fallback session. Also provides gnome-keyring and dconf.
 
 - 11 extensions: User Themes, AppIndicator, Dash to Dock, Blur my Shell,
   Clipboard Indicator, Caffeine, Just Perfection, Status Area Spacing,
@@ -230,7 +301,7 @@ Enabled via GDM as a fallback. Also provides gnome-keyring and dconf.
 | Service | Detail |
 |---|---|
 | **PipeWire** | Audio (ALSA, Pulse, JACK, 32-bit Steam) |
-| **GDM** | Display manager |
+| **SDDM + qylock** | Display manager (Wayland) + last-of-us theme |
 | **NetworkManager** | Wi-Fi, ethernet |
 | **Bluetooth** | `powerOnBoot = false` |
 | **OpenRazer + Polychromatic** | Keyboard lighting, fan control |
@@ -253,7 +324,7 @@ Enabled via GDM as a fallback. Also provides gnome-keyring and dconf.
 
 ## 🎮 Gaming
 
-- **Jovian** — Steam Deck gamescope session (selectable from GDM).
+- **Jovian** — Steam Deck gamescope session (selectable from SDDM).
 - **Steam** — Native + Proton GE, remote play, dedicated server.
 - **GameMode** — `gamemoderun` wrapper; `gamemode` group for the user.
 - Decky Loader is installed but **disabled** (`jovian.decky-loader.enable = false`).
