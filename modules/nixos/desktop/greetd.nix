@@ -1,0 +1,94 @@
+{ pkgs, ... }:
+{
+  services.greetd.enable = true;
+
+  programs.regreet = {
+    enable = true;
+    cursorTheme = {
+      name = "Bibata-Modern-Ice";
+      package = pkgs.bibata-cursors;
+    };
+    font = {
+      name = "Inter";
+      size = 13;
+      package = pkgs.inter;
+    };
+    theme = {
+      name = "Adwaita-dark";
+      package = pkgs.gnome-themes-extra;
+    };
+    settings.GTK.application_prefer_dark_theme = true;
+    extraCss = ''
+      window {
+        background-color: transparent;
+      }
+
+      .card, box.main-box {
+        background-color: rgba(10, 10, 9, 0.55);
+        border: 1px solid rgba(247, 197, 148, 0.15);
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      }
+
+      label {
+        color: #fffdf5;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+      }
+
+      .dim-label, label.subtitle {
+        color: #a89e8d;
+        font-weight: 600;
+        letter-spacing: 2px;
+      }
+
+      entry {
+        background-color: rgba(255, 255, 255, 0.035);
+        color: #fffdf5;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        padding: 10px 14px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        transition: all 0.25s ease;
+      }
+
+      entry:focus {
+        border-color: rgba(247, 197, 148, 0.5);
+        box-shadow: 0 0 12px rgba(247, 197, 148, 0.25);
+        background-color: rgba(255, 255, 255, 0.06);
+      }
+
+      button {
+        background-color: rgba(255, 255, 255, 0.03);
+        color: #a89e8d;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        padding: 8px 16px;
+        transition: all 0.2s ease;
+      }
+
+      button:hover {
+        color: #f7c594;
+        background-color: rgba(247, 197, 148, 0.08);
+        border-color: rgba(247, 197, 148, 0.3);
+      }
+
+      menu, popover {
+        background-color: rgba(10, 10, 9, 0.85);
+        border: 1px solid rgba(247, 197, 148, 0.2);
+        border-radius: 6px;
+        color: #fffdf5;
+      }
+
+      .error {
+        color: #f06060;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+    '';
+  };
+}
