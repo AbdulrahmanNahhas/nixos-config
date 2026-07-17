@@ -32,10 +32,44 @@ _: {
     theme = {
       mode = "dark";
       light = "Carbonfox - blurred";
-      dark = "Modern Vesper";
+      dark = "Rich Vesper";
     };
-    # theme_overrides take real theme keys (syntax token names), not dotted strings.
     theme_overrides = {
+      "Rich Vesper" = {
+        "background" = "#101010E0";
+        "surface.background" = "#101010E8";
+        "elevated_surface.background" = "#1A1A1AED";
+
+        "element.background" = "#101010D9";
+        "element.hover" = "#282828E0";
+        "element.active" = "#282828E8";
+        "element.selected" = "#232323E8";
+        "element.disabled" = "#101010CC";
+
+        "ghost_element.hover" = "#282828CC";
+        "ghost_element.selected" = "#232323CC";
+
+        "status_bar.background" = "#101010E0";
+        "title_bar.background" = "#101010E0";
+        "toolbar.background" = "#101010E0";
+
+        "tab_bar.background" = "#101010D9";
+        "tab.inactive_background" = "#101010D1";
+        "tab.active_background" = "#161616E8";
+
+        "panel.background" = "#101010E0";
+
+        "scrollbar.track.background" = "#1010108C";
+        "scrollbar.track.border" = "#101010CC";
+
+        "editor.background" = "#10101091";
+        "editor.gutter.background" = "#101010A3";
+        "editor.subheader.background" = "#101010CC";
+        "editor.active_line.background" = "#19191999";
+        "editor.highlighted_line.background" = "#1010107A";
+
+        "terminal.background" = "#0D0D0D80";
+      };
       "Vercel Light" = {
         syntax = {
           hint = {
@@ -122,6 +156,12 @@ _: {
     };
 
     # ── UI panels ────────────────────────────────────────
+    bottom_dock_layout = "full";
+    resize_all_panels_in_dock = [
+      "left"
+      "right"
+      "bottom"
+    ];
     tabs = {
       show_diagnostics = "all";
       close_position = "left";
@@ -140,10 +180,10 @@ _: {
       dock = "right";
     };
     outline_panel = {
-      dock = "left";
+      dock = "right";
     };
     debugger = {
-      dock = "left";
+      dock = "bottom";
     };
     minimap = {
       show = "never";
@@ -189,6 +229,8 @@ _: {
     # ── AI / Agent ────────────────────────────────────────
     disable_ai = false;
     agent = {
+      dock = "left";
+      sidebar_side = "right";
       default_profile = "ask";
       default_model = {
         provider = "zed.dev";

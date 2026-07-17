@@ -2,6 +2,7 @@
 {
   imports = [
     ./settings.nix
+    ./keymaps.nix
     ./languages.nix
     ./lsp.nix
   ];
@@ -17,6 +18,7 @@
       "rainbow-csv"
       "comment"
       "charmed-icons"
+      "rich-vesper"
     ];
   };
 }
