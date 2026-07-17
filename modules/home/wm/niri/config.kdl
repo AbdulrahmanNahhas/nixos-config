@@ -140,7 +140,8 @@ debug {
     honor-xdg-activation-with-invalid-serial
     // Keep the desktop on the Radeon 880M. The stable PCI path avoids relying
     // on renderD128/renderD129 probe order; NVIDIA remains available through
-    // `nvidia-offload` and the NVIDIA-only Jovian Gamescope session.
+    // `nvidia-offload`, including Steam games launched with
+    // `nvidia-offload %command%`.
     render-drm-device "/dev/dri/by-path/pci-0000:c5:00.0-render"
 }
 recent-windows {
