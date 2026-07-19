@@ -48,10 +48,13 @@ binds {
 
     // === Brightness Controls ===
     XF86MonBrightnessUp allow-when-locked=true {
-        spawn "brightnessctl" "set" "5%+";
+        // The internal eDP panel is driven by the AMD iGPU. Without an
+        // explicit device, brightnessctl selects the non-functional NVIDIA
+        // backlight interface exposed by this hybrid-graphics laptop.
+        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%+";
     }
     XF86MonBrightnessDown allow-when-locked=true {
-        spawn "brightnessctl" "set" "5%-";
+        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%-";
     }
 
     // === Window Management ===
