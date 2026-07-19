@@ -18,6 +18,11 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     jovian = {
       url = "github:Jovian-Experiments/Jovian-NixOS";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -57,6 +62,19 @@
             fd --type f --extension nix --exec nixfmt {}
           '';
         };
+
+      checks.${system}.gitleaks =
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        pkgs.runCommand "gitleaks-check"
+          {
+            nativeBuildInputs = [ pkgs.gitleaks ];
+          }
+          ''
+            gitleaks dir --no-banner --redact ${./.}
+            touch "$out"
+          '';
 
       nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
         inherit system;

@@ -1,3 +1,6 @@
 {
-  imports = [ ./baseline.nix ];
+  imports = [
+    ./baseline.nix
+    ./secrets.nix
+  ];
 }

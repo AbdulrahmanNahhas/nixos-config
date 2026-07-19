@@ -23,7 +23,7 @@
 
   programs.home-manager.enable = true;
 
-  # Out-of-store symlink: a private nix.conf kept outside the repo
+  # Decrypted at activation by sops-nix; the link contains no secret material.
   home.file.".config/nix/nix.conf".source =
-    config.lib.file.mkOutOfStoreSymlink "/saved/secrets/nix.conf";
+    config.lib.file.mkOutOfStoreSymlink "/run/secrets/nix-config";
 }

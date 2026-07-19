@@ -12,14 +12,17 @@ path or placeholder directory does not mean a feature is implemented.
 - NetworkManager Wi-Fi MAC randomization and IPv6 temporary addresses.
 - Flatpak for selected desktop applications.
 - OpenSSH and printing disabled.
+- SOPS/age secret management with separate Aqua editing and root-only Shadow
+  deployment identities. Declared plaintext exists only in access-controlled
+  tmpfs runtime files.
+- Declarative users: Aqua's yescrypt password hash is encrypted with SOPS and
+  direct root password login is locked.
 
 Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
 `wlan0`. SimpleX `36679` and GSConnect `1714-1764` rules are commented out.
 
 ## Known risks
 
-- Root and Aqua use `initialPassword = "changeme"`. This must be replaced by a
-  deliberate installation credential flow.
 - `trusted-users = [ "root" "@wheel" ]` gives wheel users root-equivalent Nix
   capabilities.
 - DNSCrypt listens only on `127.0.0.1:53`, while system nameservers also include
@@ -30,12 +33,16 @@ Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
   have privacy costs.
 - Kavita's wildcard bind and interface-name-specific firewall policy should be
   reviewed together.
-- A private `/saved/secrets/nix.conf` exists outside declarative secret
-  management.
+- Noctalia's third-party AniList plugin copies its token into preserved user
+  state. SOPS prevents Git/Nix-store disclosure but cannot change that upstream
+  runtime behavior.
+- The previously committed AniList token and Wallhaven API key remain
+  compromised until revoked; removing them from the current tree does not
+  remove Git history.
 
 ## Planned, not active
 
-AppArmor, Lanzaboote/Secure Boot, NixPak, sops-nix, systemd hardening, snapshots,
+AppArmor, Lanzaboote/Secure Boot, NixPak, systemd hardening, snapshots,
 TPM auto-unlock, hardened and gaming specialisations, and remote encrypted
 backups are not implemented. Planned locations are:
 
@@ -43,7 +50,6 @@ backups are not implemented. Planned locations are:
 modules/nixos/security/apparmor.nix
 modules/nixos/security/secure-boot.nix
 modules/nixos/security/systemd-hardening.nix
-modules/nixos/security/secrets.nix
 modules/nixos/storage/snapshots.nix
 specialisations/gaming.nix
 specialisations/hardened.nix

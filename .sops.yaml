@@ -1,0 +1,11 @@
+keys:
+  # Public recipients only. The matching private identities never enter Git.
+  - &admin_aqua age1pqhs35sf559lsskz3k0l5hac9hv4sslhr7sk0va06dlz0envmepqylkgxc
+  - &host_shadow age1n904a0ecz57mfk20vusrvywq8yc5vxq2lzppxwef0sk7x3ge79vq57zkje
+
+creation_rules:
+  - path_regex: encrypted-secrets/[^/]+\.(yaml|enc)$
+    key_groups:
+      - age:
+          - *admin_aqua
+          - *host_shadow

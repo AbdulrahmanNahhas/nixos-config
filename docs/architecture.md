@@ -23,15 +23,16 @@ flowchart TD
 - `profiles/nixos` compose reusable system capabilities. They are not NixOS
   specialisations; `shadow` currently selects baseline, desktop, and gaming.
 - `modules/nixos` provide focused system capabilities grouped by domain.
-- `home/aqua` owns Aqua's identity, state version, session variables, private
-  out-of-store `nix.conf` link, and selected Home profiles.
+- `home/aqua` owns Aqua's identity, state version, session variables, runtime
+  `nix.conf` link, and selected Home profiles.
 - `profiles/home` compose reusable Home Manager modules.
 - `modules/home` own individual programs, shell tools, and desktop components.
 
 NixOS modules do not import Home Manager user modules. Reusable modules receive
 `username` through module arguments or use `config.home.homeDirectory` instead
-of embedding Aqua's identity. Literal Aqua paths remain in Noctalia's external
-TOML because that live-editable application file is not rendered by Nix.
+of embedding Aqua's identity. Literal Aqua paths remain in Noctalia's tracked
+TOML template. sops-nix renders its credential-bearing runtime copy into tmpfs
+without placing plaintext in the Nix store.
 
 ## Layout
 
@@ -50,14 +51,15 @@ modules/nixos/gaming/  Jovian overlays/configuration and Steam
 modules/home/          reusable desktop, program, shell, GNOME, and WM modules
 home/aqua/             user identity and profile selection
 assets/                future shared assets; owned assets stay with modules
-secrets/               documentation only; no committed secrets
+encrypted-secrets/     committed SOPS ciphertext only
+secrets/               secret-management documentation only
 docs/                  architecture, installation, persistence, security, roadmap
 ```
 
 External NixOS modules are wired in one place: `hosts/shadow/default.nix`.
 Module-specific KDL, TOML, SVG, and text assets stay beside the module that owns
-them. Niri and Noctalia files are linked from `/saved/nixos-config`, so this
-repository path is part of the current runtime contract.
+them. Niri files are linked from `/saved/nixos-config`. Noctalia's tracked TOML
+is a non-secret template rendered by sops-nix at activation.
 
 ## Adding a host or user
 

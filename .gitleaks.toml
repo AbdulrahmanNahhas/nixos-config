@@ -1,0 +1,12 @@
+title = "nixos-config secret scanning"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "DNSCrypt resolver-list Minisign verification key is public"
+condition = "AND"
+targetRules = [ "generic-api-key" ]
+regexTarget = "line"
+regexes = [ '''minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3"''' ]
+paths = [ '''modules/nixos/networking/dnscrypt\.nix$''' ]

@@ -90,6 +90,11 @@
             mode = "0700";
           }
           {
+            # Aqua's private age identity for editing SOPS files.
+            directory = ".config/sops";
+            mode = "0700";
+          }
+          {
             # Codex credentials, conversations, settings, skills, and local state.
             directory = ".codex";
             mode = "0700";
@@ -200,6 +205,55 @@
       user = username;
       group = "users";
       mode = "0700";
+    };
+    "/saved/secrets/nix.conf".z = {
+      user = username;
+      group = "users";
+      mode = "0600";
+    };
+    "/saved/secrets/Shadow-BG-20-VPN.conf".z = {
+      user = username;
+      group = "users";
+      mode = "0600";
+    };
+    "/saved/secrets/github-token".z = {
+      user = username;
+      group = "users";
+      mode = "0600";
+    };
+    "/saved/secrets/Passwords.kdbx".z = {
+      user = username;
+      group = "users";
+      mode = "0600";
+    };
+
+    "/saved/var/lib/sops-nix".d = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
+    "/saved/var/lib/sops-nix/key.txt".z = {
+      user = "root";
+      group = "root";
+      mode = "0400";
+    };
+    "/saved/var/lib/sops-nix/recipient.txt".z = {
+      user = "root";
+      group = "root";
+      mode = "0444";
+    };
+
+    # OpenSSH is currently disabled, but preserved host identities remain
+    # root-only so enabling it later cannot expose an Aqua-owned private key.
+    "/saved/etc/ssh/ssh_host_ed25519_key".z = {
+      user = "root";
+      group = "root";
+      mode = "0600";
+    };
+    "/saved/etc/ssh/ssh_host_ed25519_key.pub".z = {
+      user = "root";
+      group = "root";
+      mode = "0644";
     };
   };
 

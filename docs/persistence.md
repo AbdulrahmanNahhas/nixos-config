@@ -37,6 +37,12 @@ Zed and Neovim state, fish and Atuin history, Niri and Noctalia state, audio
 state, Steam (including per-game shader data), Mesa/RADV shader caches, Obsidian,
 OpenRazer, Polychromatic, and all Flatpak user state under `~/.var`.
 
+Aqua's SOPS editing identity is preserved at `~/.config/sops`. Shadow's
+root-only SOPS deployment identity lives directly at
+`/saved/var/lib/sops-nix/key.txt`; because `/saved` is already a persistent
+mount, it is not a Preservation bind mount. Decrypted files under `/run/secrets`
+remain deliberately ephemeral.
+
 The authoritative list is
 `modules/nixos/storage/preservation.nix`; update this document whenever that
 list changes.
@@ -51,4 +57,6 @@ consider volatile journald with narrowly retained security logs.
 Btrfs snapshots are not configured. Snapshots are not backups, and snapshots
 reachable by a compromised system should not be presented as ransomware
 protection. Recovery procedures for a corrupted `/saved` and external encrypted
-backups remain roadmap work.
+backups remain roadmap work. The SOPS admin identity requires a separate,
+encrypted offline backup; another copy on `/saved` does not protect against disk
+loss.

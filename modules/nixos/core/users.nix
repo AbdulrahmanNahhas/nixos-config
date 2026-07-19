@@ -1,21 +1,34 @@
-{ pkgs, username, ... }:
 {
-  # TODO: Replace installation-only plaintext passwords with a secure credential flow.
-  users.users.root.initialPassword = "changeme";
-  users.users.${username} = {
-    isNormalUser = true;
-    initialPassword = "changeme";
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-      "video"
-      "input"
-      "audio"
-      "render"
-      "gamemode"
-      "openrazer"
-    ];
-    shell = pkgs.fish;
-    packages = with pkgs; [ tree ];
+  config,
+  pkgs,
+  username,
+  ...
+}:
+{
+  # Keep authentication reproducible across the tmpfs root. Password changes
+  # must be made by updating the encrypted hash rather than with `passwd`.
+  users = {
+    mutableUsers = false;
+
+    users = {
+      root.hashedPassword = "!";
+
+      ${username} = {
+        isNormalUser = true;
+        hashedPasswordFile = config.sops.secrets.aqua-password-hash.path;
+        extraGroups = [
+          "wheel"
+          "networkmanager"
+          "video"
+          "input"
+          "audio"
+          "render"
+          "gamemode"
+          "openrazer"
+        ];
+        shell = pkgs.fish;
+        packages = with pkgs; [ tree ];
+      };
+    };
   };
 }

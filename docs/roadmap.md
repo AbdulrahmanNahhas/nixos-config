@@ -6,13 +6,11 @@ bisected.
 
 ## Critical credentials and trust
 
-- Remove `initialPassword = "changeme"` for root and Aqua.
-- Decide whether root should have a password. Use a hashed installation-only
-  credential or establish credentials interactively during installation.
 - Reconsider `trusted-users = [ "root" "@wheel" ]`; trusted Nix users can gain
   root-equivalent power.
-- Introduce sops-nix or another reviewed secret workflow, including age-key
-  recovery, before adding secret modules.
+- Revoke the previously committed AniList token and Wallhaven API key, then
+  decide whether rewriting published Git history is necessary after rotation.
+- Test restoration from the encrypted offline SOPS admin-key backup.
 
 ## Privacy and networking
 
@@ -47,7 +45,7 @@ bisected.
 ## Future security modules
 
 - Research AppArmor, Secure Boot with Lanzaboote, systemd service hardening,
-  secrets management, and NixPak without claiming they are active.
+  and NixPak without claiming they are active.
 - Research hardened-kernel compatibility with NVIDIA.
 - Add gaming and hardened NixOS specialisations only after their behavioral
   differences and recovery path are defined. Current `profiles/nixos/gaming.nix`

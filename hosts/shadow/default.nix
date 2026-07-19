@@ -12,6 +12,7 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.nix-flatpak.nixosModules.nix-flatpak
     inputs.noctalia.nixosModules.default
+    inputs.sops-nix.nixosModules.sops
 
     ./hardware-configuration.nix
     ./disk.nix
