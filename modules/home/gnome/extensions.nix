@@ -67,7 +67,6 @@ let
       "nixos-manual.desktop"
       "obsidian.desktop"
       "org.onlyoffice.desktopeditors.desktop"
-      "opencode-desktop.desktop"
       "org.gnome.World.Secrets.desktop"
       "chat.simplex.simplex.desktop"
       "org.telegram.desktop.desktop"

@@ -73,8 +73,6 @@
     ffmpeg # Audio/video conversion & processing
 
     # ─── AI ────────────────────────────────────── #
-    # opencode
-    # opencode-desktop
     codex
 
     # ─── Android ───────────────────────────────── #

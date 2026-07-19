@@ -16,9 +16,12 @@
 
       gamescope-session = prev.gamescope-session.overrideAttrs (old: {
         postFixup = (old.postFixup or "") + ''
-          for f in $out/share/wayland-sessions/*.desktop; do
-            sed -i 's|^Exec=\(.*\)|Exec=\1 --force-composition|' "$f"
-          done
+          # In Hybrid/MUX mode eDP-1 is wired to the Radeon 880M. Gamescope's
+          # automatic Vulkan selection picks the RTX 5060 first, whose DRM
+          # device has no connected outputs, so pin its compositor to AMD.
+          substituteInPlace "$out/lib/steamos/gamescope-session" \
+            --replace-fail $'exec gamescope \\\n\t--generate-drm-mode fixed' \
+            $'exec gamescope \\\n\t--prefer-vk-device 1002:150e \\\n\t--generate-drm-mode fixed'
         '';
       });
 

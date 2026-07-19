@@ -34,8 +34,8 @@ Aqua's Git config, and Aqua's dconf database. Preserved directories include:
 The configuration preserves standard XDG directories except `Downloads`, plus
 Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Zen profile/cache,
 Zed and Neovim state, fish and Atuin history, Niri and Noctalia state, audio
-state, Steam, Obsidian, OpenCode, OpenRazer, Polychromatic, and all Flatpak user
-state under `~/.var`.
+state, Steam (including per-game shader data), Mesa/RADV shader caches, Obsidian,
+OpenRazer, Polychromatic, and all Flatpak user state under `~/.var`.
 
 The authoritative list is
 `modules/nixos/storage/preservation.nix`; update this document whenever that

@@ -140,6 +140,12 @@
           ".local/share/noctalia"
           ".cache/noctalia"
 
+          # ── Vulkan Shader Caches ──────────────────────────────────
+          # Steam's per-game shadercache is below .local/share/Steam; retain the
+          # driver-level compiled caches too so RADV/Mesa can reuse them.
+          ".cache/mesa_shader_cache"
+          ".cache/radv_builtin_shaders"
+
           # ── Audio Per-App State ──────────────────────────────
           ".local/state/wireplumber" # Audio volumes and default device selections
           ".local/state/pipewire"
@@ -147,12 +153,11 @@
           # ── Obsidian ─────────────────────────────────────────
           ".config/obsidian" # App preferences. Note: Vaults live in ~/Documents
 
-          # ── OpenCode Workspace ───────────────────────────────
-          ".config/opencode"
-          ".local/share/opencode"
-          ".config/ai.opencode.desktop"
+          # ── Steam ───────────────────────────────
           ".local/share/Steam"
           ".steam"
+
+          # Other
           ".config/openrazer"
           ".local/share/openrazer"
           ".config/polychromatic"
