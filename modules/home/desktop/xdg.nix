@@ -24,6 +24,11 @@
         "application/xhtml+xml" = [ "librewolf.desktop" ];
         "application/x-extension-xhtml" = [ "librewolf.desktop" ];
         "application/x-extension-xht" = [ "librewolf.desktop" ];
+        "application/pdf" = [ "org.gnome.Papers.desktop" ];
+        "application/x-bzpdf" = [ "org.gnome.Papers.desktop" ];
+        "application/x-ext-pdf" = [ "org.gnome.Papers.desktop" ];
+        "application/x-gzpdf" = [ "org.gnome.Papers.desktop" ];
+        "application/x-xzpdf" = [ "org.gnome.Papers.desktop" ];
       };
     };
 

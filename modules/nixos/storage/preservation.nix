@@ -115,7 +115,8 @@
 
           # ── Web Browser ──────────────────────────────────────
           {
-            directory = ".librewolf";
+            # LibreWolf 152+ follows the XDG profile layout.
+            directory = ".config/librewolf";
             mode = "0700";
           } # LibreWolf history, bookmarks, extensions, sessions, and cookies
 

@@ -48,6 +48,9 @@ complete browser profile. Removed or manually installed Flatpaks do not gain
 persistence automatically. Browser and Noctalia caches are ephemeral except
 for caches stored inside an application's required profile directory.
 
+LibreWolf's profile is preserved at `~/.config/librewolf`, its current XDG
+location. The obsolete `~/.librewolf` path is intentionally not preserved.
+
 Aqua's SOPS editing identity is preserved at `~/.config/sops`. Shadow's
 root-only SOPS deployment identity lives directly at
 `/saved/var/lib/sops-nix/key.txt`; because `/saved` is already a persistent
