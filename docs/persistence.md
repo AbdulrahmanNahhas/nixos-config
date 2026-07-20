@@ -20,22 +20,30 @@ model.
 
 ## System state
 
-Preserved files include machine ID, Ed25519 SSH host keys, systemd random seed,
-Aqua's Git config, and Aqua's dconf database. Preserved directories include:
+Preserved files include machine ID, systemd random seed, Aqua's Git config, and
+Aqua's dconf database. Preserved directories include:
 
-- `/var/lib/nixos`, `/var/lib/systemd/timers`, and `/var/lib/systemd/coredump`
-- `/var/log`
+- `/var/lib/nixos` and `/var/lib/systemd/timers`
 - `/var/lib/flatpak`, `/var/lib/bluetooth`, and `/var/lib/decky-loader`
 - `/var/lib/kavita`
-- `/etc/NetworkManager/system-connections` and `/etc/nixos`
+- `/etc/NetworkManager/system-connections`
+
+OpenSSH is currently disabled. Its Ed25519 host identity is preserved
+conditionally whenever the server is enabled, avoiding both unused persistent
+key material now and a changing host identity after future tmpfs-root reboots.
+
+`/saved/games` is a direct-persistent Steam library created by the gaming
+module. Like `/saved/nixos-config` and the SOPS deployment identity, it lives
+directly on the persistent `/saved` mount rather than through Preservation.
 
 ## Aqua state
 
 The configuration preserves standard XDG directories except `Downloads`, plus
-Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Zen profile/cache,
+Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Zen profile,
 Zed and Neovim state, fish and Atuin history, Niri and Noctalia state, audio
 state, Steam (including per-game shader data), Mesa/RADV shader caches, Obsidian,
-OpenRazer, Polychromatic, and all Flatpak user state under `~/.var`.
+OpenRazer, Polychromatic, and all Flatpak user state under `~/.var`. Browser and
+Noctalia caches are ephemeral.
 
 Aqua's SOPS editing identity is preserved at `~/.config/sops`. Shadow's
 root-only SOPS deployment identity lives directly at
@@ -47,12 +55,31 @@ The authoritative list is
 `modules/nixos/storage/preservation.nix`; update this document whenever that
 list changes.
 
+## Nix store maintenance
+
+`nh clean all --keep 3 --no-gcroots` runs every Friday at 03:00. It keeps the
+three newest generations for each cleaned profile, removes older generations,
+and garbage-collects store paths that are no longer reachable. `--no-gcroots`
+prevents `nh` from deleting explicit roots, including direnv and devenv project
+environments; the Nix garbage collector therefore continues protecting
+everything reachable from those roots.
+
+Nix store optimisation runs every Friday at 04:00, after cleanup. Optimisation
+hard-links identical store files to save space; `/nix/store/.links` is its
+deduplication index, not a separate cache to delete.
+
+The single Btrfs filesystem is scrubbed monthly through its `/saved` mount.
+Scrub verifies checksums across all of its subvolumes, including `/nix` and
+`/swap`. SMART monitoring also watches the physical NVMe device and warns
+logged-in users about detected health problems. A single-device scrub can
+detect corruption but usually cannot repair it without another good copy.
+
 ## Privacy and recovery
 
-Persistent logs, core dumps, browser caches, Flatpak state, shell history, and
-application state can reveal activity after a reboot. Retaining them is a
-continuity choice, not an impermanence guarantee. Review data minimization and
-consider volatile journald with narrowly retained security logs.
+Journald is volatile and bounded to 128 MiB, and systemd core dumps are disabled
+because both can retain credentials or activity. Flatpak state, shell history,
+browser profiles, and other application state can still reveal activity after a
+reboot. Retaining them is a continuity choice, not an impermanence guarantee.
 
 Btrfs snapshots are not configured. Snapshots are not backups, and snapshots
 reachable by a compromised system should not be presented as ransomware

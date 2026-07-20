@@ -19,8 +19,8 @@ bisected.
 - Evaluate `require_nolog = true` and verify whether required DNSSEC/no-filter
   properties exclude desired resolvers.
 - Decide whether LUKS `allowDiscards` matches the privacy model.
-- Review persistent logs, core dumps, browser caches, Flatpak state, and shell
-  history; consider volatile journald with selected retained security logs.
+- Review broad Flatpak state, shell history, and persistent application profiles
+  periodically for data minimization.
 - Restrict Kavita's wildcard bind if remote access is unnecessary.
 - Replace the assumed `wlan0` firewall binding and make each service own its
   opening. Keep SimpleX and GSConnect closed until needed.

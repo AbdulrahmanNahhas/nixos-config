@@ -1,4 +1,9 @@
-{ lib, username, ... }:
+{
+  config,
+  lib,
+  username,
+  ...
+}:
 {
   preservation = {
     enable = true;
@@ -12,7 +17,9 @@
           how = "symlink";
           configureParent = true;
         }
-        # SSH host keys
+      ]
+      ++ lib.optionals config.services.openssh.enable [
+        # Preserve a stable host identity whenever the SSH server is enabled.
         {
           file = "/etc/ssh/ssh_host_ed25519_key";
           how = "symlink";
@@ -23,6 +30,8 @@
           how = "symlink";
           configureParent = true;
         }
+      ]
+      ++ [
         # Systemd random seed
         {
           file = "/var/lib/systemd/random-seed";
@@ -49,7 +58,6 @@
           directory = "/var/lib/nixos";
           inInitrd = true;
         }
-        "/var/log"
         "/var/lib/flatpak"
         {
           directory = "/var/lib/bluetooth";
@@ -58,11 +66,9 @@
           mode = "0700";
         }
         "/var/lib/decky-loader"
-        "/var/lib/systemd/coredump"
         "/var/lib/systemd/timers"
         "/var/lib/kavita"
         "/etc/NetworkManager/system-connections"
-        "/etc/nixos"
       ];
 
       users.${username} = {
@@ -112,11 +118,6 @@
             directory = ".config/zen";
             mode = "0700";
           } # Zen history, profile, workspace setups, and cookies
-          {
-            directory = ".cache/zen";
-            mode = "0700";
-          } # Zen web cache (stops sites from lagging on a fresh reboot)
-
           # ── Flatpak Application Data ─────────────────────────
           ".var"
 
@@ -143,7 +144,6 @@
           ".config/niri"
           ".config/noctalia"
           ".local/share/noctalia"
-          ".cache/noctalia"
 
           # ── Vulkan Shader Caches ──────────────────────────────────
           # Steam's per-game shadercache is below .local/share/Steam; retain the
@@ -227,6 +227,13 @@
       mode = "0600";
     };
 
+    # NetworkManager profiles may contain Wi-Fi PSKs or VPN credentials.
+    "/saved/etc/NetworkManager/system-connections".d = {
+      user = "root";
+      group = "root";
+      mode = lib.mkForce "0700";
+    };
+
     "/saved/var/lib/sops-nix".d = {
       user = "root";
       group = "root";
@@ -243,14 +250,14 @@
       mode = "0444";
     };
 
-    # OpenSSH is currently disabled, but preserved host identities remain
-    # root-only so enabling it later cannot expose an Aqua-owned private key.
-    "/saved/etc/ssh/ssh_host_ed25519_key".z = {
+    # These rules become active together with the conditional Preservation
+    # entries above, so a future SSH server has a stable, protected identity.
+    "/saved/etc/ssh/ssh_host_ed25519_key".z = lib.mkIf config.services.openssh.enable {
       user = "root";
       group = "root";
       mode = "0600";
     };
-    "/saved/etc/ssh/ssh_host_ed25519_key.pub".z = {
+    "/saved/etc/ssh/ssh_host_ed25519_key.pub".z = lib.mkIf config.services.openssh.enable {
       user = "root";
       group = "root";
       mode = "0644";

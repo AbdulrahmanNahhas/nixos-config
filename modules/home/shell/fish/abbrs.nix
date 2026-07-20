@@ -9,7 +9,8 @@ _: {
     # NixOS System Management
     nx-rebuild = "nh os switch /saved/nixos-config";
     nx-test = "nh os test /saved/nixos-config";
-    nx-clean = "nh clean all --keep-since 14d --keep 10";
+    # Do not prune direnv/devenv or other explicit development GC roots.
+    nx-clean = "nh clean all --keep 3 --no-gcroots";
 
     # Navigation
     ".." = "cd ..";
