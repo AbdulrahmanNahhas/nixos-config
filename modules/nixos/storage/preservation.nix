@@ -115,11 +115,33 @@
 
           # ── Web Browser ──────────────────────────────────────
           {
-            directory = ".config/zen";
+            directory = ".librewolf";
             mode = "0700";
-          } # Zen history, profile, workspace setups, and cookies
+          } # LibreWolf history, bookmarks, extensions, sessions, and cookies
+
           # ── Flatpak Application Data ─────────────────────────
-          ".var"
+        ]
+        ++
+          map
+            (appId: {
+              directory = ".var/app/${appId}";
+              mode = "0700";
+            })
+            [
+              "chat.simplex.simplex"
+              "com.belmoussaoui.Authenticator"
+              "com.brave.Browser"
+              "com.github.ADBeveridge.Raider"
+              "dev.geopjr.Tuba"
+              "io.github.sniper1720.khushu"
+              "io.gitlab.news_flash.NewsFlash"
+              "io.gitlab.theevilskeleton.Upscaler"
+              "org.gnome.Fractal"
+              "org.onlyoffice.desktopeditors"
+              "org.signal.Signal"
+              "org.telegram.desktop"
+            ]
+        ++ [
 
           # ── Editor / IDE State ───────────────────────────────
           ".local/share/zed"

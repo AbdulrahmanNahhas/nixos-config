@@ -1,3 +1,6 @@
 {
-  imports = [ ../../modules/home/programs/zed ];
+  imports = [
+    ../../modules/home/development
+    ../../modules/home/programs/zed
+  ];
 }

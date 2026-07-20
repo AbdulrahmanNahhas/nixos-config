@@ -109,7 +109,7 @@ launcher_position = "end"
 magnification_scale = 1.2500000037252903
 main_axis_padding = 6
 margin_edge = 10
-pinned = [ "zed", "zen-beta", "org.gnome.Nautilus" ]
+pinned = [ "zed", "librewolf", "org.gnome.Nautilus" ]
 radius = 31
 reserve_space = false
 show_dots = true
@@ -222,7 +222,7 @@ anilistPanel_placement = "attached"
 anilistPanel_position = "center"
 
 [plugin_settings."noctalia/wallhaven"]
-api_key = "LK94jH4RtC8TuvysxJLBCHDOvbHoQews"
+api_key = "@WALLHAVEN_API_KEY@"
 browser_placement = "attached"
 download_dir = "~/Downloads"
 
@@ -281,8 +281,8 @@ source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
-    builtin_ids = [ "gtk3", "gtk4", "ghostty", "niri", "zen-browser" ]
-    community_ids = [ "zen-browser", "zed" ]
+    builtin_ids = [ "gtk3", "gtk4", "ghostty", "niri" ]
+    community_ids = [ "zed" ]
 
 [wallpaper]
 enabled = true
@@ -307,7 +307,7 @@ transition_on_startup = true
     path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
 
 [widget.animetracker]
-anilist_token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjZkMWYxMGI1MTkxN2QzODBlMTM1N2EwNDQ1ZWM5ZDJlODc4MjJlZDc2Yjc3ZWM2NmJmNjNkYjBlODM0NmJmZmM1Y2Y4Y2U1NDNhM2NlNWVlIn0.eyJhdWQiOiI0NTU3OCIsImp0aSI6IjZkMWYxMGI1MTkxN2QzODBlMTM1N2EwNDQ1ZWM5ZDJlODc4MjJlZDc2Yjc3ZWM2NmJmNjNkYjBlODM0NmJmZmM1Y2Y4Y2U1NDNhM2NlNWVlIiwiaWF0IjoxNzgzNjk3Njk1LCJuYmYiOjE3ODM2OTc2OTUsImV4cCI6MTgxNTIzMzY5NSwic3ViIjoiNzUxOTE3OSIsInNjb3BlcyI6W119.rbMBdcbtcjjxO2H-La0RHeDA_Yxqb-ftyyNEteN4EUF9C0lDc1nvmmX1B5XbPWHgJT3SuI8WgcknFu6NYFNOfrL8spbEVX23DeGQ2A-mm8vpmq9G4AA7eQhQfIbmpWBp8BLZ9Rc_vv2qM9QTt3CM8mXEW8o2f9o35GVAn05-srnzSGgAw9OqdpApz-WEot7Ijw7TQUfkcstIZgK5Hu0d5rCulh99JfBdNmxWwyP-T7JxMLIoHIT6ENvqfr8Xy1AWZI8L6IYzlGO38jg0lTHX3Sihzr-0kay5tNAhFmiwa1iX2Qe1LJVaXKnxpsIQpd71tRtGhJ3aPfpSPJM6iH65yw9xKhg2DOjmJaMnsmL6Wzti5ivfr9p6IC_heq_q-Zqhbzs35ZJUATL0xqnCJ8dvS9tM1XDCw9hUnLSy1xL_z6UjEKY1bfbdZUbGtVBsp2Aj1AB4uMChCnM4yeP4PTo6lC9todk3l3VUgIl60ipFuj26Vx63uPtYg385C1u1bYZDuYPUK836BJ4XMip7XzcQmqDTWXAHRi02wzIpFC7xL6g1iL90qYIW76QX1ABaObekt8VVu7YRXXd32nOEBEl4tlRDd2N9-EYb_0tyAIx-QdEC9_Ltx2aQOq1pTBnFiTmOv0-mQQPWrEEy7muk83md8VSeDIkr2MCrwbFb8knfBg0"
+anilist_token = "@ANILIST_TOKEN@"
 capsule_radius = "auto"
 enabled = true
 type = "HotZi/anilistTracker:animetracker"

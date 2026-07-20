@@ -18,16 +18,6 @@
       #     fastfetch
       # end
 
-      # Initialize starship prompt
-      starship init fish | source
-
-      # Initialize zoxide
-      zoxide init fish | source
-
-      # Initialize atuin (shell history)
-      atuin init fish | source
-
-
       # Warn once per day when flake.lock is older than seven days.
       set -l flake_dir /saved/nixos-config
       if set -q NH_FLAKE
@@ -70,5 +60,22 @@
           end
       end
     '';
+  };
+
+  programs = {
+    atuin = {
+      enable = true;
+      enableFishIntegration = true;
+    };
+    fzf = {
+      enable = true;
+      enableFishIntegration = true;
+      # Atuin is the authoritative interactive history search on Ctrl-R.
+      historyWidget.fish.command = "";
+    };
+    zoxide = {
+      enable = true;
+      enableFishIntegration = true;
+    };
   };
 }

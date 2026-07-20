@@ -12,18 +12,18 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "text/html" = [ "zen.desktop" ];
-        "x-scheme-handler/http" = [ "zen.desktop" ];
-        "x-scheme-handler/https" = [ "zen.desktop" ];
-        "x-scheme-handler/about" = [ "zen.desktop" ];
-        "x-scheme-handler/unknown" = [ "zen.desktop" ];
-        "x-scheme-handler/chrome" = [ "zen.desktop" ];
-        "application/x-extension-htm" = [ "zen.desktop" ];
-        "application/x-extension-html" = [ "zen.desktop" ];
-        "application/x-extension-shtml" = [ "zen.desktop" ];
-        "application/xhtml+xml" = [ "zen.desktop" ];
-        "application/x-extension-xhtml" = [ "zen.desktop" ];
-        "application/x-extension-xht" = [ "zen.desktop" ];
+        "text/html" = [ "librewolf.desktop" ];
+        "x-scheme-handler/http" = [ "librewolf.desktop" ];
+        "x-scheme-handler/https" = [ "librewolf.desktop" ];
+        "x-scheme-handler/about" = [ "librewolf.desktop" ];
+        "x-scheme-handler/unknown" = [ "librewolf.desktop" ];
+        "x-scheme-handler/chrome" = [ "librewolf.desktop" ];
+        "application/x-extension-htm" = [ "librewolf.desktop" ];
+        "application/x-extension-html" = [ "librewolf.desktop" ];
+        "application/x-extension-shtml" = [ "librewolf.desktop" ];
+        "application/xhtml+xml" = [ "librewolf.desktop" ];
+        "application/x-extension-xhtml" = [ "librewolf.desktop" ];
+        "application/x-extension-xht" = [ "librewolf.desktop" ];
       };
     };
 

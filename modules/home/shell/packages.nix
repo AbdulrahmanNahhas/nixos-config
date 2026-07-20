@@ -3,20 +3,9 @@
 {
   home.packages = with pkgs; [
 
-    # ─── Apps ──────────────────────────────────── #
-
-    plezy
-
     # ─── Terminal & Editor ─────────────────────── #
 
-    ghostty # Modern GPU terminal (run: ghostty)
-    # zed-editor is installed by programs.zed-editor.enable in zed.nix
     micro # Nano alternative (run: micro)
-
-    # ─── Shell ─────────────────────────────────── #
-
-    fish # Friendly interactive shell
-    starship # Cross-shell prompt
 
     # ─── Modern CLI ────────────────────────────── #
 
@@ -26,9 +15,6 @@
     ripgrep # Better grep (alias: grep, command: rg)
     yazi
     chafa # Terminal graphics (Images)
-    zoxide # Smart cd with history (alias: cd or z)
-    atuin # Shell history search & sync
-
     dust # Better du (alias: du)
     duf # Better df (alias: df)
     procs # Better ps (alias: ps)
@@ -36,26 +22,11 @@
 
     fastfetch # System information
 
-    fzf # Fuzzy finder used everywhere
     xh # Friendly HTTP client (curl alternative)
 
     # ─── Archives ──────────────────────────────── #
 
     ouch # Compress/extract almost any archive
-
-    # ─── Nix ───────────────────────────────────── #
-
-    nixd # Nix language server (required by Zed's Nix extension)
-    nil # alternative Nix language server (editor support)
-    nixfmt # Official Nix formatter
-    statix # Nix linter (alias nixlint)
-    deadnix # Find unused Nix code
-    devenv
-
-    # ─── Git ───────────────────────────────────── #
-
-    gh
-    lazygit # Terminal Git UI
 
     # ─── Networking ────────────────────────────── #
 
@@ -72,14 +43,5 @@
 
     ffmpeg # Audio/video conversion & processing
 
-    # ─── AI ────────────────────────────────────── #
-    codex
-
-    # ─── Browsers ───────────────────────────────── #
-
-    librewolf
-
-    # ─── Obsidian ───────────────────────────────── #
-    obsidian
   ];
 }

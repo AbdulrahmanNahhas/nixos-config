@@ -1,7 +1,9 @@
 _: {
-  programs.zen-browser.profiles.default.search = {
+  programs.librewolf.profiles.default.search = {
+    enable = true;
     force = true;
     default = "ddg";
+    privateDefault = "ddg";
     engines = {
       "Nix Packages" = {
         urls = [
@@ -11,9 +13,9 @@ _: {
         definedAliases = [ "@np" ];
       };
 
-      "google".metaData.hidden = true;
-      "bing".metaData.hidden = true;
-      "ebay".metaData.hidden = true;
+      google.metaData.hidden = true;
+      bing.metaData.hidden = true;
+      ebay.metaData.hidden = true;
     };
   };
 }

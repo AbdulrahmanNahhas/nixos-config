@@ -59,19 +59,17 @@ let
       "com.belmoussaoui.Authenticator.desktop"
       "com.brave.Browser.desktop"
       "org.gnome.Fractal.desktop"
-      "de.wwwtech.gitte.desktop"
       "org.keepassxc.KeePassXC.desktop"
       "io.github.sniper1720.khushu.desktop"
       "org.gnome.Settings.desktop"
       "io.gitlab.news_flash.NewsFlash.desktop"
+      "librewolf.desktop"
       "nixos-manual.desktop"
       "obsidian.desktop"
       "org.onlyoffice.desktopeditors.desktop"
-      "org.gnome.World.Secrets.desktop"
       "chat.simplex.simplex.desktop"
       "org.telegram.desktop.desktop"
       "dev.geopjr.Tuba.desktop"
-      "dev.vencord.Vesktop.desktop"
     ])
   ];
 in
@@ -132,7 +130,7 @@ in
       favorite-apps = [
         "com.mitchellh.ghostty.desktop"
         "dev.zed.Zed.desktop"
-        "zen.desktop"
+        "librewolf.desktop"
         "org.gnome.Nautilus.desktop"
         "org.signal.Signal.desktop"
       ];

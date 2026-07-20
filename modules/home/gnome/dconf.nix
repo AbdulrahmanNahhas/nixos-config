@@ -66,6 +66,13 @@ in
       remove-old-trash-files = true;
     };
 
+    # GNOME Music reads the LocalSearch database rather than scanning files
+    # itself. Restrict the indexer to the declared XDG Music directory.
+    "org/freedesktop/tracker/miner/files" = {
+      index-recursive-directories = [ "&MUSIC" ];
+      index-single-directories = [ ];
+    };
+
     # ── Notifications ────────────────────────────────────
     "org/gnome/desktop/notifications" = {
       show-in-lock-screen = true;
@@ -97,7 +104,6 @@ in
     "org/gnome/desktop/app-folders/folders/351e0451-6bef-4f3d-95e2-16c13fd65f91" = {
       apps = [
         "com.github.ADBeveridge.Raider.desktop"
-        "com.github.tchx84.Flatseal.desktop"
         "org.gnome.tweaks.desktop"
         "micro.desktop"
         "btop.desktop"

@@ -127,7 +127,7 @@ window-rule {
     open-focused false
 }
 window-rule {
-    match app-id="zen"
+    match app-id="librewolf"
     match app-id="com.mitchellh.ghostty"
     draw-border-with-background false
 }
