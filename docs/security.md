@@ -17,8 +17,8 @@ path or placeholder directory does not mean a feature is implemented.
   tmpfs runtime files.
 - Declarative users: Aqua's yescrypt password hash is encrypted with SOPS and
   direct root password login is locked.
-- Volatile, size-bounded journald and disabled systemd core dumps limit
-  persistent activity and process-memory disclosure.
+- LUKS-backed journald is limited to 128 MiB/seven days for cross-boot failure
+  diagnosis; disabled systemd core dumps limit process-memory disclosure.
 
 Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
 `wlan0`. SimpleX `36679` and GSConnect `1714-1764` rules are commented out.

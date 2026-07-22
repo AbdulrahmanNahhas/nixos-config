@@ -7,14 +7,13 @@
   # memory. Keep crash diagnostics opt-in instead of persisting them by default.
   systemd.coredump.enable = false;
 
-  # Root is tmpfs, so keep the journal bounded and ephemeral as well. Important
-  # failures remain available for the current boot without retaining activity
-  # history indefinitely on /saved.
+  # Keep enough encrypted, persistent history to diagnose failures that require
+  # booting an older generation, while bounding retained activity tightly.
   services.journald = {
-    storage = "volatile";
+    storage = "persistent";
     extraConfig = ''
-      RuntimeMaxUse=128M
-      RuntimeMaxFileSize=16M
+      SystemMaxUse=128M
+      SystemMaxFileSize=16M
       MaxRetentionSec=7day
     '';
   };

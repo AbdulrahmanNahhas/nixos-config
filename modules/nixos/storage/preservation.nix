@@ -67,6 +67,12 @@
         }
         "/var/lib/decky-loader"
         "/var/lib/systemd/timers"
+        {
+          directory = "/var/log/journal";
+          user = "root";
+          group = "systemd-journal";
+          mode = "2755";
+        }
         "/var/lib/kavita"
         "/etc/NetworkManager/system-connections"
       ];

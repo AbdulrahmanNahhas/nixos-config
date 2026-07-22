@@ -1,3 +1,5 @@
+config_version = 2
+
 [audio]
 enable_sounds = true
 sound_volume = 1.0

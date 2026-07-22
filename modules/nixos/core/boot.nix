@@ -11,7 +11,11 @@
 
     # Latest kernel for Zen 5 / RTX 50-series support
     kernelPackages = pkgs.linuxPackages_latest;
-    plymouth.enable = false;
+    # Graphical LUKS prompt and boot progress; Esc still reveals diagnostics.
+    plymouth = {
+      enable = true;
+      theme = "bgrt";
+    };
 
     # Modern Performance and Graphics Flags
     kernelParams = [

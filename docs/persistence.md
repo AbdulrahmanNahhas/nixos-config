@@ -23,7 +23,7 @@ model.
 Preserved files include machine ID, systemd random seed, Aqua's Git config, and
 Aqua's dconf database. Preserved directories include:
 
-- `/var/lib/nixos` and `/var/lib/systemd/timers`
+- `/var/lib/nixos`, `/var/lib/systemd/timers`, and `/var/log/journal`
 - `/var/lib/flatpak`, `/var/lib/bluetooth`, and `/var/lib/decky-loader`
 - `/var/lib/kavita`
 - `/etc/NetworkManager/system-connections`
@@ -82,10 +82,12 @@ detect corruption but usually cannot repair it without another good copy.
 
 ## Privacy and recovery
 
-Journald is volatile and bounded to 128 MiB, and systemd core dumps are disabled
-because both can retain credentials or activity. Flatpak state, shell history,
-browser profiles, and other application state can still reveal activity after a
-reboot. Retaining them is a continuity choice, not an impermanence guarantee.
+Journald persists up to 128 MiB or seven days on the LUKS-encrypted `/saved`
+filesystem so failures remain diagnosable after booting an older generation.
+Systemd core dumps remain disabled because they can retain process memory.
+Flatpak state, shell history, browser profiles, and other application state can
+still reveal activity after a reboot. Retaining them is a continuity choice,
+not an impermanence guarantee.
 
 Btrfs snapshots are not configured. Snapshots are not backups, and snapshots
 reachable by a compromised system should not be presented as ransomware
