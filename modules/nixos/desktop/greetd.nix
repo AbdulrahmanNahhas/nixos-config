@@ -4,6 +4,35 @@
   pkgs,
   ...
 }:
+let
+  tuigreet = pkgs.writeShellScript "tuigreet-start" ''
+    # Plymouth can leave tty1 with terminal attributes that make a TUI's
+    # default colors invisible.  Start every greeter session from a known,
+    # readable Linux-console state.
+    export TERM=linux
+    ${lib.getExe' pkgs.util-linux "setterm"} --reset
+    ${lib.getExe' pkgs.util-linux "setterm"} \
+      --foreground white \
+      --background black \
+      --cursor on \
+      --clear=all
+
+    exec ${lib.getExe pkgs.tuigreet} \
+      --greeting SHADOW \
+      --time \
+      --remember \
+      --remember-session \
+      --user-menu \
+      --asterisks \
+      --width 64 \
+      --theme ${lib.escapeShellArg "border=white;text=white;time=cyan;container=black;prompt=white;input=white;action=cyan;button=white"} \
+      --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
+      --cmd ${lib.escapeShellArg "niri-session"} \
+      --power-shutdown ${lib.escapeShellArg "systemctl poweroff"} \
+      --power-reboot ${lib.escapeShellArg "systemctl reboot"} \
+      2> >(${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=tuigreet --priority=err)
+  '';
+in
 {
   services.greetd = {
     enable = true;
@@ -13,17 +42,7 @@
     # tuigreet are Rust programs; the authenticated session starts Niri/Wayland.
     settings.default_session = {
       user = "greeter";
-      command = lib.concatStringsSep " " [
-        "${lib.getExe pkgs.tuigreet}"
-        "--time"
-        "--remember"
-        "--remember-session"
-        "--asterisks"
-        "--sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions"
-        "--cmd ${lib.escapeShellArg "niri-session"}"
-        "--power-shutdown ${lib.escapeShellArg "systemctl poweroff"}"
-        "--power-reboot ${lib.escapeShellArg "systemctl reboot"}"
-      ];
+      command = "${tuigreet}";
     };
   };
 
