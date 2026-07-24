@@ -35,11 +35,17 @@ _: {
           "https://mail.proton.me"
           "https://pass.proton.me"
 
+          # Tuta
+          "https://app.tuta.com"
+
           # AI services
           "https://auth.openai.com"
           "https://chatgpt.com"
           "https://platform.openai.com"
           "https://claude.ai"
+
+          # Social applications
+          "https://x.com"
         ];
         Behavior = "reject-tracker-and-partition-foreign";
         BehaviorPrivateBrowsing = "reject-tracker-and-partition-foreign";
