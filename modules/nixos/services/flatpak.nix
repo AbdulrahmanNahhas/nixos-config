@@ -17,8 +17,6 @@ let
     "io.gitlab.adhami3310.Impression"
     "app.drey.EarTag"
     "io.bassi.Amberol"
-    "org.gnome.Papers" # Document / PDF Viewer (Sandboxed)
-    "org.gnome.Loupe" # Image Viewer (Sandboxed)
   ];
 in
 {
@@ -142,22 +140,6 @@ in
 
       "io.bassi.Amberol".Context = {
         filesystems = [ "xdg-music" ];
-        shared = [ "!network" ];
-      };
-
-      "org.gnome.Papers".Context = {
-        filesystems = [
-          "xdg-download"
-          "xdg-documents"
-        ];
-        shared = [ "!network" ];
-      };
-
-      "org.gnome.Loupe".Context = {
-        filesystems = [
-          "xdg-pictures"
-          "xdg-download"
-        ];
         shared = [ "!network" ];
       };
     };
