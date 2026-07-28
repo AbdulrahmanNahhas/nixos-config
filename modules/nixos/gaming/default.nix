@@ -1,6 +1,3 @@
 {
-  imports = [
-    ./jovian.nix
-    ./steam.nix
-  ];
+  imports = [ ./steam.nix ];
 }
