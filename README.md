@@ -15,12 +15,12 @@ Declarative NixOS and Home Manager configuration for `shadow`, a Razer Blade
 
 ## Current features
 
-- Niri with Noctalia as the default session, launched by greetd/ReGreet.
-- GNOME as a secondary desktop with declarative dconf, extensions, bookmarks,
-  and monitor configuration managed through Home Manager.
-- PipeWire, NetworkManager, DNSCrypt Proxy, Bluetooth, OpenRazer, fwupd, SANE,
-  Flatpak, Steam/Jovian, and Kavita.
-- OpenSSH and printing are currently disabled.
+- Niri with Noctalia as the only desktop session, launched by greetd/tuigreet.
+- Selected GNOME/GTK applications with declarative preferences and Files
+  bookmarks, without GNOME Shell or its extension stack.
+- PipeWire, NetworkManager, DNSCrypt Proxy, Bluetooth, OpenRazer, fwupd,
+  declarative Flatpak, standard Steam, and Kavita.
+- OpenSSH, printing, scanning, ModemManager, and usbmuxd are disabled.
 - The firewall is enabled. Only Kavita's `8083/tcp` opening on `wlan0` is
   active; SimpleX and GSConnect rules remain commented out.
 - Preservation retains explicitly selected system and Aqua state under
@@ -56,8 +56,8 @@ nix eval .#nixosConfigurations.shadow.config.system.build.toplevel.drvPath
 ```
 
 `nh` assumes this repository lives at `/saved/nixos-config`. Its scheduled
-Friday cleanup keeps generations from the last 7 days and at least 5
-generations (`--keep-since 7d --keep 5 --no-direnv`).
+Friday cleanup keeps the three newest generations while preserving explicit GC
+roots such as direnv/devenv environments (`--keep 3 --no-gcroots`).
 
 ## Security status
 
@@ -65,8 +65,8 @@ generations (`--keep-since 7d --keep 5 --no-direnv`).
   randomized Wi-Fi MAC addresses, and explicit persistence.
 - **Partially implemented:** Flatpak application isolation and a small baseline
   security module; neither is a complete confinement strategy.
-- **Planned:** credential cleanup, sops-nix, AppArmor, Secure Boot, service
-  hardening, snapshots, backups, and TPM-assisted unlock.
+- **Planned:** AppArmor, Secure Boot, further service hardening, snapshots,
+  backups, and TPM-assisted unlock.
 - **Researching:** hardened-kernel/NVIDIA compatibility and future NixOS
   specialisations.
 - **Postponed:** no additional security mechanism is claimed active until its

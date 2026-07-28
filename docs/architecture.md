@@ -42,13 +42,13 @@ profiles/nixos/        baseline, desktop, and gaming compositions
 profiles/home/         shell, desktop, and development compositions
 modules/nixos/core/    boot, locale, Nix, packages, and users
 modules/nixos/hardware hardware capabilities and peripherals
-modules/nixos/desktop/ Niri, greetd/ReGreet, GNOME, and fonts
+modules/nixos/desktop/ Niri, greetd/tuigreet, GTK applications, and fonts
 modules/nixos/networking/ DNSCrypt, firewall, and NetworkManager
 modules/nixos/security/ active baseline plus documentation
 modules/nixos/storage/ preservation plus future-work documentation
 modules/nixos/services/ focused system services and Flatpak
-modules/nixos/gaming/  Jovian overlays/configuration and Steam
-modules/home/          reusable desktop, program, shell, GNOME, and WM modules
+modules/nixos/gaming/  standard Steam, Proton, and GameMode configuration
+modules/home/          reusable desktop, program, shell, GTK, and WM modules
 home/aqua/             user identity and profile selection
 assets/                future shared assets; owned assets stay with modules
 encrypted-secrets/     committed SOPS ciphertext only

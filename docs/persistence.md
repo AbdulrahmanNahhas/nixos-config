@@ -24,7 +24,7 @@ Preserved files include machine ID, systemd random seed, Aqua's Git config, and
 Aqua's dconf database. Preserved directories include:
 
 - `/var/lib/nixos`, `/var/lib/systemd/timers`, and `/var/log/journal`
-- `/var/lib/flatpak`, `/var/lib/bluetooth`, and `/var/lib/decky-loader`
+- `/var/lib/flatpak` and `/var/lib/bluetooth`
 - `/var/lib/kavita`
 - `/etc/NetworkManager/system-connections`
 
