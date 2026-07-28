@@ -22,19 +22,6 @@ _: {
       end
     '';
 
-    phone = ''
-      switch $argv[1]
-        case on
-          gnome-extensions enable gsconnect@andyholmes.github.io
-        case off
-          gnome-extensions disable gsconnect@andyholmes.github.io && pkill -f gsconnect
-        case info
-          gnome-extensions info gsconnect@andyholmes.github.io
-        case '*'
-          echo "Usage: phone on|off|info"
-      end
-    '';
-
     devenv-new = ''
       devenv init
       echo "use devenv" > .envrc

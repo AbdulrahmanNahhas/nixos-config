@@ -1,37 +1,21 @@
 { pkgs, ... }:
 {
+  # Niri is the only desktop session. Keep just the GTK applications and
+  # services needed by the workflow, rather than installing GNOME Shell.
   services = {
-    desktopManager.gnome = {
-      enable = true;
-      sessionPath = [ pkgs.gjs ];
-    };
     gnome.gnome-keyring.enable = true;
-    gnome.gnome-software.enable = false;
-    xserver.excludePackages = [ pkgs.xterm ];
+    gvfs.enable = true;
   };
+  programs.dconf.enable = true;
 
-  environment.gnome.excludePackages = with pkgs; [
-    gnome-tour
-    gnome-connections
-    gnome-console
-    gnome-characters
-    yelp
-    epiphany
-    geary
+  # These remain native, trusted applications and use the normal Unix user
+  # boundary. Flatpak is used where per-application filesystem mediation is
+  # required.
+  environment.systemPackages = with pkgs; [
+    nautilus
+    gnome-text-editor
+    gnome-clocks
+    gnome-calendar
+    gnome-disk-utility
   ];
-
-  environment.systemPackages = with pkgs; [ gnome-tweaks ];
-  programs.seahorse.enable = true;
-
-  # LocalSearch checks the systemd user-manager environment, but greetd's Niri
-  # session records Class=user in logind without importing XDG_SESSION_CLASS.
-  # Accept Niri's imported desktop marker as the equivalent real-session guard.
-  systemd.user.services.localsearch-3 = {
-    overrideStrategy = "asDropin";
-    unitConfig.ConditionEnvironment = [
-      ""
-      "|XDG_SESSION_CLASS=user"
-      "|XDG_CURRENT_DESKTOP=niri"
-    ];
-  };
 }
