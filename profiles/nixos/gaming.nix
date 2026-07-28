@@ -1,5 +1,3 @@
 {
-  imports = [
-    ../../modules/nixos/gaming
-  ];
+  imports = [ ../../modules/nixos/gaming/steam.nix ];
 }

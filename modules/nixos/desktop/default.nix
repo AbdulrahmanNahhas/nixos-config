@@ -1,7 +1,7 @@
 {
   imports = [
     ./fonts.nix
-    ./gnome.nix
+    ./gtk-apps.nix
     ./greetd.nix
     ./niri.nix
   ];

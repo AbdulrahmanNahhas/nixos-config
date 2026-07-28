@@ -48,7 +48,7 @@ modules/nixos/security/ active baseline plus documentation
 modules/nixos/storage/ preservation plus future-work documentation
 modules/nixos/services/ focused system services and Flatpak
 modules/nixos/gaming/  standard Steam, Proton, and GameMode configuration
-modules/home/          reusable desktop, program, shell, GTK, and WM modules
+modules/home/          desktop integration, applications, shell, and WM modules
 home/aqua/             user identity and profile selection
 assets/                future shared assets; owned assets stay with modules
 encrypted-secrets/     committed SOPS ciphertext only

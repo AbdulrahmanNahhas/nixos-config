@@ -1,9 +1,8 @@
 {
   imports = [
-    ./desktop.nix
+    ./personal.nix
     ./ghostty
     ./keepassxc.nix
     ./librewolf
-    ./zed
   ];
 }
