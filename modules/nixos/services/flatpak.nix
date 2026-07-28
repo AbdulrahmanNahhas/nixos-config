@@ -14,6 +14,7 @@ let
     "org.gnome.Fractal"
     "org.onlyoffice.desktopeditors"
     "org.telegram.desktop"
+    "io.github.diegopvlk.Cine"
   ];
 in
 {
