@@ -4,7 +4,6 @@ let
   # Every app in this list is currently publisher-verified by Flathub.
   verifiedApps = [
     "chat.simplex.simplex"
-    "com.belmoussaoui.Authenticator"
     "com.brave.Browser"
     "com.github.ADBeveridge.Raider"
     "dev.geopjr.Tuba"
@@ -15,14 +14,17 @@ let
     "org.onlyoffice.desktopeditors"
     "org.telegram.desktop"
     "io.github.diegopvlk.Cine"
+    "io.gitlab.adhami3310.Impression"
+    "app.drey.EarTag"
+    "io.bassi.Amberol"
+    "org.gnome.Papers" # Document / PDF Viewer (Sandboxed)
+    "org.gnome.Loupe" # Image Viewer (Sandboxed)
   ];
 in
 {
   services.flatpak = {
     enable = true;
 
-    # Use the restricted remote by default. Signal's Flathub package is
-    # community-maintained, so it remains an explicit, documented exception.
     remotes = [
       {
         name = "flathub-verified";
@@ -47,9 +49,6 @@ in
         }
       ];
 
-    # Security-sensitive desktop apps should not wait for a system rebuild to
-    # receive browser/runtime patches. The persistent timer catches missed runs
-    # after sleep or power-off.
     update = {
       onActivation = false;
       auto = {
@@ -58,70 +57,108 @@ in
       };
     };
 
-    # This module is authoritative for system Flatpaks and their remotes.
     uninstallUnmanaged = true;
     uninstallUnused = true;
 
     overrides = {
-      global.Environment.XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+      global = {
+        Environment.XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
 
-      # Prefer the Wayland isolation boundary on the Niri host. SimpleX is
-      # intentionally excluded because its current manifest exposes X11 only.
-      "com.brave.Browser".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "com.belmoussaoui.Authenticator".Context = {
-        shared = [ "!network" ];
-        sockets = [
-          "!x11"
-          "wayland"
-        ];
+        Context = {
+          # Strict filesystem block
+          filesystems = [
+            "!host"
+            "!home"
+          ];
+
+          # Enforce Wayland and block legacy X11 protocols. Audio remains
+          # controlled by each upstream manifest because Flatpak's PulseAudio
+          # socket is also the PipeWire compatibility path.
+          sockets = [
+            "!x11"
+            "!fallback-x11"
+            "wayland"
+          ];
+
+          # Remove broad direct device access inherited from manifests.
+          devices = [ "!all" ];
+
+          # Wayland applications do not need the shared IPC namespace that X11
+          # commonly requires.
+          shared = [ "!ipc" ];
+        };
       };
-      "com.github.ADBeveridge.Raider".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "dev.geopjr.Tuba".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "io.github.sniper1720.khushu".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "io.gitlab.news_flash.NewsFlash".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "io.gitlab.theevilskeleton.Upscaler".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "org.gnome.Fractal".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
-      "org.telegram.desktop".Context.sockets = [
-        "!x11"
-        "wayland"
-      ];
 
-      # Portals and narrowly-scoped paths replace blanket home/host access.
-      "chat.simplex.simplex".Context.filesystems = [
-        "!home"
-        "xdg-download"
-      ];
+      # --- Exceptions & App-Specific Routing ---
+
+      "chat.simplex.simplex".Context = {
+        sockets = [
+          "x11"
+          "!wayland"
+        ];
+        shared = [ "ipc" ];
+        filesystems = [ "xdg-download" ];
+      };
+
+      "com.brave.Browser".Context = {
+        filesystems = [ "xdg-download" ];
+      };
+
       "org.onlyoffice.desktopeditors".Context = {
         filesystems = [
-          "!host"
           "xdg-documents"
           "xdg-download"
         ];
-        sockets = [
-          "!x11"
-          "wayland"
+      };
+
+      "org.signal.Signal".Context = {
+        Environment = "ELECTRON_OZONE_PLATFORM_HINT=wayland";
+        filesystems = [ "xdg-download" ];
+      };
+
+      # Flatpak has no block-device-only permission. Impression therefore needs
+      # the broad device grant from its upstream manifest to flash removable
+      # drives; keep this explicit because it is a significant exception.
+      "io.gitlab.adhami3310.Impression".Context = {
+        devices = [ "all" ];
+      };
+
+      # --- Local App Network & Filesystem Isolation ---
+
+      "app.drey.EarTag".Context = {
+        filesystems = [ "xdg-music" ];
+        shared = [ "!network" ];
+      };
+
+      "io.github.diegopvlk.Cine".Context = {
+        filesystems = [ "xdg-videos" ];
+        shared = [ "!network" ];
+      };
+
+      "io.gitlab.theevilskeleton.Upscaler".Context = {
+        filesystems = [ "xdg-pictures" ];
+        shared = [ "!network" ];
+      };
+
+      "io.bassi.Amberol".Context = {
+        filesystems = [ "xdg-music" ];
+        shared = [ "!network" ];
+      };
+
+      "org.gnome.Papers".Context = {
+        filesystems = [
+          "xdg-download"
+          "xdg-documents"
         ];
+        shared = [ "!network" ];
+      };
+
+      "org.gnome.Loupe".Context = {
+        filesystems = [
+          "xdg-pictures"
+          "xdg-download"
+        ];
+        shared = [ "!network" ];
       };
     };
   };

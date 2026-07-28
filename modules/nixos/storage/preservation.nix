@@ -45,7 +45,7 @@
           how = "symlink";
         }
 
-        # ── GNOME desktop state ──────────────────────────────
+        # ── GTK application settings ─────────────────────────
         {
           file = "/home/${username}/.config/dconf/user";
           how = "symlink";
@@ -65,7 +65,7 @@
           group = "root";
           mode = "0700";
         }
-        "/var/lib/decky-loader"
+
         "/var/lib/systemd/timers"
         {
           directory = "/var/log/journal";
@@ -135,15 +135,21 @@
               mode = "0700";
             })
             [
+              "app.drey.EarTag"
               "chat.simplex.simplex"
-              "com.belmoussaoui.Authenticator"
+
               "com.brave.Browser"
               "com.github.ADBeveridge.Raider"
               "dev.geopjr.Tuba"
+              "io.github.diegopvlk.Cine"
               "io.github.sniper1720.khushu"
+              "io.bassi.Amberol"
+              "io.gitlab.adhami3310.Impression"
               "io.gitlab.news_flash.NewsFlash"
               "io.gitlab.theevilskeleton.Upscaler"
               "org.gnome.Fractal"
+              "org.gnome.Loupe"
+              "org.gnome.Papers"
               "org.onlyoffice.desktopeditors"
               "org.signal.Signal"
               "org.telegram.desktop"

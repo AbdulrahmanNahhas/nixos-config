@@ -1,7 +1,6 @@
 _: {
-  # Brave's Flatpak can install PWAs inside its private profile without
-  # exporting desktop launchers. Declare the launcher so Noctalia can index it
-  # and use the PWA-specific window class for icon matching.
+  # Brave stores this PWA in its Flatpak profile but does not reliably export a
+  # launcher that Noctalia can index, so keep the desktop entry declarative.
   xdg.desktopEntries.brave-whatsapp = {
     name = "WhatsApp";
     genericName = "Messaging";
