@@ -44,10 +44,20 @@ _: {
         "..."
       ];
       format_on_save = "on";
+      code_actions_on_format = {
+        "source.fixAll.biome" = true;
+        "source.organizeImports.biome" = true;
+      };
       formatter = {
         language_server = {
           name = "biome";
         };
+      };
+    };
+    JSX = {
+      code_actions_on_format = {
+        "source.fixAll.biome" = true;
+        "source.organizeImports.biome" = true;
       };
     };
     TypeScript = {
@@ -57,6 +67,10 @@ _: {
         "..."
       ];
       format_on_save = "on";
+      code_actions_on_format = {
+        "source.fixAll.biome" = true;
+        "source.organizeImports.biome" = true;
+      };
       formatter = {
         language_server = {
           name = "biome";
@@ -70,6 +84,10 @@ _: {
         "..."
       ];
       format_on_save = "on";
+      code_actions_on_format = {
+        "source.fixAll.biome" = true;
+        "source.organizeImports.biome" = true;
+      };
       formatter = {
         language_server = {
           name = "biome";
