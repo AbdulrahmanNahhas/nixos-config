@@ -168,6 +168,17 @@
           ".local/state/nix"
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
+          {
+            # Approved .envrc hashes; losing these prompts for direnv allow
+            # after every reboot on the tmpfs root.
+            directory = ".local/share/direnv";
+            mode = "0700";
+          }
+          {
+            # Devenv trust metadata, cached keys, and explicit GC roots.
+            directory = ".local/share/devenv";
+            mode = "0700";
+          }
 
           # ── Niri & Noctalia State ────────
           {

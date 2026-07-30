@@ -32,7 +32,7 @@ _: {
     theme = {
       mode = "dark";
       light = "Carbonfox - blurred";
-      dark = "Rich Vesper";
+      dark = "Rust & Brown";
     };
     theme_overrides = {
       "Rich Vesper" = {

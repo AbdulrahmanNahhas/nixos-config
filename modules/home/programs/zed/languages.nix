@@ -1,6 +1,10 @@
 _: {
   programs.zed-editor.userSettings.languages = {
     Nix = {
+      language_servers = [
+        "nixd"
+        "!nil"
+      ];
       formatter = {
         language_server = {
           name = "nixd";
@@ -22,76 +26,86 @@ _: {
       format_on_save = "on";
     };
     CSS = {
+      language_servers = [
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
-        };
-      };
-    };
-    HTML = {
-      format_on_save = "on";
-      formatter = {
-        language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
     JavaScript = {
+      language_servers = [
+        "vtsls"
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
     TypeScript = {
+      language_servers = [
+        "vtsls"
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
     TSX = {
+      language_servers = [
+        "vtsls"
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
     JSON = {
+      language_servers = [
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
     JSONC = {
+      language_servers = [
+        "biome"
+        "..."
+      ];
       format_on_save = "on";
       formatter = {
         language_server = {
-          name = "oxfmt";
+          name = "biome";
         };
       };
     };
+    # Biome does not cover these formats. Keep Zed's supported defaults,
+    # which currently use Prettier for HTML, Markdown, and YAML.
+    HTML.format_on_save = "on";
     Markdown = {
       format_on_save = "on";
-      formatter = {
-        language_server = {
-          name = "oxfmt";
-        };
-      };
     };
-    YAML = {
-      format_on_save = "on";
-      formatter = {
-        language_server = {
-          name = "oxfmt";
-        };
-      };
-    };
+    YAML.format_on_save = "on";
   };
 }

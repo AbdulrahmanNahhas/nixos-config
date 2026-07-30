@@ -22,10 +22,45 @@ _: {
       end
     '';
 
+    devenv-enable = ''
+      if not test -f devenv.nix
+        echo "devenv.nix not found in $PWD"
+        echo "Run devenv-new [directory] for a new environment."
+        return 1
+      end
+
+      if test -e .envrc
+        echo "Keeping existing .envrc; review it before approval."
+      else
+        printf '%s\n' 'eval "$(devenv direnvrc)"' 'use devenv' > .envrc
+        echo "Created .envrc with devenv's direnv integration."
+      end
+
+      command direnv allow .
+    '';
+
     devenv-new = ''
-      devenv init
-      echo "use devenv" > .envrc
-      direnv allow
+      if test (count $argv) -gt 1
+        echo "Usage: devenv-new [directory]"
+        return 2
+      end
+
+      if test (count $argv) -eq 1
+        mkdir -p -- $argv[1]
+        and cd -- $argv[1]
+        or return
+      end
+
+      if test -e devenv.nix -o -e devenv.yaml
+        echo "A devenv configuration already exists in $PWD"
+        echo "Run devenv-enable to create/approve its .envrc."
+        return 1
+      end
+
+      command devenv init
+      or return
+
+      devenv-enable
     '';
 
     wallpaper = ''

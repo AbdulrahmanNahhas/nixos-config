@@ -1,5 +1,19 @@
 _: {
   programs.zed-editor.userSettings.lsp = {
+    nixd = {
+      initialization_options = {
+        formatting.command = [ "nixfmt" ];
+      };
+    };
+
+    biome = {
+      settings = {
+        # Avoid Zed downloading and running its own Biome in projects that
+        # have not explicitly opted in with biome.json or biome.jsonc.
+        require_config_file = true;
+      };
+    };
+
     vtsls = {
       settings = {
         typescript = {

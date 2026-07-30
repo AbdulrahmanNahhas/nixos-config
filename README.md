@@ -38,7 +38,8 @@ flake.nix -> hosts/shadow -> profiles/nixos -> modules/nixos
 ```
 
 See [architecture](docs/architecture.md) for the full layout and dependency
-rules.
+rules. See the [development environment guide](docs/development.md) for the
+Zed, devenv, direnv, Rust, and web-tooling workflow.
 
 ## Installation
 

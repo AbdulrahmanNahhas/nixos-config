@@ -40,13 +40,20 @@ directly on the persistent `/saved` mount rather than through Preservation.
 
 The configuration preserves standard XDG directories except `Downloads`, plus
 Books, SSH/GnuPG credentials, GitHub CLI and keyring state, the complete
-LibreWolf profile, Zed and Neovim state, fish and Atuin history, Niri and
-Noctalia state, audio state, Steam (including per-game shader data), Mesa/RADV
-shader caches, Obsidian, OpenRazer, and Polychromatic. Flatpak state is limited
-to the application IDs declared in the Flatpak module; this includes Brave's
-complete browser profile. Removed or manually installed Flatpaks do not gain
-persistence automatically. Browser and Noctalia caches are ephemeral except
-for caches stored inside an application's required profile directory.
+LibreWolf profile, Zed and Neovim state, fish and Atuin history, direnv
+approvals, devenv trust data and GC roots, Niri and Noctalia state, audio state,
+Steam (including per-game shader data), Mesa/RADV shader caches, Obsidian,
+OpenRazer, and Polychromatic. Flatpak state is limited to the application IDs
+declared in the Flatpak module; this includes Brave's complete browser profile.
+Removed or manually installed Flatpaks do not gain persistence automatically.
+Browser and Noctalia caches are ephemeral except for caches stored inside an
+application's required profile directory.
+
+Direnv approvals are retained in `~/.local/share/direnv`, so an unchanged
+`.envrc` remains approved after reboot. Changing `.envrc` still invalidates its
+approval and requires another review and `direnv allow`. Devenv's
+`~/.local/share/devenv` directory is also retained for its trust metadata,
+cached keys, and explicit Nix GC roots.
 
 LibreWolf's profile is preserved at `~/.config/librewolf`, its current XDG
 location. The obsolete `~/.librewolf` path is intentionally not preserved.

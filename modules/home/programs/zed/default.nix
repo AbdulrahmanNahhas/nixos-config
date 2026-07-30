@@ -12,6 +12,7 @@
     package = pkgs.zed-editor.fhs;
 
     extensions = [
+      "biome"
       "nix"
       "toml"
       "vercel-theme"
@@ -19,6 +20,7 @@
       "comment"
       "charmed-icons"
       "rich-vesper"
+      "rust-and-brown"
     ];
   };
 }
