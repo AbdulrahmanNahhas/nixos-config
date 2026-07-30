@@ -172,11 +172,15 @@
             # Approved .envrc hashes; losing these prompts for direnv allow
             # after every reboot on the tmpfs root.
             directory = ".local/share/direnv";
+            user = username;
+            group = "users";
             mode = "0700";
           }
           {
             # Devenv trust metadata, cached keys, and explicit GC roots.
             directory = ".local/share/devenv";
+            user = username;
+            group = "users";
             mode = "0700";
           }
 
