@@ -295,17 +295,17 @@ offset_y = 12
 # ─────────────────────────────────────────────────────────────────────────────
 
 [plugins]
-enabled = ["noctalia/wallhaven", "avivbintangaringga/nix-monitor"]
+enabled = [ "avivbintangaringga/nix-monitor", "noctalia/wallhaven", "ycf/mawaqit" ]
 
-[[plugins.source]]
-kind = "git"
-location = "https://github.com/noctalia-dev/official-plugins"
-name = "official"
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
 
-[[plugins.source]]
-kind = "git"
-location = "https://github.com/noctalia-dev/community-plugins"
-name = "community"
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
 
 [plugin_settings."avivbintangaringga/nix-monitor"]
 show_update_check_notification = true
@@ -319,6 +319,14 @@ api_key = "@WALLHAVEN_API_KEY@"
 browser_placement = "floating"
 browser_position = "center"
 download_dir = "~/Downloads"
+
+[plugin_settings."ycf/mawaqit"]
+city = "Homs"
+country = "Syria"
+panel_open_near_click = false
+panel_placement = "attached"
+playAzan = true
+twelveHourFormat = true
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Shell
