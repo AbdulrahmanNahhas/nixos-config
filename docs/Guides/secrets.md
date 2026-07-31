@@ -78,19 +78,19 @@ editing, rotation, disaster recovery, and authorizing replacement hosts.
 
 ## Repository files: written versus generated
 
-| Path | Kind | Created by | Hand-edit? | Commit? |
-|---|---|---|---|---|
-| `flake.nix` | Dependency and check policy | Human | Yes | Yes |
-| `flake.lock` | Exact dependency revisions/hashes | `nix flake update` | No | Yes |
-| `.sops.yaml` | Public recipients and creation rules | Human | Yes, carefully | Yes |
-| `.gitleaks.toml` | Secret-scanner policy | Human | Yes | Yes |
-| `modules/nixos/security/secrets.nix` | Runtime secret declarations/templates | Human | Yes | Yes |
-| `modules/nixos/core/users.nix` | Password consumers and root lock | Human | Yes | Yes |
-| `modules/nixos/storage/preservation.nix` | Persistent-key mounts and modes | Human | Yes | Yes |
-| `modules/home/wm/noctalia/config.toml` | Non-secret TOML template | Human/application source | Yes | Yes |
-| `encrypted-secrets/*.enc` | SOPS ciphertext envelopes | SOPS | Only through SOPS | Yes |
-| `/run/secrets*` | Runtime plaintext | sops-nix | No | Never |
-| Private age identities | Decryption keys | `age-keygen` | No | Never |
+| Path                                     | Kind                                  | Created by               | Hand-edit?        | Commit? |
+| ---------------------------------------- | ------------------------------------- | ------------------------ | ----------------- | ------- |
+| `flake.nix`                              | Dependency and check policy           | Human                    | Yes               | Yes     |
+| `flake.lock`                             | Exact dependency revisions/hashes     | `nix flake update`       | No                | Yes     |
+| `.sops.yaml`                             | Public recipients and creation rules  | Human                    | Yes, carefully    | Yes     |
+| `.gitleaks.toml`                         | Secret-scanner policy                 | Human                    | Yes               | Yes     |
+| `modules/nixos/security/secrets.nix`     | Runtime secret declarations/templates | Human                    | Yes               | Yes     |
+| `modules/nixos/core/users.nix`           | Password consumers and root lock      | Human                    | Yes               | Yes     |
+| `modules/nixos/storage/preservation.nix` | Persistent-key mounts and modes       | Human                    | Yes               | Yes     |
+| `modules/home/wm/noctalia/config.toml`   | Non-secret TOML template              | Human/application source | Yes               | Yes     |
+| `encrypted-secrets/*.enc`                | SOPS ciphertext envelopes             | SOPS                     | Only through SOPS | Yes     |
+| `/run/secrets*`                          | Runtime plaintext                     | sops-nix                 | No                | Never   |
+| Private age identities                   | Decryption keys                       | `age-keygen`             | No                | Never   |
 
 Generated ciphertext is expected to be mode `0644`: it is designed to be
 shareable. Access control belongs on private identities and decrypted runtime
@@ -178,18 +178,17 @@ creates a circular recovery dependency.
 
 ### Deployed automatically
 
-| Ciphertext | Runtime use |
-|---|---|
-| `aqua-password-hash.enc` | Early user creation; Aqua's yescrypt password hash |
-| `nix.conf.enc` | `/run/secrets/nix-config`, linked to Aqua's `~/.config/nix/nix.conf` |
-| `noctalia-anilist-token.enc` | Injected into the rendered Noctalia TOML |
-| `noctalia-wallhaven-api-key.enc` | Injected into the rendered Noctalia TOML |
+| Ciphertext                       | Runtime use                                                          |
+| -------------------------------- | -------------------------------------------------------------------- |
+| `aqua-password-hash.enc`         | Early user creation; Aqua's yescrypt password hash                   |
+| `nix.conf.enc`                   | `/run/secrets/nix-config`, linked to Aqua's `~/.config/nix/nix.conf` |
+| `noctalia-wallhaven-api-key.enc` | Injected into the rendered Noctalia TOML                             |
 
 ### Encrypted archive, not decrypted automatically
 
-| Ciphertext | Reason |
-|---|---|
-| `github-token.enc` | No current module or service consumes it |
+| Ciphertext                  | Reason                                                   |
+| --------------------------- | -------------------------------------------------------- |
+| `github-token.enc`          | No current module or service consumes it                 |
 | `wireguard-shadow.conf.enc` | No current declarative WireGuard/NetworkManager consumer |
 
 Keeping unused ciphertext undeclared follows least privilege: sops-nix does not
@@ -213,8 +212,8 @@ The relevant boot/activation sequence is:
    - Root's hash is `!`, locking direct password authentication.
    - `passwd` changes are not authoritative; password rotation must update the
      encrypted hash and activate a new generation.
-5. Normal sops-nix activation decrypts `nix-config` and the two Noctalia
-   credentials under `/run/secrets`.
+5. Normal sops-nix activation decrypts `nix-config` and the Noctalia
+   credential under `/run/secrets`.
 6. sops-nix replaces template placeholders and writes
    `/run/secrets/rendered/noctalia-config.toml` as `aqua:users 0600`.
 7. Home Manager creates out-of-store symlinks from Aqua's expected application
@@ -231,7 +230,6 @@ The tracked TOML contains non-secret markers:
 
 ```toml
 api_key = "@WALLHAVEN_API_KEY@"
-anilist_token = "@ANILIST_TOKEN@"
 ```
 
 `modules/nixos/security/secrets.nix` reads only this non-secret template during
@@ -242,11 +240,9 @@ The rendered TOML lives in tmpfs and is writable by Aqua. Durable configuration
 changes must be made to the tracked template and activated again; edits made
 only to the rendered `/run` file disappear at reboot or the next activation.
 
-The third-party AniList plugin copies its token into Noctalia's preserved user
-state. SOPS cannot prevent an application from persisting a credential it has
-already received. Both the AniList token and Wallhaven key were previously in
-Git plaintext and must be rotated at their providers; encrypting the old values
-does not revoke leaked credentials or erase Git history.
+The Wallhaven key was previously committed to Git in plaintext and must be
+rotated at the provider. Encrypting the old value does not revoke a leaked
+credential or erase Git history.
 
 ## Adding a new secret
 
@@ -451,12 +447,12 @@ consumer tested.
 
 After successful `nh os test`/`switch`:
 
-| Legacy path | Delete? | Condition |
-|---|---|---|
-| `/saved/secrets/nix.conf` | Yes | `~/.config/nix/nix.conf` resolves to `/run/secrets/nix-config` and Nix commands work |
-| `/saved/secrets/github-token` | Yes | `github-token.enc` decrypts and an off-device identity backup exists |
-| `/saved/secrets/Shadow-BG-20-VPN.conf` | Yes | `wireguard-shadow.conf.enc` decrypts and the recovery workflow is understood |
-| `/saved/secrets/Passwords.kdbx` | No | Keep it; back the database up independently |
+| Legacy path                            | Delete? | Condition                                                                            |
+| -------------------------------------- | ------- | ------------------------------------------------------------------------------------ |
+| `/saved/secrets/nix.conf`              | Yes     | `~/.config/nix/nix.conf` resolves to `/run/secrets/nix-config` and Nix commands work |
+| `/saved/secrets/github-token`          | Yes     | `github-token.enc` decrypts and an off-device identity backup exists                 |
+| `/saved/secrets/Shadow-BG-20-VPN.conf` | Yes     | `wireguard-shadow.conf.enc` decrypts and the recovery workflow is understood         |
+| `/saved/secrets/Passwords.kdbx`        | No      | Keep it; back the database up independently                                          |
 
 The permission rules for legacy files can be removed from Preservation in a
 follow-up cleanup commit after the files are gone. Prefer recoverable deletion

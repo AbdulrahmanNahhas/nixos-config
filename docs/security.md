@@ -35,12 +35,8 @@ Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
   have privacy costs.
 - Kavita's wildcard bind and interface-name-specific firewall policy should be
   reviewed together.
-- Noctalia's third-party AniList plugin copies its token into preserved user
-  state. SOPS prevents Git/Nix-store disclosure but cannot change that upstream
-  runtime behavior.
-- The previously committed AniList token and Wallhaven API key remain
-  compromised until revoked; removing them from the current tree does not
-  remove Git history.
+- The previously committed Wallhaven API key remains compromised until revoked;
+  removing it from the current tree does not remove Git history.
 
 ## Planned, not active
 

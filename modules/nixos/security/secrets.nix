@@ -33,11 +33,6 @@ in
         mode = "0400";
       };
 
-      noctalia-anilist-token = {
-        sopsFile = encryptedSecretRoot + /noctalia-anilist-token.enc;
-        format = "binary";
-      };
-
       noctalia-wallhaven-api-key = {
         sopsFile = encryptedSecretRoot + /noctalia-wallhaven-api-key.enc;
         format = "binary";
@@ -47,14 +42,8 @@ in
     templates."noctalia-config.toml" = {
       content =
         builtins.replaceStrings
-          [
-            "@ANILIST_TOKEN@"
-            "@WALLHAVEN_API_KEY@"
-          ]
-          [
-            config.sops.placeholder."noctalia-anilist-token"
-            config.sops.placeholder."noctalia-wallhaven-api-key"
-          ]
+          [ "@WALLHAVEN_API_KEY@" ]
+          [ config.sops.placeholder."noctalia-wallhaven-api-key" ]
           noctaliaConfig;
       owner = username;
       group = "users";

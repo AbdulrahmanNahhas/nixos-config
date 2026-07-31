@@ -8,8 +8,8 @@ bisected.
 
 - Reconsider `trusted-users = [ "root" "@wheel" ]`; trusted Nix users can gain
   root-equivalent power.
-- Revoke the previously committed AniList token and Wallhaven API key, then
-  decide whether rewriting published Git history is necessary after rotation.
+- Revoke the previously committed Wallhaven API key, then decide whether
+  rewriting published Git history is necessary after rotation.
 - Test restoration from the encrypted offline SOPS admin-key backup.
 
 ## Privacy and networking
