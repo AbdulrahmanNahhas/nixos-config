@@ -1,20 +1,24 @@
-// This config is in the KDL format: https://kdl.dev
-config-notification {
-    disable-failed
-}
+// Main niri configuration.
+// Additional key bindings live in binds.kdl.
+// Noctalia generates noctalia.kdl automatically.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Input
+// ─────────────────────────────────────────────────────────────────────────────
+
 gestures {
-    hot-corners {
-        off
-    }
+    hot-corners { off; }
 }
+
 input {
     keyboard {
         xkb {
             layout "us,ara"
-            options "grp:caps_toggle"
+            options "grp:win_space_toggle"
         }
         numlock
     }
+
     touchpad {
         tap
         tap-button-map "left-right-middle"
@@ -22,145 +26,191 @@ input {
         natural-scroll
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Layout
+// ─────────────────────────────────────────────────────────────────────────────
+
 layout {
     background-color "transparent"
     center-focused-column "never"
-    gaps 4
+    gaps 8
+
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
     }
+
     default-column-width { proportion 0.5; }
-    border {
-        off
-        width 1
-        active-color   "#707070"
-        inactive-color "#d0d0d0"
-        urgent-color   "#cc4444"
-    }
+
+    border { off; }
+
     focus-ring {
         width 1
+        active-color "#b8b8b8"
+        inactive-color "#505050"
+        urgent-color "#e06c75"
     }
+
     shadow {
-        softness 30
-        spread 5
-        offset x=0 y=5
-        color "#0007"
+        softness 24
+        spread 1
+        offset x=0 y=4
+        color "#00000055"
+    }
+
+    tab-indicator {
+        place-within-column
+        hide-when-single-tab
     }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Overview and shell integration
+// ─────────────────────────────────────────────────────────────────────────────
+
 overview {
-    backdrop-color "#000000"
+    backdrop-color "#000000d9"
 }
+
 environment {
     XDG_CURRENT_DESKTOP "niri"
 }
-hotkey-overlay {
-    skip-at-startup
+
+hotkey-overlay { skip-at-startup; }
+
+layer-rule {
+    match namespace="^noctalia-backdrop"
+    place-within-backdrop true
 }
+
 prefer-no-csd
+
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Animations
+// ─────────────────────────────────────────────────────────────────────────────
+
 animations {
     workspace-switch {
-        spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
+        spring damping-ratio=0.66 stiffness=420 epsilon=0.0001
     }
+
+    horizontal-view-movement {
+        spring damping-ratio=0.74 stiffness=390 epsilon=0.0001
+    }
+
+    window-movement {
+        spring damping-ratio=0.60 stiffness=350 epsilon=0.0001
+    }
+
+    window-resize {
+        spring damping-ratio=0.80 stiffness=450 epsilon=0.0001
+    }
+
     window-open {
-        duration-ms 150
+        duration-ms 175
         curve "ease-out-expo"
     }
+
     window-close {
-        duration-ms 150
+        duration-ms 140
         curve "ease-out-quad"
     }
-    horizontal-view-movement {
-        spring damping-ratio=0.85 stiffness=423 epsilon=0.0001
-    }
-    window-movement {
-        spring damping-ratio=0.75 stiffness=323 epsilon=0.0001
-    }
-    window-resize {
-        spring damping-ratio=0.85 stiffness=423 epsilon=0.0001
-    }
-    config-notification-open-close {
-        spring damping-ratio=0.65 stiffness=923 epsilon=0.001
-    }
-    screenshot-ui-open {
-        duration-ms 200
-        curve "ease-out-quad"
-    }
+
     overview-open-close {
-        spring damping-ratio=0.85 stiffness=800 epsilon=0.0001
+        spring damping-ratio=0.72 stiffness=580 epsilon=0.0001
+    }
+
+    screenshot-ui-open {
+        duration-ms 170
+        curve "ease-out-quad"
+    }
+
+    config-notification-open-close {
+        spring damping-ratio=0.70 stiffness=680 epsilon=0.001
     }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Window behavior
+// ─────────────────────────────────────────────────────────────────────────────
+
 window-rule {
-    geometry-corner-radius 20
-    clip-to-geometry true
-    tiled-state true
-    draw-border-with-background false
-}
-window-rule {
-    match app-id=r#"^org\.gnome\."#
-    draw-border-with-background false
-    geometry-corner-radius 12
-    clip-to-geometry true
-}
-window-rule {
-    match app-id=r#"^gnome-control-center$"#
-    match app-id=r#"^pavucontrol$"#
-    match app-id=r#"^nm-connection-editor$"#
-    default-column-width { proportion 0.5; }
     open-floating false
+    tiled-state true
+    default-column-display "tabbed"
+    geometry-corner-radius 16
+    clip-to-geometry true
+    draw-border-with-background false
 }
+
 window-rule {
     match app-id=r#"^org\.gnome\.Calculator$"#
     match app-id=r#"^gnome-calculator$"#
     match app-id=r#"^galculator$"#
     match app-id=r#"^blueman-manager$"#
-    match app-id=r#"^org\.gnome\.Nautilus$"#
-    match app-id=r#"^xdg-desktop-portal$"#
+    match app-id=r#"^pavucontrol$"#
+    match app-id=r#"^nm-connection-editor$"#
+
+    default-column-width { proportion 0.33333; }
+}
+
+// Keep transient utility windows tiled by default, but make Picture-in-Picture
+// genuinely useful without changing the global no-auto-floating policy.
+window-rule {
+    match title=r#"^(Picture-in-Picture|Picture in picture)$"#
     open-floating true
+    default-floating-position x=32 y=32 relative-to="bottom-right"
 }
-window-rule {
-    match app-id=r#"^steam$"# title=r#"^notificationtoasts_\d+_desktop$"#
-    default-floating-position x=10 y=10 relative-to="bottom-right"
-    open-focused false
-}
-window-rule {
-    match app-id="librewolf"
-    match app-id="com.mitchellh.ghostty"
-    draw-border-with-background false
-}
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id="zoom"
-    open-floating true
-}
-debug {
-    honor-xdg-activation-with-invalid-serial
-    // Keep the desktop on the Radeon 880M. The stable PCI path avoids relying
-    // on renderD128/renderD129 probe order; NVIDIA remains available through
-    // `nvidia-offload`, including Steam games launched with
-    // `nvidia-offload %command%`.
-    render-drm-device "/dev/dri/by-path/pci-0000:c5:00.0-render"
-}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Recent-window switcher
+// ─────────────────────────────────────────────────────────────────────────────
+
 recent-windows {
     binds {
-        Alt+Tab         { next-window scope="output"; }
-        Alt+Shift+Tab   { previous-window scope="output"; }
-        Alt+grave       { next-window filter="app-id"; }
-        Alt+Shift+grave { previous-window filter="app-id"; }
+        Alt+Tab { next-window scope="all"; }
+        Alt+Shift+Tab { previous-window scope="all"; }
+        Alt+grave { next-window scope="all" filter="app-id"; }
+        Alt+Shift+grave { previous-window scope="all" filter="app-id"; }
     }
-    highlight {
-        corner-radius 20
+
+    previews {
+        max-height 700
+        max-scale 0.72
     }
+
+    highlight { corner-radius 16; }
 }
-// Use the panel's EDID name because the connector changes between eDP-1 on
-// AMD and eDP-2 on NVIDIA when the laptop's display MUX changes sides.
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Graphics
+// ─────────────────────────────────────────────────────────────────────────────
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+
+    // Keep niri on the Radeon 880M. Applications can use the RTX 5060 through
+    // nvidia-offload without moving the compositor to the discrete GPU.
+    render-drm-device "/dev/dri/by-path/pci-0000:c5:00.0-render"
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Internal display
+// ─────────────────────────────────────────────────────────────────────────────
+
 output "Samsung Display Corp. ATNA40CU05-0  Unknown" {
     mode "2880x1800@60.001"
     scale 2
     position x=0 y=0
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Included configuration
+// ─────────────────────────────────────────────────────────────────────────────
+
 include "binds.kdl"
-include "noctalia.kdl"   // auto-generated live by Noctalia, not in git
+include "noctalia.kdl"

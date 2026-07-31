@@ -1,145 +1,274 @@
 binds {
-    // === System & Overview ===
-    Mod+D repeat=false { toggle-overview; }
-    Mod+Tab repeat=false { toggle-overview; }
-    Mod+Shift+Slash { show-hotkey-overlay; }
+    // ─────────────────────────────────────────────────────────────────────────
+    // Core shell
+    // ─────────────────────────────────────────────────────────────────────────
 
-    // === Application Launchers ===
-    Mod+T hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
-    Mod+Space hotkey-overlay-title="Application Launcher" {
-        spawn "noctalia" "msg" "panel-toggle" "launcher";   // ⚠ verify panel name
-    }
-    Mod+V hotkey-overlay-title="Clipboard Manager" {
-        spawn "noctalia" "msg" "panel-toggle" "clipboard";  // ⚠ verify panel name
-    }
-    Mod+Comma hotkey-overlay-title="Settings" {
-        spawn "noctalia" "msg" "panel-toggle" "settings";   // ⚠ verify panel name
-    }
-    Mod+N hotkey-overlay-title="Notification Center" {
-        spawn "noctalia" "msg" "panel-toggle" "control-center" "notifications";  // confirmed context pattern
-    }
-    Mod+X hotkey-overlay-title="Power Menu: Toggle" {
-        spawn "noctalia" "msg" "panel-toggle" "session";
+    // Visual view of all workspaces and windows.
+    Mod+Tab repeat=false hotkey-overlay-title="Window Overview" {
+        toggle-overview
     }
 
-    // === Security ===
-    Mod+Alt+L hotkey-overlay-title="Lock Screen" {
-        spawn "qylock-lock";                                  // qylock Quickshell lockscreen, theme last-of-us
+    // Keep Mod+D for the launcher because Super+Space is now the
+    // English/Arabic keyboard-layout switch.
+    Mod+D repeat=false hotkey-overlay-title="Applications" {
+        spawn "noctalia" "msg" "panel-toggle" "launcher"
     }
-    Mod+Shift+E { quit; }
 
-    // === Audio Controls (real, compositor-level — Noctalia's OSD reacts automatically) ===
+    Mod+T repeat=false hotkey-overlay-title="Terminal" {
+        spawn "ghostty"
+    }
+
+    Mod+V repeat=false hotkey-overlay-title="Clipboard" {
+        spawn "noctalia" "msg" "panel-toggle" "clipboard"
+    }
+
+    Mod+Comma repeat=false hotkey-overlay-title="Settings" {
+        spawn "noctalia" "msg" "panel-toggle" "settings"
+    }
+
+    Mod+N repeat=false hotkey-overlay-title="Notifications" {
+        spawn "noctalia" "msg" "panel-toggle" "control-center" "notifications"
+    }
+
+    Mod+X repeat=false hotkey-overlay-title="Power Menu" {
+        spawn "noctalia" "msg" "panel-toggle" "session"
+    }
+
+    Mod+Shift+Slash repeat=false hotkey-overlay-title="Keyboard Shortcuts" {
+        show-hotkey-overlay
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Session and security
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Mod+Alt+L repeat=false allow-inhibiting=false hotkey-overlay-title="Lock Screen" {
+        spawn "noctalia" "msg" "session" "lock"
+    }
+
+    // Shows niri's confirmation dialog.
+    Mod+Shift+E repeat=false hotkey-overlay-title="Exit niri" {
+        quit
+    }
+
+    // Escape hatch for remote desktop, virtual machines, games, and
+    // applications that request exclusive shortcuts.
+    Mod+Escape repeat=false allow-inhibiting=false hotkey-overlay-title="Release Captured Shortcuts" {
+        toggle-keyboard-shortcuts-inhibit
+    }
+
+    Mod+Shift+P repeat=false hotkey-overlay-title="Turn Off Display" {
+        power-off-monitors
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Audio
+    // ─────────────────────────────────────────────────────────────────────────
+
     XF86AudioRaiseVolume allow-when-locked=true {
-        spawn "wpctl" "set-volume" "-l" "1.0" "@DEFAULT_AUDIO_SINK@" "3%+";
+        spawn "wpctl" "set-volume" "-l" "1.0" "@DEFAULT_AUDIO_SINK@" "3%+"
     }
+
     XF86AudioLowerVolume allow-when-locked=true {
-        spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "3%-";
+        spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "3%-"
     }
+
     XF86AudioMute allow-when-locked=true {
-        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle";
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"
     }
+
     XF86AudioMicMute allow-when-locked=true {
-        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle";
+        spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"
     }
-    XF86AudioPause allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioPlay  allow-when-locked=true { spawn "playerctl" "play-pause"; }
-    XF86AudioPrev  allow-when-locked=true { spawn "playerctl" "previous"; }
-    XF86AudioNext  allow-when-locked=true { spawn "playerctl" "next"; }
 
-    // === Brightness Controls ===
+    XF86AudioPause allow-when-locked=true {
+        spawn "playerctl" "play-pause"
+    }
+
+    XF86AudioPlay allow-when-locked=true {
+        spawn "playerctl" "play-pause"
+    }
+
+    XF86AudioPrev allow-when-locked=true {
+        spawn "playerctl" "previous"
+    }
+
+    XF86AudioNext allow-when-locked=true {
+        spawn "playerctl" "next"
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Brightness
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // The internal display is driven by the AMD iGPU. Explicitly selecting its
+    // backlight prevents brightnessctl from choosing the NVIDIA interface.
     XF86MonBrightnessUp allow-when-locked=true {
-        // The internal eDP panel is driven by the AMD iGPU. Without an
-        // explicit device, brightnessctl selects the non-functional NVIDIA
-        // backlight interface exposed by this hybrid-graphics laptop.
-        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%+";
+        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%+"
     }
+
     XF86MonBrightnessDown allow-when-locked=true {
-        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%-";
+        spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%-"
     }
 
-    // === Window Management ===
-    Mod+Q repeat=false { close-window; }
-    Mod+F { maximize-column; }
-    Mod+Shift+F { fullscreen-window; }
-    Mod+Shift+T { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
-    Mod+W { toggle-column-tabbed-display; }
 
-    // === Focus Navigation ===
-    Mod+Left  { focus-column-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
-    Mod+Right { focus-column-right; }
-    Mod+H     { focus-column-left; }
-    Mod+J     { focus-window-down; }
-    Mod+K     { focus-window-up; }
-    Mod+L     { focus-column-right; }
+    // ─────────────────────────────────────────────────────────────────────────
+    // Window state
+    // ─────────────────────────────────────────────────────────────────────────
 
-    // === Window Movement ===
-    Mod+Shift+Left  { move-column-left; }
-    Mod+Shift+Down  { move-window-down; }
-    Mod+Shift+Up    { move-window-up; }
-    Mod+Shift+Right { move-column-right; }
-    Mod+Shift+H     { move-column-left; }
-    Mod+Shift+J     { move-window-down; }
-    Mod+Shift+K     { move-window-up; }
-    Mod+Shift+L     { move-column-right; }
+    Mod+Q repeat=false hotkey-overlay-title="Close Window" {
+        close-window
+    }
 
-    // === Column Navigation ===
-    Mod+Home { focus-column-first; }
-    Mod+End  { focus-column-last; }
-    Mod+Ctrl+Home { move-column-to-first; }
-    Mod+Ctrl+End  { move-column-to-last; }
+    Mod+F repeat=false hotkey-overlay-title="Maximize Column" {
+        maximize-column
+    }
 
-    // === Monitor Navigation ===
-    Mod+Ctrl+Left  { focus-monitor-left; }
-    Mod+Ctrl+Right { focus-monitor-right; }
-    Mod+Ctrl+H     { focus-monitor-left; }
-    Mod+Ctrl+J     { focus-monitor-down; }
-    Mod+Ctrl+K     { focus-monitor-up; }
-    Mod+Ctrl+L     { focus-monitor-right; }
+    Mod+Shift+F repeat=false hotkey-overlay-title="Fullscreen Window" {
+        fullscreen-window
+    }
 
-    // === Move to Monitor ===
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
-    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+    // Everything opens tiled, but this remains available for exceptional cases.
+    Mod+Shift+T repeat=false hotkey-overlay-title="Toggle Floating" {
+        toggle-window-floating
+    }
 
-    // === Workspace Navigation ===
-    Mod+Page_Down { focus-workspace-down; }
-    Mod+Page_Up   { focus-workspace-up; }
-    Mod+U         { focus-workspace-down; }
-    Mod+I         { focus-workspace-up; }
-    Mod+Ctrl+Down { move-column-to-workspace-down; }
-    Mod+Ctrl+Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+U    { move-column-to-workspace-down; }
-    Mod+Ctrl+I    { move-column-to-workspace-up; }
+    // Useful after manually floating a window.
+    Mod+Shift+V repeat=false hotkey-overlay-title="Focus Floating or Tiled" {
+        switch-focus-between-floating-and-tiling
+    }
 
-    // === Move Workspaces ===
-    Mod+Shift+Page_Down { move-workspace-down; }
-    Mod+Shift+Page_Up   { move-workspace-up; }
-    Mod+Shift+U         { move-workspace-down; }
-    Mod+Shift+I         { move-workspace-up; }
+    Mod+W repeat=false hotkey-overlay-title="Toggle Column Tabs" {
+        toggle-column-tabbed-display
+    }
 
-    // === Mouse Wheel Navigation ===
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
-    Mod+WheelScrollRight      { focus-column-right; }
-    Mod+WheelScrollLeft       { focus-column-left; }
-    Mod+Ctrl+WheelScrollRight { move-column-right; }
-    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
-    Mod+Shift+WheelScrollDown      { focus-column-right; }
-    Mod+Shift+WheelScrollUp        { focus-column-left; }
-    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
-    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
 
-    // === Numbered Workspaces ===
+    // ─────────────────────────────────────────────────────────────────────────
+    // Focus
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Arrow keys: horizontal window focus, vertical workspace navigation.
+    Mod+Left {
+        focus-column-left
+    }
+
+    Mod+Right {
+        focus-column-right
+    }
+
+    Mod+Down {
+        focus-workspace-down
+    }
+
+    Mod+Up {
+        focus-workspace-up
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Move windows and columns
+    // ─────────────────────────────────────────────────────────────────────────
+
+
+    Mod+Shift+Left hotkey-overlay-title=null {
+        move-column-left
+    }
+
+    Mod+Shift+Down {
+        move-column-to-workspace-down
+    }
+
+    Mod+Shift+Up {
+        move-column-to-workspace-up
+    }
+
+    Mod+Shift+Right hotkey-overlay-title=null {
+        move-column-right
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Column positions
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Mod+Home {
+        focus-column-first
+    }
+
+    Mod+End {
+        focus-column-last
+    }
+
+    Mod+Ctrl+Home {
+        move-column-to-first
+    }
+
+    Mod+Ctrl+End {
+        move-column-to-last
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Workspaces
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Mod+U hotkey-overlay-title="Next Workspace" {
+        focus-workspace-down
+    }
+
+    Mod+I hotkey-overlay-title="Previous Workspace" {
+        focus-workspace-up
+    }
+
+    Mod+Ctrl+U hotkey-overlay-title="Move to Next Workspace" {
+        move-column-to-workspace-down
+    }
+
+    Mod+Ctrl+I hotkey-overlay-title="Move to Previous Workspace" {
+        move-column-to-workspace-up
+    }
+
+    Mod+Shift+U {
+        move-workspace-down
+    }
+
+    Mod+Shift+I {
+        move-workspace-up
+    }
+
+    // Page keys remain as discoverable aliases.
+    Mod+Page_Down hotkey-overlay-title=null {
+        focus-workspace-down
+    }
+
+    Mod+Page_Up hotkey-overlay-title=null {
+        focus-workspace-up
+    }
+
+    Mod+Ctrl+Down hotkey-overlay-title=null {
+        move-column-to-workspace-down
+    }
+
+    Mod+Ctrl+Up hotkey-overlay-title=null {
+        move-column-to-workspace-up
+    }
+
+    Mod+Shift+Page_Down hotkey-overlay-title=null {
+        move-workspace-down
+    }
+
+    Mod+Shift+Page_Up hotkey-overlay-title=null {
+        move-workspace-up
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Numbered workspaces
+    // ─────────────────────────────────────────────────────────────────────────
+
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -149,6 +278,7 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
+
     Mod+Shift+1 { move-column-to-workspace 1; }
     Mod+Shift+2 { move-column-to-workspace 2; }
     Mod+Shift+3 { move-column-to-workspace 3; }
@@ -159,32 +289,181 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    // === Column Management ===
-    Mod+BracketLeft  { consume-or-expel-window-left; }
-    Mod+BracketRight { consume-or-expel-window-right; }
-    Mod+Period { expel-window-from-column; }
 
-    // === Sizing & Layout ===
-    Mod+R { switch-preset-column-width; }
-    Mod+Shift+R { switch-preset-window-height; }
-    Mod+Ctrl+R { reset-window-height; }
-    Mod+Ctrl+F { expand-column-to-available-width; }
-    Mod+C { center-column; }
-    Mod+Ctrl+C { center-visible-columns; }
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
-    Mod+Shift+Minus { set-window-height "-10%"; }
-    Mod+Shift+Equal { set-window-height "+10%"; }
+    // ─────────────────────────────────────────────────────────────────────────
+    // Tabs and column grouping
+    // ─────────────────────────────────────────────────────────────────────────
 
-    // === Screenshots ===
-    XF86Launch1 { screenshot; }
-    Ctrl+XF86Launch1 { screenshot-screen; }
-    Alt+XF86Launch1 { screenshot-window; }
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    // Because columns default to tabbed display, consumed windows remain
+    // full-height rather than becoming vertically stacked tiles.
+    Mod+BracketLeft hotkey-overlay-title="Group with Left Column" {
+        consume-or-expel-window-left
+    }
 
-    // === System Controls ===
-    Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    Mod+Shift+P { power-off-monitors; }
+    Mod+BracketRight hotkey-overlay-title="Group with Right Column" {
+        consume-or-expel-window-right
+    }
+
+    Mod+Period hotkey-overlay-title="Remove from Column" {
+        expel-window-from-column
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Width and positioning
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Mod+R hotkey-overlay-title="Cycle Column Width" {
+        switch-preset-column-width
+    }
+
+    Mod+Ctrl+F hotkey-overlay-title="Fill Available Width" {
+        expand-column-to-available-width
+    }
+
+    Mod+C hotkey-overlay-title="Center Column" {
+        center-column
+    }
+
+    Mod+Ctrl+C hotkey-overlay-title="Center Visible Columns" {
+        center-visible-columns
+    }
+
+    Mod+Minus {
+        set-column-width "-10%"
+    }
+
+    Mod+Equal {
+        set-column-width "+10%"
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Occasional external-monitor support
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // These bindings are retained but hidden from the shortcut overlay because
+    // the laptop normally runs with one output.
+    Mod+Ctrl+Left hotkey-overlay-title=null {
+        focus-monitor-left
+    }
+
+    Mod+Ctrl+Right hotkey-overlay-title=null {
+        focus-monitor-right
+    }
+
+    Mod+Ctrl+H hotkey-overlay-title=null {
+        focus-monitor-left
+    }
+
+    Mod+Ctrl+J hotkey-overlay-title=null {
+        focus-monitor-down
+    }
+
+    Mod+Ctrl+K hotkey-overlay-title=null {
+        focus-monitor-up
+    }
+
+    Mod+Ctrl+L hotkey-overlay-title=null {
+        focus-monitor-right
+    }
+
+    Mod+Shift+Ctrl+Left hotkey-overlay-title=null {
+        move-column-to-monitor-left
+    }
+
+    Mod+Shift+Ctrl+Down hotkey-overlay-title=null {
+        move-column-to-monitor-down
+    }
+
+    Mod+Shift+Ctrl+Up hotkey-overlay-title=null {
+        move-column-to-monitor-up
+    }
+
+    Mod+Shift+Ctrl+Right hotkey-overlay-title=null {
+        move-column-to-monitor-right
+    }
+
+    Mod+Shift+Ctrl+H hotkey-overlay-title=null {
+        move-column-to-monitor-left
+    }
+
+    Mod+Shift+Ctrl+J hotkey-overlay-title=null {
+        move-column-to-monitor-down
+    }
+
+    Mod+Shift+Ctrl+K hotkey-overlay-title=null {
+        move-column-to-monitor-up
+    }
+
+    Mod+Shift+Ctrl+L hotkey-overlay-title=null {
+        move-column-to-monitor-right
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Mouse-wheel navigation
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Mod+WheelScrollDown cooldown-ms=150 {
+        focus-workspace-down
+    }
+
+    Mod+WheelScrollUp cooldown-ms=150 {
+        focus-workspace-up
+    }
+
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 {
+        move-column-to-workspace-down
+    }
+
+    Mod+Ctrl+WheelScrollUp cooldown-ms=150 {
+        move-column-to-workspace-up
+    }
+
+    Mod+Shift+WheelScrollDown cooldown-ms=100 {
+        focus-column-right
+    }
+
+    Mod+Shift+WheelScrollUp cooldown-ms=100 {
+        focus-column-left
+    }
+
+    Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=100 {
+        move-column-right
+    }
+
+    Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=100 {
+        move-column-left
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Screenshots
+    // ─────────────────────────────────────────────────────────────────────────
+
+    Print repeat=false hotkey-overlay-title="Screenshot Area" {
+        screenshot show-pointer=false
+    }
+
+    Ctrl+Print repeat=false hotkey-overlay-title="Screenshot Screen" {
+        screenshot-screen show-pointer=false
+    }
+
+    Alt+Print repeat=false hotkey-overlay-title="Screenshot Window" {
+        screenshot-window
+    }
+
+    // Laptop-specific screenshot key.
+    XF86Launch1 repeat=false hotkey-overlay-title=null {
+        screenshot show-pointer=false
+    }
+
+    Ctrl+XF86Launch1 repeat=false hotkey-overlay-title=null {
+        screenshot-screen show-pointer=false
+    }
+
+    Alt+XF86Launch1 repeat=false hotkey-overlay-title=null {
+        screenshot-window
+    }
 }
