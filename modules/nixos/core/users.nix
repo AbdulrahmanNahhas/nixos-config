@@ -25,6 +25,7 @@
           "render"
           "gamemode"
           "openrazer"
+          "dialout"
         ];
         shell = pkgs.fish;
         packages = with pkgs; [ tree ];

@@ -189,6 +189,11 @@
             mode = "0700";
           }
 
+          # ── Espressif Xtensa Rust Toolchain ──────────────────
+          # ESP-IDF itself stays project-local in .embuild/espressif.
+          ".rustup"
+          ".espup"
+
           # ── Niri & Noctalia State ────────
           {
             directory = ".local/state/noctalia";

@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   nixpkgs.config.allowUnfree = true;
 
@@ -33,5 +34,15 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+  };
+
+  # Espressif's Xtensa Rust toolchain is distributed as generic Linux
+  # binaries. nix-ld provides its expected ELF loader on NixOS.
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      zlib
+    ];
   };
 }
