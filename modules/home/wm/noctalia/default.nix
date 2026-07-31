@@ -1,9 +1,13 @@
 { config, inputs, ... }:
 {
-  imports = [ inputs.noctalia.homeModules.default ];
+  imports = [
+    inputs.noctalia.homeModules.default
+  ];
 
-  programs.noctalia.enable = true;
-  programs.noctalia.systemd.enable = true;
+  programs.noctalia = {
+    enable = true;
+    systemd.enable = true;
+  };
 
   # sops-nix renders the tracked non-secret template with plugin credentials at
   # activation time. The resulting TOML is writable by Aqua but lives in tmpfs;
