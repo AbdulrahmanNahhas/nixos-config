@@ -294,13 +294,6 @@ offset_y = 12
 # Plugins
 # ─────────────────────────────────────────────────────────────────────────────
 
-[plugin_settings."noctalia/wallhaven"]
-api_key = "@WALLHAVEN_API_KEY@"
-download_dir = "~/Downloads"
-
-[plugin_settings."avivbintangaringga/nix-monitor"]
-panel_open_near_click = false
-show_update_check_notification = true
 [plugins]
 enabled = ["noctalia/wallhaven", "avivbintangaringga/nix-monitor"]
 
@@ -313,6 +306,19 @@ name = "official"
 kind = "git"
 location = "https://github.com/noctalia-dev/community-plugins"
 name = "community"
+
+[plugin_settings."avivbintangaringga/nix-monitor"]
+clean_command = "sudo nix store optimise"
+optimize_command = "nh clean all --keep 5 --keep-since 14d"
+panel_open_near_click = false
+show_update_check_notification = true
+update_command = "nh os switch /saved/nixos-config --update"
+
+[plugin_settings."noctalia/wallhaven"]
+api_key = "@WALLHAVEN_API_KEY@"
+browser_placement = "floating"
+browser_position = "center"
+download_dir = "~/Downloads"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Shell
