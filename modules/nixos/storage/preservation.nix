@@ -191,8 +191,18 @@
 
           # ── Espressif Xtensa Rust Toolchain ──────────────────
           # ESP-IDF itself stays project-local in .embuild/espressif.
-          ".rustup"
-          ".espup"
+          {
+            directory = ".rustup";
+            user = username;
+            group = "users";
+            mode = "0700";
+          }
+          {
+            directory = ".espup";
+            user = username;
+            group = "users";
+            mode = "0700";
+          }
 
           # ── Niri & Noctalia State ────────
           {
