@@ -111,6 +111,11 @@
             directory = ".codex";
             mode = "0700";
           }
+          {
+            # T3 Code credentials, conversations, settings, skills, and local state.
+            directory = ".t3";
+            mode = "0700";
+          }
 
           # ── Git & Forge CLI Tools ────────────────────────────
           ".config/gh"
