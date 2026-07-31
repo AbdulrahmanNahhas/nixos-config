@@ -308,11 +308,11 @@ location = "https://github.com/noctalia-dev/community-plugins"
 name = "community"
 
 [plugin_settings."avivbintangaringga/nix-monitor"]
-clean_command = "sudo nix store optimise"
-optimize_command = "nh clean all --keep 5 --keep-since 14d"
-panel_open_near_click = false
 show_update_check_notification = true
+panel_open_near_click = false
 update_command = "nh os switch /saved/nixos-config --update"
+optimize_command = "sudo nix store optimise"
+clean_command = "nh clean all --keep 5 --keep-since 14d"
 
 [plugin_settings."noctalia/wallhaven"]
 api_key = "@WALLHAVEN_API_KEY@"
