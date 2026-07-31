@@ -17,6 +17,7 @@ let
     "io.gitlab.adhami3310.Impression"
     "app.drey.EarTag"
     "io.bassi.Amberol"
+    "moe.tsuna.tsukimi"
   ];
 in
 {
