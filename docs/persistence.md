@@ -56,10 +56,11 @@ approval and requires another review and `direnv allow`. Devenv's
 cached keys, and explicit Nix GC roots.
 
 The Espressif Xtensa Rust compiler and LLVM payload are retained in `~/.rustup`;
-espup's supporting Clang-library link is retained in `~/.espup`. ESP-IDF and its
-C toolchain are intentionally workspace-local under each project's
-`.embuild/espressif` directory, so they survive through the already-preserved
-`~/Projects` tree without an additional home-level persistence entry.
+espup's supporting Clang-library link is retained in `~/.espup`. Managed ESP-IDF
+checkouts, Python environments, downloaded archives, and versioned C tools are
+retained in `~/.espressif`. This is the native builder's upstream-supported
+global location, shared by ESP Rust projects instead of duplicating several
+gigabytes below every project's `.embuild/espressif` directory.
 
 LibreWolf's profile is preserved at `~/.config/librewolf`, its current XDG
 location. The obsolete `~/.librewolf` path is intentionally not preserved.

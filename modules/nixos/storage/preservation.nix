@@ -189,10 +189,17 @@
             mode = "0700";
           }
 
-          # ── Espressif Xtensa Rust Toolchain ──────────────────
-          # ESP-IDF itself stays project-local in .embuild/espressif.
+          # ── Shared Espressif Toolchains ──────────────────────
           {
             directory = ".rustup";
+            user = username;
+            group = "users";
+            mode = "0700";
+          }
+          {
+            # Versioned ESP-IDF checkouts, Python envs, archives, and C tools
+            # shared by ESP Rust projects using the native global builder.
+            directory = ".espressif";
             user = username;
             group = "users";
             mode = "0700";
