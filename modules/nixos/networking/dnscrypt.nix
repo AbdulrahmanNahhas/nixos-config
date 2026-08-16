@@ -13,6 +13,13 @@ in
     settings = {
       listen_addresses = [ "127.0.0.1:53" ];
 
+      # Avoid probing the entire public resolver catalog after every rebuild.
+      # DNS is unavailable until dnscrypt-proxy finishes its initial selection.
+      server_names = [
+        "cloudflare"
+        "scaleway-fr"
+      ];
+
       sources.public-resolvers = {
         urls = [
           "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"

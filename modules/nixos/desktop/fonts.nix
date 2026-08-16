@@ -1,5 +1,7 @@
 { pkgs, ... }:
 {
+  fonts.fontDir.enable = true;
+
   fonts.packages = with pkgs; [
     nerd-fonts.geist-mono
 

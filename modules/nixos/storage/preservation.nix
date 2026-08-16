@@ -74,7 +74,12 @@
           mode = "2755";
         }
         "/var/lib/kavita"
-        "/etc/NetworkManager/system-connections"
+        {
+          directory = "/etc/NetworkManager/system-connections";
+          user = "root";
+          group = "root";
+          mode = "0700";
+        }
       ];
 
       users.${username} = {
@@ -309,6 +314,13 @@
       user = "root";
       group = "root";
       mode = lib.mkForce "0700";
+    };
+    # NetworkManager rejects profiles not owned by root. Recursively repair
+    # profiles that may have been created with the user's ownership.
+    "/saved/etc/NetworkManager/system-connections".Z = {
+      user = "root";
+      group = "root";
+      mode = "-";
     };
 
     "/saved/var/lib/sops-nix".d = {

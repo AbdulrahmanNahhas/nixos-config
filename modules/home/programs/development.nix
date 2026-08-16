@@ -12,6 +12,9 @@
     gh
     lazygit
 
+    # Sandboxing
+    bubblewrap
+
     # Coding agent
     codex
   ];
