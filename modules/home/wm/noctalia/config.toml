@@ -255,7 +255,6 @@ input_radius = 6.0
 show_caps_lock = true
 show_keyboard_layout = true
 show_login_button = true
-show_password_hint = true
 
 [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
 box_height = 70.0
@@ -275,7 +274,6 @@ input_radius = 6.0
 show_caps_lock = true
 show_keyboard_layout = true
 show_login_button = true
-show_password_hint = true
 
 # ─────────────────────────────────────────────────────────────────────────────
 # OSD
@@ -348,7 +346,6 @@ niri_overview_type_to_launch_enabled = true
 password_style = "random"
 screen_time_enabled = true
 settings_show_advanced = true
-middle_click_opens_widget_settings = true
 
 external_ip_enabled = false
 telemetry_enabled = false
@@ -409,8 +406,9 @@ borders = true
 shadow = true
 list_item_background = false
 
-# "centered" is the current detached, screen-centered mode.
-launcher_placement = "centered"
+# Detached, screen-centered launcher.
+launcher_placement = "floating"
+launcher_position = "center"
 clipboard_placement = "attached"
 polkit_placement = "attached"
 
@@ -469,7 +467,7 @@ transition_on_startup = true
 
 [wallpaper.automation]
 enabled = true
-interval_minutes = 30
+interval_seconds = 1800
 order = "random"
 recursive = false
 
@@ -490,7 +488,6 @@ path = "/home/aqua/Pictures/Wallpapers/wallhaven-eolmrl.jpg"
 path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
 
 [widget.wallhaven]
-enabled = true
 type = "noctalia/wallhaven:wallhaven"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -508,7 +505,8 @@ capsule_radius = 70
 [widget.workspaces]
 enabled = true
 style = "regular"
-display = "id"
+label_source = "id"
+show_labels = true
 labels_only_when_occupied = false
 hide_when_empty = false
 focused_output_only = false
@@ -623,6 +621,5 @@ min_length = 0
 
 [widget.nix-monitor]
 colorize_glyph = false
-scale = 0.9
 show_text = false
 type = "avivbintangaringga/nix-monitor:nix-monitor"
