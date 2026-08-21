@@ -11,16 +11,6 @@
     enable = true;
     package = pkgs.zed-editor.fhs;
 
-    extensions = [
-      "biome"
-      "nix"
-      "toml"
-      "vercel-theme"
-      "rainbow-csv"
-      "comment"
-      "charmed-icons"
-      "rich-vesper"
-      "rust-and-brown"
-    ];
+    extensions = import ./extensions.nix;
   };
 }

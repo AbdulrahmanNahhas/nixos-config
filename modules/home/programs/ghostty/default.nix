@@ -14,7 +14,8 @@ _: {
       window-decoration = "auto";
       window-theme = "auto";
       gtk-titlebar = true;
-      background-opacity = 0.92;
+      background-opacity = 0.90;
+      background-blur-radius = 20;
 
       theme = "noctalia";
 

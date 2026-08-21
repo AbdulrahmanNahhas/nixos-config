@@ -18,6 +18,11 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
+    goose = {
+      url = "github:aaif-goose/goose";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,54 +32,55 @@
       url = "github:noctalia-dev/noctalia";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
   outputs =
-    inputs@{ nixpkgs, ... }:
+    inputs@{
+      self,
+      nixpkgs,
+      ...
+    }:
     let
       system = "x86_64-linux";
-      hostname = "shadow";
-      username = "aqua";
+
+      host = {
+        hostname = "shadow";
+        username = "aqua";
+      };
+
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
     in
     {
-      formatter.${system} =
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
-        pkgs.writeShellApplication {
-          name = "nixfmt-tree";
-          runtimeInputs = [
-            pkgs.fd
-            pkgs.nixfmt
-          ];
-          text = ''
-            fd --type f --extension nix --exec nixfmt {}
-          '';
+      formatter.${system} = pkgs.nixfmt-rfc-style;
+
+      nixosConfigurations.${host.hostname} = nixpkgs.lib.nixosSystem {
+        inherit system;
+
+        specialArgs = {
+          inherit inputs;
+          inherit (host) hostname username;
         };
 
+        modules = [
+          ./${host.hostname}
+        ];
+      };
+
       checks.${system}.gitleaks =
-        let
-          pkgs = nixpkgs.legacyPackages.${system};
-        in
         pkgs.runCommand "gitleaks-check"
           {
             nativeBuildInputs = [ pkgs.gitleaks ];
           }
           ''
-            gitleaks dir --no-banner --redact ${./.}
-            touch "$out"
+            gitleaks dir \
+              --no-banner \
+              --redact \
+              ${self}
+
+            touch $out
           '';
-
-      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs hostname username;
-        };
-
-        modules = [
-          ./hosts/${hostname}
-        ];
-      };
     };
 }

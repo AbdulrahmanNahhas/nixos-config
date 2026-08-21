@@ -1,3 +1,7 @@
+{
+  pkgs,
+  ...
+}:
 let
   flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
 
@@ -7,17 +11,18 @@ let
     "com.brave.Browser"
     "com.github.ADBeveridge.Raider"
     "dev.geopjr.Tuba"
-    "io.github.sniper1720.khushu"
     "io.gitlab.news_flash.NewsFlash"
     "io.gitlab.theevilskeleton.Upscaler"
     "org.gnome.Fractal"
-    "org.onlyoffice.desktopeditors"
     "org.telegram.desktop"
     "io.github.diegopvlk.Cine"
     "io.gitlab.adhami3310.Impression"
     "app.drey.EarTag"
     "io.bassi.Amberol"
     "moe.tsuna.tsukimi"
+    "dev.geopjr.Archives"
+    "org.libreoffice.LibreOffice"
+    "io.github.alainm23.planify"
   ];
 in
 {
@@ -45,6 +50,14 @@ in
         {
           appId = "org.signal.Signal";
           origin = "flathub";
+        }
+
+        {
+          appId = "io.github.block.Goose";
+          bundle = "${pkgs.fetchurl {
+            url = "https://github.com/aaif-goose/goose/releases/download/v1.46.0/io.github.block.Goose_stable_x86_64.flatpak";
+            hash = "sha256-kNaedAfHx7nW3QyvCS+b0KIGYNYEcPpMAsVyf2uo0Hw=";
+          }}";
         }
       ];
 

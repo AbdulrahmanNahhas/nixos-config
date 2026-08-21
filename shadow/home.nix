@@ -5,9 +5,11 @@
 }:
 {
   imports = [
-    ../../profiles/home
-    ../../profiles/home/desktop.nix
-    ../../profiles/home/development.nix
+    ../modules/home/shell
+    ../modules/home/desktop
+    ../modules/home/programs
+    ../modules/home/packages
+    ../modules/home/wm
   ];
 
   home = {

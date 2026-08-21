@@ -15,9 +15,16 @@
 
     ./hardware-configuration.nix
     ./disk.nix
-    ../../profiles/nixos
-    ../../profiles/nixos/desktop.nix
-    ../../profiles/nixos/gaming.nix
+
+    ../modules/nixos/core
+    ../modules/nixos/hardware
+    ../modules/nixos/networking
+    ../modules/nixos/security
+    ../modules/nixos/storage
+    ../modules/nixos/services
+    ../modules/nixos/desktop
+    ../modules/nixos/services/flatpak.nix
+    ../modules/nixos/gaming/steam.nix
   ];
 
   networking.hostName = hostname;
@@ -28,6 +35,6 @@
     useUserPackages = true;
     backupFileExtension = "backup";
     extraSpecialArgs = { inherit inputs username; };
-    users.${username} = import ../../home/aqua;
+    users.${username} = import ./home.nix;
   };
 }

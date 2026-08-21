@@ -10,7 +10,7 @@ The current host layout assumes:
 - UEFI boot.
 - Repository checkout at `/saved/nixos-config` after installation.
 
-Before installing, review `hosts/shadow/disk.nix`, replace the insecure
+Before installing, review `shadow/disk.nix`, replace the insecure
 installation passwords in `modules/nixos/core/users.nix`, and verify that
 valuable data is backed up elsewhere.
 

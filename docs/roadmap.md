@@ -28,7 +28,7 @@ bisected.
 ## Maintainability and validation
 
 - Move the host-specific preferred-GPU PCI address into a dedicated
-  `hosts/shadow/hardware.nix` when more host facts justify that file.
+  `shadow/hardware.nix` when more host facts justify that file.
 - Add custom module options only when real reuse removes duplication.
 - Add a flake formatter using `nixfmt-rfc-style` or `treefmt-nix`.
 - Add `deadnix`, `statix`, and CI evaluation of `nixosConfigurations.shadow`.
@@ -48,5 +48,5 @@ bisected.
   and NixPak without claiming they are active.
 - Research hardened-kernel compatibility with NVIDIA.
 - Add gaming and hardened NixOS specialisations only after their behavioral
-  differences and recovery path are defined. Current `profiles/nixos/gaming.nix`
-  is a composition profile, not a specialisation.
+  differences and recovery path are defined. Current `modules/nixos/gaming/`
+  is imported directly by `shadow/default.nix`, not a specialisation.

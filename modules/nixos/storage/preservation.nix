@@ -111,11 +111,11 @@
             directory = ".config/sops";
             mode = "0700";
           }
-          {
-            # Codex credentials, conversations, settings, skills, and local state.
-            directory = ".codex";
-            mode = "0700";
-          }
+          # {
+          #   # Codex credentials, conversations, settings, skills, and local state.
+          #   directory = ".codex";
+          #   mode = "0700";
+          # }
           {
             # T3 Code credentials, conversations, settings, skills, and local state.
             directory = ".t3";

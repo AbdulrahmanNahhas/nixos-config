@@ -2,9 +2,9 @@
 
 ## Project Structure & Module Organization
 
-This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `hosts/shadow/` contains machine facts and Disko layout. `profiles/nixos/` and `profiles/home/` compose features, while reusable implementations live under `modules/nixos/` and `modules/home/`. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `assets/` only for shared assets, `docs/` for design and operational notes, and `secrets/` for documentation—not secret material.
+This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `shadow/default.nix` contains machine facts, Disko layout, and directly selects the `modules/nixos/` groups it needs. `shadow/home.nix` owns Aqua's identity and directly selects the `modules/home/` groups it needs. There is one host and one user, so both live flat under `shadow/` rather than `hosts/<name>/` and `home/<user>/` subdirectories. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `assets/` only for shared assets, `docs/` for design and operational notes, and `secrets/` for documentation—not secret material.
 
-Follow the dependency direction documented in `docs/architecture.md`: hosts select profiles, and profiles import modules. Do not import Home Manager user modules from NixOS modules.
+Follow the dependency direction documented in `docs/architecture.md`: `shadow/` selects modules directly. Do not import Home Manager user modules from NixOS modules. Only split `shadow/` into per-host/per-user subdirectories (and reintroduce a `profiles/` composition layer) once a second host or user needs a differing module selection.
 
 ## Build, Test, and Development Commands
 
@@ -19,7 +19,7 @@ Never use the destructive Disko installation command in `docs/installation.md` a
 
 ## Coding Style & Naming Conventions
 
-Use two-space indentation and `nixfmt` output for Nix. Prefer small domain-focused modules named with lowercase descriptive words, such as `modules/nixos/services/power.nix`. Keep hardware facts in `hosts/shadow/`; avoid embedding host or user paths in reusable modules. Add comments for non-obvious hardware workarounds and security tradeoffs.
+Use two-space indentation and `nixfmt` output for Nix. Prefer small domain-focused modules named with lowercase descriptive words, such as `modules/nixos/services/power.nix`. Keep hardware facts in `shadow/`; avoid embedding host or user paths in reusable modules. Add comments for non-obvious hardware workarounds and security tradeoffs.
 
 ## Testing Guidelines
 

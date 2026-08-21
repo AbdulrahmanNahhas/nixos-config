@@ -28,13 +28,14 @@ Declarative NixOS and Home Manager configuration for `shadow`, a Razer Blade
 
 ## Architecture
 
-`flake.nix` constructs the host. `hosts/shadow` owns machine facts and selects
-NixOS profiles. Profiles compose reusable modules, while `home/aqua` owns Aqua's
-identity and Home profile selection.
+`flake.nix` constructs the host. `shadow/default.nix` owns machine facts and
+selects NixOS modules directly, while `shadow/home.nix` owns Aqua's identity
+and selects Home Manager modules directly. There is one host and one user, so
+both live flat under `shadow/` instead of per-host/per-user subdirectories.
 
 ```text
-flake.nix -> hosts/shadow -> profiles/nixos -> modules/nixos
-                         -> home/aqua -> profiles/home -> modules/home
+flake.nix -> shadow/default.nix -> modules/nixos
+                               -> shadow/home.nix -> modules/home
 ```
 
 See [architecture](docs/architecture.md) for the full layout and dependency

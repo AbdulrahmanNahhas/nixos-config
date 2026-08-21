@@ -1,5 +1,13 @@
-_: {
+{ lib, ... }:
+let
+  extensions = import ./extensions.nix;
+in
+{
   programs.zed-editor.userSettings = {
+    # Keep Zed from prompting to install/update extensions already declared
+    # in default.nix.
+    auto_install_extensions = lib.genAttrs extensions (_: true);
+
     # ── Privacy ──────────────────────────────────────────
     redact_private_values = false;
     private_files = [
@@ -108,7 +116,7 @@ _: {
     format_on_save = "on";
     hover_popover_enabled = true;
     use_autoclose = true;
-    auto_indent = true;
+    auto_indent = "syntax_aware";
     auto_indent_on_paste = true;
     preferred_line_length = 100;
     soft_wrap = "prefer_line";
@@ -170,7 +178,7 @@ _: {
     };
     project_panel = {
       dock = "left";
-      hide_gitignore = true;
+      hide_gitignore = false;
       hide_hidden = false;
     };
     git_panel = {
@@ -234,7 +242,54 @@ _: {
       default_profile = "ask";
       default_model = {
         provider = "zed.dev";
-        model = "claude-sonnet-4-5";
+        model = "claude-sonnet-5";
+        effort = "high";
+        enable_thinking = true;
+      };
+      inline_assistant_model = {
+        provider = "anthropic";
+        model = "claude-sonnet-5";
+        enable_thinking = false;
+      };
+      # Fetch auto-allow: reference/doc sites for the languages this config's
+      # LSPs cover (Rust, Nix, JS/TS, biome, shadcn), so the agent doesn't
+      # have to ask before reading docs.
+      tool_permissions = {
+        tools = {
+          fetch = {
+            always_allow = [
+              { pattern = "^https?://biomejs\\.dev"; }
+              { pattern = "^https?://ui\\.shadcn\\.com"; }
+              { pattern = "^https?://(.*\\.)?rust-lang\\.org"; }
+              { pattern = "^https?://docs\\.rs"; }
+              { pattern = "^https?://crates\\.io"; }
+              { pattern = "^https?://(.*\\.)?nixos\\.org"; }
+              { pattern = "^https?://noogle\\.dev"; }
+              { pattern = "^https?://developer\\.mozilla\\.org"; }
+              { pattern = "^https?://(.*\\.)?typescriptlang\\.org"; }
+              { pattern = "^https?://(www\\.)?npmjs\\.com"; }
+              { pattern = "^https?://en\\.cppreference\\.com"; }
+            ];
+          };
+        };
+      };
+      sandbox_permissions = {
+        allow_unsandboxed = false;
+        network_hosts = [
+          "github.com"
+          "gitlab.com"
+          "wikipedia.org"
+          "docs.rs"
+          "crates.io"
+          "doc.rust-lang.org"
+          "search.nixos.org"
+          "noogle.dev"
+          "developer.mozilla.org"
+          "typescriptlang.org"
+          "npmjs.com"
+          "registry.npmjs.org"
+          "en.cppreference.com"
+        ];
       };
     };
     show_edit_predictions = true;
