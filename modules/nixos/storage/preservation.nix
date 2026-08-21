@@ -160,6 +160,7 @@
               "org.gnome.Fractal"
               "org.gnome.Loupe"
               "org.gnome.Papers"
+              "org.libreoffice.LibreOffice"
               "org.onlyoffice.desktopeditors"
               "org.signal.Signal"
               "org.telegram.desktop"
@@ -280,6 +281,33 @@
       user = username;
       group = "users";
       mode = "0755";
+    };
+    # Flatpak's own per-app data lives here (.var/app/<id>, mapped below).
+    # Without pre-creating .var and .var/app themselves, a *brand-new*
+    # app's first-ever "directory" entry has no existing parent to inherit
+    # ownership from, and flatpak's own sandboxed mkdir ends up creating it
+    # instead -- confirmed live: org.libreoffice.LibreOffice's first launch
+    # after being added to the preserveAt list below created
+    # ~/.var/app/org.libreoffice.LibreOffice owned by nobody:nogroup
+    # (a user-namespace mapping artifact of flatpak's rootless bwrap),
+    # which then made the app fail to start at all ("mkdirat(data):
+    # Permission denied").
+    "/home/${username}/.var".d = {
+      user = username;
+      group = "users";
+      mode = "0755";
+    };
+    "/home/${username}/.var/app".d = {
+      user = username;
+      group = "users";
+      mode = "0755";
+    };
+    # Retroactively repairs the already-broken directory from the incident
+    # above; the .d rules above only prevent this for apps added from now on.
+    "/home/${username}/.var/app/org.libreoffice.LibreOffice".Z = {
+      user = username;
+      group = "users";
+      mode = "0700";
     };
 
     # Isolated secret runtime directory used by explicit out-of-store home configurations.

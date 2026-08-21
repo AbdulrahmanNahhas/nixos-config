@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs.librewolf = {
     enable = true;
 

@@ -1,82 +1,70 @@
+[accessibility]
+ui_scale = 1.1000000000000001
+
 [audio]
 enable_sounds = true
-sound_volume = 0.55
-
-[accessibility]
-ui_scale = 1.1
+sound_volume = 0.55000000000000004
 
 [backdrop]
+blur_intensity = 0.32000000000000001
 enabled = true
-blur_intensity = 0.32
-tint_intensity = 0.28
-
+tint_intensity = 0.28000000000000003
 # ─────────────────────────────────────────────────────────────────────────────
 # Full-width bottom bar with three balanced regions
 # ─────────────────────────────────────────────────────────────────────────────
 
 [bar]
-order = ["default"]
+order = [ "default" ]
 
-[bar.default]
-enabled = true
-position = "bottom"
-auto_hide = false
-smart_auto_hide = false
-show_on_workspace_switch = true
-reserve_space = true
-layer = "top"
-
-background_opacity = 0.84
-margin_ends = 0
-margin_edge = 0
-margin_opposite_edge = 0
-thickness = 38
-padding = 10
-widget_spacing = 14
-
-radius = 36
-radius_top_left = 36
-radius_top_right = 36
-radius_bottom_left = 0
-radius_bottom_right = 0
-concave_edge_corners = true
-
-border = "outline"
-border_width = 0.0
-shadow = true
-contact_shadow = true
-panel_overlap = 3
-
-scale = 1.25
-font_family = "GeistMono Nerd Font Mono"
-font_weight = 500
-hover_highlight = true
-
-capsule = false
-capsule_fill = "surface_variant"
-capsule_foreground = "on_surface"
-capsule_thickness = 0.85
-capsule_opacity = 0.82
-
-# Stable layout: primary actions left, identity/navigation centered,
-# status controls right. This prevents media titles from shifting everything.
-start = ["active_window", "workspaces", "launcher", "clipboard", "wallpaper", "wallhaven"]
-
-center = ["nix-monitor", "tray", "notifications", "clock", "session"]
-
-end = ["audio_visualizer", "bluetooth", "brightness", "volume", "network", "caffeine", "battery", "control-center"]
-capsule_radius = 10
+    [bar.default]
+    auto_hide = false
+    background_opacity = 0.83999999999999997
+    border = "outline"
+    border_width = 0.0
+    capsule = false
+    capsule_fill = "surface_variant"
+    capsule_foreground = "on_surface"
+    capsule_opacity = 0.81999999999999995
+    capsule_radius = 10
+    capsule_thickness = 0.84999999999999998
+    center = [ "nix-monitor", "tray", "notifications", "bar", "clock", "session" ]
+    concave_edge_corners = true
+    contact_shadow = true
+    enabled = true
+    end = [ "audio_visualizer", "bluetooth", "brightness", "volume", "network", "caffeine", "battery", "control-center" ]
+    font_family = "GeistMono Nerd Font Mono"
+    font_weight = 500
+    hover_highlight = true
+    layer = "top"
+    margin_edge = 0
+    margin_ends = 0
+    margin_opposite_edge = 0
+    padding = 10
+    panel_overlap = 3
+    position = "bottom"
+    radius = 36
+    radius_bottom_left = 0
+    radius_bottom_right = 0
+    radius_top_left = 36
+    radius_top_right = 36
+    reserve_space = true
+    scale = 1.2500000111758709
+    shadow = true
+    show_on_workspace_switch = true
+    smart_auto_hide = false
+    start = [ "active_window", "workspaces", "launcher", "clipboard", "wallpaper", "wallhaven" ]
+    thickness = 38
+    widget_spacing = 14
 
 [battery]
 warning_threshold = 20
 
 [control_center]
-width = 800
+hidden_tabs = []
+show_shortcut_labels = true
 sidebar = "compact"
 sidebar_section = "compact"
-show_shortcut_labels = true
-hidden_tabs = []
-
+width = 800
 # ─────────────────────────────────────────────────────────────────────────────
 # Desktop widgets
 # ─────────────────────────────────────────────────────────────────────────────
@@ -84,70 +72,72 @@ hidden_tabs = []
 [desktop_widgets]
 enabled = true
 schema_version = 2
-widget_order = [
-  "desktop-widget-0000000000000001",
-  "desktop-widget-0000000000000002",
-  "desktop-widget-0000000000000004"
-]
+widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-0000000000000002", "desktop-widget-0000000000000004" ]
 
-[desktop_widgets.grid]
-cell_size = 32
-major_interval = 4
-visible = true
+    [desktop_widgets.grid]
+    cell_size = 32
+    major_interval = 4
+    visible = true
 
-[desktop_widgets.widget.desktop-widget-0000000000000001]
-box_height = 192.0
-box_width = 224.0
-cx = 144.0
-cy = 130.0
-output = "eDP-2"
-rotation = 0.0
-type = "fancy_audio_visualizer"
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 192.0
+    box_width = 224.0
+    cx = 144.0
+    cy = 130.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "fancy_audio_visualizer"
 
-[desktop_widgets.widget.desktop-widget-0000000000000001.settings]
-background = false
-bar_width = 0.2
-bloom_intensity = 1.0
-fade_when_idle = true
-inner_diameter = 0.5
-ring_opacity = 1.0
-rotation_speed = 0.5
-sensitivity = 1.3
-visualization_mode = "all"
-wave_thickness = 1.0
+        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+        background = false
+        bar_width = 0.20000000000000001
+        bloom_intensity = 1.0
+        fade_when_idle = true
+        inner_diameter = 0.5
+        ring_opacity = 1.0
+        rotation_speed = 0.5
+        sensitivity = 1.3
+        visualization_mode = "all"
+        wave_thickness = 1.0
 
-[desktop_widgets.widget.desktop-widget-0000000000000002]
-box_height = 64.0
-box_width = 224.0
-cx = 1312.0
-cy = 802.0
-output = "eDP-1"
-rotation = 0.0
-type = "clock"
+    [desktop_widgets.widget.desktop-widget-0000000000000002]
+    box_height = 64.0
+    box_width = 224.0
+    cx = 1312.0
+    cy = 802.0
+    output = "eDP-1"
+    placement_height = 900.0
+    placement_width = 1440.0
+    rotation = 0.0
+    type = "clock"
 
-[desktop_widgets.widget.desktop-widget-0000000000000002.settings]
-background = false
-center_text = true
-clock_style = "digital"
-shadow = true
+        [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
+        background = false
+        center_text = true
+        clock_style = "digital"
+        shadow = true
 
-[desktop_widgets.widget.desktop-widget-0000000000000004]
-box_height = 224.0
-box_width = 160.0
-cx = 96.0
-cy = 722.0
-output = "eDP-1"
-rotation = 0.0
-type = "media_player"
+    [desktop_widgets.widget.desktop-widget-0000000000000004]
+    box_height = 224.0
+    box_width = 160.0
+    cx = 96.0
+    cy = 722.0
+    output = "eDP-1"
+    placement_height = 900.0
+    placement_width = 1440.0
+    rotation = 0.0
+    type = "media_player"
 
-[desktop_widgets.widget.desktop-widget-0000000000000004.settings]
-background = false
-background_opacity = 0.0
-background_padding = 14
-background_radius = 30
-hide_when_no_media = true
-layout = "vertical"
-shadow = true
+        [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+        background = false
+        background_opacity = 0.0
+        background_padding = 14
+        background_radius = 30
+        hide_when_no_media = true
+        layout = "vertical"
+        shadow = true
 
 [dock]
 enabled = false
@@ -157,52 +147,127 @@ enabled = false
 # ─────────────────────────────────────────────────────────────────────────────
 
 [hot_corners]
-enabled = true
 delay_ms = 120
+enabled = true
 
-[hot_corners.bottom_left]
-action = "launcher"
+    [hot_corners.bottom_left]
+    action = "launcher"
 
-[hot_corners.bottom_right]
-action = "control-center"
+    [hot_corners.bottom_right]
+    action = "control-center"
 
-[hot_corners.top_left]
-action = "command"
-command = "noctalia msg wallpaper-random"
+    [hot_corners.top_left]
+    action = "command"
+    command = "noctalia msg wallpaper-random"
 
-[hot_corners.top_right]
-action = "window-switcher"
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Idle
-# ─────────────────────────────────────────────────────────────────────────────
+    [hot_corners.top_right]
+    action = "window-switcher"
 
 [idle]
-behavior_order = ["lock", "screen-off", "lock-and-suspend"]
+behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
 pre_action_fade_seconds = 2.0
 
-[idle.behavior.lock]
-action = "lock"
-enabled = true
-timeout = 600.0
+    [idle.behavior.lock]
+    action = "lock"
+    enabled = true
+    timeout = 600.0
 
-[idle.behavior.screen-off]
-action = "screen_off"
-enabled = true
-timeout = 720.0
+    [idle.behavior.lock-and-suspend]
+    action = "lock_and_suspend"
+    enabled = true
+    timeout = 1800.0
 
-[idle.behavior.lock-and-suspend]
-action = "lock_and_suspend"
-enabled = true
-timeout = 1800.0
+    [idle.behavior.screen-off]
+    action = "screen_off"
+    enabled = true
+    timeout = 720.0
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Location and night light
 # ─────────────────────────────────────────────────────────────────────────────
 
 [location]
-auto_locate = false
 address = "Homs, Syria"
+auto_locate = false
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Lock screen
+# ─────────────────────────────────────────────────────────────────────────────
+
+[lockscreen]
+allow_empty_password = false
+blur_intensity = 0.5
+blurred_desktop = true
+enabled = true
+fingerprint = true
+monitors = []
+tint_intensity = 0.29999999999999999
+wallpaper = ""
+
+[lockscreen_widgets]
+enabled = true
+schema_version = 2
+widget_order = [ "lockscreen-login-box@eDP-1", "lockscreen-login-box@eDP-2" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 720.0
+    cy = 781.0
+    output = "eDP-1"
+    placement_height = 900.0
+    placement_width = 1440.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
+    box_height = 196.0
+    box_width = 720.0
+    cx = 720.0
+    cy = 781.0
+    output = "eDP-2"
+    placement_height = 0.0
+    placement_width = 0.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
 
 [nightlight]
 enabled = true
@@ -211,86 +276,42 @@ temperature_day = 5000
 temperature_night = 2500
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Lock screen
-# ─────────────────────────────────────────────────────────────────────────────
-
-[lockscreen]
-enabled = true
-fingerprint = true
-allow_empty_password = false
-blurred_desktop = true
-blur_intensity = 0.5
-tint_intensity = 0.3
-wallpaper = ""
-monitors = []
-
-[lockscreen_widgets]
-enabled = true
-schema_version = 2
-widget_order = [
-  "lockscreen-login-box@eDP-1",
-  "lockscreen-login-box@eDP-2"
-]
-
-[lockscreen_widgets.grid]
-cell_size = 16
-major_interval = 4
-visible = true
-
-[lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-box_height = 70.0
-box_width = 400.0
-cx = 720.0
-cy = 781.0
-output = "eDP-1"
-rotation = 0.0
-type = "login_box"
-
-[lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-background_color = "surface_variant"
-background_opacity = 0.88
-background_radius = 12.0
-input_opacity = 1.0
-input_radius = 6.0
-show_caps_lock = true
-show_keyboard_layout = true
-show_login_button = true
-
-[lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
-box_height = 70.0
-box_width = 400.0
-cx = 720.0
-cy = 781.0
-output = "eDP-2"
-rotation = 0.0
-type = "login_box"
-
-[lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
-background_color = "surface_variant"
-background_opacity = 0.88
-background_radius = 12.0
-input_opacity = 1.0
-input_radius = 6.0
-show_caps_lock = true
-show_keyboard_layout = true
-show_login_button = true
-
-# ─────────────────────────────────────────────────────────────────────────────
 # OSD
 # ─────────────────────────────────────────────────────────────────────────────
 
 [osd]
 background_opacity = 0.88
-position = "bottom_center"
-position_vertical = "bottom_right"
-orientation = "horizontal"
-scale = 1.0
 offset_x = 20
 offset_y = 12
+orientation = "horizontal"
+position = "bottom_center"
+position_vertical = "bottom_right"
+scale = 1.0
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Plugins
 # ─────────────────────────────────────────────────────────────────────────────
+
+[plugin_settings."avivbintangaringga/nix-monitor"]
+clean_command = "sudo nix store optimise"
+optimize_command = "nh clean all --keep 5 --keep-since 14d"
+panel_open_near_click = false
+show_update_check_notification = true
+update_command = "nh os switch /saved/nixos-config --update"
+
+[plugin_settings."noctalia/wallhaven"]
+api_key = "LK94jH4RtC8TuvysxJLBCHDOvbHoQews"
+browser_placement = "floating"
+browser_position = "center"
+download_dir = "~/Downloads"
+
+[plugin_settings."ycf/mawaqit"]
+city = "Homs"
+country = "Syria"
+panel_open_near_click = false
+panel_placement = "attached"
+playAzan = true
+twelveHourFormat = true
 
 [plugins]
 enabled = [ "avivbintangaringga/nix-monitor", "noctalia/wallhaven", "ycf/mawaqit" ]
@@ -305,134 +326,101 @@ enabled = [ "avivbintangaringga/nix-monitor", "noctalia/wallhaven", "ycf/mawaqit
     location = "https://github.com/noctalia-dev/community-plugins"
     name = "community"
 
-[plugin_settings."avivbintangaringga/nix-monitor"]
-show_update_check_notification = true
-panel_open_near_click = false
-update_command = "nh os switch /saved/nixos-config --update"
-optimize_command = "sudo nix store optimise"
-clean_command = "nh clean all --keep 5 --keep-since 14d"
-
-[plugin_settings."noctalia/wallhaven"]
-api_key = "@WALLHAVEN_API_KEY@"
-browser_placement = "floating"
-browser_position = "center"
-download_dir = "~/Downloads"
-
-[plugin_settings."ycf/mawaqit"]
-city = "Homs"
-country = "Syria"
-panel_open_near_click = false
-panel_placement = "attached"
-playAzan = true
-twelveHourFormat = true
-
 # ─────────────────────────────────────────────────────────────────────────────
 # Shell
 # ─────────────────────────────────────────────────────────────────────────────
-
 [shell]
 avatar_path = "/home/aqua/Pictures/Ash Amber - 2.png"
-corner_radius_scale = 2.0
-font_family = "Geist"
-
 button_borders = true
-input_borders = true
-popup_borders = true
 card_borders = true
-popup_shadows = true
-
+clipboard_auto_paste = "auto"
+clipboard_confirm_clear_history = true
+clipboard_enabled = true
+clipboard_history_max_entries = 200
+clipboard_keep_from_closed_apps = true
+corner_radius_scale = 2.0
+external_ip_enabled = false
+font_family = "Geist"
+input_borders = true
+lang = "en"
 launch_apps_as_systemd_services = true
 niri_overview_type_to_launch_enabled = true
+offline_mode = false
 password_style = "random"
+popup_borders = true
+popup_shadows = true
 screen_time_enabled = true
 settings_show_advanced = true
-
-external_ip_enabled = false
 telemetry_enabled = false
-offline_mode = false
 
-clipboard_enabled = true
-clipboard_keep_from_closed_apps = true
-clipboard_history_max_entries = 200
-clipboard_confirm_clear_history = true
-clipboard_auto_paste = "auto"
-lang = "en"
-
-[shell.animation]
-enabled = true
-speed = 1.0
+    [shell.animation]
+    enabled = true
+    speed = 1.0
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Detached centered launcher
+# Apps Launcher
 # ─────────────────────────────────────────────────────────────────────────────
 
-[shell.launcher]
-app_grid = true
-categories = false
-show_icons = true
-compact = false
-sort_by_usage = false
-provider_prefix = "/"
-auto_paste = "auto"
-fetch_exchange_rates = true
+    [shell.launcher]
+    app_grid = true
+    auto_paste = "auto"
+    categories = false
+    compact = false
+    fetch_exchange_rates = true
+    provider_prefix = "/"
+    show_icons = true
+    sort_by_usage = false
 
-[shell.launcher.providers.calculator]
-prefix = "calc"
-global = true
+        [shell.launcher.providers.calculator]
+        global = true
+        prefix = "calc"
 
-[shell.launcher.providers.emoji]
-prefix = "emo"
-global = false
+        [shell.launcher.providers.emoji]
+        global = false
+        prefix = "emo"
 
-[shell.launcher.providers.session]
-prefix = "session"
-global = false
+        [shell.launcher.providers.session]
+        global = false
+        prefix = "session"
 
-[shell.launcher.providers.wallpaper]
-prefix = "wall"
-global = false
+        [shell.launcher.providers.wallpaper]
+        global = false
+        prefix = "wall"
 
-[shell.launcher.providers.windows]
-prefix = "win"
-global = false
+        [shell.launcher.providers.windows]
+        global = false
+        prefix = "win"
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Panel placement
-# ─────────────────────────────────────────────────────────────────────────────
+    [shell.panel]
+    borders = true
+    clipboard_placement = "attached"
+    control_center_placement = "attached"
+    launcher_placement = "floating"
+    launcher_position = "center"
+    list_item_background = false
+    open_near_click_clipboard = false
+    open_near_click_control_center = false
+    open_near_click_launcher = false
+    open_near_click_session = true
+    open_near_click_wallpaper = false
+    polkit_placement = "attached"
+    session_placement = "attached"
+    session_position = "bottom_center"
+    shadow = true
+    transparency_mode = "solid"
+    wallpaper_placement = "floating"
 
-[shell.panel]
-transparency_mode = "solid"
-borders = true
-shadow = true
-list_item_background = false
+    [shell.screen_corners]
+    enabled = true
+    size = 30
 
-# Detached, screen-centered launcher.
-launcher_placement = "floating"
-launcher_position = "center"
-clipboard_placement = "attached"
-polkit_placement = "attached"
+    [shell.screenshot]
+    directory = "/home/aqua/Pictures/Screenshots"
 
-control_center_placement = "attached"
-wallpaper_placement = "floating"
-session_placement = "attached"
+    [shell.shadow]
+    alpha = 0.56000000000000005
+    direction = "center"
 
-open_near_click_launcher = false
-open_near_click_clipboard = false
-open_near_click_control_center = false
-open_near_click_wallpaper = false
-open_near_click_session = true
-session_position = "bottom_center"
-
-[shell.screen_corners]
-enabled = true
-size = 30
-
-[shell.screenshot]
-directory = "/home/aqua/Pictures/Screenshots"
-
-[shell.shadow]
-alpha = 0.56
-direction = "center"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Theme
@@ -441,177 +429,51 @@ direction = "center"
 [theme]
 builtin = "Catppuccin"
 mode = "dark"
+pure_black_dark = false
 source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
-pure_black_dark = false
 
-[theme.templates]
-enable_builtin_templates = true
-builtin_ids = ["gtk3", "gtk4", "ghostty", "niri"]
-enable_community_templates = false
-community_ids = []
+    [theme.templates]
+    builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri" ]
+    community_ids = [ "zed", "bat", "lazygit", "yazi", "obsidian" ]
+    enable_builtin_templates = true
+    enable_community_templates = true
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Wallpaper
 # ─────────────────────────────────────────────────────────────────────────────
 
 [wallpaper]
-enabled = true
 directory = "/home/aqua/Pictures/Wallpapers"
-fill_mode = "crop"
-fill_color = "primary"
-transition = ["wipe"]
-transition_duration = 1100
 edge_smoothness = 0.38
+enabled = true
+fill_color = "primary"
+fill_mode = "crop"
+transition = [ "wipe" ]
+transition_duration = 1100
 transition_on_startup = true
 
-[wallpaper.automation]
-enabled = true
-interval_seconds = 1800
-order = "random"
-recursive = false
+    [wallpaper.automation]
+    enabled = true
+    interval_seconds = 1800
+    order = "random"
+    recursive = false
 
-[wallpaper.default]
-path = "/home/aqua/Pictures/Wallpapers/wallhaven-eolmrl.jpg"
+    [wallpaper.default]
+    path = "/home/aqua/Pictures/Wallpapers/thumb-1920-1326433-2248977507.jpg"
+
+    [wallpaper.last]
+    path = "/home/aqua/Pictures/Wallpapers/thumb-1920-1326433-2248977507.jpg"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/aqua/Pictures/Wallpapers/thumb-1920-1326433-2248977507.jpg"
+
+    [wallpaper.monitors.eDP-2]
+    path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Plugin widgets
 # ─────────────────────────────────────────────────────────────────────────────
-
-[wallpaper.last]
-path = "/home/aqua/Pictures/Wallpapers/wallhaven-eolmrl.jpg"
-
-[wallpaper.monitors.eDP-1]
-path = "/home/aqua/Pictures/Wallpapers/wallhaven-eolmrl.jpg"
-
-[wallpaper.monitors.eDP-2]
-path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
-
-[widget.wallhaven]
-type = "noctalia/wallhaven:wallhaven"
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Built-in bar widgets
-# ─────────────────────────────────────────────────────────────────────────────
-
-[widget.launcher]
-enabled = false
-capsule = false
-capsule_fill = "primary"
-capsule_foreground = "on_primary"
-capsule_padding = 4
-capsule_radius = 70
-
-[widget.workspaces]
-enabled = true
-style = "regular"
-label_source = "id"
-show_labels = true
-labels_only_when_occupied = false
-hide_when_empty = false
-focused_output_only = false
-pill_scale = 1.0
-active_pill_size = 2.0
-inactive_pill_size = 1.0
-capsule_radius = "auto"
-
-[widget.clipboard]
-enabled = true
-capsule = false
-
-[widget.wallpaper]
-enabled = true
-capsule = false
-
-[widget.audio_visualizer]
-enabled = true
-bands = 25
-width = 65
-mirrored = true
-centered = true
-show_when_idle = true
-color_1 = "primary"
-color_2 = "secondary"
-capsule = false
-
-# A strict upper width prevents long video titles from disturbing bar balance.
-scale = 1.15
-[widget.media]
-enabled = false
-hide_when_no_media = true
-hide_artist = false
-artist_first = false
-min_length = 72
-max_length = 150
-title_scroll = "on_hover"
-art_size = 30
-album_art_only = true
-hide_album_art = false
-capsule = true
-
-[widget.clock]
-enabled = true
-format = "{:%H:%M}"
-tooltip_format = "{:%A, %d %B %Y}"
-font_weight = 600
-capsule = false
-capsule_fill = "surface_variant"
-capsule_foreground = "on_surface"
-capsule_opacity = 0.72
-capsule_padding = 6
-capsule_radius = 13
-anchor = true
-
-[widget.tray]
-enabled = true
-capsule = false
-
-[widget.bluetooth]
-enabled = true
-hide_when_no_connected_device = true
-capsule = false
-
-[widget.brightness]
-enabled = true
-show_label = false
-capsule = false
-
-[widget.volume]
-enabled = true
-show_label = false
-capsule = false
-
-[widget.network]
-enabled = true
-show_label = false
-show_vpn_label = false
-vpn_status = "replace"
-capsule = false
-
-[widget.battery]
-enabled = true
-display_mode = "graphic"
-scale = 0.9
-capsule = false
-
-[widget.notifications]
-enabled = true
-hide_when_no_unread = true
-capsule = false
-
-[widget.control-center]
-enabled = false
-capsule = false
-
-[widget.session]
-enabled = true
-capsule = false
-capsule_fill = "surface_variant"
-capsule_foreground = "on_surface"
-capsule_radius = 14
-custom_image = "/home/aqua/Pictures/nixos.png"
-custom_image_colorize = true
-scale = 0.85
 
 [widget.active_window]
 display = "icon_only"
@@ -619,7 +481,133 @@ icon_size = 15
 max_length = 40
 min_length = 0
 
+[widget.audio_visualizer]
+bands = 25
+capsule = false
+centered = true
+color_1 = "primary"
+color_2 = "secondary"
+enabled = true
+mirrored = true
+scale = 1.1500000000000001
+show_when_idle = true
+width = 65
+
+[widget.bar]
+dynamicIcon = true
+showElapsed = true
+type = "ycf/mawaqit:bar"
+
+[widget.battery]
+capsule = false
+display_mode = "graphic"
+enabled = true
+scale = 0.90000000000000002
+
+[widget.bluetooth]
+capsule = false
+enabled = true
+hide_when_no_connected_device = true
+
+[widget.brightness]
+capsule = false
+enabled = true
+show_label = false
+
+[widget.clipboard]
+capsule = false
+enabled = true
+
+[widget.clock]
+anchor = false
+capsule = false
+capsule_fill = "surface_variant"
+capsule_foreground = "on_surface"
+capsule_opacity = 0.71999999999999997
+capsule_padding = 6
+capsule_radius = 13
+enabled = false
+font_weight = 600
+format = "{:%H:%M}"
+tooltip_format = "{:%A, %d %B %Y}"
+
+[widget.control-center]
+capsule = false
+enabled = false
+
+[widget.launcher]
+capsule = false
+capsule_fill = "primary"
+capsule_foreground = "on_primary"
+capsule_padding = 4
+capsule_radius = 70
+enabled = false
+
+[widget.media]
+album_art_only = true
+art_size = 30
+artist_first = false
+capsule = true
+enabled = false
+hide_album_art = false
+hide_artist = false
+hide_when_no_media = true
+max_length = 150
+min_length = 72
+title_scroll = "on_hover"
+
+[widget.network]
+capsule = false
+enabled = true
+show_label = false
+show_vpn_label = false
+vpn_status = "replace"
+
 [widget.nix-monitor]
 colorize_glyph = false
 show_text = false
 type = "avivbintangaringga/nix-monitor:nix-monitor"
+
+[widget.notifications]
+capsule = false
+enabled = true
+hide_when_no_unread = true
+
+[widget.session]
+capsule = false
+capsule_fill = "surface_variant"
+capsule_foreground = "on_surface"
+capsule_radius = 14
+custom_image = "/home/aqua/Pictures/nixos.png"
+custom_image_colorize = true
+enabled = true
+scale = 0.85000000000000009
+
+[widget.tray]
+capsule = false
+enabled = true
+
+[widget.volume]
+capsule = false
+enabled = true
+show_label = false
+
+[widget.wallhaven]
+type = "noctalia/wallhaven:wallhaven"
+
+[widget.wallpaper]
+capsule = false
+enabled = true
+
+[widget.workspaces]
+active_pill_size = 2.0
+capsule_radius = "auto"
+enabled = true
+focused_output_only = false
+hide_when_empty = false
+inactive_pill_size = 1.0
+label_source = "id"
+labels_only_when_occupied = false
+pill_scale = 1.0
+show_labels = true
+style = "regular"

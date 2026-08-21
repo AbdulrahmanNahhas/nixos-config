@@ -24,6 +24,20 @@ let
     "org.libreoffice.LibreOffice"
     "io.github.alainm23.planify"
   ];
+
+  # GTK3 theme-switching extensions (published by the GNOME project itself,
+  # not part of the verified-apps subset). GTK3 apps that ask for
+  # GTK_THEME=adw-gtk3-dark find nothing at all inside the sandbox unless one
+  # of these is installed -- flatpak does NOT expose the host's real
+  # /usr/share/themes into sandboxes the way it does for fonts and icons.
+  # Confirmed live: without this, `flatpak run --command=sh` shows
+  # /usr/share/themes containing only the runtime's own bundled "Default"
+  # and "Emacs" themes, and GTK3 apps fell back to that plain, unstyled
+  # engine (looked broken, not merely "not dark").
+  gtkThemeExtensions = [
+    "org.gtk.Gtk3theme.adw-gtk3"
+    "org.gtk.Gtk3theme.adw-gtk3-dark"
+  ];
 in
 {
   services.flatpak = {
@@ -46,6 +60,10 @@ in
         inherit appId;
         origin = "flathub-verified";
       }) verifiedApps
+      ++ map (appId: {
+        inherit appId;
+        origin = "flathub";
+      }) gtkThemeExtensions
       ++ [
         {
           appId = "org.signal.Signal";
@@ -74,7 +92,16 @@ in
 
     overrides = {
       global = {
-        Environment.XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+        Environment = {
+          XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+          # Picked up by GTK3 apps that read GTK_THEME directly instead of
+          # relying on the portal Settings interface. The actual theme files
+          # come from the org.gtk.Gtk3theme.adw-gtk3-dark flatpak extension
+          # above -- without it installed, this variable alone makes GTK3
+          # fall back to its plain, unstyled default engine instead of
+          # silently ignoring the missing theme.
+          GTK_THEME = "adw-gtk3-dark";
+        };
 
         Context = {
           # Strict filesystem block
@@ -123,6 +150,28 @@ in
         ];
       };
 
+      "org.libreoffice.LibreOffice".Context = {
+        filesystems = [
+          "xdg-documents"
+          "xdg-download"
+          # Read-only access to noctalia's rendered theme state so its
+          # post_hook can `unopkg add` the built Noctalia ColorScheme .oxt
+          # from ~/.local/state/noctalia into this sandbox. See
+          # home/wm/noctalia's community "libreoffice" template.
+          #
+          # "xdg-state" is not a filesystem category flatpak recognizes (it
+          # only knows xdg-{documents,download,music,pictures,...}, plus
+          # xdg-{config,cache,data} -- NOT xdg-state). Confirmed live:
+          # `flatpak run --verbose` logged "Unknown filesystem type
+          # xdg-state/noctalia:ro" and silently dropped the whole app
+          # sandbox into a broken state (LibreOffice failed to even start).
+          # A literal home-relative path works the same way the
+          # "!home" + specific xdg-* exceptions already do elsewhere in
+          # this file.
+          "~/.local/state/noctalia:ro"
+        ];
+      };
+
       "org.signal.Signal".Context = {
         Environment = "ELECTRON_OZONE_PLATFORM_HINT=wayland";
         filesystems = [ "xdg-download" ];
@@ -135,10 +184,45 @@ in
         devices = [ "all" ];
       };
 
+      # --- GTK4 Apps Needing dconf Access ---
+      # GTK4 apps using libadwaita need to read org/gnome/desktop/interface
+      # dconf settings (especially color-scheme for dark theme support).
+      "org.gnome.Fractal".Context = {
+        filesystems = [ "~/.config/dconf:ro" ];
+      };
+
+      "io.gitlab.adhami3310.Impression".Context.filesystems = [
+        "~/.config/dconf:ro"
+        "xdg-pictures"
+      ];
+
+      "io.gitlab.news_flash.NewsFlash".Context = {
+        filesystems = [ "~/.config/dconf:ro" ];
+      };
+
+      "io.github.alainm23.planify".Context = {
+        filesystems = [ "~/.config/dconf:ro" ];
+      };
+
+      "moe.tsuna.tsukimi".Context = {
+        filesystems = [ "~/.config/dconf:ro" ];
+      };
+
+      "io.gitlab.theevilskeleton.Upscaler".Context = {
+        filesystems = [
+          "~/.config/dconf:ro"
+          "xdg-pictures"
+        ];
+        shared = [ "!network" ];
+      };
+
       # --- Local App Network & Filesystem Isolation ---
 
       "app.drey.EarTag".Context = {
-        filesystems = [ "xdg-music" ];
+        filesystems = [
+          "~/.config/dconf:ro"
+          "xdg-music"
+        ];
         shared = [ "!network" ];
       };
 
@@ -147,13 +231,11 @@ in
         shared = [ "!network" ];
       };
 
-      "io.gitlab.theevilskeleton.Upscaler".Context = {
-        filesystems = [ "xdg-pictures" ];
-        shared = [ "!network" ];
-      };
-
       "io.bassi.Amberol".Context = {
-        filesystems = [ "xdg-music" ];
+        filesystems = [
+          "~/.config/dconf:ro"
+          "xdg-music"
+        ];
         shared = [ "!network" ];
       };
     };

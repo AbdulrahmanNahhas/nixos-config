@@ -12,8 +12,9 @@
     gh
     lazygit
 
-    # Sandboxing
+    # Sandboxing (used by Claude Code's bubblewrap-based agent sandbox)
     bubblewrap
+    socat
 
     # Coding agent
     claude-code
