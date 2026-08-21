@@ -28,7 +28,10 @@
     };
 
     terminal = false;
-    categories = [ "Development" "Documentation" ];
+    categories = [
+      "Development"
+      "Documentation"
+    ];
     settings = {
       StartupWMClass = "rust-book-app";
       "X-Flatpak" = "com.brave.Browser";

@@ -44,6 +44,14 @@
           file = "/home/${username}/.gitconfig";
           how = "symlink";
         }
+        # Claude Code's top-level config: MCP servers, project trust, and
+        # onboarding state. Rewritten atomically (write + rename), so a
+        # bindmount would be severed on the first save -- symlink is the
+        # only "how" that survives that pattern.
+        {
+          file = "/home/${username}/.claude.json";
+          how = "symlink";
+        }
 
         # ── GTK application settings ─────────────────────────
         {
@@ -119,6 +127,13 @@
           {
             # T3 Code credentials, conversations, settings, skills, and local state.
             directory = ".t3";
+            mode = "0700";
+          }
+          {
+            # Claude Code OAuth credentials, session transcripts, per-project
+            # history, plugins, skills, and settings. Pairs with the
+            # ~/.claude.json symlink above.
+            directory = ".claude";
             mode = "0700";
           }
 

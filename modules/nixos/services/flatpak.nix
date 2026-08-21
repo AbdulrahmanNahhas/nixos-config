@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ ... }:
 let
   flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
 
@@ -69,14 +66,6 @@ in
           appId = "org.signal.Signal";
           origin = "flathub";
         }
-
-        {
-          appId = "io.github.block.Goose";
-          bundle = "${pkgs.fetchurl {
-            url = "https://github.com/aaif-goose/goose/releases/download/v1.46.0/io.github.block.Goose_stable_x86_64.flatpak";
-            hash = "sha256-kNaedAfHx7nW3QyvCS+b0KIGYNYEcPpMAsVyf2uo0Hw=";
-          }}";
-        }
       ];
 
     update = {
@@ -94,13 +83,14 @@ in
       global = {
         Environment = {
           XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
-          # Picked up by GTK3 apps that read GTK_THEME directly instead of
-          # relying on the portal Settings interface. The actual theme files
-          # come from the org.gtk.Gtk3theme.adw-gtk3-dark flatpak extension
-          # above -- without it installed, this variable alone makes GTK3
-          # fall back to its plain, unstyled default engine instead of
-          # silently ignoring the missing theme.
-          GTK_THEME = "adw-gtk3-dark";
+          # GTK_THEME is deliberately NOT set globally. It is a GTK3-only
+          # knob: a GTK4/libadwaita app that sees GTK_THEME=adw-gtk3-dark
+          # goes looking for adw-gtk3-dark/gtk-4.0/gtk.css, finds nothing
+          # (adw-gtk3 ships gtk-3.0 only) and falls back to *no* stylesheet
+          # at all -- unstyled widgets and missing symbolic icons. GTK4 apps
+          # already follow the portal's org.gnome.desktop.interface
+          # color-scheme, so GTK_THEME is applied per-app to the GTK3
+          # holdouts below instead.
         };
 
         Context = {
@@ -150,8 +140,13 @@ in
         ];
       };
 
-      "org.libreoffice.LibreOffice".Context = {
-        filesystems = [
+      "org.libreoffice.LibreOffice" = {
+        # LibreOffice's VCL still draws with GTK3, so this is one of the few
+        # sandboxes where GTK_THEME is meaningful. The theme files come from
+        # the org.gtk.Gtk3theme.adw-gtk3-dark extension installed above.
+        Environment.GTK_THEME = "adw-gtk3-dark";
+
+        Context.filesystems = [
           "xdg-documents"
           "xdg-download"
           # Read-only access to noctalia's rendered theme state so its
@@ -172,9 +167,13 @@ in
         ];
       };
 
-      "org.signal.Signal".Context = {
-        Environment = "ELECTRON_OZONE_PLATFORM_HINT=wayland";
-        filesystems = [ "xdg-download" ];
+      "org.signal.Signal" = {
+        # Environment is a sibling of Context, not a key inside it -- nested
+        # here it was silently written into the [Context] group and never
+        # reached the app.
+        Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+
+        Context.filesystems = [ "xdg-download" ];
       };
 
       # Flatpak has no block-device-only permission. Impression therefore needs
@@ -182,6 +181,10 @@ in
       # drives; keep this explicit because it is a significant exception.
       "io.gitlab.adhami3310.Impression".Context = {
         devices = [ "all" ];
+        filesystems = [
+          "~/.config/dconf:ro"
+          "xdg-pictures"
+        ];
       };
 
       # --- GTK4 Apps Needing dconf Access ---
@@ -190,11 +193,6 @@ in
       "org.gnome.Fractal".Context = {
         filesystems = [ "~/.config/dconf:ro" ];
       };
-
-      "io.gitlab.adhami3310.Impression".Context.filesystems = [
-        "~/.config/dconf:ro"
-        "xdg-pictures"
-      ];
 
       "io.gitlab.news_flash.NewsFlash".Context = {
         filesystems = [ "~/.config/dconf:ro" ];

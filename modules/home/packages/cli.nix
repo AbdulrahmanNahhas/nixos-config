@@ -6,7 +6,6 @@
     # ─── Terminal & Editor ─────────────────────── #
 
     micro # Nano alternative (run: micro)
-    helix
 
     # ─── Modern CLI ────────────────────────────── #
 

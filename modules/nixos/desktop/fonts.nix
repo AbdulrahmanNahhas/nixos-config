@@ -1,8 +1,20 @@
 { pkgs, ... }:
 {
+  # Aggregates every font below into /run/current-system/sw/share/X11/fonts.
+  # desktop/flatpak-theming.nix re-projects the same set onto /usr/share/fonts
+  # so flatpak sandboxes pick it up too -- without that, apps only see the
+  # handful of fonts their own runtime bundles and any text outside that
+  # coverage (Arabic in particular) renders as tofu boxes.
   fonts.fontDir.enable = true;
 
   fonts.packages = with pkgs; [
+    # UI Sans-Serif
+    # Adwaita Sans/Mono are what desktop/dconf.nix actually names in
+    # org.gnome.desktop.interface; without them installed, fontconfig
+    # silently resolves "Adwaita Sans" to whatever sorts first (observed
+    # live: Noto Sans CJK KR).
+    adwaita-fonts
+
     # Monospace / Developer Fonts
     nerd-fonts.geist-mono
     nerd-fonts.jetbrains-mono
@@ -27,6 +39,7 @@
     enable = true;
     defaultFonts = {
       sansSerif = [
+        "Adwaita Sans"
         "Inter"
         "Vazirmatn"
         "IBM Plex Sans Arabic"
