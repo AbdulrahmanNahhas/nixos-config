@@ -6,36 +6,37 @@
 }:
 let
   tuigreet = pkgs.writeShellScript "tuigreet-start" ''
-    # Plymouth can leave tty1 with terminal attributes that make a TUI's
-    # default colors invisible.  Start every greeter session from a known,
-    # readable Linux-console state.
+    if ${pkgs.plymouth}/bin/plymouth --ping 2>/dev/null; then
+      ${pkgs.plymouth}/bin/plymouth quit --wait
+    fi
+
     export TERM=linux
-    ${lib.getExe' pkgs.util-linux "setterm"} --reset
+    ${lib.getExe' pkgs.util-linux "setterm"} --reset 2>/dev/null || true
     ${lib.getExe' pkgs.util-linux "setterm"} \
       --foreground white \
       --background black \
       --cursor on \
-      --clear=all
+      --clear=all 2>/dev/null || true
 
     exec ${lib.getExe pkgs.tuigreet} \
-      --greeting ${lib.escapeShellArg "SHADOW // SECURE SESSION"} \
+      --greeting ${lib.escapeShellArg "SYSTEM // SECURE LOGIN"} \
       --time \
       --time-format ${lib.escapeShellArg "%A, %d %B  ·  %H:%M"} \
       --remember \
-      --remember-session \
+      --remember-user-session \
       --user-menu \
       --asterisks \
-      --width 68 \
-      --window-padding 1 \
+      --asterisks-char "•" \
+      --width 56 \
+      --window-padding 2 \
       --container-padding 2 \
       --prompt-padding 1 \
       --greet-align center \
-      --theme ${lib.escapeShellArg "border=cyan;text=white;time=cyan;container=black;prompt=cyan;input=white;action=cyan;button=cyan"} \
+      --theme ${lib.escapeShellArg "border=white;text=white;time=gray;title=white;greet=white;prompt=gray;input=bright-white;action=gray;button=white;container=black"} \
       --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
-      --cmd ${lib.escapeShellArg "niri-session"} \
+      --cmd ${lib.escapeShellArg "${pkgs.niri}/bin/niri-session"} \
       --power-shutdown ${lib.escapeShellArg "systemctl poweroff"} \
-      --power-reboot ${lib.escapeShellArg "systemctl reboot"} \
-      2> >(${lib.getExe' pkgs.systemd "systemd-cat"} --identifier=tuigreet --priority=err)
+      --power-reboot ${lib.escapeShellArg "systemctl reboot"}
   '';
 in
 {
@@ -43,8 +44,10 @@ in
     enable = true;
     restart = true;
 
-    # Keep authentication independent of the graphics stack. Both greetd and
-    # tuigreet are Rust programs; the authenticated session starts Niri/Wayland.
+    # Upstream-supported way to run a TUI greeter: wires up TTYPath/TTYReset/
+    # TTYVHangup/TTYVTDisallocate and StandardInput/Output on tty1 for us.
+    useTextGreeter = true;
+
     settings.default_session = {
       user = "greeter";
       command = "${tuigreet}";

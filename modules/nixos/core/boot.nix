@@ -14,7 +14,12 @@
     # Graphical LUKS prompt and boot progress; Esc still reveals diagnostics.
     plymouth = {
       enable = true;
-      theme = "bgrt";
+      theme = "motion";
+      themePackages = [
+        (pkgs.adi1090x-plymouth-themes.override {
+          selected_themes = [ "motion" ];
+        })
+      ];
     };
 
     # Modern Performance and Graphics Flags
