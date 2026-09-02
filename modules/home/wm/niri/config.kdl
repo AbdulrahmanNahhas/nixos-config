@@ -111,14 +111,15 @@ animations {
         spring damping-ratio=0.80 stiffness=450 epsilon=0.0001
     }
 
+    // ── GLITCH POP OPEN ───────────────────────────────────────────────────
+    // Low damping causes severe overshoot; high stiffness makes it jitter instantly.
     window-open {
-        duration-ms 175
-        curve "ease-out-expo"
+        spring damping-ratio=0.32 stiffness=1300 epsilon=0.0001
     }
 
+    // ── GLITCH SNAP CLOSE ──────────────────────────────────────────────────
     window-close {
-        duration-ms 140
-        curve "ease-out-quad"
+        spring damping-ratio=0.38 stiffness=1500 epsilon=0.0001
     }
 
     overview-open-close {
@@ -146,6 +147,9 @@ window-rule {
     geometry-corner-radius 16
     clip-to-geometry true
     draw-border-with-background false
+
+    opacity 1.00 // 0.95
+    background-effect { blur false; } // true
 }
 
 window-rule {
@@ -159,23 +163,39 @@ window-rule {
     default-column-width { proportion 0.33333; }
 }
 
+window-rule {
+    match app-id="org.gnome.Nautilus"
+    match app-id="io.bassi.Amberol"
+
+    opacity 0.90
+    background-effect { blur true; }
+}
+
 // Keep transient utility windows tiled by default, but make Picture-in-Picture
 // genuinely useful without changing the global no-auto-floating policy.
 window-rule {
     match title=r#"^(Picture-in-Picture|Picture in picture)$"#
-    open-floating true
+    open-floating false
     default-floating-position x=32 y=32 relative-to="bottom-right"
+    opacity 1.00
 }
 
 window-rule {
     match app-id="^com.mitchellh.ghostty$"
     background-effect { blur true; }
+    opacity 1.00
 }
 
 window-rule {
     match app-id="brave-rust-book.cs.brown.edu__-Default"
     opacity 0.90
     background-effect { blur true; }
+}
+
+window-rule {
+    match app-id="brave-origin"
+    opacity 1.00
+    background-effect { blur false; }
 }
 
 window-rule {
@@ -220,10 +240,10 @@ debug {
 // Internal display
 // ─────────────────────────────────────────────────────────────────────────────
 
-output "Samsung Display Corp. ATNA40CU05-0  Unknown" {
-    mode "2880x1800@60.001"
+output "eDP-1" {
+    mode "2880x1800@120.000"
     scale 2
-    position x=0 y=0
+    variable-refresh-rate
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

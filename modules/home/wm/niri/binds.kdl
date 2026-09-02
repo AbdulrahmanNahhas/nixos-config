@@ -22,6 +22,10 @@ binds {
         spawn "noctalia" "msg" "panel-toggle" "clipboard"
     }
 
+    Mod+W repeat=false hotkey-overlay-title="Wallpapers" {
+        spawn "noctalia" "msg" "panel-toggle" "wallpaper"
+    }
+
     Mod+Comma repeat=false hotkey-overlay-title="Settings" {
         spawn "noctalia" "msg" "panel-toggle" "settings"
     }
@@ -141,7 +145,7 @@ binds {
         switch-focus-between-floating-and-tiling
     }
 
-    Mod+W repeat=false hotkey-overlay-title="Toggle Column Tabs" {
+    Mod+Shift+W repeat=false hotkey-overlay-title="Toggle Column Tabs" {
         toggle-column-tabbed-display
     }
 

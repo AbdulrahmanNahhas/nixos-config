@@ -1,12 +1,7 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   home.packages = [ pkgs.brightnessctl ];
 
-  # Symlink the main config
-  xdg.configFile."niri/config.kdl".source =
-    config.lib.file.mkOutOfStoreSymlink "/saved/nixos-config/modules/home/wm/niri/config.kdl";
-
-  # Symlink the keybindings file (Crucial for your 'include' statement)
-  xdg.configFile."niri/binds.kdl".source =
-    config.lib.file.mkOutOfStoreSymlink "/saved/nixos-config/modules/home/wm/niri/binds.kdl";
+  xdg.configFile."niri/config.kdl".source = ./config.kdl;
+  xdg.configFile."niri/binds.kdl".source = ./binds.kdl;
 }
