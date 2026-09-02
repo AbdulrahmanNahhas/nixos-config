@@ -202,7 +202,7 @@ blurred_desktop = true
 enabled = true
 fingerprint = true
 monitors = []
-tint_intensity = 0.29999999999999999
+tint_intensity = 0.85
 wallpaper = ""
 
 [lockscreen_widgets]
@@ -418,7 +418,7 @@ telemetry_enabled = false
     directory = "/home/aqua/Pictures/Screenshots"
 
     [shell.shadow]
-    alpha = 0.56000000000000005
+    alpha = 1.0
     direction = "center"
 
 
@@ -445,13 +445,13 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [wallpaper]
 directory = "/home/aqua/Pictures/Wallpapers"
-edge_smoothness = 0.38
+edge_smoothness = 0.05
 enabled = true
 fill_color = "primary"
 fill_mode = "crop"
-transition = [ "wipe" ]
-transition_duration = 1100
-transition_on_startup = true
+transition = [ "honeycomb", "disc" ]
+transition_duration = 2000
+transition_on_startup = false
 
     [wallpaper.automation]
     enabled = true
