@@ -2,11 +2,6 @@
 
 {
   home.packages = with pkgs; [
-
-    # ─── Terminal & Editor ─────────────────────── #
-
-    micro # Nano alternative (run: micro)
-
     # ─── Modern CLI ────────────────────────────── #
 
     eza # Better ls (aliases: ls, ll, la, tree)
@@ -29,10 +24,6 @@
     ouch # Compress/extract almost any archive
     zip # Used by noctalia's libreoffice theme template to build its .oxt
     unzip
-
-    # ─── Scripting ─────────────────────────────── #
-
-    python3 # Used by noctalia's libreoffice theme template (hex->dec colors)
 
     # ─── Networking ────────────────────────────── #
 
