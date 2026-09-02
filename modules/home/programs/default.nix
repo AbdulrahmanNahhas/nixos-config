@@ -3,7 +3,7 @@
     ./ghostty
     ./helix
     ./keepassxc.nix
-    ./librewolf
+    ./brave
     ./zed
   ];
 }
