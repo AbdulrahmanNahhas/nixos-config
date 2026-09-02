@@ -119,20 +119,7 @@
             directory = ".config/sops";
             mode = "0700";
           }
-          # {
-          #   # Codex credentials, conversations, settings, skills, and local state.
-          #   directory = ".codex";
-          #   mode = "0700";
-          # }
           {
-            # T3 Code credentials, conversations, settings, skills, and local state.
-            directory = ".t3";
-            mode = "0700";
-          }
-          {
-            # Claude Code OAuth credentials, session transcripts, per-project
-            # history, plugins, skills, and settings. Pairs with the
-            # ~/.claude.json symlink above.
             directory = ".claude";
             mode = "0700";
           }
@@ -146,10 +133,9 @@
 
           # ── Web Browser ──────────────────────────────────────
           {
-            # LibreWolf 152+ follows the XDG profile layout.
-            directory = ".config/librewolf";
+            directory = ".config/BraveSoftware/Brave-Origin";
             mode = "0700";
-          } # LibreWolf history, bookmarks, extensions, sessions, and cookies
+          } # Brave history, bookmarks, extensions, sessions, and cookies
 
           # ── Flatpak Application Data ─────────────────────────
         ]
@@ -162,7 +148,6 @@
             [
               "app.drey.EarTag"
               "chat.simplex.simplex"
-
               "com.brave.Browser"
               "com.github.ADBeveridge.Raider"
               "dev.geopjr.Tuba"
@@ -176,21 +161,21 @@
               "org.gnome.Loupe"
               "org.gnome.Papers"
               "org.libreoffice.LibreOffice"
-              "org.onlyoffice.desktopeditors"
               "org.signal.Signal"
               "org.telegram.desktop"
+              "moe.tsuna.tsukimi"
+              "dev.geopjr.Archives"
+              "io.github.alainm23.planify"
             ]
         ++ [
 
           # ── Editor / IDE State ───────────────────────────────
           ".local/share/zed"
           ".config/zed"
-          ".config/nvim"
-          ".local/state/nvim"
 
           # ── Shell History & State ────────────────────────────
-          ".config/fish"
-          ".local/share/fish"
+          # ".config/fish"
+          # ".local/share/fish"
           ".local/state/nix"
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
@@ -233,15 +218,14 @@
           }
 
           # ── Niri & Noctalia State ────────
+          # Runtime state & setup wizard flags
           {
             directory = ".local/state/noctalia";
             user = username;
             group = "users";
             mode = "0755";
           }
-          ".config/niri"
-          ".config/noctalia"
-          ".local/share/noctalia"
+          ".local/share/noctalia" # Plugin files and downloads
 
           # ── Vulkan Shader Caches ──────────────────────────────────
           # Steam's per-game shadercache is below .local/share/Steam; retain the
@@ -297,6 +281,38 @@
       group = "users";
       mode = "0755";
     };
+
+    # niri and ghostty both reference noctalia-generated theme files that
+    # only exist once noctalia has started -- but niri fails to start
+    # without one, and ghostty's missing one fails validation and aborts
+    # home-manager activation. Bootstrap empty placeholders ("f" leaves real
+    # content alone once noctalia writes it).
+    "/home/${username}/.config/niri".d = {
+      user = username;
+      group = "users";
+      mode = "0755";
+    };
+    "/home/${username}/.config/niri/noctalia.kdl".f = {
+      user = username;
+      group = "users";
+      mode = "0644";
+    };
+    "/home/${username}/.config/ghostty".d = {
+      user = username;
+      group = "users";
+      mode = "0755";
+    };
+    "/home/${username}/.config/ghostty/themes".d = {
+      user = username;
+      group = "users";
+      mode = "0755";
+    };
+    "/home/${username}/.config/ghostty/themes/noctalia".f = {
+      user = username;
+      group = "users";
+      mode = "0644";
+    };
+
     # Flatpak's own per-app data lives here (.var/app/<id>, mapped below).
     # Without pre-creating .var and .var/app themselves, a *brand-new*
     # app's first-ever "directory" entry has no existing parent to inherit
