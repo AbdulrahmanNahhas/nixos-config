@@ -20,17 +20,9 @@ let
     "dev.geopjr.Archives"
     "org.libreoffice.LibreOffice"
     "io.github.alainm23.planify"
+    "org.gnome.World.Secrets"
   ];
 
-  # GTK3 theme-switching extensions (published by the GNOME project itself,
-  # not part of the verified-apps subset). GTK3 apps that ask for
-  # GTK_THEME=adw-gtk3-dark find nothing at all inside the sandbox unless one
-  # of these is installed -- flatpak does NOT expose the host's real
-  # /usr/share/themes into sandboxes the way it does for fonts and icons.
-  # Confirmed live: without this, `flatpak run --command=sh` shows
-  # /usr/share/themes containing only the runtime's own bundled "Default"
-  # and "Emacs" themes, and GTK3 apps fell back to that plain, unstyled
-  # engine (looked broken, not merely "not dark").
   gtkThemeExtensions = [
     "org.gtk.Gtk3theme.adw-gtk3"
     "org.gtk.Gtk3theme.adw-gtk3-dark"
@@ -199,6 +191,10 @@ in
       };
 
       "io.github.alainm23.planify".Context = {
+        filesystems = [ "~/.config/dconf:ro" ];
+      };
+
+      "org.gnome.World.Secrets".Context = {
         filesystems = [ "~/.config/dconf:ro" ];
       };
 
