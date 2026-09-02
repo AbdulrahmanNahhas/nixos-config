@@ -17,6 +17,7 @@
     socat
 
     # Coding agent
-    claude-code
+    goose-cli
+    goose-desktop
   ];
 }
