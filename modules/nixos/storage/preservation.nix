@@ -172,6 +172,8 @@
           # ── Editor / IDE State ───────────────────────────────
           ".local/share/zed"
           ".config/zed"
+          ".local/share/delta"
+          ".config/delta"
 
           # ── Shell History & State ────────────────────────────
           # ".config/fish"
