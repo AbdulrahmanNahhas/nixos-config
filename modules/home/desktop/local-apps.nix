@@ -1,5 +1,29 @@
 { ... }:
 {
+  xdg.desktopEntries.delta = {
+    name = "Delta";
+    genericName = "Text Editor";
+    comment = "AI-native code editor (Zed Delta beta)";
+
+    exec = "/saved/apps/delta-linux-x86_64/Delta/bin/delta cli open %U";
+    icon = ./icons/delta.png;
+
+    terminal = false;
+
+    categories = [
+      "Development"
+      "IDE"
+      "TextEditor"
+    ];
+
+    mimeType = [ "x-scheme-handler/delta" ];
+
+    settings = {
+      StartupWMClass = "dev.zed.Delta";
+      Keywords = "delta;editor;ide;";
+    };
+  };
+
   xdg.desktopEntries.nahhascinema = {
     name = "Nahhas Cinema";
     genericName = "Family Media Center";

@@ -204,6 +204,12 @@ window-rule {
     background-effect { blur true; }
 }
 
+window-rule {
+    match app-id="dev.zed.Delta"
+    opacity 0.92
+    background-effect { blur true; }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Recent-window switcher
 // ─────────────────────────────────────────────────────────────────────────────
