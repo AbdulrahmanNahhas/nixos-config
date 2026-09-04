@@ -5,5 +5,6 @@
   home.packages = with pkgs; [
     obsidian # Notes
     mullvad-browser
+    wl-screenrec
   ];
 }

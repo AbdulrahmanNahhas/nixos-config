@@ -25,8 +25,6 @@
     clean = {
       enable = true;
       dates = "Fri 03:00";
-      # Keep a small rollback window while preserving every explicit GC root,
-      # including direnv and devenv project environments.
       extraArgs = "--keep 3 --no-gcroots";
     };
   };

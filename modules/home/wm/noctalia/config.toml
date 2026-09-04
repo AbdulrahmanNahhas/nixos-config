@@ -300,7 +300,7 @@ show_update_check_notification = true
 update_command = "nh os switch /saved/nixos-config --update"
 
 [plugin_settings."noctalia/wallhaven"]
-api_key = "LK94jH4RtC8TuvysxJLBCHDOvbHoQews"
+api_key = ""
 browser_placement = "floating"
 browser_position = "center"
 download_dir = "~/Downloads"

@@ -188,7 +188,7 @@ window-rule {
 
 window-rule {
     match app-id="brave-rust-book.cs.brown.edu__-Default"
-    opacity 0.90
+    opacity 0.93
     background-effect { blur true; }
 }
 
@@ -200,13 +200,13 @@ window-rule {
 
 window-rule {
     match app-id="dev.zed.Zed"
-    opacity 0.92
+    opacity 0.93
     background-effect { blur true; }
 }
 
 window-rule {
     match app-id="dev.zed.Delta"
-    opacity 0.92
+    opacity 0.96
     background-effect { blur true; }
 }
 

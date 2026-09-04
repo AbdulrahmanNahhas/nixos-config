@@ -18,6 +18,5 @@
 
     # Coding agent
     goose-cli
-    goose-desktop
   ];
 }

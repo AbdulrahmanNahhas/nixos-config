@@ -49,7 +49,16 @@
       };
     in
     {
-      formatter.${system} = pkgs.nixfmt-rfc-style;
+      formatter.${system} = pkgs.writeShellApplication {
+        name = "nixfmt-all";
+        runtimeInputs = [
+          pkgs.fd
+          pkgs.nixfmt
+        ];
+        text = ''
+          fd --extension nix --exec nixfmt {}
+        '';
+      };
 
       nixosConfigurations.${host.hostname} = nixpkgs.lib.nixosSystem {
         inherit system;

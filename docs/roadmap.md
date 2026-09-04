@@ -30,7 +30,7 @@ bisected.
 - Move the host-specific preferred-GPU PCI address into a dedicated
   `shadow/hardware.nix` when more host facts justify that file.
 - Add custom module options only when real reuse removes duplication.
-- Add a flake formatter using `nixfmt-rfc-style` or `treefmt-nix`.
+- Add a flake formatter using `nixfmt` or `treefmt-nix`.
 - Add `deadnix`, `statix`, and CI evaluation of `nixosConfigurations.shadow`.
 - Keep the simple flake shape until a second host requires generalization.
 
