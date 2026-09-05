@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `shadow/default.nix` contains machine facts, Disko layout, and directly selects the `modules/nixos/` groups it needs. `shadow/home.nix` owns Aqua's identity and directly selects the `modules/home/` groups it needs. There is one host and one user, so both live flat under `shadow/` rather than `hosts/<name>/` and `home/<user>/` subdirectories. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `assets/` only for shared assets, `docs/` for design and operational notes, and `secrets/` for documentation—not secret material.
+This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `shadow/default.nix` contains machine facts, Disko layout, and directly selects the `modules/nixos/` groups it needs. `shadow/home.nix` owns Aqua's identity and directly selects the `modules/home/` groups it needs. There is one host and one user, so both live flat under `shadow/` rather than `hosts/<name>/` and `home/<user>/` subdirectories. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `docs/` for design and operational notes and `encrypted-secrets/` for committed SOPS ciphertext only.
 
 Follow the dependency direction documented in `docs/architecture.md`: `shadow/` selects modules directly. Do not import Home Manager user modules from NixOS modules. Only split `shadow/` into per-host/per-user subdirectories (and reintroduce a `profiles/` composition layer) once a second host or user needs a differing module selection.
 

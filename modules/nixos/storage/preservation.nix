@@ -44,10 +44,9 @@
           file = "/home/${username}/.gitconfig";
           how = "symlink";
         }
-        # Claude Code's top-level config: MCP servers, project trust, and
-        # onboarding state. Rewritten atomically (write + rename), so a
-        # bindmount would be severed on the first save -- symlink is the
-        # only "how" that survives that pattern.
+        # Claude Code config: MCP servers, project trust, onboarding state.
+        # Rewritten atomically, which severs a bindmount on first save, so
+        # symlink is the only "how" that survives.
         {
           file = "/home/${username}/.claude.json";
           how = "symlink";
@@ -74,6 +73,14 @@
           mode = "0700";
         }
 
+        {
+          # tuigreet's remembered user and session; without it the greeter
+          # forgets both on every boot of the tmpfs root.
+          directory = "/var/cache/tuigreet";
+          user = "greeter";
+          group = "greeter";
+          mode = "0755";
+        }
         "/var/lib/systemd/timers"
         {
           directory = "/var/log/journal";
@@ -137,36 +144,21 @@
             mode = "0700";
           } # Brave history, bookmarks, extensions, sessions, and cookies
 
-          # ── Flatpak Application Data ─────────────────────────
         ]
+        # ── Flatpak Application Data ───────────────────────────
+        # Derived from the Flatpak module so the two lists cannot drift. The
+        # GTK theme extensions installed there have no per-app data.
         ++
           map
             (appId: {
               directory = ".var/app/${appId}";
               mode = "0700";
             })
-            [
-              "app.drey.EarTag"
-              "chat.simplex.simplex"
-              "com.brave.Browser"
-              "com.github.ADBeveridge.Raider"
-              "dev.geopjr.Tuba"
-              "io.github.diegopvlk.Cine"
-              "io.github.sniper1720.khushu"
-              "io.bassi.Amberol"
-              "io.gitlab.adhami3310.Impression"
-              "io.gitlab.news_flash.NewsFlash"
-              "io.gitlab.theevilskeleton.Upscaler"
-              "org.gnome.Fractal"
-              "org.gnome.Loupe"
-              "org.gnome.Papers"
-              "org.libreoffice.LibreOffice"
-              "org.signal.Signal"
-              "org.telegram.desktop"
-              "moe.tsuna.tsukimi"
-              "dev.geopjr.Archives"
-              "io.github.alainm23.planify"
-            ]
+            (
+              lib.filter (appId: !lib.hasPrefix "org.gtk.Gtk3theme." appId) (
+                map (pkg: pkg.appId) config.services.flatpak.packages
+              )
+            )
         ++ [
 
           # ── Editor / IDE State ───────────────────────────────
@@ -176,8 +168,6 @@
           ".config/delta"
 
           # ── Shell History & State ────────────────────────────
-          # ".config/fish"
-          # ".local/share/fish"
           ".local/state/nix"
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
@@ -219,15 +209,17 @@
             mode = "0700";
           }
 
-          # ── Niri & Noctalia State ────────
-          # Runtime state & setup wizard flags
+          # ── Desktop Session State ────────────────────────────
           {
+            # Noctalia runtime state and setup wizard flags
             directory = ".local/state/noctalia";
             user = username;
             group = "users";
             mode = "0755";
           }
           ".local/share/noctalia" # Plugin files and downloads
+          ".config/cosmic" # Panel, theme, and per-application settings
+          ".local/state/cosmic" # Window state and first-run flags
 
           # ── Vulkan Shader Caches ──────────────────────────────────
           # Steam's per-game shadercache is below .local/share/Steam; retain the
@@ -284,11 +276,10 @@
       mode = "0755";
     };
 
-    # niri and ghostty both reference noctalia-generated theme files that
-    # only exist once noctalia has started -- but niri fails to start
-    # without one, and ghostty's missing one fails validation and aborts
-    # home-manager activation. Bootstrap empty placeholders ("f" leaves real
-    # content alone once noctalia writes it).
+    # niri and ghostty both read noctalia-generated theme files that only
+    # exist after noctalia starts, and both fail hard without them (ghostty
+    # aborts home-manager activation). "f" bootstraps empty placeholders and
+    # leaves the real content alone once noctalia writes it.
     "/home/${username}/.config/niri".d = {
       user = username;
       group = "users";
@@ -315,16 +306,10 @@
       mode = "0644";
     };
 
-    # Flatpak's own per-app data lives here (.var/app/<id>, mapped below).
-    # Without pre-creating .var and .var/app themselves, a *brand-new*
-    # app's first-ever "directory" entry has no existing parent to inherit
-    # ownership from, and flatpak's own sandboxed mkdir ends up creating it
-    # instead -- confirmed live: org.libreoffice.LibreOffice's first launch
-    # after being added to the preserveAt list below created
-    # ~/.var/app/org.libreoffice.LibreOffice owned by nobody:nogroup
-    # (a user-namespace mapping artifact of flatpak's rootless bwrap),
-    # which then made the app fail to start at all ("mkdirat(data):
-    # Permission denied").
+    # Parents of the per-app .var/app/<id> mounts above. A brand-new app whose
+    # parents do not exist yet gets them created by flatpak.s rootless bwrap
+    # instead, owned by nobody:nogroup -- which then breaks the app
+    # ("mkdirat(data): Permission denied", hit live with LibreOffice).
     "/home/${username}/.var".d = {
       user = username;
       group = "users";
@@ -335,8 +320,8 @@
       group = "users";
       mode = "0755";
     };
-    # Retroactively repairs the already-broken directory from the incident
-    # above; the .d rules above only prevent this for apps added from now on.
+    # Repairs the directory already broken that way; the rules above only
+    # prevent it for apps added since.
     "/home/${username}/.var/app/org.libreoffice.LibreOffice".Z = {
       user = username;
       group = "users";

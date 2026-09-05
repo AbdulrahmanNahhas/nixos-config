@@ -9,12 +9,10 @@
 
   # Keep enough encrypted, persistent history to diagnose failures that require
   # booting an older generation, while bounding retained activity tightly.
-  services.journald = {
-    storage = "persistent";
-    extraConfig = ''
-      SystemMaxUse=128M
-      SystemMaxFileSize=16M
-      MaxRetentionSec=7day
-    '';
+  services.journald.settings.Journal = {
+    Storage = "persistent";
+    SystemMaxUse = "128M";
+    SystemMaxFileSize = "16M";
+    MaxRetentionSec = "7day";
   };
 }

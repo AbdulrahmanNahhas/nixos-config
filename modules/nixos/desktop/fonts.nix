@@ -1,35 +1,31 @@
 { pkgs, ... }:
 {
-  # Aggregates every font below into /run/current-system/sw/share/X11/fonts.
-  # desktop/flatpak-theming.nix re-projects the same set onto /usr/share/fonts
-  # so flatpak sandboxes pick it up too -- without that, apps only see the
-  # handful of fonts their own runtime bundles and any text outside that
-  # coverage (Arabic in particular) renders as tofu boxes.
+  # Collects every font below into the system font dir;
+  # desktop/flatpak-theming.nix mirrors the same set onto /usr/share/fonts so
+  # flatpak sandboxes see more than their runtime's own handful.
   fonts.fontDir.enable = true;
 
   fonts.packages = with pkgs; [
-    # UI Sans-Serif
-    # Adwaita Sans/Mono are what desktop/dconf.nix actually names in
-    # org.gnome.desktop.interface; without them installed, fontconfig
-    # silently resolves "Adwaita Sans" to whatever sorts first (observed
-    # live: Noto Sans CJK KR).
+    # UI sans-serif. desktop/dconf.nix names Adwaita Sans/Mono explicitly;
+    # without the package fontconfig silently resolves it to whatever sorts
+    # first (observed live: Noto Sans CJK KR).
     adwaita-fonts
 
-    # Monospace / Developer Fonts
+    # Monospace / developer
     nerd-fonts.geist-mono
     nerd-fonts.jetbrains-mono
 
-    # English Sans-Serif
+    # English sans-serif
     inter
     geist-font
 
-    # Arabic & Multilingual Sans-Serif
+    # Arabic & multilingual sans-serif
     vazirmatn
     ibm-plex # Includes IBM Plex Sans Arabic & IBM Plex Serif
 
-    # High-Quality Arabic & English Serif
+    # Arabic & English serif
     amiri
-    noto-fonts # Provides Noto Sans/Naskh Arabic as solid Unicode fallback
+    noto-fonts # Noto Sans/Naskh Arabic as Unicode fallback
 
     # Emoji
     noto-fonts-color-emoji

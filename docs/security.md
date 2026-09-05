@@ -6,12 +6,13 @@ path or placeholder directory does not mean a feature is implemented.
 ## Active controls
 
 - LUKS2 disk encryption with a tmpfs root and explicit preservation.
-- NixOS firewall enabled; Kavita `8083/tcp` is open only on `wlan0`.
+- NixOS firewall enabled; `8083`, `23101`, and `5432/tcp` are open only on
+  `wlan0`.
 - DNSCrypt Proxy with DNSSEC-required, no-filter resolvers; `require_nolog` is
   currently false.
 - NetworkManager Wi-Fi MAC randomization and IPv6 temporary addresses.
 - Flatpak for selected desktop applications.
-- OpenSSH and printing disabled.
+- OpenSSH, printing, and mDNS/avahi disabled.
 - SOPS/age secret management with separate Aqua editing and root-only Shadow
   deployment identities. Declared plaintext exists only in access-controlled
   tmpfs runtime files.
@@ -21,7 +22,7 @@ path or placeholder directory does not mean a feature is implemented.
   diagnosis; disabled systemd core dumps limit process-memory disclosure.
 
 Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
-`wlan0`. SimpleX `36679` and GSConnect `1714-1764` rules are commented out.
+`wlan0`. No other port is opened; SimpleX and GSConnect stay closed.
 
 ## Known risks
 
@@ -37,6 +38,9 @@ Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
   reviewed together.
 - The previously committed Wallhaven API key remains compromised until revoked;
   removing it from the current tree does not remove Git history.
+- The COSMIC module hard-enables `geoclue2` for automatic timezone and night
+  light, so it is running in the Niri session too. It is request-driven and
+  submits no location data, but it cannot be switched off without `mkForce`.
 
 ## Planned, not active
 

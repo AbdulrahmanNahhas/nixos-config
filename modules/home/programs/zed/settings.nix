@@ -39,8 +39,8 @@ in
     # ── Theme / appearance ───────────────────────────────
     theme = {
       mode = "dark";
-      light = "Carbonfox - blurred";
-      dark = "Rust & Brown";
+      light = "Rust & Brown";
+      dark = "Vercel Dark";
     };
     theme_overrides = {
       "Rich Vesper" = {

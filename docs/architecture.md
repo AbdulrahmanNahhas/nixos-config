@@ -44,20 +44,18 @@ shadow/disk.nix          Disko layout
 shadow/home.nix           Aqua's Home Manager composition
 modules/nixos/core/    boot, locale, Nix, packages, and users
 modules/nixos/hardware hardware capabilities and peripherals
-modules/nixos/desktop/ Niri, greetd/tuigreet, GTK applications, and fonts
+modules/nixos/desktop/ Niri, greetd/tuigreet, applications, and fonts
 modules/nixos/networking/ DNSCrypt, firewall, and NetworkManager
 modules/nixos/security/ active baseline plus documentation
 modules/nixos/storage/ preservation plus future-work documentation
 modules/nixos/services/ focused system services and Flatpak
 modules/nixos/gaming/  standard Steam, Proton, and GameMode configuration
 modules/home/desktop/  desktop integration (GTK, XDG, bookmarks, web apps)
-modules/home/programs/ configured programs (ghostty, librewolf, keepassxc, zed)
+modules/home/programs/ configured programs (brave, ghostty, helix, keepassxc, zed)
 modules/home/packages/ plain package lists (CLI tools, dev tools, standalone apps)
 modules/home/shell/    fish and fastfetch
 modules/home/wm/       Niri and Noctalia
-assets/                future shared assets; owned assets stay with modules
 encrypted-secrets/     committed SOPS ciphertext only
-secrets/               secret-management documentation only
 docs/                  architecture, installation, persistence, security, roadmap
 ```
 

@@ -6,23 +6,22 @@ Declarative NixOS and Home Manager configuration for `shadow`, a Razer Blade
 
 ## Hardware
 
-| Component | Detail |
-| --- | --- |
-| CPU | AMD Ryzen AI 9 365 |
-| GPU | AMD Radeon 880M and NVIDIA RTX 5060 Max-Q |
-| RAM | 16 GB LPDDR5X |
-| Disk | NVMe at `/dev/nvme0n1` |
+| Component | Detail                                    |
+| --------- | ----------------------------------------- |
+| CPU       | AMD Ryzen AI 9 365                        |
+| GPU       | AMD Radeon 880M and NVIDIA RTX 5060 Max-Q |
+| RAM       | 16 GB LPDDR5X                             |
+| Disk      | NVMe at `/dev/nvme0n1`                    |
 
 ## Current features
 
-- Niri with Noctalia as the only desktop session, launched by greetd/tuigreet.
-- Selected GNOME/GTK applications with declarative preferences and Files
-  bookmarks, without GNOME Shell or its extension stack.
+- Niri with Noctalia as the desktop session, launched through greetd/tuigreet.
+- COSMIC applications (Files, Edit, Viewer, Reader, Player, and System Monitor)
+  integrated into Niri, with Papers kept for DjVu, CBZ, and PostScript.
 - PipeWire, NetworkManager, DNSCrypt Proxy, Bluetooth, OpenRazer, fwupd,
   declarative Flatpak, standard Steam, and Kavita.
-- OpenSSH, printing, scanning, ModemManager, and usbmuxd are disabled.
-- The firewall is enabled. Only Kavita's `8083/tcp` opening on `wlan0` is
-  active; SimpleX and GSConnect rules remain commented out.
+- OpenSSH, printing, scanning, mDNS, ModemManager, and usbmuxd are disabled.
+- The firewall is enabled and only opens ports on `wlan0`.
 - Preservation retains explicitly selected system and Aqua state under
   `/saved`; everything else on root is lost at reboot.
 

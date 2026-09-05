@@ -17,7 +17,6 @@
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     sessionVariables = {
-      # PATH = "/etc/profiles/per-user/${config.home.username}/bin:$PATH";
       EDITOR = "hx";
       VISUAL = "zeditor --wait";
     };

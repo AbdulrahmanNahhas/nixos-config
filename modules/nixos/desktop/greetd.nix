@@ -1,7 +1,7 @@
 {
-  config,
   lib,
   pkgs,
+  username,
   ...
 }:
 let
@@ -18,13 +18,16 @@ let
       --cursor on \
       --clear=all 2>/dev/null || true
 
+    # The UID window covers real accounts only; nixbld build users start at
+    # 30001 and would otherwise fill the user menu.
     exec ${lib.getExe pkgs.tuigreet} \
       --greeting ${lib.escapeShellArg "SYSTEM // SECURE LOGIN"} \
       --time \
       --time-format ${lib.escapeShellArg "%A, %d %B  ·  %H:%M"} \
-      --remember \
-      --remember-user-session \
+      --user ${username} \
       --user-menu \
+      --user-menu-min-uid 1000 \
+      --user-menu-max-uid 29999 \
       --asterisks \
       --asterisks-char "•" \
       --width 56 \
@@ -33,7 +36,6 @@ let
       --prompt-padding 1 \
       --greet-align center \
       --theme ${lib.escapeShellArg "border=white;text=white;time=gray;title=white;greet=white;prompt=gray;input=bright-white;action=gray;button=white;container=black"} \
-      --sessions ${config.services.displayManager.sessionData.desktops}/share/wayland-sessions \
       --cmd ${lib.escapeShellArg "${pkgs.niri}/bin/niri-session"} \
       --power-shutdown ${lib.escapeShellArg "systemctl poweroff"} \
       --power-reboot ${lib.escapeShellArg "systemctl reboot"}
@@ -44,8 +46,7 @@ in
     enable = true;
     restart = true;
 
-    # Upstream-supported way to run a TUI greeter: wires up TTYPath/TTYReset/
-    # TTYVHangup/TTYVTDisallocate and StandardInput/Output on tty1 for us.
+    # Upstream way to run a TUI greeter: wires up the TTY and stdio on tty1.
     useTextGreeter = true;
 
     settings.default_session = {
@@ -66,11 +67,10 @@ in
     };
   };
 
-  # The systemd-user PAM stack deadlocks on Shadow before the user manager can
-  # signal readiness. That blocks greetd (and every real-user login) for the
-  # full 90-second user@.service timeout. The login-facing greetd PAM stack is
-  # unchanged; only the nested PAM invocation used to launch `systemd --user`
-  # is bypassed. Supply the runtime directory that pam_systemd normally adds.
+  # The systemd-user PAM stack deadlocks on Shadow, blocking greetd and every
+  # login for the full 90-second user@.service timeout. Only the nested PAM
+  # call that launches `systemd --user` is bypassed (the greetd login stack is
+  # untouched), so the runtime directory pam_systemd adds is supplied here.
   systemd.services."user@" = {
     environment.XDG_RUNTIME_DIR = "/run/user/%i";
     serviceConfig.PAMName = lib.mkForce "";

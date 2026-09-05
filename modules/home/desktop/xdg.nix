@@ -1,115 +1,126 @@
-{ config, ... }:
+{ config, lib, ... }:
+let
+  # One entry per handler; every type listed becomes that desktop file's
+  # default. COSMIC applications are installed by modules/nixos/desktop/apps.nix.
+  handlers = {
+    "brave-origin.desktop" = [
+      "text/html"
+      "application/xhtml+xml"
+      "application/x-extension-htm"
+      "application/x-extension-html"
+      "application/x-extension-shtml"
+      "application/x-extension-xht"
+      "application/x-extension-xhtml"
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "x-scheme-handler/about"
+      "x-scheme-handler/chrome"
+      "x-scheme-handler/unknown"
+    ];
+
+    # Files also owns archives: like Nautilus before it, it extracts them from
+    # the context menu rather than browsing them.
+    "com.system76.CosmicFiles.desktop" = [
+      "inode/directory"
+      "application/zip"
+      "application/x-7z-compressed"
+      "application/x-tar"
+      "application/x-compressed-tar"
+      "application/x-bzip-compressed-tar"
+      "application/x-xz-compressed-tar"
+      "application/x-rar"
+    ];
+
+    "com.system76.CosmicEdit.desktop" = [
+      "text/plain"
+      "text/markdown"
+    ];
+
+    "com.system76.CosmicViewer.desktop" = [
+      "image/jpeg"
+      "image/png"
+      "image/x-png"
+      "image/gif"
+      "image/webp"
+      "image/avif"
+      "image/jxl"
+      "image/bmp"
+      "image/tiff"
+      "image/svg+xml"
+      "image/heif"
+    ];
+
+    "com.system76.CosmicPlayer.desktop" = [
+      "video/mp4"
+      "video/x-matroska"
+      "video/webm"
+      "video/quicktime"
+      "video/x-msvideo"
+      "video/x-flv"
+      "video/mpeg"
+      "video/ogg"
+      "video/3gp"
+      "video/3gpp"
+      "video/3gpp2"
+      "video/mp2t"
+    ];
+
+    "com.system76.CosmicReader.desktop" = [ "application/pdf" ];
+
+    # Papers keeps the formats cosmic-reader cannot open.
+    "org.gnome.Papers.desktop" = [
+      "application/x-bzpdf"
+      "application/x-ext-pdf"
+      "application/x-gzpdf"
+      "application/x-xzpdf"
+      "application/postscript"
+      "application/x-djvu"
+      "image/vnd.djvu"
+      "application/x-cbz"
+      "application/x-cbr"
+    ];
+
+    "io.bassi.Amberol.desktop" = [
+      "audio/mpeg"
+      "audio/flac"
+      "audio/x-flac"
+      "audio/wav"
+      "audio/x-wav"
+      "audio/ogg"
+      "audio/x-vorbis+ogg"
+      "audio/opus"
+      "audio/x-opus+ogg"
+      "audio/aac"
+      "audio/m4a"
+      "audio/mp4"
+      "audio/webm"
+    ];
+
+    "org.libreoffice.LibreOffice.desktop" = [
+      "application/msword"
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      "application/vnd.ms-excel"
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      "application/vnd.ms-powerpoint"
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+      "application/vnd.oasis.opendocument.text"
+      "application/vnd.oasis.opendocument.spreadsheet"
+      "application/vnd.oasis.opendocument.presentation"
+    ];
+  };
+in
 {
   xdg = {
     terminal-exec = {
       enable = true;
-      settings = {
-        default = [ "com.mitchellh.ghostty.desktop" ];
-      };
+      settings.default = [ "com.mitchellh.ghostty.desktop" ];
     };
 
     mimeApps = {
       enable = true;
-      defaultApplications = {
-        # Web Browser
-        "text/html" = [ "brave-origin.desktop" ];
-        "x-scheme-handler/http" = [ "brave-origin.desktop" ];
-        "x-scheme-handler/https" = [ "brave-origin.desktop" ];
-        "x-scheme-handler/about" = [ "brave-origin.desktop" ];
-        "x-scheme-handler/unknown" = [ "brave-origin.desktop" ];
-        "x-scheme-handler/chrome" = [ "brave-origin.desktop" ];
-        "application/x-extension-htm" = [ "brave-origin.desktop" ];
-        "application/x-extension-html" = [ "brave-origin.desktop" ];
-        "application/x-extension-shtml" = [ "brave-origin.desktop" ];
-        "application/xhtml+xml" = [ "brave-origin.desktop" ];
-        "application/x-extension-xhtml" = [ "brave-origin.desktop" ];
-        "application/x-extension-xht" = [ "brave-origin.desktop" ];
-
-        # Video Player (Cine)
-        "video/mp4" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/x-matroska" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/webm" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/quicktime" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/x-msvideo" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/x-flv" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/mpeg" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/ogg" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/3gp" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/3gpp" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/3gpp2" = [ "io.github.diegopvlk.Cine.desktop" ];
-        "video/mp2t" = [ "io.github.diegopvlk.Cine.desktop" ];
-
-        # Audio Player (Amberol)
-        "audio/mpeg" = [ "io.bassi.Amberol.desktop" ];
-        "audio/flac" = [ "io.bassi.Amberol.desktop" ];
-        "audio/x-flac" = [ "io.bassi.Amberol.desktop" ];
-        "audio/wav" = [ "io.bassi.Amberol.desktop" ];
-        "audio/x-wav" = [ "io.bassi.Amberol.desktop" ];
-        "audio/ogg" = [ "io.bassi.Amberol.desktop" ];
-        "audio/x-vorbis+ogg" = [ "io.bassi.Amberol.desktop" ];
-        "audio/opus" = [ "io.bassi.Amberol.desktop" ];
-        "audio/x-opus+ogg" = [ "io.bassi.Amberol.desktop" ];
-        "audio/aac" = [ "io.bassi.Amberol.desktop" ];
-        "audio/m4a" = [ "io.bassi.Amberol.desktop" ];
-        "audio/mp4" = [ "io.bassi.Amberol.desktop" ];
-        "audio/webm" = [ "io.bassi.Amberol.desktop" ];
-
-        # Image Viewer (Loupe)
-        "image/jpeg" = [ "org.gnome.Loupe.desktop" ];
-        "image/png" = [ "org.gnome.Loupe.desktop" ];
-        "image/gif" = [ "org.gnome.Loupe.desktop" ];
-        "image/webp" = [ "org.gnome.Loupe.desktop" ];
-        "image/avif" = [ "org.gnome.Loupe.desktop" ];
-        "image/jxl" = [ "org.gnome.Loupe.desktop" ];
-        "image/bmp" = [ "org.gnome.Loupe.desktop" ];
-        "image/tiff" = [ "org.gnome.Loupe.desktop" ];
-        "image/svg+xml" = [ "org.gnome.Loupe.desktop" ];
-        "image/heif" = [ "org.gnome.Loupe.desktop" ];
-        "image/x-png" = [ "org.gnome.Loupe.desktop" ];
-
-        # Document / PDF / E-Book Viewer (Papers)
-        "application/pdf" = [ "org.gnome.Papers.desktop" ];
-        "application/x-bzpdf" = [ "org.gnome.Papers.desktop" ];
-        "application/x-ext-pdf" = [ "org.gnome.Papers.desktop" ];
-        "application/x-gzpdf" = [ "org.gnome.Papers.desktop" ];
-        "application/x-xzpdf" = [ "org.gnome.Papers.desktop" ];
-        "application/postscript" = [ "org.gnome.Papers.desktop" ];
-        "application/x-djvu" = [ "org.gnome.Papers.desktop" ];
-        "image/vnd.djvu" = [ "org.gnome.Papers.desktop" ];
-        "application/x-cbz" = [ "org.gnome.Papers.desktop" ];
-        "application/x-cbr" = [ "org.gnome.Papers.desktop" ];
-
-        # Office Documents (OnlyOffice)
-        "application/msword" = [ "org.libreoffice.LibreOffice.desktop" ];
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document" = [
-          "org.libreoffice.LibreOffice.desktop"
-        ];
-        "application/vnd.ms-excel" = [ "org.libreoffice.LibreOffice.desktop" ];
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" = [
-          "org.libreoffice.LibreOffice.desktop"
-        ];
-        "application/vnd.ms-powerpoint" = [ "org.libreoffice.LibreOffice.desktop" ];
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation" = [
-          "org.libreoffice.LibreOffice.desktop"
-        ];
-        "application/vnd.oasis.opendocument.text" = [ "org.libreoffice.LibreOffice.desktop" ];
-        "application/vnd.oasis.opendocument.spreadsheet" = [ "org.libreoffice.LibreOffice.desktop" ];
-        "application/vnd.oasis.opendocument.presentation" = [ "org.libreoffice.LibreOffice.desktop" ];
-
-        # File Manager & Archives (Nautilus)
-        "inode/directory" = [ "org.gnome.Nautilus.desktop" ];
-        "application/zip" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-7z-compressed" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-tar" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-compressed-tar" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-bzip-compressed-tar" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-xz-compressed-tar" = [ "org.gnome.Nautilus.desktop" ];
-        "application/x-rar" = [ "org.gnome.Nautilus.desktop" ];
-
-        # Text & Code
-        "text/plain" = [ "org.gnome.TextEditor.desktop" ];
-        "text/markdown" = [ "org.gnome.TextEditor.desktop" ];
-      };
+      defaultApplications = lib.concatMapAttrs (
+        desktop: types: lib.genAttrs types (_: [ desktop ])
+      ) handlers;
     };
 
     userDirs = {

@@ -18,6 +18,18 @@ binds {
         spawn "ghostty"
     }
 
+    Mod+E repeat=false hotkey-overlay-title="Files" {
+        spawn "cosmic-files"
+    }
+
+    Mod+Z repeat=false hotkey-overlay-title="Zed Editor" {
+        spawn "zeditor"
+    }
+
+    Mod+B repeat=false hotkey-overlay-title="Web Browser" {
+        spawn "brave-origin"
+    }
+
     Mod+V repeat=false hotkey-overlay-title="Clipboard" {
         spawn "noctalia" "msg" "panel-toggle" "clipboard"
     }

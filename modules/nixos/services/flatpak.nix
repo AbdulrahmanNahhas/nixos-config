@@ -75,14 +75,10 @@ in
       global = {
         Environment = {
           XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
-          # GTK_THEME is deliberately NOT set globally. It is a GTK3-only
-          # knob: a GTK4/libadwaita app that sees GTK_THEME=adw-gtk3-dark
-          # goes looking for adw-gtk3-dark/gtk-4.0/gtk.css, finds nothing
-          # (adw-gtk3 ships gtk-3.0 only) and falls back to *no* stylesheet
-          # at all -- unstyled widgets and missing symbolic icons. GTK4 apps
-          # already follow the portal's org.gnome.desktop.interface
-          # color-scheme, so GTK_THEME is applied per-app to the GTK3
-          # holdouts below instead.
+          # GTK_THEME is deliberately not global: it is GTK3-only, and a
+          # GTK4/libadwaita app that sees it looks for a gtk-4.0 stylesheet
+          # adw-gtk3 does not ship and ends up with none at all. GTK4 apps
+          # already follow the portal, so it is set per-app below instead.
         };
 
         Context = {
@@ -141,20 +137,10 @@ in
         Context.filesystems = [
           "xdg-documents"
           "xdg-download"
-          # Read-only access to noctalia's rendered theme state so its
-          # post_hook can `unopkg add` the built Noctalia ColorScheme .oxt
-          # from ~/.local/state/noctalia into this sandbox. See
-          # home/wm/noctalia's community "libreoffice" template.
-          #
-          # "xdg-state" is not a filesystem category flatpak recognizes (it
-          # only knows xdg-{documents,download,music,pictures,...}, plus
-          # xdg-{config,cache,data} -- NOT xdg-state). Confirmed live:
-          # `flatpak run --verbose` logged "Unknown filesystem type
-          # xdg-state/noctalia:ro" and silently dropped the whole app
-          # sandbox into a broken state (LibreOffice failed to even start).
-          # A literal home-relative path works the same way the
-          # "!home" + specific xdg-* exceptions already do elsewhere in
-          # this file.
+          # Read-only noctalia theme state, so its post_hook can `unopkg add`
+          # the generated Noctalia ColorScheme .oxt into this sandbox. Spelled
+          # as a home-relative path because flatpak has no "xdg-state"
+          # category: it drops the unknown entry and breaks the whole sandbox.
           "~/.local/state/noctalia:ro"
         ];
       };

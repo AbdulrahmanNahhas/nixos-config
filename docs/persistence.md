@@ -24,6 +24,7 @@ Preserved files include machine ID, systemd random seed, Aqua's Git config, and
 Aqua's dconf database. Preserved directories include:
 
 - `/var/lib/nixos`, `/var/lib/systemd/timers`, and `/var/log/journal`
+- `/var/cache/tuigreet`, so the greeter remembers Aqua's last session
 - `/var/lib/flatpak` and `/var/lib/bluetooth`
 - `/var/lib/kavita`
 - `/etc/NetworkManager/system-connections`
@@ -39,15 +40,20 @@ directly on the persistent `/saved` mount rather than through Preservation.
 ## Aqua state
 
 The configuration preserves standard XDG directories except `Downloads`, plus
-Books, SSH/GnuPG credentials, GitHub CLI and keyring state, the complete
-LibreWolf profile, Zed and Neovim state, fish and Atuin history, direnv
-approvals, devenv trust data and GC roots, Niri and Noctalia state, audio state,
-Steam (including per-game shader data), Mesa/RADV shader caches, Obsidian,
-OpenRazer, and Polychromatic. Flatpak state is limited to the application IDs
-declared in the Flatpak module; this includes Brave's complete browser profile.
-Removed or manually installed Flatpaks do not gain persistence automatically.
+Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Zed and Delta state,
+Atuin history, direnv approvals, devenv trust data and GC roots, Noctalia and
+COSMIC application state, audio state, Steam (including per-game shader data),
+Mesa/RADV shader caches, Obsidian, OpenRazer, and Polychromatic. Flatpak state
+covers exactly the application IDs declared in the Flatpak module, derived from
+that module's own list so the two cannot drift; this includes Brave's complete
+browser profile. Manually installed Flatpaks do not gain persistence
+automatically, and removing an application from the Flatpak module also drops
+its persistence, leaving the old `~/.var/app/<id>` behind under `/saved`.
 Browser and Noctalia caches are ephemeral except for caches stored inside an
 application's required profile directory.
+
+COSMIC applications keep their settings and window state under
+`~/.config/cosmic` and `~/.local/state/cosmic`.
 
 Direnv approvals are retained in `~/.local/share/direnv`, so an unchanged
 `.envrc` remains approved after reboot. Changing `.envrc` still invalidates its
@@ -61,9 +67,6 @@ checkouts, Python environments, downloaded archives, and versioned C tools are
 retained in `~/.espressif`. This is the native builder's upstream-supported
 global location, shared by ESP Rust projects instead of duplicating several
 gigabytes below every project's `.embuild/espressif` directory.
-
-LibreWolf's profile is preserved at `~/.config/librewolf`, its current XDG
-location. The obsolete `~/.librewolf` path is intentionally not preserved.
 
 Aqua's SOPS editing identity is preserved at `~/.config/sops`. Shadow's
 root-only SOPS deployment identity lives directly at

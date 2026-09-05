@@ -1,7 +1,7 @@
 { config, ... }:
 {
-  # Shared GTK/GNOME application preferences. GNOME Shell-specific settings
-  # belong nowhere in the Niri-only desktop configuration.
+  # Preferences shared by the remaining GTK applications and the GTK portal.
+  # COSMIC reads none of this; its own settings live under ~/.config/cosmic.
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
@@ -14,7 +14,7 @@
       show-battery-percentage = true;
     };
 
-    # Retain the values used by the existing wallpaper helper and GTK tools.
+    # Values the wallpaper helper and GTK tools read.
     "org/gnome/desktop/background" = {
       picture-uri = "file://${config.home.homeDirectory}/Pictures/Wallpapers/my-neighbor-totoro-sunflowers.png";
       picture-uri-dark = "file://${config.home.homeDirectory}/Pictures/Wallpapers/my-neighbor-totoro-sunflowers.png";
