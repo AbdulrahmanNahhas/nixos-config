@@ -21,6 +21,7 @@ let
     "org.libreoffice.LibreOffice"
     "io.github.alainm23.planify"
     "org.gnome.World.Secrets"
+    "com.github.johnfactotum.Foliate"
   ];
 
   gtkThemeExtensions = [
