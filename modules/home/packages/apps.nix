@@ -6,5 +6,6 @@
     obsidian # Notes
     mullvad-browser
     wl-screenrec
+    kdePackages.kdenlive
   ];
 }
