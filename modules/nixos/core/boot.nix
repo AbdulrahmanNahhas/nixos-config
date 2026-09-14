@@ -11,6 +11,7 @@
 
     # Latest kernel for Zen 5 / RTX 50-series support
     kernelPackages = pkgs.linuxPackages_latest;
+
     # Graphical LUKS prompt and boot progress; Esc still reveals diagnostics.
     plymouth = {
       enable = true;
@@ -28,5 +29,12 @@
       "acpi_backlight=native"
       "nvidia_wmi_ec_backlight.force=1"
     ];
+
+    # Kernel Security Hardening
+    kernel.sysctl = {
+      "kernel.unprivileged_bpf_disabled" = 1;
+      "kernel.dmesg_restrict" = 1;
+      "kernel.kptr_restrict" = 2;
+    };
   };
 }
