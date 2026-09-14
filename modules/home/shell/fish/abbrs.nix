@@ -9,8 +9,11 @@ _: {
     # NixOS System Management
     nx-rebuild = "nh os switch /saved/nixos-config";
     nx-test = "nh os test /saved/nixos-config";
-    # Do not prune direnv/devenv or other explicit development GC roots.
-    nx-clean = "nh clean all --keep 3 --no-gcroots";
+    nx-boot = "nh os boot /saved/nixos-config"; # Safer rebuild for Kernel/NVIDIA driver updates
+    nx-update = "nh os switch --update"; # Updates flake inputs before rebuilding
+    # NixOS Maintenance
+    nx-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots";
+    nx-optimize = "sudo nix store optimise";
 
     # Navigation
     ".." = "cd ..";

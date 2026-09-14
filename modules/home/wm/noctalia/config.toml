@@ -293,11 +293,11 @@ scale = 1.0
 # ─────────────────────────────────────────────────────────────────────────────
 
 [plugin_settings."avivbintangaringga/nix-monitor"]
-clean_command = "sudo nix store optimise"
-optimize_command = "nh clean all --keep 5 --keep-since 14d"
-panel_open_near_click = false
+update_command = "nh os switch --update --ask"
+optimize_command = "sudo nix store optimise"
+clean_command = "nh clean all --keep 3 --keep-since 7d --no-gcroots"
 show_update_check_notification = true
-update_command = "nh os switch /saved/nixos-config --update"
+panel_open_near_click = false
 
 [plugin_settings."noctalia/wallhaven"]
 api_key = ""
