@@ -234,6 +234,9 @@
           # ── Obsidian ─────────────────────────────────────────
           ".config/obsidian" # App preferences. Note: Vaults live in ~/Documents
 
+          # ── Anki ─────────────────────────────────────────────
+          ".local/share/Anki2" # Collection, media, add-ons, and prefs21.db
+
           # ── Steam ───────────────────────────────
           ".local/share/Steam"
           ".steam"

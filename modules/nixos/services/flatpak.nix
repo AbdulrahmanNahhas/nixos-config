@@ -2,9 +2,8 @@
 let
   flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
 
-  # Every app in this list is currently publisher-verified by Flathub.
+  # Apps available from Flathub's publisher-verified subset.
   verifiedApps = [
-    "chat.simplex.simplex"
     "com.brave.Browser"
     "com.github.ADBeveridge.Raider"
     "dev.geopjr.Tuba"
@@ -22,6 +21,12 @@ let
     "io.github.alainm23.planify"
     "org.gnome.World.Secrets"
     "com.github.johnfactotum.Foliate"
+  ];
+
+  # Community-maintained, not currently publisher-verified by Flathub.
+  unverifiedApps = [
+    "org.signal.Signal"
+    "org.b3log.siyuan"
   ];
 
   gtkThemeExtensions = [
@@ -53,14 +58,9 @@ in
       ++ map (appId: {
         inherit appId;
         origin = "flathub";
-      }) gtkThemeExtensions
-      ++ [
-        {
-          appId = "org.signal.Signal";
-          origin = "flathub";
-        }
-      ];
+      }) (unverifiedApps ++ gtkThemeExtensions);
 
+    # Flatpaks track Flathub, not the NixOS channel, so they need their own timer.
     update = {
       onActivation = false;
       auto = {
@@ -69,155 +69,137 @@ in
       };
     };
 
+    # This file is the source of truth for installed Flatpaks.
     uninstallUnmanaged = true;
     uninstallUnused = true;
 
     overrides = {
-      global = {
-        Environment = {
-          XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
-          # GTK_THEME is deliberately not global: it is GTK3-only, and a
-          # GTK4/libadwaita app that sees it looks for a gtk-4.0 stylesheet
-          # adw-gtk3 does not ship and ends up with none at all. GTK4 apps
-          # already follow the portal, so it is set per-app below instead.
+      # Nix fully owns the override files: manual `flatpak override` edits are
+      # discarded on activation, and removed apps lose their override file too.
+      # Without this the sandbox policy below is advisory, not authoritative.
+      writeMode = "replace";
+      pruneUnmanagedOverrides = true;
+
+      settings = {
+        # Every app starts fully restricted and is granted back only what it
+        # needs. Anything not listed below runs with this baseline alone.
+        global = {
+          Environment = {
+            # Flatpak already bind-mounts host icon themes read-only at
+            # /run/host; this only points the cursor loader at them.
+            XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
+
+            # GTK_THEME is deliberately not global: it is GTK3-only, and a
+            # GTK4/libadwaita app that sees it looks for a gtk-4.0 stylesheet
+            # adw-gtk3 does not ship and ends up with none at all. GTK4 apps
+            # already follow the portal, so it is set per-app below instead.
+          };
+
+          Context = {
+            # No host filesystem or real home. Files still reach apps through
+            # the file portal, which grants per-file access on user consent.
+            filesystems = [
+              "!host"
+              "!home"
+            ];
+
+            # Wayland only. Audio stays under each upstream manifest because
+            # Flatpak's PulseAudio socket is also the PipeWire compat path.
+            sockets = [
+              "wayland"
+              "!x11"
+              "!fallback-x11"
+            ];
+
+            # Drop the broad device access most manifests request.
+            devices = [ "!all" ];
+
+            # Wayland apps do not need the shared IPC namespace X11 requires.
+            shared = [ "!ipc" ];
+          };
         };
 
-        Context = {
-          # Strict filesystem block
+        # --- Exceptions & app-specific routing -----------------------------
+
+        # Private knowledge base. Its manifest --persist entries keep the
+        # workspace inside ~/.var/app, so the global !home policy costs nothing
+        # and the data is covered by preservation's .var/app loop.
+        "org.b3log.siyuan" = {
+          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+        };
+
+        # Upstream requests device=all for camera access during calls; Signal
+        # uses /dev/video* directly rather than the camera portal.
+        "org.signal.Signal" = {
+          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+          Context = {
+            devices = [ "all" ];
+            sockets = [ "pulseaudio" ];
+            filesystems = [ "xdg-download" ];
+          };
+        };
+
+        "com.brave.Browser".Context.filesystems = [ "xdg-download" ];
+
+        "org.libreoffice.LibreOffice" = {
+          # LibreOffice's VCL still uses GTK3 for this integration.
+          Environment.GTK_THEME = "adw-gtk3-dark";
+          Context.filesystems = [
+            "xdg-documents"
+            "xdg-download"
+            "~/.local/state/noctalia:ro" # Read-only Noctalia theme state.
+          ];
+        };
+
+        # Writes bootable images to removable media. Replace `all` with `usb`
+        # if a future release works without full device access.
+        "io.gitlab.adhami3310.Impression".Context = {
+          devices = [ "all" ];
           filesystems = [
-            "!host"
-            "!home"
+            "~/.config/dconf:ro"
+            "xdg-pictures"
           ];
-
-          # Enforce Wayland and block legacy X11 protocols. Audio remains
-          # controlled by each upstream manifest because Flatpak's PulseAudio
-          # socket is also the PipeWire compatibility path.
-          sockets = [
-            "!x11"
-            "!fallback-x11"
-            "wayland"
-          ];
-
-          # Remove broad direct device access inherited from manifests.
-          devices = [ "!all" ];
-
-          # Wayland applications do not need the shared IPC namespace that X11
-          # commonly requires.
-          shared = [ "!ipc" ];
         };
-      };
 
-      # --- Exceptions & App-Specific Routing ---
+        # --- Read-only dconf for apps that follow interface preferences -----
 
-      "chat.simplex.simplex".Context = {
-        sockets = [
-          "x11"
-          "!wayland"
-        ];
-        shared = [ "ipc" ];
-        filesystems = [ "xdg-download" ];
-      };
+        "org.gnome.Fractal".Context.filesystems = [ "~/.config/dconf:ro" ];
+        "io.gitlab.news_flash.NewsFlash".Context.filesystems = [ "~/.config/dconf:ro" ];
+        "io.github.alainm23.planify".Context.filesystems = [ "~/.config/dconf:ro" ];
+        "org.gnome.World.Secrets".Context.filesystems = [ "~/.config/dconf:ro" ];
+        "moe.tsuna.tsukimi".Context.filesystems = [ "~/.config/dconf:ro" ];
 
-      "com.brave.Browser".Context = {
-        filesystems = [ "xdg-download" ];
-      };
+        # --- Local-only apps: no reason to reach the network ----------------
 
-      "org.onlyoffice.desktopeditors".Context = {
-        filesystems = [
-          "xdg-documents"
-          "xdg-download"
-        ];
-      };
+        "io.gitlab.theevilskeleton.Upscaler".Context = {
+          filesystems = [
+            "~/.config/dconf:ro"
+            "xdg-pictures"
+          ];
+          shared = [ "!network" ];
+        };
 
-      "org.libreoffice.LibreOffice" = {
-        # LibreOffice's VCL still draws with GTK3, so this is one of the few
-        # sandboxes where GTK_THEME is meaningful. The theme files come from
-        # the org.gtk.Gtk3theme.adw-gtk3-dark extension installed above.
-        Environment.GTK_THEME = "adw-gtk3-dark";
+        "app.drey.EarTag".Context = {
+          filesystems = [
+            "~/.config/dconf:ro"
+            "xdg-music"
+          ];
+          shared = [ "!network" ];
+        };
 
-        Context.filesystems = [
-          "xdg-documents"
-          "xdg-download"
-          # Read-only noctalia theme state, so its post_hook can `unopkg add`
-          # the generated Noctalia ColorScheme .oxt into this sandbox. Spelled
-          # as a home-relative path because flatpak has no "xdg-state"
-          # category: it drops the unknown entry and breaks the whole sandbox.
-          "~/.local/state/noctalia:ro"
-        ];
-      };
+        "io.github.diegopvlk.Cine".Context = {
+          filesystems = [ "xdg-videos" ];
+          shared = [ "!network" ];
+        };
 
-      "org.signal.Signal" = {
-        # Environment is a sibling of Context, not a key inside it -- nested
-        # here it was silently written into the [Context] group and never
-        # reached the app.
-        Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-
-        Context.filesystems = [ "xdg-download" ];
-      };
-
-      # Flatpak has no block-device-only permission. Impression therefore needs
-      # the broad device grant from its upstream manifest to flash removable
-      # drives; keep this explicit because it is a significant exception.
-      "io.gitlab.adhami3310.Impression".Context = {
-        devices = [ "all" ];
-        filesystems = [
-          "~/.config/dconf:ro"
-          "xdg-pictures"
-        ];
-      };
-
-      # --- GTK4 Apps Needing dconf Access ---
-      # GTK4 apps using libadwaita need to read org/gnome/desktop/interface
-      # dconf settings (especially color-scheme for dark theme support).
-      "org.gnome.Fractal".Context = {
-        filesystems = [ "~/.config/dconf:ro" ];
-      };
-
-      "io.gitlab.news_flash.NewsFlash".Context = {
-        filesystems = [ "~/.config/dconf:ro" ];
-      };
-
-      "io.github.alainm23.planify".Context = {
-        filesystems = [ "~/.config/dconf:ro" ];
-      };
-
-      "org.gnome.World.Secrets".Context = {
-        filesystems = [ "~/.config/dconf:ro" ];
-      };
-
-      "moe.tsuna.tsukimi".Context = {
-        filesystems = [ "~/.config/dconf:ro" ];
-      };
-
-      "io.gitlab.theevilskeleton.Upscaler".Context = {
-        filesystems = [
-          "~/.config/dconf:ro"
-          "xdg-pictures"
-        ];
-        shared = [ "!network" ];
-      };
-
-      # --- Local App Network & Filesystem Isolation ---
-
-      "app.drey.EarTag".Context = {
-        filesystems = [
-          "~/.config/dconf:ro"
-          "xdg-music"
-        ];
-        shared = [ "!network" ];
-      };
-
-      "io.github.diegopvlk.Cine".Context = {
-        filesystems = [ "xdg-videos" ];
-        shared = [ "!network" ];
-      };
-
-      "io.bassi.Amberol".Context = {
-        filesystems = [
-          "~/.config/dconf:ro"
-          "xdg-music"
-        ];
-        shared = [ "!network" ];
+        "io.bassi.Amberol".Context = {
+          filesystems = [
+            "~/.config/dconf:ro"
+            "xdg-music"
+          ];
+          shared = [ "!network" ];
+        };
       };
     };
   };
