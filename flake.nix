@@ -15,7 +15,9 @@
     };
 
     preservation.url = "github:nix-community/preservation";
-    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    # Pinned past v0.7.0 for `overrides.writeMode = "replace"`, which is not in a
+    # tagged release yet.
+    nix-flatpak.url = "github:gmodena/nix-flatpak/0f392e302963bce69787c495aa95ef1d50dda889";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     sops-nix = {
