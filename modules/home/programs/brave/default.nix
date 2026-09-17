@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   programs.chromium = {
     enable = true;
@@ -12,6 +12,9 @@
 
     # Translated brave://flags & GPU Power-Saving Overrides
     commandLineArgs = [
+      # Load Noctalia theme from local cache
+      "--load-extension=/home/${username}/.cache/noctalia/brave-origin-theme"
+
       # Force rendering & video decoding strictly on AMD 880M (Keeps NVIDIA sleeping)
       "--render-node-override=/dev/dri/renderD128"
       "--ignore-gpu-blocklist"

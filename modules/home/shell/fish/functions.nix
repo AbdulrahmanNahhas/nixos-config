@@ -1,6 +1,6 @@
 _: {
   programs.fish.functions = {
-    sys-upgrade = "nh os switch --update $argv";
+    sys-build = "nh os switch $argv";
     sys-test = "nh os test $argv";
     sys-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots $argv";
     sys-optimise = "sudo nix store optimise";

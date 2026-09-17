@@ -37,7 +37,11 @@ binds {
         spawn "noctalia" "msg" "panel-toggle" "clipboard"
     }
 
-    Mod+W repeat=false hotkey-overlay-title="Wallpapers" {
+    Mod+W repeat=false hotkey-overlay-title="Wallpapers Cinema" {
+        spawn "noctalia" "msg" "panel-toggle" "ashur-d/wallpaper-widget:hub"
+    }
+
+    Mod+Ctrl+W repeat=false hotkey-overlay-title="Wallpapers" {
         spawn "noctalia" "msg" "panel-toggle" "wallpaper"
     }
 
@@ -148,6 +152,10 @@ binds {
 
     Mod+Shift+F repeat=false hotkey-overlay-title="Fullscreen Window" {
         fullscreen-window
+    }
+
+    Mod+Shift+B repeat=false hotkey-overlay-title="Toggle Bar" {
+        spawn "noctalia" "msg" "bar-toggle"
     }
 
     // Everything opens tiled, but this remains available for exceptional cases.

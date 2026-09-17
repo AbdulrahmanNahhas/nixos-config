@@ -116,6 +116,10 @@ in
             filesystems = [
               "!host"
               "!home"
+
+              # Read-only access to GTK 3 & 4 user configurations
+              "xdg-config/gtk-3.0:ro"
+              "xdg-config/gtk-4.0:ro"
             ];
 
             # Wayland only. Audio stays under each upstream manifest because

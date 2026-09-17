@@ -12,6 +12,9 @@
     # ─── System Utilities ─── #
     usbutils # lsusb
     pciutils # lspci
+
+    # Tools
     wl-clipboard
+    gpu-screen-recorder
   ];
 }
