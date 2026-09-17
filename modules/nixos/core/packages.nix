@@ -12,5 +12,6 @@
     # ─── System Utilities ─── #
     usbutils # lsusb
     pciutils # lspci
+    wl-clipboard
   ];
 }

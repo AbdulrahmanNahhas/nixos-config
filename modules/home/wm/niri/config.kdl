@@ -14,7 +14,7 @@ input {
     keyboard {
         xkb {
             layout "us,ara"
-            options "grp:win_space_toggle"
+            options "grp:alt_shift_toggle"
         }
         numlock
     }
@@ -45,10 +45,10 @@ layout {
 
     default-column-width { proportion 0.5; }
 
-    border { off; }
+    // border { off; }
 
     focus-ring {
-        width 1
+        width 2
         active-color "#b8b8b8"
         inactive-color "#505050"
         urgent-color "#e06c75"

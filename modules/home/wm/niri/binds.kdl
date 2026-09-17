@@ -8,10 +8,13 @@ binds {
         toggle-overview
     }
 
-    // Keep Mod+D for the launcher because Super+Space is now the
-    // English/Arabic keyboard-layout switch.
-    Mod+D repeat=false hotkey-overlay-title="Applications" {
+    Mod+Space repeat=false hotkey-overlay-title="Applications" {
         spawn "noctalia" "msg" "panel-toggle" "launcher"
+    }
+
+    // Copilot key sends Super+Shift+F23.
+    Mod+Shift+F23 repeat=false hotkey-overlay-title="Commands" {
+        spawn "noctalia" "msg" "panel-toggle" "launcher" "/"
     }
 
     Mod+T repeat=false hotkey-overlay-title="Terminal" {

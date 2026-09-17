@@ -154,14 +154,15 @@ enabled = true
     action = "launcher"
 
     [hot_corners.bottom_right]
-    action = "control-center"
+    action = "control_center"
 
     [hot_corners.top_left]
     action = "command"
     command = "noctalia msg wallpaper-random"
 
     [hot_corners.top_right]
-    action = "window-switcher"
+    action = "command"
+    command = "noctalia msg panel-toggle launcher /"
 
 [idle]
 behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
@@ -384,13 +385,123 @@ telemetry_enabled = false
         global = false
         prefix = "session"
 
-        [shell.launcher.providers.wallpaper]
-        global = false
-        prefix = "wall"
-
         [shell.launcher.providers.windows]
         global = false
         prefix = "win"
+
+        # Built-in wallpaper search remains available as /wallpaper
+        [shell.launcher.providers.wallpaper]
+        global = false
+        prefix = "wallpaper"
+
+        # ── Wallpaper Panel ──────────────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.wall]
+        label = "Wallpaper"
+        prefix = "wall"
+        glyph = "photo"
+        global = false
+        command = 'printf "Wallpaper Picker\tOpen Noctalia wallpaper panel\n"'
+        exec = 'noctalia msg panel-toggle wallpaper'
+
+        # ── Arbitrary Shell Command ──────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.command]
+        label = "Command"
+        prefix = "cmd"
+        glyph = "terminal"
+        global = false
+        freeform = true
+        exec = '{query}'
+
+        # ── NixOS System Maintenance ────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.nixos]
+        label = "NixOS Management"
+        prefix = "nix"
+        glyph = "terminal"
+        global = false
+
+        command = '''
+        printf "%s\n" \
+          "System Upgrade\tRebuild and switch configuration" \
+          "Test Config\tBuild and test configuration without boot entry" \
+          "Garbage Collect\tRemove unused store paths" \
+          "Update Flake\tUpdate flake.lock inputs" \
+          "Package Search\tInteractive nix package search"
+        '''
+
+        exec = '''
+        case "{selection}" in
+          Upgrade*) cmd="sys-upgrade" ;;
+          Test*)    cmd="sys-test" ;;
+          Garbage*) cmd="sys-clean" ;;
+          Update*)  cmd="sys-update" ;;
+          Optimise*)  cmd="sys-optimise" ;;
+          Package*) cmd="sys-search" ;;
+        esac
+
+        ghostty -e fish -lc "$cmd; exec fish"
+        '''
+        # ── Nix Package Search ───────────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.search]
+        label = "Nix Package Search"
+        prefix = "search"
+        glyph = "search"
+        global = false
+        freeform = true
+        exec = "ghostty -e fish -lc 'sys-search $argv[1]; exec fish' -- \"{query}\""
+
+        # ── Configuration Editing ────────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.edit_nix]
+        label = "Edit Nix Config"
+        prefix = "edit"
+        glyph = "file-code"
+        global = false
+        command = 'printf "Helix (Terminal)\tOpen nix-config in helix\nZed (GUI)\tOpen nix-config in Zed\n"'
+        exec = 'case "{selection}" in Helix*) ghostty -e fish -c "$EDITOR /saved/nixos-config" ;; Zed*) zeditor /saved/nixos-config ;; esac'
+
+        # ── Window Controls ──────────────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.kill_window]
+        label = "Kill Active Window"
+        prefix = "kill"
+        glyph = "circle-x"
+        global = false
+        command = 'printf "Kill Active Window\tClose current window\n"'
+        exec = 'niri msg action close-window'
+
+        # ── Noctalia ─────────────────────────────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.noctalia_settings]
+        label = "Noctalia Settings"
+        prefix = "settings"
+        glyph = "adjustments"
+        global = false
+        command = 'printf "Noctalia Settings\tOpen settings panel\n"'
+        exec = 'noctalia msg settings-open'
+
+        # ── Interactive Sub-Menu: Audio Volume ────────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.volume]
+        label = "Audio Volume"
+        prefix = "vol"
+        glyph = "volume"
+        global = false
+        command = 'printf "Set Audio Volume\tOpen interactive volume picker\n"'
+        exec = 'LEVEL="$(printf "%s\n" 25% 50% 75% 100% 125% 150% | noctalia dmenu -p "Set Sink Volume")"; [ -n "$LEVEL" ] && noctalia msg volume-set "$LEVEL"'
+
+        # ── Interactive Sub-Menu: Power Profiles ─────────────────────────────────────
+
+        [shell.launcher.dmenu.entry.power_profile]
+        label = "Power Profile"
+        prefix = "power"
+        glyph = "bolt"
+        global = false
+        command = 'printf "Change Power Profile\tSelect performance or saver mode\n"'
+        exec = 'MODE="$(printf "%s\n" performance balanced power-saver | noctalia dmenu -p "Power Profile")"; [ -n "$MODE" ] && noctalia msg power-set "$MODE"'
 
     [shell.panel]
     borders = true
