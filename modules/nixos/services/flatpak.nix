@@ -1,6 +1,7 @@
 { ... }:
 let
   flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
+  flathub_beta = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
 
   # Apps available from Flathub's publisher-verified subset.
   verifiedApps = [
@@ -21,12 +22,17 @@ let
     "io.github.alainm23.planify"
     "org.gnome.World.Secrets"
     "com.github.johnfactotum.Foliate"
+    "com.github.jeromerobert.pdfarranger"
   ];
 
   # Community-maintained, not currently publisher-verified by Flathub.
   unverifiedApps = [
     "org.signal.Signal"
     "org.b3log.siyuan"
+  ];
+
+  betaApps = [
+    "cx.modal.Reflection"
   ];
 
   gtkThemeExtensions = [
@@ -48,6 +54,10 @@ in
         name = "flathub";
         location = flathub;
       }
+      {
+        name = "flathub-beta";
+        location = flathub_beta;
+      }
     ];
 
     packages =
@@ -58,7 +68,11 @@ in
       ++ map (appId: {
         inherit appId;
         origin = "flathub";
-      }) (unverifiedApps ++ gtkThemeExtensions);
+      }) (unverifiedApps ++ gtkThemeExtensions)
+      ++ map (appId: {
+        inherit appId;
+        origin = "flathub-beta";
+      }) betaApps;
 
     # Flatpaks track Flathub, not the NixOS channel, so they need their own timer.
     update = {
