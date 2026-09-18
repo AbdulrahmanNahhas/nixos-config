@@ -1,3 +1,4 @@
+{ username, ... }:
 {
   # Memory-safe sudo. Disables the C sudo (the modules assert against each
   # other), so sudoers settings must live under sudo-rs, not security.sudo.
@@ -5,6 +6,23 @@
     enable = true;
     extraConfig = ''
       Defaults env_keep += "EDITOR VISUAL"
+    '';
+  };
+
+  # Blocks any USB device not matched below, including ones present at boot.
+  # The built-in devices must be listed or the laptop loses its keyboard
+  # controller, Bluetooth, and camera. New devices are approved with
+  # `usbguard list-devices` / `usbguard allow-device -p <id>`.
+  services.usbguard = {
+    enable = true;
+    IPCAllowedUsers = [
+      "root"
+      username
+    ];
+    rules = ''
+      allow id 1532:02c5 name "Razer Blade"
+      allow id 13d3:3604 name "Wireless_Device"
+      allow id 30c9:0104 name "Integrated Camera"
     '';
   };
 

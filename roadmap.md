@@ -1,7 +1,7 @@
 | Category                           | Status      | Component                  | Description                                                                            |
 | ---------------------------------- | ----------- | -------------------------- | -------------------------------------------------------------------------------------- |
 | **Firmware & Boot Security**       | `[ ]`       | Libreboot / Coreboot       | Open-source hardware firmware for root-of-trust boot security                          |
-|                                    | `[ ]`       | USBGuard                   | Firewall protecting USB ports against BadUSB and unauthorized device attacks           |
+|                                    | `[x]`       | USBGuard                   | Firewall protecting USB ports against BadUSB and unauthorized device attacks           |
 |                                    | `[ ]`       | Lanzaboote & UKI           | Unified Kernel Images enabling native UEFI Secure Boot                                 |
 |                                    | `[ ]`       | systemd-cryptenroll        | Automated LUKS volume unlocking via hardware TPM2 chips                                |
 |                                    | `[ ]`       | `pam_u2f`                  | Hardware FIDO2/YubiKey multi-factor authentication for login and `sudo`                |
@@ -15,7 +15,7 @@
 |                                    | `[x]`       | `boot.initrd.systemd`      | Modern stage-1 initrd integration powered natively by systemd                          |
 |                                    | `[x]`       | Sysctl Kernel Mitigations  | Hardening unprivileged BPF loading, kernel pointer leaks, and dmesg buffers            |
 |                                    | `[x]`       | AppArmor                   | Linux security module for mandatory access control and application profiling           |
-|                                    | `[ ]`       | zRAM Swap                  | In-memory compressed swap space to optimize RAM usage                                  |
+|                                    | `[x]`       | zRAM Swap                  | In-memory compressed swap space to optimize RAM usage                                  |
 |                                    | `[ ]`       | auto-cpufreq               | Automatic CPU frequency tuner for dynamic power and thermal management                 |
 |                                    | `[ ]`       | Scudo Memory Allocator     | Hardened user-mode memory allocator replacing glibc malloc against heap exploits       |
 |                                    | `[ ]`       | Process Isolation          | Mounting `/proc` with `hidepid=2` so users only view their own running processes       |
@@ -48,8 +48,8 @@
 |                                    | `[ ]`       | nix-index & comma          | Instant execution of uninstalled packages via `,` lookup                               |
 |                                    | `[ ]`       | nix-output-monitor (`nom`) | Visual build-tree display for Nix evaluations                                          |
 |                                    | `[ ]`       | nvd                        | Version diff analyzer between NixOS generations before switching                       |
-|                                    | `[ ]`       | statix & deadnix           | Static analysis linter and dead-code detection for Nix code                            |
-|                                    | `[ ]`       | Alejandra / `nixfmt`       | Opinionated, deterministic code formatters for Nix expressions                         |
+|                                    | `[x]`       | statix & deadnix           | Static analysis linter and dead-code detection for Nix code                            |
+|                                    | `[x]`       | Alejandra / `nixfmt`       | Opinionated, deterministic code formatters for Nix expressions                         |
 | **Auditing & Maintenance**         | `[ ]`       | Trivy / Grype              | Vulnerability and CVE scanning for Nix derivations                                     |
 |                                    | `[ ]`       | Restic                     | Fast, encrypted snapshot backup utility for local and remote storage                   |
 |                                    | `[x]`       | Nix Store Optimise         | Automatic hard-linking of duplicate store paths via `nix.settings.auto-optimise-store` |
