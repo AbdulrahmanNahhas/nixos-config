@@ -1,5 +1,7 @@
 { config, ... }:
 {
+  nixpkgs.config.cudaCapabilities = [ "12.0" ];
+
   hardware.nvidia = {
     powerManagement.finegrained = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
