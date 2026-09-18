@@ -89,6 +89,7 @@
           mode = "2755";
         }
         "/var/lib/kavita"
+        "/var/lib/docker" # Images and the Hermes sandbox container
         {
           directory = "/etc/NetworkManager/system-connections";
           user = "root";
@@ -128,6 +129,11 @@
           }
           {
             directory = ".claude";
+            mode = "0700";
+          }
+          {
+            # Hermes config, API keys, memory, skills, and docker sandboxes.
+            directory = ".hermes";
             mode = "0700";
           }
 
