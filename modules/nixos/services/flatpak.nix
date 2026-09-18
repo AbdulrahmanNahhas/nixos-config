@@ -31,6 +31,7 @@ let
   unverifiedApps = [
     "org.signal.Signal"
     "org.b3log.siyuan"
+    "org.zotero.Zotero"
   ];
 
   betaApps = [
@@ -145,6 +146,11 @@ in
         # workspace inside ~/.var/app, so the global !home policy costs nothing
         # and the data is covered by preservation's .var/app loop.
         "org.b3log.siyuan" = {
+          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+        };
+
+        "org.zotero.Zotero" = {
           Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
           Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
         };
