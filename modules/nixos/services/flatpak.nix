@@ -23,7 +23,7 @@ let
     "org.gnome.World.Secrets"
     "com.github.johnfactotum.Foliate"
     "com.github.jeromerobert.pdfarranger"
-    "org.gnome.VideoTrimmer"
+    "org.gnome.gitlab.YaLTeR.VideoTrimmer"
   ];
 
   # Community-maintained, not currently publisher-verified by Flathub.
