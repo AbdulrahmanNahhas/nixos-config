@@ -29,6 +29,12 @@
       url = "github:noctalia-dev/noctalia/v5.0.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Updated by bumping this input; the Nix build refuses `hermes update`.
+    hermes = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
