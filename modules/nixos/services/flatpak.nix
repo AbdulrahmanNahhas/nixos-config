@@ -24,6 +24,7 @@ let
     "com.github.johnfactotum.Foliate"
     "com.github.jeromerobert.pdfarranger"
     "org.gnome.gitlab.YaLTeR.VideoTrimmer"
+    "org.zotero.Zotero"
   ];
 
   # Community-maintained, not currently publisher-verified by Flathub.
