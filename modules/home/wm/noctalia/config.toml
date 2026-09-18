@@ -453,7 +453,7 @@ telemetry_enabled = false
 
         command = '''
         printf "%s\t%s\n" \
-          "System Build"  "Rebuild and switch configuration" \
+          "System Build"    "Rebuild and switch configuration" \
           "Test Config"     "Build and test configuration without boot entry" \
           "Garbage Collect" "Remove unused store paths" \
           "Update Flake"    "Update flake.lock inputs" \
@@ -462,7 +462,7 @@ telemetry_enabled = false
 
         exec = '''
         case "{selection}" in
-          Build*) cmd="sys-build" ;;
+          Build*)   cmd="sys-build" ;;
           Test*)    cmd="sys-test" ;;
           Garbage*) cmd="sys-clean" ;;
           Update*)  cmd="sys-update" ;;
