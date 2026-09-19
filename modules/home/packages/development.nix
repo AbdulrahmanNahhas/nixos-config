@@ -17,6 +17,7 @@
     socat
 
     # Coding agent
-    goose-cli
+    claude-code
+    opencode
   ];
 }
