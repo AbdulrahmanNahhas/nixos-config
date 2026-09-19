@@ -26,13 +26,16 @@
     };
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia/v5.0.1";
+      url = "github:noctalia-dev/noctalia/v5.1.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Updated by bumping this input; the Nix build refuses `hermes update`.
-    hermes = {
-      url = "github:NousResearch/hermes-agent";
+    # OpenAI's signed Linux .deb (ChatGPT + Codex GUI) repackaged for Nix;
+    # nixpkgs' `chatgpt` is the macOS bundle. Community-maintained: the .deb
+    # hash it pins is verified against OpenAI's apt signature, but the Nix
+    # wrapper itself is third-party code, so glance at the diff on bumps.
+    codex-desktop-linux = {
+      url = "github:ilysenko/codex-desktop-linux";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

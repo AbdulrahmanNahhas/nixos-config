@@ -2,8 +2,8 @@
   imports = [
     ./ghostty
     ./helix
-    ./hermes.nix
     ./keepassxc.nix
+    ./ai
     ./brave
     ./zed
   ];

@@ -15,11 +15,6 @@ _: {
     nx-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots";
     nx-optimize = "sudo nix store optimise";
 
-    # Hermes profiles (the Nix build does not write the ~/.hermes/bin wrappers)
-    vivy = "hermes -p vivy";
-    mira = "hermes -p mira";
-    ash = "hermes -p ash";
-
     # Navigation
     ".." = "cd ..";
     "..." = "cd ../..";

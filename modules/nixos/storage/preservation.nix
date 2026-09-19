@@ -44,13 +44,6 @@
           file = "/home/${username}/.gitconfig";
           how = "symlink";
         }
-        # Claude Code config: MCP servers, project trust, onboarding state.
-        # Rewritten atomically, which severs a bindmount on first save, so
-        # symlink is the only "how" that survives.
-        {
-          file = "/home/${username}/.claude.json";
-          how = "symlink";
-        }
 
         # ── GTK application settings ─────────────────────────
         {
@@ -89,7 +82,6 @@
           mode = "2755";
         }
         "/var/lib/kavita"
-        "/var/lib/docker" # Images and the Hermes sandbox container
         {
           directory = "/etc/NetworkManager/system-connections";
           user = "root";
@@ -128,12 +120,14 @@
             mode = "0700";
           }
           {
-            directory = ".claude";
+            # Codex CLI and the ChatGPT desktop app: ChatGPT login
+            # (auth.json), config.toml, sessions, plugins, and skills.
+            directory = ".codex";
             mode = "0700";
           }
           {
-            # Hermes config, API keys, memory, skills, and docker sandboxes.
-            directory = ".hermes";
+            # OpenCode provider credentials (auth.json) and session history.
+            directory = ".local/share/opencode";
             mode = "0700";
           }
 
@@ -224,8 +218,17 @@
             mode = "0755";
           }
           ".local/share/noctalia" # Plugin files and downloads
-          ".config/cosmic" # Panel, theme, and per-application settings
-          ".local/state/cosmic" # Window state and first-run flags
+
+          # ── ChatGPT Desktop ──────────────────────────────────
+          {
+            # Electron profile of the ChatGPT app (window state, local data;
+            # the session token itself is in the keyring above).
+            directory = ".config/Codex";
+            mode = "0700";
+          }
+          # ~400 MB of Node/Python/LibreOffice the app fetches on first launch
+          # for its document tools; not worth re-downloading every boot.
+          ".cache/codex-runtimes"
 
           # ── Vulkan Shader Caches ──────────────────────────────────
           # Steam's per-game shadercache is below .local/share/Steam; retain the

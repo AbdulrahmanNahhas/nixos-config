@@ -22,7 +22,7 @@ binds {
     }
 
     Mod+E repeat=false hotkey-overlay-title="Files" {
-        spawn "cosmic-files"
+        spawn "nautilus"
     }
 
     Mod+Z repeat=false hotkey-overlay-title="Zed Editor" {

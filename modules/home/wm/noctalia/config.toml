@@ -472,6 +472,33 @@ telemetry_enabled = false
         ghostty -e fish -lc "$cmd; exec fish"
         '''
 
+        # ── Local AI (uncomment with home/programs/ai/local.nix) ───────────────────
+#
+#         [shell.launcher.dmenu.entry.ai]
+#         label = "Local AI"
+#         prefix = "ai"
+#         glyph = "cpu"
+#         global = false
+#
+#         command = '''
+#         printf "%s\t%s\n" \
+#           "Start"  "Start llama-swap on 127.0.0.1:8080" \
+#           "Chat"   "Open the local chat UI in the browser" \
+#           "Stop"   "Stop llama-swap and free the GPU" \
+#           "Unload" "Unload models, keep the router running" \
+#           "Status" "Show running models and follow the log"
+#         '''
+#
+#         exec = '''
+#         case "{selection}" in
+#           Start*)  fish -c "ai on" ;;
+#           Chat*)   fish -c "ai on; ai chat" ;;
+#           Stop*)   fish -c "ai off" ;;
+#           Unload*) fish -c "ai unload" ;;
+#           Status*) ghostty -e fish -lc "ai status; ai logs" ;;
+#         esac
+#         '''
+
         # ── Nix Package Search ───────────────────────────────────────────────────────
 
         [shell.launcher.dmenu.entry.search]
@@ -745,9 +772,6 @@ type = "avivbintangaringga/nix-monitor:nix-monitor"
 capsule = false
 enabled = true
 hide_when_no_unread = true
-
-[widget.pulse]
-type = "lowcache/claude-companion:pulse"
 
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"

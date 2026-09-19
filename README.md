@@ -16,8 +16,10 @@ Declarative NixOS and Home Manager configuration for `shadow`, a Razer Blade
 ## Current features
 
 - Niri with Noctalia as the desktop session, launched through greetd/tuigreet.
-- COSMIC applications (Files, Edit, Viewer, Reader, Player, and System Monitor)
-  integrated into Niri, with Papers kept for DjVu, CBZ, and PostScript.
+- GNOME applications (Nautilus, Text Editor, Loupe, Showtime, Papers, and
+  Resources) integrated into Niri.
+- Codex CLI, OpenCode, and the ChatGPT desktop app, sharing one persona file
+  and reachable from Zed's agent panel (see `modules/home/programs/ai`).
 - PipeWire, NetworkManager, DNSCrypt Proxy, Bluetooth, OpenRazer, fwupd,
   declarative Flatpak, standard Steam, and Kavita.
 - OpenSSH, printing, scanning, mDNS, ModemManager, and usbmuxd are disabled.
@@ -58,7 +60,7 @@ nix eval .#nixosConfigurations.shadow.config.system.build.toplevel.drvPath
 
 `nh` assumes this repository lives at `/saved/nixos-config`. Its scheduled
 Friday cleanup keeps the three newest generations while preserving explicit GC
-roots such as direnv/devenv environments (`--keep 3 --no-gcroots`).
+roots such as direnv/devenv environments (`--keep 3 --keep-since 7d --no-gcroots`).
 
 ## Security status
 

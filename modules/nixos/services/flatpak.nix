@@ -5,7 +5,6 @@ let
 
   # Apps available from Flathub's publisher-verified subset.
   verifiedApps = [
-    "com.brave.Browser"
     "com.github.ADBeveridge.Raider"
     "dev.geopjr.Tuba"
     "io.gitlab.news_flash.NewsFlash"
@@ -15,7 +14,7 @@ let
     "io.github.diegopvlk.Cine"
     "io.gitlab.adhami3310.Impression"
     "app.drey.EarTag"
-    "io.bassi.Amberol"
+    "com.jeffser.Nocturne"
     "moe.tsuna.tsukimi"
     "dev.geopjr.Archives"
     "org.libreoffice.LibreOffice"
@@ -31,7 +30,6 @@ let
   unverifiedApps = [
     "org.signal.Signal"
     "org.b3log.siyuan"
-    "org.zotero.Zotero"
   ];
 
   betaApps = [
@@ -166,8 +164,6 @@ in
           };
         };
 
-        "com.brave.Browser".Context.filesystems = [ "xdg-download" ];
-
         "org.libreoffice.LibreOffice" = {
           # LibreOffice's VCL still uses GTK3 for this integration.
           Environment.GTK_THEME = "adw-gtk3-dark";
@@ -219,7 +215,7 @@ in
           shared = [ "!network" ];
         };
 
-        "io.bassi.Amberol".Context = {
+        "com.jeffser.Nocturne".Context = {
           filesystems = [
             "~/.config/dconf:ro"
             "xdg-music"

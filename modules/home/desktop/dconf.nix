@@ -1,7 +1,6 @@
 { config, ... }:
 {
-  # Preferences shared by the remaining GTK applications and the GTK portal.
-  # COSMIC reads none of this; its own settings live under ~/.config/cosmic.
+  # Preferences shared by GTK applications and the portals.
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";

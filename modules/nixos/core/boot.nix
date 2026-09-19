@@ -34,7 +34,6 @@
       "randomize_kstack_offset=on"
 
       # Strict IOMMU for DMA protection (complements USBGuard)
-      "intel_iommu=on"
       "amd_iommu=on"
       "iommu.passthrough=0"
       "iommu.strict=1"

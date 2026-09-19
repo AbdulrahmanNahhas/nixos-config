@@ -1,7 +1,7 @@
 { config, lib, ... }:
 let
   # One entry per handler; every type listed becomes that desktop file's
-  # default. COSMIC applications are installed by modules/nixos/desktop/apps.nix.
+  # default. The GNOME applications are installed by modules/nixos/desktop/apps.nix.
   handlers = {
     "brave-origin.desktop" = [
       "text/html"
@@ -18,10 +18,10 @@ let
       "x-scheme-handler/unknown"
     ];
 
-    # Files also owns archives: like Nautilus before it, it extracts them from
-    # the context menu rather than browsing them.
-    "com.system76.CosmicFiles.desktop" = [
-      "inode/directory"
+    "org.gnome.Nautilus.desktop" = [ "inode/directory" ];
+
+    # Flatpak archive manager; Nautilus would extract instead of browsing.
+    "dev.geopjr.Archives.desktop" = [
       "application/zip"
       "application/x-7z-compressed"
       "application/x-tar"
@@ -31,12 +31,12 @@ let
       "application/x-rar"
     ];
 
-    "com.system76.CosmicEdit.desktop" = [
+    "org.gnome.TextEditor.desktop" = [
       "text/plain"
       "text/markdown"
     ];
 
-    "com.system76.CosmicViewer.desktop" = [
+    "org.gnome.Loupe.desktop" = [
       "image/jpeg"
       "image/png"
       "image/x-png"
@@ -50,7 +50,7 @@ let
       "image/heif"
     ];
 
-    "com.system76.CosmicPlayer.desktop" = [
+    "org.gnome.Showtime.desktop" = [
       "video/mp4"
       "video/x-matroska"
       "video/webm"
@@ -65,10 +65,8 @@ let
       "video/mp2t"
     ];
 
-    "com.system76.CosmicReader.desktop" = [ "application/pdf" ];
-
-    # Papers keeps the formats cosmic-reader cannot open.
     "org.gnome.Papers.desktop" = [
+      "application/pdf"
       "application/x-bzpdf"
       "application/x-ext-pdf"
       "application/x-gzpdf"
@@ -80,7 +78,7 @@ let
       "application/x-cbr"
     ];
 
-    "io.bassi.Amberol.desktop" = [
+    "io.github.diegopvlk.Cine.desktop" = [
       "audio/mpeg"
       "audio/flac"
       "audio/x-flac"

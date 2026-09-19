@@ -1,9 +1,9 @@
 { config, ... }:
 {
+  # Blackwell only; keeps the local llama-cpp-cuda build to one architecture.
   nixpkgs.config.cudaCapabilities = [ "12.0" ];
 
   hardware.nvidia = {
-    powerManagement.finegrained = true;
     package = config.boot.kernelPackages.nvidiaPackages.latest;
     dynamicBoost.enable = true;
   };

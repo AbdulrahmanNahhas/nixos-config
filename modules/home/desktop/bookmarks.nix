@@ -1,7 +1,7 @@
 { config, ... }:
 {
   # Sidebar shortcuts for the GTK file chooser (Niri's portal file picker).
-  # COSMIC Files keeps its own favourites under ~/.config/cosmic.
+  # Nautilus reads the same file.
   xdg.configFile."gtk-3.0/bookmarks".text = ''
     file://${config.home.homeDirectory}/Documents Documents
     file://${config.home.homeDirectory}/Projects Projects

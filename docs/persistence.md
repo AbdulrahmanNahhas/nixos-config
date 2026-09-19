@@ -27,7 +27,6 @@ Aqua's dconf database. Preserved directories include:
 - `/var/cache/tuigreet`, so the greeter remembers Aqua's last session
 - `/var/lib/flatpak` and `/var/lib/bluetooth`
 - `/var/lib/kavita`
-- `/var/lib/docker`, holding images and the Hermes sandbox container
 - `/etc/NetworkManager/system-connections`
 
 OpenSSH is currently disabled. Its Ed25519 host identity is preserved
@@ -35,30 +34,27 @@ conditionally whenever the server is enabled, avoiding both unused persistent
 key material now and a changing host identity after future tmpfs-root reboots.
 
 `/saved/games` is a direct-persistent Steam library created by the gaming
-module, and `/saved/models` holds the GGUF files served by `llama-swap`. Like
-`/saved/nixos-config` and the SOPS deployment identity, they live directly on
-the persistent `/saved` mount rather than through Preservation; `/saved/models`
-is outside `/home` so the hardened `llama-swap` service can read it.
+module, and `/saved/models` holds the GGUF files served by the local-ai
+module. Like `/saved/nixos-config` and the SOPS deployment identity, they live
+directly on the persistent `/saved` mount rather than through Preservation.
 
 ## Aqua state
 
 The configuration preserves standard XDG directories except `Downloads`, plus
-Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Claude Code and
-Hermes agent state (`~/.hermes`: config, API keys, memory, skills, and docker
-sandboxes), Zed and Delta state,
-Atuin history, direnv approvals, devenv trust data and GC roots, Noctalia and
-COSMIC application state, audio state, Steam (including per-game shader data),
-Mesa/RADV shader caches, Obsidian, OpenRazer, and Polychromatic. Flatpak state
-covers exactly the application IDs declared in the Flatpak module, derived from
-that module's own list so the two cannot drift; this includes Brave's complete
-browser profile. Manually installed Flatpaks do not gain persistence
+Books, SSH/GnuPG credentials, GitHub CLI and keyring state, Brave's profile,
+Codex and the ChatGPT desktop app (`~/.codex` login and sessions, the app's
+Electron profile, and its downloaded document runtime), OpenCode credentials
+and sessions, Zed and Delta state, Atuin history, direnv approvals, devenv
+trust data and GC roots, Noctalia state, audio state, Steam (including
+per-game shader data), Mesa/RADV shader caches, Obsidian, OpenRazer, and
+Polychromatic. Flatpak state covers exactly the application IDs declared in
+the Flatpak module, derived from that module's own list so the two cannot
+drift. Manually installed Flatpaks do not gain persistence
 automatically, and removing an application from the Flatpak module also drops
 its persistence, leaving the old `~/.var/app/<id>` behind under `/saved`.
 Browser and Noctalia caches are ephemeral except for caches stored inside an
 application's required profile directory.
 
-COSMIC applications keep their settings and window state under
-`~/.config/cosmic` and `~/.local/state/cosmic`.
 
 Direnv approvals are retained in `~/.local/share/direnv`, so an unchanged
 `.envrc` remains approved after reboot. Changing `.envrc` still invalidates its

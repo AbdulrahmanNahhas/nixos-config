@@ -18,8 +18,8 @@
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
       "https://devenv.cachix.org"
-      # Official CUDA cache (successor of cuda-maintainers.cachix.org). Without
-      # it every cudaSupport package compiles the toolkit from source.
+      # Official CUDA cache: serves the CUDA runtime libraries llama-cpp-cuda
+      # links against, so only llama-cpp itself compiles locally.
       "https://cache.nixos-cuda.org"
     ];
     trusted-public-keys = [

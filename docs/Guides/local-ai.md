@@ -1,152 +1,94 @@
-# Local AI: llama-swap and Hermes
+# Local AI: llama-swap (parked)
 
-The NixOS side is declared in `modules/nixos/services/llama.nix` (llama.cpp
-with CUDA, `services.llama-swap` on `127.0.0.1:8080`), `docker.nix`, and
-`modules/home/programs/hermes.nix` (the `hermes` CLI and desktop app from the
-`hermes` flake input). Everything below is one-time runtime setup that lives in
-`/saved/models` and `~/.hermes`, both persistent.
+Not imported today: `modules/home/programs/ai/default.nix` comments out
+`./local.nix` and the Noctalia `ai` launcher entry is commented out beside it,
+because `llama-cpp-cuda` compiles locally on every nixpkgs bump. Uncomment
+both to enable.
 
-Hermes updates come from `nix flake update hermes`; the Nix build refuses
-`hermes update`.
+`modules/home/programs/ai/local.nix` owns the whole feature: `llama-cpp-cuda`,
+a user service running `llama-swap` on `127.0.0.1:8080`, the `ai` fish
+function, and Zed's "Local" model provider. The GGUF files in `/saved/models`
+are the only runtime state.
 
-## 1. Verify the GPU and the binary
+Nothing runs until `ai on`. llama-swap itself never touches the GPU; it starts
+`llama-server` for whichever model a client asks for and stops it after the
+model's `ttl`, so the RTX 5060 wakes only while a model is loaded and sleeps
+again a few minutes after the last request.
 
-```fish
-nvidia-smi                 # must list the RTX 5060, idle
-llama-server --version     # from the CUDA-enabled llama-cpp
-```
+## Build cost
 
-## 2. Download the models
+`llama-cpp-cuda` is not served by any binary cache, so each nixpkgs bump
+recompiles llama-cpp locally (minutes, one GPU architecture thanks to
+`cudaCapabilities`). The CUDA runtime it links against does come from
+`cache.nixos-cuda.org`. If a bump also brings a build input that Hydra has not
+cached yet (Node.js was one), that compiles too; `nh os switch` a day later
+usually finds it cached.
+
+## Setup
 
 ```fish
 cd /saved/models
 hf download unsloth/Qwen3.5-9B-GGUF Qwen3.5-9B-Q4_K_M.gguf --local-dir .
-hf download unsloth/Qwen3.5-4B-GGUF Qwen3.5-4B-Q4_K_M.gguf --local-dir .
 ```
 
-Expect about 5.7 GiB and 3.4 GiB. If a repo name 404s, search Hugging Face for
-the current Qwen3.5 GGUF upload and adjust the file names in `llama.nix`.
+Expect about 5.7 GiB. If the repo name 404s, search Hugging Face for the
+current upload and change the file name in `local.nix`; a new model is a
+new entry in its `models` set and in the Zed list.
 
-Smoke test the 9B by hand before trusting the service:
+Smoke test by hand before trusting the service:
 
 ```fish
-llama-server -m /saved/models/Qwen3.5-9B-Q4_K_M.gguf -ngl 99 -c 32768 --port 8081
+llama-server -m /saved/models/Qwen3.5-9B-Q4_K_M.gguf -ngl 99 -fa on --port 8081
 ```
 
-The startup log must say `offloaded N/N layers to GPU`. Anything less means
-the layers landed on the CPU; fix that first. Then confirm the service path:
+The log must say `offloaded N/N layers to GPU`. Then:
 
 ```fish
-systemctl status llama-swap
-curl http://127.0.0.1:8080/v1/models
-journalctl -u llama-swap -f      # watch the first swap-in
+ai on
+ai chat            # llama.cpp's chat UI, nothing else to install
+ai status          # loaded models
+ai logs            # follow the service log
+ai unload          # free the GPU, keep the router
+ai off
 ```
 
-## 3. Hermes: first run and lockdown
+The Noctalia launcher has the same actions under the `ai` prefix.
 
-```fish
-hermes setup
+## Clients
+
+- **Chat**: `ai chat` opens llama.cpp's built-in web UI (served by llama-swap
+  at `/upstream/qwen-main/`). Local, no account, conversations stay in the
+  browser profile.
+- **Zed**: agent panel → "Local" provider. It asks for an API key once; type
+  anything. The service must be running; Zed will not start it.
+- **OpenCode**: `opencode providers login` → OpenAI-compatible provider, host
+  `http://127.0.0.1:8080`, model `qwen-main`, any key.
+- **Codex**: a `[model_providers.local]` entry in `~/.codex/config.toml` with
+  `base_url = "http://127.0.0.1:8080/v1"`, then `codex -c model_provider=local
+  -m qwen-main`.
+- **GNOME app**, if a native window is wanted later: Alpaca
+  (`com.jeffser.Alpaca` on Flathub, libadwaita, speaks to any
+  OpenAI-compatible endpoint, has speech input). Not installed.
+
+## Two GPUs
+
+The CUDA build can only see the RTX 5060. Small models for the AMD 880M need
+`llama-cpp-vulkan` (Hydra-cached, no toolkit) with the AMD ICD pinned so they
+never wake the NVIDIA card:
+
+```nix
+cmd = "${lib.getExe' pkgs.llama-cpp-vulkan "llama-server"} -m ${models}/<2B>.gguf -ngl 99 -c 8192 --port \${PORT} --host 127.0.0.1";
+env = [ "VK_ICD_FILENAMES=/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json" ];
 ```
 
-Edit `~/.hermes/config.yaml` before the first real task:
-
-```yaml
-approvals:
-  mode: on                # never "off"
-
-terminal:
-  backend: docker         # default is "local", direct host execution
-  container_memory: 3072  # MB; 16 GB total, llama-server needs the rest
-  container_persistent: true
-  docker_forward_env: []  # anything here is readable by agent code
-```
-
-Persistent mode keeps `/workspace` and `/root` under
-`~/.hermes/sandboxes/docker/<task_id>/`. The Docker daemon is socket-activated
-and starts on the first `hermes` task.
-
-Trim the tool surface with `hermes tools`; enable the minimum. Do not run
-`hermes gateway`.
-
-## 4. Point Hermes at llama-swap
-
-```fish
-hermes model
-```
-
-OpenAI-compatible provider, endpoint `http://127.0.0.1:8080/v1`, model
-`qwen-main`, any dummy API key. `hermes doctor` should pass. Add `qwen-fast`
-as a second profile and Claude as a third; `/model` switches mid-session.
-Skip Nous Portal.
-
-## 5. Make it yours
-
-```fish
-cd ~/.hermes && git init
-printf 'sandboxes/\n*.key\n.env\n' > .gitignore
-git add -A && git commit -m "baseline"
-```
-
-Write `~/.hermes/SOUL.md` by hand. Skills in `~/.hermes/skills/` follow the
-agentskills.io layout and also load in Claude Code.
+The iGPU has no VRAM of its own; a 2B model takes about 1.5 GiB of the 16 GiB
+of RAM, which is fine next to the 9B in VRAM. Speech: `whisper-cpp-vulkan`
+(transcription, same ICD trick) and `piper-tts` (speech synthesis, CPU) are in
+nixpkgs; Alpaca can drive both. Add these when a model is chosen; nothing is
+declared until then.
 
 ## Notes
 
-- Both models together exceed the 8 GiB of VRAM; llama-swap unloads an idle
-  model after its `ttl` (600 s main, 300 s fast) so the other can load.
-- The dGPU is normally asleep. If a swap-in fails with no CUDA device, check
-  `nvidia-smi` first; if the card never wakes, the fallback is
-  `hardware.nvidia.nvidiaPersistenced = true` at a power cost.
-
-## Profiles (the household)
-
-Each bot is a profile under `~/.hermes/profiles/<name>/` — its own
-`config.yaml`, `.env`, `auth.json`, `SOUL.md`, `memories/`, sessions.
-`--clone` copies config, `.env`, `SOUL.md`, skills, and the curated
-memories, never OAuth logins: each bot signs in itself with
-`hermes -p <name> auth add anthropic`.
-
-| Bot | Role | Backend | Toolsets |
-|-----|------|---------|----------|
-| vivy | Shadow's keeper: NixOS config, Hermes, packages, AIs | `local`, manual approvals, write-sandboxed to the flake, `~/Projects`, her profile | terminal, file, delegation, memory, skills, todo, clarify, session_search |
-| mira | companion, search, news, university | no terminal | web (keyless ring), file, memory, skills, todo, clarify, session_search |
-| ash | engineering, real work | `docker`, `~/Projects` mounted at `/workspace` | terminal, code_execution, file, memory, skills, todo, clarify, session_search |
-
-The root profile (`~/.hermes/config.yaml`) is the locked baseline the
-clones inherit: `approvals.mode: manual`, the `approvals.deny` list,
-docker backend, checkpoints on, wake word and catalog fetches off. Do
-not run `hermes gateway`; `hermes setup` starts one, stop it with
-`hermes gateway stop` and `systemctl --user disable --now hermes-gateway`.
-
-## Updating
-
-```fish
-cd /saved/nixos-config
-nix flake update hermes          # or: nix flake update  (everything)
-nix build .#nixosConfigurations.shadow.config.system.build.toplevel --no-link
-sudo nh os test /saved/nixos-config
-hermes config check              # new keys since the last version?
-hermes config migrate            # adds them with defaults; review the diff
-hermes doctor
-```
-
-`hermes update` is refused by the Nix build; ignore doctor's "reinstall
-entry point with pip" line for the same reason. If the desktop app fails
-its Electron-headers hash after a bump, either the override in
-`modules/home/programs/hermes.nix` is now unnecessary (remove it) or its
-hash needs the new value from the build error's `got:` line.
-
-## Local models: when and how
-
-`llama-swap` is running and `qwen-main`/`qwen-fast` are declared, but
-the GGUF files are not downloaded until you run the `hf download` lines
-above. Then, per bot:
-
-```fish
-hermes -p mira model    # Custom OpenAI-compatible → http://127.0.0.1:8080/v1, model qwen-main, any key
-```
-
-Good fits for the 9B: Mira's chat and summaries, quick questions,
-anything you would rather not send to a cloud provider. Poor fits: Vivy's
-NixOS work and Ash's engineering — tool-heavy, long-context tasks where a
-9B fumbles. `/model` switches mid-session in either direction.
+- If a swap-in fails with no CUDA device, check `nvidia-smi` first; if the
+  card never wakes, the fallback is `hardware.nvidia.nvidiaPersistenced = true`
+  at a power cost.

@@ -38,9 +38,6 @@ Kavita listens on `0.0.0.0` and `::`, although its firewall opening is tied to
   reviewed together.
 - The previously committed Wallhaven API key remains compromised until revoked;
   removing it from the current tree does not remove Git history.
-- The COSMIC module hard-enables `geoclue2` for automatic timezone and night
-  light, so it is running in the Niri session too. It is request-driven and
-  submits no location data, but it cannot be switched off without `mkForce`.
 
 ## Planned, not active
 

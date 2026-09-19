@@ -26,7 +26,6 @@
           "gamemode"
           "openrazer"
           "dialout"
-          "docker"
         ];
         shell = pkgs.fish;
       };
