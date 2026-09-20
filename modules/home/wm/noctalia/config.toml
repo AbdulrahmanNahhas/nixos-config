@@ -632,7 +632,7 @@ wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
     builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri" ]
-    community_ids = [ "brave-origin", "libreoffice", "zed", "bat", "lazygit", "yazi" ]
+    community_ids = [ "brave-origin", "libreoffice", "zed", "bat", "lazygit", "yazi", "opencode" ]
     enable_builtin_templates = true
     enable_community_templates = true
 
