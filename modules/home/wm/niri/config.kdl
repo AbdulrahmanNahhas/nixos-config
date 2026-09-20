@@ -183,6 +183,7 @@ window-rule {
 window-rule {
     match app-id="dev.zed.Zed"
     match app-id="org.b3log.siyuan"
+    match app-id="codex-desktop"
     opacity 0.94
     background-effect { blur true; }
 }
