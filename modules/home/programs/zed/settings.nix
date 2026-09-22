@@ -235,10 +235,6 @@ in
     };
 
     # ── AI / Agent ────────────────────────────────────────
-    # Agentic work goes through the external agents in programs/ai (Codex on
-    # the ChatGPT subscription; OpenCode later). The built-in agent and inline
-    # assistant need Zed Pro or an API key: once OpenRouter/OpenCode Zen is in
-    # use, add the key in the panel and point default_model at that provider.
     disable_ai = false;
     agent = {
       dock = "left";
@@ -250,9 +246,6 @@ in
         effort = "high";
         enable_thinking = true;
       };
-      # Fetch auto-allow: reference/doc sites for the languages this config's
-      # LSPs cover (Rust, Nix, JS/TS, biome, shadcn), so the agent doesn't
-      # have to ask before reading docs.
       tool_permissions = {
         tools = {
           fetch = {
