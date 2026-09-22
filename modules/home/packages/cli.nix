@@ -8,7 +8,6 @@
     bat # Better cat (alias: cat)
     fd # Better find (alias: find)
     ripgrep # Better grep (alias: grep, command: rg)
-    yazi
     chafa # Terminal graphics (Images)
     dust # Better du (alias: du)
     duf # Better df (alias: df)
