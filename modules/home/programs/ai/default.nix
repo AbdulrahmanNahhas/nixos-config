@@ -27,6 +27,9 @@
     context = ./persona.md;
   };
 
+  # Delta looks for project-level instructions in its config directory.
+  xdg.configFile."delta/AGENTS.md".source = ./persona.md;
+
   # External agents in Zed's agent panel over ACP. Declared as "custom" with
   # nixpkgs binaries; the registry entries would fetch npx/tarball builds
   # instead. codex-acp is nixpkgs' codex, so it shares ~/.codex with the CLI.
