@@ -50,7 +50,7 @@ let
       "image/heif"
     ];
 
-    "org.gnome.Showtime.desktop" = [
+    "io.github.diegopvlk.Cine.desktop" = [
       "video/mp4"
       "video/x-matroska"
       "video/webm"
@@ -63,22 +63,6 @@ let
       "video/3gpp"
       "video/3gpp2"
       "video/mp2t"
-    ];
-
-    "org.gnome.Papers.desktop" = [
-      "application/pdf"
-      "application/x-bzpdf"
-      "application/x-ext-pdf"
-      "application/x-gzpdf"
-      "application/x-xzpdf"
-      "application/postscript"
-      "application/x-djvu"
-      "image/vnd.djvu"
-      "application/x-cbz"
-      "application/x-cbr"
-    ];
-
-    "io.github.diegopvlk.Cine.desktop" = [
       "audio/mpeg"
       "audio/flac"
       "audio/x-flac"
@@ -92,6 +76,19 @@ let
       "audio/m4a"
       "audio/mp4"
       "audio/webm"
+    ];
+
+    "org.gnome.Papers.desktop" = [
+      "application/pdf"
+      "application/x-bzpdf"
+      "application/x-ext-pdf"
+      "application/x-gzpdf"
+      "application/x-xzpdf"
+      "application/postscript"
+      "application/x-djvu"
+      "image/vnd.djvu"
+      "application/x-cbz"
+      "application/x-cbr"
     ];
 
     "org.libreoffice.LibreOffice.desktop" = [
