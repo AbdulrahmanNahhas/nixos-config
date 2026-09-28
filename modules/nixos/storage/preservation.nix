@@ -187,6 +187,10 @@
             mode = "0700";
           }
 
+          # ── GNOME Calendar / Evolution Data Server ───────────────
+          ".local/share/evolution"
+          ".config/evolution"
+
           # ── Shared Espressif Toolchains ──────────────────────
           {
             directory = ".rustup";

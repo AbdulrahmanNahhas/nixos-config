@@ -14,5 +14,6 @@
     papers
     resources
     gnome-disk-utility
+    gnome-calendar
   ];
 }
