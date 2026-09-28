@@ -67,6 +67,9 @@ in
     };
   };
 
+  # Unlock the login keyring for apps launched in the greetd session.
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   # The systemd-user PAM stack deadlocks on Shadow, blocking greetd and every
   # login for the full 90-second user@.service timeout. Only the nested PAM
   # call that launches `systemd --user` is bypassed (the greetd login stack is

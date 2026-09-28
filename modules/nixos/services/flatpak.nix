@@ -9,7 +9,6 @@ let
     "dev.geopjr.Tuba"
     "io.gitlab.news_flash.NewsFlash"
     "io.gitlab.theevilskeleton.Upscaler"
-    "org.gnome.Fractal"
     "org.telegram.desktop"
     "io.github.diegopvlk.Cine"
     "io.gitlab.adhami3310.Impression"
@@ -30,6 +29,7 @@ let
   unverifiedApps = [
     "org.signal.Signal"
     "org.b3log.siyuan"
+    "im.riot.Riot" # Element Desktop
   ];
 
   betaApps = [
@@ -140,12 +140,24 @@ in
 
         # --- Exceptions & app-specific routing -----------------------------
 
-        # Private knowledge base. Its manifest --persist entries keep the
-        # workspace inside ~/.var/app, so the global !home policy costs nothing
-        # and the data is covered by preservation's .var/app loop.
         "org.b3log.siyuan" = {
           Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
           Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+        };
+
+        "im.riot.Riot" = {
+          Environment = {
+            ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+            XDG_CURRENT_DESKTOP = "GNOME";
+          };
+          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+          # Allow Element to use the host GNOME Keyring Secret Service.
+          "Session Bus Policy" = {
+            "org.freedesktop.secrets" = "talk";
+          };
+          Context.filesystems = [
+            "~/.config/dconf:ro"
+          ];
         };
 
         "org.zotero.Zotero" = {
@@ -186,7 +198,6 @@ in
 
         # --- Read-only dconf for apps that follow interface preferences -----
 
-        "org.gnome.Fractal".Context.filesystems = [ "~/.config/dconf:ro" ];
         "io.gitlab.news_flash.NewsFlash".Context.filesystems = [ "~/.config/dconf:ro" ];
         "io.github.alainm23.planify".Context.filesystems = [ "~/.config/dconf:ro" ];
         "org.gnome.World.Secrets".Context.filesystems = [ "~/.config/dconf:ro" ];
