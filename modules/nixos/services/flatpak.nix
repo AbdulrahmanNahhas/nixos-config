@@ -1,6 +1,21 @@
 { lib, ... }:
 let
   apps = import ./flatpak-apps.nix;
+  themePaths = [
+    "xdg-config/gtk-3.0:ro"
+    "xdg-config/gtk-4.0:ro"
+  ];
+  appOverrides =
+    app:
+    let
+      overrides = app.overrides or { };
+    in
+    if app.strictFilesystems or false then
+      lib.recursiveUpdate overrides {
+        Context.filesystems = [ "!host:reset" ] ++ themePaths ++ (overrides.Context.filesystems or [ ]);
+      }
+    else
+      overrides;
 in
 {
   services.flatpak = {
@@ -37,7 +52,7 @@ in
       # Managed system overrides replace manual edits; user overrides are separate.
       writeMode = "replace";
       pruneUnmanagedOverrides = true;
-      settings = lib.mapAttrs (_: app: app.overrides or { }) apps // {
+      settings = lib.mapAttrs (_: appOverrides) apps // {
         global = {
           Environment = {
             # Flatpak already bind-mounts host icon themes read-only at

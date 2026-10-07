@@ -25,6 +25,15 @@ in
         neededForUsers = true;
       };
 
+      # Native NetworkManager can import this runtime file when needed.
+      # Existing NetworkManager connections stay authoritative and untouched.
+      vpn-shadow = {
+        sopsFile = encryptedSecretRoot + /wireguard-shadow.conf.enc;
+        format = "binary";
+        path = "/run/secrets/Shadow-BG-20.conf";
+        mode = "0400";
+      };
+
       nix-config = {
         sopsFile = encryptedSecretRoot + /nix.conf.enc;
         format = "binary";

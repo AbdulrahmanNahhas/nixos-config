@@ -12,13 +12,20 @@
     user = "kavita";
     tokenKeyFile = "/var/lib/kavita/token_key";
     settings = {
-      IpAddresses = "0.0.0.0,::";
+      IpAddresses = "127.0.0.1,::1";
       Port = 8083;
     };
   };
 
   systemd.services.kavita = {
-    serviceConfig.BindPaths = [ "/home/${username}/Books:/books" ];
+    serviceConfig = {
+      BindReadOnlyPaths = [ "/home/${username}/Books:/books" ];
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      ProtectSystem = "strict";
+      ReadWritePaths = [ "/var/lib/kavita" ];
+      UMask = "0077";
+    };
     wantedBy = lib.mkForce [ ];
   };
 }

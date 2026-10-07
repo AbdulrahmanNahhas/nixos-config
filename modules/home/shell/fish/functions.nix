@@ -7,6 +7,7 @@ _: {
     sys-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots $argv";
     sys-optimise = "sudo nix store optimise";
     sys-update = "nix flake update --flake /saved/nixos-config $argv";
+    sys-guide = "xdg-open /saved/nixos-config/guide/index.html";
 
     sys-search = ''
       set -l initial_query (string join ' ' -- $argv)

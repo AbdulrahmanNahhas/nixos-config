@@ -10,6 +10,7 @@
     };
   };
   "io.gitlab.theevilskeleton.Upscaler" = {
+    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
@@ -23,9 +24,16 @@
   "org.telegram.desktop" = {
   };
   "io.github.diegopvlk.Cine" = {
+    strictFilesystems = true;
     overrides = {
       Context = {
-        filesystems = [ "xdg-videos" ];
+        filesystems = [
+          "xdg-videos"
+          "xdg-pictures/Cine Screenshots:create"
+          "xdg-run/gvfs"
+          "xdg-run/gvfsd"
+          "xdg-run/pipewire-0:ro"
+        ];
         shared = [ "!network" ];
       };
     };
@@ -42,17 +50,20 @@
     };
   };
   "app.drey.EarTag" = {
+    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
           "~/.config/dconf:ro"
           "xdg-music"
+          "xdg-download"
         ];
         shared = [ "!network" ];
       };
     };
   };
   "com.jeffser.Nocturne" = {
+    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [

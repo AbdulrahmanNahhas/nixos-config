@@ -11,10 +11,16 @@ in
 
     # https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml
     settings = {
-      listen_addresses = [ "127.0.0.1:53" ];
+      listen_addresses = [
+        "127.0.0.1:53"
+        "[::1]:53"
+      ];
 
       # Avoid probing the entire public resolver catalog after every rebuild.
       # DNS is unavailable until dnscrypt-proxy finishes its initial selection.
+      # These entries advertise DNSSEC, no logging, and no filtering in the
+      # signed resolver catalog. Those are operator claims, not an audit.
+      # Explicit server_names bypass require_*; keep that distinction visible.
       server_names = [
         "cloudflare"
         "scaleway-fr"
@@ -40,9 +46,9 @@ in
       doh_servers = true;
       odoh_servers = false;
 
-      # Security requirements
+      # Requirements for automatic selection if server_names is removed.
       require_dnssec = true;
-      require_nolog = false;
+      require_nolog = true;
       require_nofilter = true;
 
       # Prevent local hostname leaks
