@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Inside Shadow · Your NixOS field guide</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="inventory.js" defer></script>
+  <script src="content.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to lesson</a>
+  <aside id="sidebar">
+    <a class="brand" href="#orientation"><span class="mark">S</span><span>Inside Shadow<small>Aqua’s system, explained.</small></span></a>
+    <label class="search-label" for="search">Find a concept or task</label>
+    <input id="search" type="search" placeholder="Try “keys”, “add app”, “rollback”…" autocomplete="off">
+    <div class="progress-label"><span id="progressText">Your learning path</span><button id="reset" type="button">Reset</button></div>
+    <progress id="progress" max="100" value="0" aria-label="Lessons marked understood"></progress>
+    <nav id="nav" aria-label="Lessons"></nav>
+    <p class="side-note">Offline by design. No analytics, external fonts, or command execution. Progress is stored only in this browser when available.</p>
+  </aside>
+  <div class="workspace">
+    <header><button id="menu" type="button" aria-expanded="false" aria-controls="sidebar">Lessons</button><span class="eyebrow">FIELD GUIDE / SHADOW</span><button id="theme" type="button">Light theme</button></header>
+    <main id="main" tabindex="-1">
+      <div id="lesson">
+        <p class="eyebrow">START HERE</p><h1>Understand the machine<br>you live with.</h1>
+        <p>This guide explains Shadow’s NixOS configuration, from the language and rebuilds to apps, persistence, secrets, networking, and recovery.</p>
+        <noscript>Enable JavaScript for the lessons, search, and interactive simulations. Source content is in content.js beside this file.</noscript>
+      </div>
+      <section id="lab" aria-label="Interactive exercise" hidden></section>
+      <section id="knowledge" aria-label="Check your understanding" hidden></section>
+      <footer class="lesson-footer"><button id="previous" type="button">← Previous</button><button id="understood" type="button">Mark understood</button><button id="next" type="button">Next lesson →</button></footer>
+    </main>
+    <footer class="page-footer">Written for your repository · 7 October 2026 · A guide and simulator, not a live system monitor.</footer>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

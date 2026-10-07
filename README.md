@@ -1,87 +1,17 @@
-# Shadow NixOS configuration
+# Shadow
 
-Declarative NixOS and Home Manager configuration for `shadow`, a Razer Blade
-14 (2025). The root filesystem is tmpfs; LUKS2 protects a Btrfs filesystem whose
-`/nix` and `/saved` subvolumes retain selected state.
+NixOS + Home Manager for Aqua's Razer Blade 14: Niri/Noctalia, an encrypted
+Btrfs persistent store, and an ephemeral root.
 
-## Hardware
-
-| Component | Detail                                    |
-| --------- | ----------------------------------------- |
-| CPU       | AMD Ryzen AI 9 365                        |
-| GPU       | AMD Radeon 880M and NVIDIA RTX 5060 Max-Q |
-| RAM       | 16 GB LPDDR5X                             |
-| Disk      | NVMe at `/dev/nvme0n1`                    |
-
-## Current features
-
-- Niri with Noctalia as the desktop session, launched through greetd/tuigreet.
-- GNOME applications (Nautilus, Text Editor, Loupe, Showtime, Papers, and
-  Resources) integrated into Niri.
-- Codex CLI, OpenCode, and the ChatGPT desktop app, sharing one persona file
-  and reachable from Zed's agent panel (see `modules/home/programs/ai`).
-- PipeWire, NetworkManager, DNSCrypt Proxy, Bluetooth, OpenRazer, fwupd,
-  declarative Flatpak, standard Steam, and Kavita.
-- OpenSSH, printing, scanning, mDNS, ModemManager, and usbmuxd are disabled.
-- The firewall is enabled and only opens ports on `wlan0`.
-- Preservation retains explicitly selected system and Aqua state under
-  `/saved`; everything else on root is lost at reboot.
-
-## Architecture
-
-`flake.nix` constructs the host. `shadow/default.nix` owns machine facts and
-selects NixOS modules directly, while `shadow/home.nix` owns Aqua's identity
-and selects Home Manager modules directly. There is one host and one user, so
-both live flat under `shadow/` instead of per-host/per-user subdirectories.
-
-```text
-flake.nix -> shadow/default.nix -> modules/nixos
-                               -> shadow/home.nix -> modules/home
-```
-
-See [architecture](docs/architecture.md) for the full layout and dependency
-rules. See the [development environment guide](docs/development.md) for the
-Zed, devenv, direnv, Rust, and web-tooling workflow.
-
-## Installation
-
-The Disko installation procedure destroys the target disk. Review the device,
-layout, credentials, and persistence policy first. Follow the dedicated
-[installation guide](docs/installation.md); do not run its destructive commands
-as ordinary validation.
-
-## Maintenance
+Open [the interactive guide](guide/index.html) in your browser for the system
+map, concepts, app catalog, secrets/VPN workflows, maintenance, and sources.
+It works offline and does not run commands on your machine.
 
 ```sh
-sudo nh os switch /saved/nixos-config
 nix flake check
-nix eval .#nixosConfigurations.shadow.config.system.build.toplevel.drvPath
+nix build .#nixosConfigurations.shadow.config.system.build.toplevel --no-link
+sudo nh os test /saved/nixos-config
 ```
 
-`nh` assumes this repository lives at `/saved/nixos-config`. Its scheduled
-Friday cleanup keeps the three newest generations while preserving explicit GC
-roots such as direnv/devenv environments (`--keep 3 --keep-since 7d --no-gcroots`).
-
-## Security status
-
-- **Implemented:** LUKS2 disk encryption, tmpfs root, firewall, DNSCrypt Proxy,
-  randomized Wi-Fi MAC addresses, and explicit persistence.
-- **Partially implemented:** Flatpak application isolation and a small baseline
-  security module; neither is a complete confinement strategy.
-- **Planned:** AppArmor, Secure Boot, further service hardening, snapshots,
-  backups, and TPM-assisted unlock.
-- **Researching:** hardened-kernel/NVIDIA compatibility and future NixOS
-  specialisations.
-- **Postponed:** no additional security mechanism is claimed active until its
-  configuration exists and is imported.
-
-Persisting logs, core dumps, browser caches, Flatpak state, and application
-state improves continuity but retains sensitive activity across reboots. See
-[security](docs/security.md) and [persistence](docs/persistence.md).
-
-## Roadmap
-
-Security changes are intentionally separated from this structural layout.
-Priorities include removing plaintext initial passwords, reducing Nix trust,
-reviewing DNS and firewall assumptions, and adding tested recovery and backup
-procedures. See the [roadmap](docs/roadmap.md).
+After reviewing and testing a generation, use `sudo nh os switch /saved/nixos-config`.
+Disko formatting is an installation operation and must never be used as a test.

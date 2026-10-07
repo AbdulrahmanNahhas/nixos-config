@@ -4,6 +4,9 @@
   username,
   ...
 }:
+let
+  flatpakApps = import ../services/flatpak-apps.nix;
+in
 {
   preservation = {
     enable = true;
@@ -148,18 +151,20 @@
         # ── Flatpak Application Data ───────────────────────────
         # Derived from the Flatpak module so the two lists cannot drift. The
         # GTK theme extensions installed there have no per-app data.
-        ++
-          map
-            (appId: {
-              directory = ".var/app/${appId}";
-              mode = "0700";
-            })
-            (
-              lib.filter (appId: !lib.hasPrefix "org.gtk.Gtk3theme." appId) (
-                map (pkg: pkg.appId) config.services.flatpak.packages
-              )
-            )
+        ++ map (appId: {
+          directory = ".var/app/${appId}";
+          mode = "0700";
+        }) (builtins.attrNames (lib.filterAttrs (_: app: app.persist or true) flatpakApps))
         ++ [
+
+          {
+            directory = ".config/keepassxc";
+            mode = "0700";
+          }
+          {
+            directory = ".config/rust-book-brave";
+            mode = "0700";
+          }
 
           # ── Editor / IDE State ───────────────────────────────
           ".local/share/zed"
@@ -190,28 +195,6 @@
           # ── GNOME Calendar / Evolution Data Server ───────────────
           ".local/share/evolution"
           ".config/evolution"
-
-          # ── Shared Espressif Toolchains ──────────────────────
-          {
-            directory = ".rustup";
-            user = username;
-            group = "users";
-            mode = "0700";
-          }
-          {
-            # Versioned ESP-IDF checkouts, Python envs, archives, and C tools
-            # shared by ESP Rust projects using the native global builder.
-            directory = ".espressif";
-            user = username;
-            group = "users";
-            mode = "0700";
-          }
-          {
-            directory = ".espup";
-            user = username;
-            group = "users";
-            mode = "0700";
-          }
 
           # ── Desktop Session State ────────────────────────────
           {

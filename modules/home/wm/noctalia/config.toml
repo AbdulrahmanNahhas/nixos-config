@@ -453,7 +453,9 @@ telemetry_enabled = false
 
         command = '''
         printf "%s\t%s\n" \
-          "System Build"    "Rebuild and switch configuration" \
+          "Check Config"    "Evaluate and run checks" \
+          "Build Config"    "Build without activation" \
+          "Switch Config"   "Build and activate configuration" \
           "Test Config"     "Build and test configuration without boot entry" \
           "Garbage Collect" "Remove unused store paths" \
           "Update Flake"    "Update flake.lock inputs" \
@@ -462,11 +464,14 @@ telemetry_enabled = false
 
         exec = '''
         case "{selection}" in
+          Check*)   cmd="sys-check" ;;
           Build*)   cmd="sys-build" ;;
+          Switch*)  cmd="sys-switch" ;;
           Test*)    cmd="sys-test" ;;
           Garbage*) cmd="sys-clean" ;;
           Update*)  cmd="sys-update" ;;
           Package*) cmd="sys-search" ;;
+          *) exit 0 ;;
         esac
 
         ghostty -e fish -lc "$cmd; exec fish"

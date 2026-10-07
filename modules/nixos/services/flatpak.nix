@@ -1,81 +1,29 @@
-{ ... }:
+{ lib, ... }:
 let
-  flathub = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-  flathub_beta = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
-
-  # Apps available from Flathub's publisher-verified subset.
-  verifiedApps = [
-    "com.github.ADBeveridge.Raider"
-    "dev.geopjr.Tuba"
-    "io.gitlab.news_flash.NewsFlash"
-    "io.gitlab.theevilskeleton.Upscaler"
-    "org.telegram.desktop"
-    "io.github.diegopvlk.Cine"
-    "io.gitlab.adhami3310.Impression"
-    "app.drey.EarTag"
-    "com.jeffser.Nocturne"
-    "moe.tsuna.tsukimi"
-    "dev.geopjr.Archives"
-    "org.libreoffice.LibreOffice"
-    "io.github.alainm23.planify"
-    "org.gnome.World.Secrets"
-    "com.github.johnfactotum.Foliate"
-    "com.github.jeromerobert.pdfarranger"
-    "org.gnome.gitlab.YaLTeR.VideoTrimmer"
-    "org.zotero.Zotero"
-  ];
-
-  # Community-maintained, not currently publisher-verified by Flathub.
-  unverifiedApps = [
-    "org.signal.Signal"
-    "org.b3log.siyuan"
-    "im.riot.Riot" # Element Desktop
-  ];
-
-  betaApps = [
-    "cx.modal.Reflection"
-  ];
-
-  gtkThemeExtensions = [
-    "org.gtk.Gtk3theme.adw-gtk3"
-    "org.gtk.Gtk3theme.adw-gtk3-dark"
-  ];
+  apps = import ./flatpak-apps.nix;
 in
 {
   services.flatpak = {
     enable = true;
-
     remotes = [
       {
         name = "flathub-verified";
-        location = flathub;
+        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
         args = "--subset=verified";
       }
       {
         name = "flathub";
-        location = flathub;
+        location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
       }
       {
         name = "flathub-beta";
-        location = flathub_beta;
+        location = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
       }
     ];
-
-    packages =
-      map (appId: {
-        inherit appId;
-        origin = "flathub-verified";
-      }) verifiedApps
-      ++ map (appId: {
-        inherit appId;
-        origin = "flathub";
-      }) (unverifiedApps ++ gtkThemeExtensions)
-      ++ map (appId: {
-        inherit appId;
-        origin = "flathub-beta";
-      }) betaApps;
-
-    # Flatpaks track Flathub, not the NixOS channel, so they need their own timer.
+    packages = lib.mapAttrsToList (appId: app: {
+      inherit appId;
+      origin = app.origin or "flathub-verified";
+    }) apps;
     update = {
       onActivation = false;
       auto = {
@@ -83,21 +31,13 @@ in
         onCalendar = "daily";
       };
     };
-
-    # This file is the source of truth for installed Flatpaks.
     uninstallUnmanaged = true;
     uninstallUnused = true;
-
     overrides = {
-      # Nix fully owns the override files: manual `flatpak override` edits are
-      # discarded on activation, and removed apps lose their override file too.
-      # Without this the sandbox policy below is advisory, not authoritative.
+      # Managed system overrides replace manual edits; user overrides are separate.
       writeMode = "replace";
       pruneUnmanagedOverrides = true;
-
-      settings = {
-        # Every app starts fully restricted and is granted back only what it
-        # needs. Anything not listed below runs with this baseline alone.
+      settings = lib.mapAttrs (_: app: app.overrides or { }) apps // {
         global = {
           Environment = {
             # Flatpak already bind-mounts host icon themes read-only at
@@ -111,8 +51,8 @@ in
           };
 
           Context = {
-            # No host filesystem or real home. Files still reach apps through
-            # the file portal, which grants per-file access on user consent.
+            # Broad home/host grants are denied; specific manifest paths remain.
+            # Per-app exceptions and portals provide the intended file access.
             filesystems = [
               "!host"
               "!home"
@@ -136,102 +76,6 @@ in
             # Wayland apps do not need the shared IPC namespace X11 requires.
             shared = [ "!ipc" ];
           };
-        };
-
-        # --- Exceptions & app-specific routing -----------------------------
-
-        "org.b3log.siyuan" = {
-          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-        };
-
-        "im.riot.Riot" = {
-          Environment = {
-            ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-            XDG_CURRENT_DESKTOP = "GNOME";
-          };
-          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-          # Allow Element to use the host GNOME Keyring Secret Service.
-          "Session Bus Policy" = {
-            "org.freedesktop.secrets" = "talk";
-          };
-          Context.filesystems = [
-            "~/.config/dconf:ro"
-          ];
-        };
-
-        "org.zotero.Zotero" = {
-          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-          Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-        };
-
-        # Upstream requests device=all for camera access during calls; Signal
-        # uses /dev/video* directly rather than the camera portal.
-        "org.signal.Signal" = {
-          Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-          Context = {
-            devices = [ "all" ];
-            sockets = [ "pulseaudio" ];
-            filesystems = [ "xdg-download" ];
-          };
-        };
-
-        "org.libreoffice.LibreOffice" = {
-          # LibreOffice's VCL still uses GTK3 for this integration.
-          Environment.GTK_THEME = "adw-gtk3-dark";
-          Context.filesystems = [
-            "xdg-documents"
-            "xdg-download"
-            "~/.local/state/noctalia:ro" # Read-only Noctalia theme state.
-          ];
-        };
-
-        # Writes bootable images to removable media. Replace `all` with `usb`
-        # if a future release works without full device access.
-        "io.gitlab.adhami3310.Impression".Context = {
-          devices = [ "all" ];
-          filesystems = [
-            "~/.config/dconf:ro"
-            "xdg-pictures"
-          ];
-        };
-
-        # --- Read-only dconf for apps that follow interface preferences -----
-
-        "io.gitlab.news_flash.NewsFlash".Context.filesystems = [ "~/.config/dconf:ro" ];
-        "io.github.alainm23.planify".Context.filesystems = [ "~/.config/dconf:ro" ];
-        "org.gnome.World.Secrets".Context.filesystems = [ "~/.config/dconf:ro" ];
-        "moe.tsuna.tsukimi".Context.filesystems = [ "~/.config/dconf:ro" ];
-
-        # --- Local-only apps: no reason to reach the network ----------------
-
-        "io.gitlab.theevilskeleton.Upscaler".Context = {
-          filesystems = [
-            "~/.config/dconf:ro"
-            "xdg-pictures"
-          ];
-          shared = [ "!network" ];
-        };
-
-        "app.drey.EarTag".Context = {
-          filesystems = [
-            "~/.config/dconf:ro"
-            "xdg-music"
-          ];
-          shared = [ "!network" ];
-        };
-
-        "io.github.diegopvlk.Cine".Context = {
-          filesystems = [ "xdg-videos" ];
-          shared = [ "!network" ];
-        };
-
-        "com.jeffser.Nocturne".Context = {
-          filesystems = [
-            "~/.config/dconf:ro"
-            "xdg-music"
-          ];
-          shared = [ "!network" ];
         };
       };
     };

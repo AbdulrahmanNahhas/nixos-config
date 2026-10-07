@@ -1,10 +1,12 @@
 _: {
   programs.fish.functions = {
-    sys-build = "nh os switch $argv";
+    sys-check = "nix flake check /saved/nixos-config $argv";
+    sys-build = "nh os build $argv";
+    sys-switch = "nh os switch $argv";
     sys-test = "nh os test $argv";
     sys-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots $argv";
     sys-optimise = "sudo nix store optimise";
-    sys-update = "nh os switch --update --ask $argv";
+    sys-update = "nix flake update --flake /saved/nixos-config $argv";
 
     sys-search = ''
       set -l initial_query (string join ' ' -- $argv)

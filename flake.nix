@@ -26,7 +26,7 @@
     };
 
     noctalia = {
-      url = "github:noctalia-dev/noctalia/v5.2.0";
+      url = "github:noctalia-dev/noctalia/v5.2.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -36,6 +36,11 @@
     # wrapper itself is third-party code, so glance at the diff on bumps.
     codex-desktop-linux = {
       url = "github:ilysenko/codex-desktop-linux";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    delta = {
+      url = "github:zed-industries/delta-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

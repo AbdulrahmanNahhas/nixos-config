@@ -2,9 +2,9 @@
 
 ## Project Structure & Module Organization
 
-This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `shadow/default.nix` contains machine facts, Disko layout, and directly selects the `modules/nixos/` groups it needs. `shadow/home.nix` owns Aqua's identity and directly selects the `modules/home/` groups it needs. There is one host and one user, so both live flat under `shadow/` rather than `hosts/<name>/` and `home/<user>/` subdirectories. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `docs/` for design and operational notes and `encrypted-secrets/` for committed SOPS ciphertext only.
+This flake configures the single `shadow` host and Aqua's Home Manager environment. `flake.nix` constructs the system; `shadow/default.nix` contains machine facts, Disko layout, and directly selects the `modules/nixos/` groups it needs. `shadow/home.nix` owns Aqua's identity and directly selects the `modules/home/` groups it needs. There is one host and one user, so both live flat under `shadow/` rather than `hosts/<name>/` and `home/<user>/` subdirectories. Keep module-owned KDL, TOML, SVG, and text assets beside their module. Use `guide/` for the interactive operator guide and `encrypted-secrets/` for committed SOPS ciphertext only.
 
-Follow the dependency direction documented in `docs/architecture.md`: `shadow/` selects modules directly. Do not import Home Manager user modules from NixOS modules. Only split `shadow/` into per-host/per-user subdirectories (and reintroduce a `profiles/` composition layer) once a second host or user needs a differing module selection.
+Follow the dependency direction: `shadow/` selects modules directly. Do not import Home Manager user modules from NixOS modules. Only split `shadow/` into per-host/per-user subdirectories (and reintroduce a `profiles/` composition layer) once a second host or user needs a differing module selection.
 
 ## Build, Test, and Development Commands
 
@@ -15,7 +15,7 @@ Follow the dependency direction documented in `docs/architecture.md`: `shadow/` 
 - `nix fmt`: format every Nix file with the flake's `nixfmt`/`fd` formatter.
 - `niri validate --config ~/.config/niri/config.kdl`: validate the live Niri configuration, including Noctalia's generated include.
 
-Never use the destructive Disko installation command in `docs/installation.md` as a test.
+Never run destructive Disko installation/formatting commands as a test.
 
 ## Coding Style & Naming Conventions
 
@@ -31,4 +31,4 @@ History uses concise subjects, sometimes with prefixes such as `fix:`, `docs:`, 
 
 ## Security & State
 
-Do not commit credentials, keys, tokens, or `/saved/secrets/nix.conf`. Root is tmpfs; update `docs/persistence.md` whenever persistent state changes. Preserve unrelated modifications in a dirty worktree.
+Do not commit credentials, keys, tokens, or `/saved/secrets/nix.conf`. Root is tmpfs; update the persistence section in `guide/` whenever persistent state changes. Preserve unrelated modifications in a dirty worktree.

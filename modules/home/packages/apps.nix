@@ -7,6 +7,5 @@
     mullvad-browser
     wl-screenrec
     anki
-    prismlauncher
   ];
 }

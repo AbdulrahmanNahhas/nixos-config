@@ -4,7 +4,8 @@
     ./helix
     ./keepassxc.nix
     ./ai
-    ./brave
+    ./brave.nix
+    ./delta.nix
     ./zed
   ];
 }
