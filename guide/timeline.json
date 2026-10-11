@@ -1,0 +1,36 @@
+{
+  "reviewed": "2026-10-11",
+  "basis": "Configuration commits, not installation or activation dates. Baseline means already present in the earliest recorded snapshot. Open periods describe source selection at HEAD; pending edits are undated.",
+  "events": [
+    {"date":"2026-06-26","category":"Storage","title":"Ephemeral root and Preservation already present","detail":"Tmpfs root, encrypted Btrfs and explicit persistence are a baseline, not a proven adoption date.","commits":["08f53e4"]},
+    {"date":"2026-06-26","category":"Hardware","title":"Default kernel set → latest kernel set","detail":"Hardware-support policy changed; this does not identify a numeric kernel version.","commits":["466d829"]},
+    {"date":"2026-06-28","category":"Guide","title":"Operator cheatsheet added","detail":"CHEATSHEET.md preceded the interactive guide.","commits":["5a1af97"]},
+    {"date":"2026-07-10","category":"Desktop","title":"Niri + Noctalia introduced","detail":"GNOME remained available while the new desktop was integrated.","commits":["de38398","62b2285"]},
+    {"date":"2026-07-16","category":"Networking","title":"DNSCrypt becomes the system DNS path","detail":"NetworkManager stops owning DNS; resolver configuration was corrected the following day.","commits":["6206fe5","11fc4ad"]},
+    {"date":"2026-07-20","category":"Storage","title":"Persistence narrowed; integrity maintenance added","detail":"Monthly scrub and SMART added. Retained logs changed again later; always consult the current persistence declaration.","commits":["6bb7096"]},
+    {"date":"2026-07-20","category":"Apps","title":"Zen → LibreWolf","detail":"Browser module selection changes; personal usage dates remain unknown.","commits":["598cd21"]},
+    {"date":"2026-07-28","category":"Desktop","title":"Niri becomes the sole desktop session","detail":"GNOME session removed; GNOME/GTK applications and integration remain.","commits":["baf823d"]},
+    {"date":"2026-07-28","category":"Apps","title":"Jovian integration → standard Steam","detail":"Simpler desktop gaming ownership without a dedicated Jovian session.","commits":["9825f67"]},
+    {"date":"2026-08-16","category":"Networking","title":"DNS providers selected explicitly","detail":"Cloudflare and Scaleway replace discovery across the full catalog.","commits":["be176c4"]},
+    {"date":"2026-08-21","category":"Maintenance","title":"Flat single-host/user layout established","detail":"shadow/ directly selects modules; no extra profiles layer is needed for one host/user.","commits":["21ead94"]},
+    {"date":"2026-09-02","category":"Apps","title":"LibreWolf → Brave as default browser","detail":"Program imports and web MIME defaults change; not a claim about exclusive usage.","commits":["596d36a"]},
+    {"date":"2026-09-02","category":"Desktop","title":"Niri files become store-managed","detail":"Home Manager deployment replaces direct out-of-store links.","commits":["5a6d6c2"]},
+    {"date":"2026-09-02","category":"Apps","title":"micro defaults → Helix/Zed","detail":"EDITOR and VISUAL change; this is not their first installation date.","commits":["c97ec51"]},
+    {"date":"2026-09-18","category":"Storage","title":"zram added before disk swap","detail":"Compressed RAM swap reduces disk pressure; disk swap remains overflow.","commits":["23b3038"]},
+    {"date":"2026-09-19","category":"Apps","title":"COSMIC app integration → GNOME apps","detail":"An application-stack change, not a COSMIC compositor migration.","commits":["d687e16"]},
+    {"date":"2026-09-28","category":"Release pin","title":"Noctalia v5.1.0 → v5.2.0","detail":"Repository release-pin update, not the upstream release or activation date.","commits":["d9a0f8e"]},
+    {"date":"2026-10-07","category":"Release pin","title":"Noctalia v5.2.0 → v5.2.1","detail":"Historical flake selection. The pending worktree removes that input; no adoption date is assigned to an uncommitted change.","commits":["dfb1def"]},
+    {"date":"2026-10-07","category":"Guide","title":"Interactive guide replaces former docs","detail":"Offline lessons, app catalog and simulations become the operator entry point.","commits":["dfb1def"]},
+    {"date":"2026-10-07","category":"Networking","title":"DNS/IPv6 alignment and narrower service exposure","detail":"Loopback resolver alignment, Kavita LAN opening removed, native NetworkManager VPN workflow documented.","commits":["573c599"]}
+  ],
+  "periods": [
+    {"from":null,"to":"2026-06-26","category":"Storage","title":"Preservation already selected","detail":"Adoption predates or equals the first snapshot. No Impermanence-to-Preservation migration is evidenced.","commits":["08f53e4"]},
+    {"from":null,"to":null,"category":"Power","title":"Power-profiles-daemon baseline","detail":"Present in the first snapshot and committed HEAD. No recorded TLP, TuneD or auto-cpufreq migration.","commits":["08f53e4"]},
+    {"from":"2026-07-10","to":"2026-07-28","category":"Desktop","title":"GNOME + Niri transition","detail":"Niri/Noctalia introduced alongside GNOME; GNOME session removed at the endpoint.","commits":["de38398","baf823d"]},
+    {"from":"2026-07-20","to":"2026-09-02","category":"Apps","title":"LibreWolf selected","detail":"Zen replaced at the start; Brave becomes default at the end. Ranges are commit boundaries, not usage logs.","commits":["598cd21","596d36a"]},
+    {"from":"2026-09-02","to":null,"category":"Apps","title":"Brave selected as default","detail":"Open-ended at reviewed source state; running browser preferences require verification.","commits":["596d36a"]},
+    {"from":"2026-09-05","to":"2026-09-19","category":"Apps","title":"COSMIC application integration","detail":"GNOME applications replace these integrations; desktop compositor remained Niri.","commits":["77ceecf","d687e16"]},
+    {"from":"2026-09-28","to":"2026-10-07","category":"Release pin","title":"Noctalia v5.2.0 pin","detail":"v5.1.0 → v5.2.0 is known; the earlier v5.1.0 start date is not established here.","commits":["d9a0f8e","dfb1def"]},
+    {"from":"2026-10-07","to":null,"category":"Release pin","title":"Noctalia v5.2.1 historical input pin","detail":"Valid for committed HEAD. Pending flake edits remove the input; inspect the effective shell package before treating this as a live version.","commits":["dfb1def"]}
+  ]
+}

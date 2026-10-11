@@ -1,0 +1,10 @@
+{
+  "name": "shadow-guide",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "One static handbook generated from local Markdown and JSON.",
+  "engines": { "node": ">=20" },
+  "scripts": { "build": "node build.mjs" },
+  "devDependencies": { "marked": "18.1.0" }
+}

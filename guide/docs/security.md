@@ -1,0 +1,17 @@
+LUKS protects retained data while the disk is locked. It does not block malware running as you after login. SOPS protects selected secrets in Git/store copies, but applications consuming them can read them. An ephemeral root removes undeclared root state after reboot, while preserved histories and app profiles remain.
+
+USBGuard controls USB device authorization. Its built-in allowlist is essential: blindly blocking those devices can break the keyboard, camera, and Bluetooth. Runtime approval needs a persistent policy path if it should survive activation. Review a device before allowing it.
+
+AppArmor is loaded, but useful protection requires enforced profiles that cover actual workloads. A native app without a profile is not magically confined. Service hardening can restrict writable paths, devices, namespaces, privileges, and address families. Add restrictions with the service’s data and workflow in mind.
+
+## Authentication and session details
+
+Root password login is locked; Aqua authenticates with a SOPS-deployed hash and has administrative access through sudo-rs. The greetd login stack unlocks the GNOME keyring. A documented workaround bypasses the nested user-manager PAM call after a deadlock; it must be investigated through actual session tests before removing it.
+
+Niri/Noctalia supplies idle locking and suspend behavior. Locking before suspend must be tested interactively. An unlocked keyring can serve credentials to authorized apps; secret-service access should be granted intentionally.
+
+## Boot trust is a separate layer
+
+Secure Boot and TPM auto-unlock are not configured by these stages. Secure Boot signs/verifies boot artifacts; it does not replace disk encryption. TPM unlock links access to measurements/policy and needs a recovery credential. NVIDIA and OpenRazer complicate module-signing/lockdown decisions. Enrollment belongs to a prepared recovery exercise, not a quick cleanup.
+
+The previously exposed Wallhaven token still requires provider-side rotation if that has not already happened. A clean current-source scan cannot prove it was revoked or that old Git history contains no secrets.
