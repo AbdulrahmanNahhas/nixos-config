@@ -152,30 +152,21 @@ _: {
           "key": "\u251C\u2500 \uF186 SHELL",
           "keyColor": "bright_blue",
           "text": "command -v noctalia >/dev/null 2>&1 && noctalia --version | awk '{print $2}'",
-          "format": "Noctalia {result}",
-          "condition": {
-            "succeeded": true
-          }
+          "format": "Noctalia {result}"
         },
         {
           "type": "command",
           "key": "\u251C\u2500 \uF2DC NIX",
           "keyColor": "bright_blue",
           "text": "command -v nix >/dev/null 2>&1 && nix --version | awk '{print $3}'",
-          "format": "Nix {result}",
-          "condition": {
-            "succeeded": true
-          }
+          "format": "Nix {result}"
         },
         {
           "type": "command",
           "key": "\u2514\u2500 \uF487 FLATPAK",
           "keyColor": "bright_blue",
           "text": "command -v flatpak >/dev/null 2>&1 && flatpak --version | awk '{print $2}'",
-          "format": "Flatpak {result}",
-          "condition": {
-            "succeeded": true
-          }
+          "format": "Flatpak {result}"
         },
 
         "break",
