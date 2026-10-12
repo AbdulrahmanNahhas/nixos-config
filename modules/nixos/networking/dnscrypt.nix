@@ -59,7 +59,8 @@ in
       cache = true;
       cache_size = 4096;
 
-      cache_min_ttl = 2400;
+      # Avoid extending short-lived DNS records to 40 minutes.
+      cache_min_ttl = 60;
       cache_max_ttl = 86400;
 
       cache_neg_min_ttl = 60;

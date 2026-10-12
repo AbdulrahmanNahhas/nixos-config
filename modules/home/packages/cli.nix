@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -13,7 +13,6 @@
     duf # Better df (alias: df)
     procs # Better ps (alias: ps)
     btop # Interactive system monitor
-    inputs.superfile.packages.${pkgs.stdenv.hostPlatform.system}.default # Terminal file manager
 
     fastfetch # System information
 

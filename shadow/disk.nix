@@ -4,7 +4,7 @@
 
     # ── tmpfs root ──────────────────────────────────────────────────────────
     # The entire / is RAM — wiped clean on every reboot.
-    # Only /nix and /saved survive reboots (btrfs subvols below).
+    # /nix, /saved, /swap and the ESP persist; Preservation restores selected paths.
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
@@ -47,9 +47,10 @@
               name = "crypted";
 
               settings = {
-                allowDiscards = true; # enables SSD TRIM through LUKS
-                # For TPM2 auto-unlock later, add:
-                # crypttabExtraOpts = [ "tpm2-device=auto" ];
+                # Allow SSD TRIM through LUKS; leaks allocation patterns, not plaintext.
+                allowDiscards = true;
+                # TPM unlock needs a measured-boot policy and independent recovery key;
+                # a crypttab flag alone does not establish trusted boot.
               };
 
               content = {
@@ -77,9 +78,8 @@
                     ];
                   };
 
-                  # Swap as a btrfs swapfile.
-                  # Size = full RAM (16G) so suspend-to-disk / hibernate is possible.
-                  # Use RAM/2 if you only care about suspend-to-RAM.
+                  # Encrypted disk swap backs up zram under memory pressure.
+                  # This size alone does not enable hibernation; resume needs separate setup.
                   "/swap" = {
                     mountpoint = "/swap";
                     mountOptions = [ "x-gvfs-hide" ];

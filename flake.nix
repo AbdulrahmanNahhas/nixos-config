@@ -25,11 +25,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia = {
-      url = "github:noctalia-dev/noctalia/v5.2.1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # OpenAI's signed Linux .deb (ChatGPT + Codex GUI) repackaged for Nix;
     # nixpkgs' `chatgpt` is the macOS bundle. Community-maintained: the .deb
     # hash it pins is verified against OpenAI's apt signature, but the Nix
@@ -41,11 +36,6 @@
 
     delta = {
       url = "github:zed-industries/delta-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    superfile = {
-      url = "github:yorukot/superfile";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

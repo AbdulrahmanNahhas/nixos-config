@@ -15,6 +15,6 @@
 
     # Tools
     wl-clipboard
-    gpu-screen-recorder
+
   ];
 }

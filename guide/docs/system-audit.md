@@ -1,6 +1,32 @@
-# Shadow system audit
+{
+"title": "Shadow system audit",
+"group": "DATED NOTES",
+"weight": 50,
+"sources": [],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
 
 Audit date: **2026-10-11**. Goal: modern hardware support, measured battery efficiency, recoverability, and understandable maintenance. Recommendations and primary sources: [research](research.md).
+
+## Follow-up: 2026-10-12
+
+The initial audit below is dated evidence. The current source selects the NVIDIA
+`latest` branch, uses Home Manager's built-in Noctalia module instead of a separate
+Noctalia flake input, and removes the Superfile integration and unused recorder
+packages. DNSCrypt's minimum cache TTL is reduced to 60 seconds. Power management
+uses PPD and UPower, with TLP and auto-cpufreq disabled; the Razer hardware module
+continues to own PRIME and runtime power defaults. The initrd option spelling and
+storage comments have been corrected.
+
+The changed Nix files passed formatting checks, `nix flake check` passed, and the
+complete no-link Shadow system build passed. This supersedes the initial sandbox
+build limitation and the warning about an unverified dirty build. No configuration
+was activated in this follow-up; battery duration, suspend/resume and editor/provider
+behavior still require observation on the running laptop. Current declarations and
+input revisions are generated in Configuration and Input revisions.
 
 ## Evidence and scope
 
@@ -135,4 +161,4 @@ Suggested future comment improvements (no source edits made):
 - `disk.nix`: swap size is not hibernation configuration and “16G = full RAM” needs verification; explain discard allocation-pattern leakage alongside TRIM, and don't imply TPM auto-unlock alone authenticates boot.
 - `graphics.nix`: reference inherited PRIME/PM ownership; document why beta/latest is necessary, affected hardware and a stable-driver/kernel retest criterion.
 - `greetd.nix`: retain the deadlock explanation, add a reproducer/upstream issue and conditions to remove the nested-PAM bypass; test session cleanup and keyring behavior.
-- Keep accurate AppArmor/DNS/scrub comments. Reconcile `guide/checkbox.md` later: its missing-scrub/SMART and blanket-confinement claims disagree with current declarations. Do not add extra module layers or comments that only restate assignments.
+- Keep accurate AppArmor/DNS/scrub comments. The former checklist has been replaced by the source-backed technology tables; scrub/SMART and confinement distinctions are recorded there. Do not add extra module layers or comments that only restate assignments.

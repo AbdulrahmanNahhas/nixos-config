@@ -1,7 +1,8 @@
-# boot.nix
 { pkgs, ... }:
 {
-  # Bootloader Configuration
+  # Parked experiment; check compatibility before enabling Rust-based init.
+  # system.nixos-init.enable = true;
+
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -9,7 +10,9 @@
       systemd-boot.configurationLimit = 8;
     };
 
-    # Latest kernel for Zen 5 / RTX 50-series support
+    initrd.systemd.enable = true;
+
+    # Track new hardware support; reboot-test NVIDIA and suspend on each bump.
     kernelPackages = pkgs.linuxPackages_latest;
 
     # Graphical LUKS prompt and boot progress; Esc still reveals diagnostics.
@@ -23,7 +26,7 @@
       ];
     };
 
-    # Modern Performance and Graphics Flags
+    # Security hardening and hardware overrides; not blanket performance tuning.
     kernelParams = [
       # Prevent data leaks in uninitialized memory
       "init_on_alloc=1"
@@ -44,7 +47,7 @@
       # No module.sig_enforce / lockdown: NixOS does not sign modules, and the
       # out-of-tree NVIDIA and OpenRazer modules would be refused.
 
-      # GPU
+      # AMD EPP policy and laptop backlight overrides; recheck after driver updates.
       "amd_pstate=active"
       "acpi_backlight=native"
       "nvidia_wmi_ec_backlight.force=1"

@@ -5,7 +5,8 @@
   home.packages = with pkgs; [
     obsidian # Notes
     mullvad-browser
-    wl-screenrec
+
     anki
+    stremio-linux-shell
   ];
 }

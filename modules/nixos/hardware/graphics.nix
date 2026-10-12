@@ -1,17 +1,24 @@
 { config, ... }:
 {
-  # Blackwell only; keeps the local llama-cpp-cuda build to one architecture.
+  # RTX 5060 Blackwell CUDA architecture.
   nixpkgs.config.cudaCapabilities = [ "12.0" ];
-
-  hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-    dynamicBoost.enable = true;
-  };
 
   hardware.graphics.enable = true;
 
-  # Host-specific PCI address; move to shadow/hardware.nix if more facts accumulate.
-  services.udev.extraRules = ''
-    SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", ENV{DEVNAME}=="/dev/dri/card[0-9]*", SUBSYSTEMS=="pci", KERNELS=="0000:c5:00.0", TAG+="mutter-device-preferred-primary"
-  '';
+  # Loads the NVIDIA driver module; does not enable an X11 desktop.
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  # The selected Razer nixos-hardware module owns PRIME and runtime-PM defaults.
+  # Recheck GPU suspension after offload, external displays and resume.
+  hardware.nvidia = {
+    # In this pin, beta is older than the working 615 driver. Review on updates.
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    open = true;
+    modesetting.enable = true;
+
+    nvidiaSettings = true;
+
+    # Do not deliberately keep an otherwise idle dGPU initialized.
+    nvidiaPersistenced = false;
+  };
 }
