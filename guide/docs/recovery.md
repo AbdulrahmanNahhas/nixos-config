@@ -1,3 +1,27 @@
+{
+"title": "Recovery, backups & cleanup",
+"group": "OPERATIONS",
+"weight": 16,
+"sources": [
+[
+"Btrfs scrub",
+"https://btrfs.readthedocs.io/en/latest/btrfs-scrub.html"
+],
+[
+"Nix garbage collection",
+"https://nix.dev/manual/nix/latest/package-management/garbage-collection"
+],
+[
+"Restic backup documentation",
+"https://restic.readthedocs.io/en/stable/"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 A generation references a particular system closure. Booting an older generation can recover from a broken driver/configuration. A Btrfs snapshot captures local filesystem state at a point in time. An external backup protects against loss of that disk. These mechanisms have different failure boundaries.
 
 These stages do not add external backup jobs or snapshots. Your next recovery priority is a tested encrypted off-device backup of documents, projects, password databases, age recovery identity, and selected app state. Recovery keys cannot exist only on the failed laptop.

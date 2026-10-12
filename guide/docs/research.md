@@ -1,4 +1,13 @@
-# Research and decisions for Shadow
+{
+"title": "Research and decisions for Shadow",
+"group": "DATED NOTES",
+"weight": 50,
+"sources": [],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
 
 Research date: **2026-10-11**, not a software release date. Scope and evidence: [system audit](system-audit.md). Primary sources were fetched during this audit; mutable `master`, `latest` and `stable` documentation can change. Proposed review dates below are operator checkpoints, not upstream commitments.
 

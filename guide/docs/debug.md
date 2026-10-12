@@ -1,9 +1,29 @@
-| Layer | Typical symptom | First check |
-| --- | --- | --- |
-| Evaluation | Unknown option, type error, missing path | Imports, option declaration, staged new files |
-| Build | Download/hash/compiler failure | Specific derivation log, network/cache access |
-| Activation | Managed-file collision, permission/mount error | Activation output and relevant ownership |
-| Runtime | App crashes, no DNS, unavailable keyring | Service/app logs and actual session behavior |
+{
+"title": "Find the cause of a failure",
+"group": "OPERATIONS",
+"weight": 17,
+"sources": [
+[
+"NixOS troubleshooting reference",
+"https://nixos.org/manual/nixos/stable/"
+],
+[
+"systemctl manual",
+"https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
+| Layer      | Typical symptom                                | First check                                   |
+| ---------- | ---------------------------------------------- | --------------------------------------------- |
+| Evaluation | Unknown option, type error, missing path       | Imports, option declaration, staged new files |
+| Build      | Download/hash/compiler failure                 | Specific derivation log, network/cache access |
+| Activation | Managed-file collision, permission/mount error | Activation output and relevant ownership      |
+| Runtime    | App crashes, no DNS, unavailable keyring       | Service/app logs and actual session behavior  |
 
 ```
 systemctl --failed

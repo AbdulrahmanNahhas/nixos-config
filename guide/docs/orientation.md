@@ -1,3 +1,23 @@
+{
+"title": "Start with the whole system",
+"group": "FOUNDATIONS",
+"weight": 1,
+"sources": [
+[
+"NixOS manual",
+"https://nixos.org/manual/nixos/stable/"
+],
+[
+"nix.dev learning paths",
+"https://nix.dev/"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 **The goal**
 
 ### Explain it, then change it.

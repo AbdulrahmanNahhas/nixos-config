@@ -1,3 +1,27 @@
+{
+"title": "Security without magic labels",
+"group": "NETWORK & PROTECTION",
+"weight": 14,
+"sources": [
+[
+"AppArmor project",
+"https://apparmor.net/"
+],
+[
+"systemd service sandboxing",
+"https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html"
+],
+[
+"Lanzaboote recovery considerations",
+"https://nix-community.github.io/lanzaboote/explanation/troubleshooting.html"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 LUKS protects retained data while the disk is locked. It does not block malware running as you after login. SOPS protects selected secrets in Git/store copies, but applications consuming them can read them. An ephemeral root removes undeclared root state after reboot, while preserved histories and app profiles remain.
 
 USBGuard controls USB device authorization. Its built-in allowlist is essential: blindly blocking those devices can break the keyboard, camera, and Bluetooth. Runtime approval needs a persistent policy path if it should survive activation. Review a device before allowing it.

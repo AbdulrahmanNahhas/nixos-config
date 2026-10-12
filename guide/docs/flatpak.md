@@ -1,3 +1,23 @@
+{
+"title": "Add & manage a Flatpak",
+"group": "DAILY WORK",
+"weight": 7,
+"sources": [
+[
+"nix-flatpak",
+"https://github.com/gmodena/nix-flatpak"
+],
+[
+"Flatpak basic commands",
+"https://docs.flatpak.org/en/latest/using-flatpak.html"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 The catalog’s keys are application IDs. An empty entry uses the default verified Flathub remote and retains its data under `~/.var/app/<id>`. `origin` chooses a different remote. `overrides` declares permissions and environment changes. `persist = false;` is used for theme extensions with no application state.
 
 ```

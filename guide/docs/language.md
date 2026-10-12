@@ -1,3 +1,23 @@
+{
+"title": "Read the Nix language",
+"group": "FOUNDATIONS",
+"weight": 2,
+"sources": [
+[
+"Nix language tutorial",
+"https://nix.dev/tutorials/nix-language"
+],
+[
+"Nix reference manual",
+"https://nix.dev/reference/nix-manual"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 A Nix file is an expression that evaluates to a value. Common values are strings, numbers, booleans, paths, lists, attribute sets, and functions. An attribute set is a mapping of names to values; it is not a shell script. Nix is lazy: values are evaluated when needed.
 
 ```
@@ -15,13 +35,13 @@ in
 
 ## Patterns you will actually edit
 
--   `./file.nix` is a path relative to the file containing it.
--   `import ./flatpak-apps.nix` evaluates that expression. A module’s `imports = [ … ];` asks the module system to include modules; this has a different job.
--   `inherit appId;` means `appId = appId;` using the surrounding value.
--   `app.origin or "flathub-verified"` supplies a fallback when the attribute is missing. This is not boolean OR.
--   `map (x: …) list` transforms a list. `lib.mapAttrsToList` transforms named entries into a list.
--   `a // b` shallowly merges attribute sets with right-hand keys winning. It is not the module system’s recursive option merge.
--   `"${username}"` is interpolation: insert a value into a string.
+- `./file.nix` is a path relative to the file containing it.
+- `import ./flatpak-apps.nix` evaluates that expression. A module’s `imports = [ … ];` asks the module system to include modules; this has a different job.
+- `inherit appId;` means `appId = appId;` using the surrounding value.
+- `app.origin or "flathub-verified"` supplies a fallback when the attribute is missing. This is not boolean OR.
+- `map (x: …) list` transforms a list. `lib.mapAttrsToList` transforms named entries into a list.
+- `a // b` shallowly merges attribute sets with right-hand keys winning. It is not the module system’s recursive option merge.
+- `"${username}"` is interpolation: insert a value into a string.
 
 ### Why a package name sometimes needs pkgs.
 

@@ -1,0 +1,38 @@
+<section id="revisions">
+    <div class="section-heading">
+        <h2>Input revisions</h2>
+        <span>Generated from flake.lock</span>
+    </div>
+    {{ $lock := (resources.Get "config/flake.lock").Content | transform.Unmarshal }}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Revision</th>
+                    <th>Upstream date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $name,$node := (index $lock.nodes $lock.root).inputs }}{{ if
+                reflect.IsSlice $node }}{{ $node = index $node 0 }}{{ end }}{{ $pin := index
+                $lock.nodes $node }}
+                <tr data-search>
+                    <td>{{ $name }}</td>
+                    <td>
+                        <code
+                            >{{ with $pin.locked.rev }}{{ substr . 0 12 }}{{ else }}Content hash{{
+                            end }}</code
+                        >
+                    </td>
+                    <td>
+                        {{ with $pin.locked.lastModified }}{{ (time.AsTime (int .)).Format
+                        "2006-01-02" }}{{ else }}—{{ end }}
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+    <p class="muted">Upstream dates are not installation or activation dates.</p>
+</section>

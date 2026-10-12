@@ -1,3 +1,23 @@
+{
+"title": "Add & operate a VPN",
+"group": "NETWORK & PROTECTION",
+"weight": 13,
+"sources": [
+[
+"WireGuard quick start",
+"https://www.wireguard.com/quickstart/"
+],
+[
+"NetworkManager WireGuard settings",
+"https://networkmanager.dev/docs/api/latest/settings-wireguard.html"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 The desktop controller remains NetworkManager. A WireGuard configuration includes a local private key, address, peer public key, endpoint, and allowed IP ranges. Allowed IPs help select which peer handles which destinations; routing rules decide how traffic reaches the interface. These are not equivalent to a kill switch.
 
 ## Use the native NetworkManager workflow

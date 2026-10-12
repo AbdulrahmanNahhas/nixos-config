@@ -1,0 +1,31 @@
+<header id="overview">
+    <div class="eyebrow">SHADOW / NIXOS + HOME MANAGER</div>
+    <h1>A small handbook.<br />A clear system.</h1>
+    <p class="lead">The technologies, configuration and operating knowledge behind this laptop.</p>
+    <div class="overview-grid">
+        <div>
+            <span>01 / SYSTEM</span><strong>Declarative</strong>
+            <p>Nix inputs → host → system and user modules.</p>
+        </div>
+        <div>
+            <span>02 / STATE</span><strong>Explicit persistence</strong>
+            <p>Temporary root. Encrypted persistent storage.</p>
+        </div>
+        <div>
+            <span>03 / EVIDENCE</span><strong>Source ≠ runtime</strong>
+            <p>Checkmarks describe declarations, not health checks.</p>
+        </div>
+    </div>
+</header>
+<section class="overview-pages">
+    <div class="section-heading">
+        <h2>Explore the handbook</h2>
+        <span>Choose a section</span>
+    </div>
+    <div class="overview-links">
+        {{ range sort (where site.RegularPages "Params.handbook" "ne" nil) "Weight" }}<a
+            href="{{ path.Base .RelPermalink }}"
+            ><span>{{ .Title }}</span><span aria-hidden="true">↗</span></a
+        >{{ end }}
+    </div>
+</section>

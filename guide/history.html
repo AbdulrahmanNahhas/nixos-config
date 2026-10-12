@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="color-scheme" content="dark light" />
+        <title>History · Shadow · Technical handbook</title>
+        <style>
+            @layer base,layout,components;
+@layer base{*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:#101113;color:#e8e9ec;font:15px/1.65 ui-sans-serif,system-ui,-apple-system,sans-serif}a{color:#b4afff;text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(36px,5vw,58px);line-height:1.12;letter-spacing:-.055em;font-weight:650;margin-bottom:22px}h2{font-size:23px;letter-spacing:-.035em;margin:0}h3{font-size:18px;margin-top:30px}code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{font-size:.85em;overflow-wrap:anywhere}pre{background:#17181c;border:1px solid #303138;border-radius:8px;padding:18px;overflow:auto;line-height:1.6}pre code{overflow-wrap:normal}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid #aba2ff;outline-offset:4px}[hidden]{display:none!important}.muted{color:#989ba6;font-size:13px}.check{color:#86d6ab}.pending{color:#90949f}.verify{color:#e1c080}.skip{position:absolute;left:16px;top:-60px}.skip:focus{top:12px;background:#202126;padding:8px;z-index:10}}
+@layer layout{.sidebar{width:238px;position:fixed;inset:0 auto 0 0;border-right:1px solid #292a30;padding:30px 22px;display:flex;flex-direction:column;background:#121316}.brand{display:flex;gap:10px;align-items:center;font-weight:650;color:#ededf1;font-size:19px}.brand-mark{display:grid;place-items:center;border:1px solid #645e93;background:#242137;color:#c9c3ff;width:30px;height:30px;border-radius:8px;font-size:16px}.brand-sub{font-size:14px;font-weight:400;color:#8c8d99}.sidebar-label{font-size:10px;letter-spacing:.12em;color:#818490;margin:38px 0 12px}.sidebar nav{display:grid;gap:4px}.sidebar nav a{padding:8px 10px;border-radius:6px;color:#a6a9b4;font-size:13px;display:flex;justify-content:space-between}.sidebar nav a:hover,.sidebar nav a.active{background:#24222f;color:#d2cbff;text-decoration:none}.sidebar nav span{font-size:11px;color:#797488}.sidebar-foot{margin-top:auto;font-size:11px;color:#777b88;line-height:1.9}main{max-width:1220px;margin-left:238px;padding:62px 64px 24px}header{padding-bottom:32px}.eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;color:#aaa0eb;margin-bottom:22px}.lead{color:#a5a8b2;max-width:560px;font-size:17px}.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid #303138;margin-top:34px;padding-top:22px}.overview-grid span{font-size:9px;letter-spacing:.1em;color:#808491}.overview-grid strong{display:block;font-size:14px;margin:8px 0}.overview-grid p{font-size:12px;color:#90949f;margin:0}section{padding:34px 0 14px;scroll-margin-top:20px}.section-heading{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:17px}.section-heading>span{font-size:11px;color:#858995}.section-intro{color:#969aa6;font-size:12px}footer{border-top:1px solid #303138;margin-top:45px;padding-top:22px;display:flex;justify-content:space-between;font-size:11px;color:#777d8a}@media(min-width:1700px){main{margin-left:max(238px,calc((100vw - 1000px)/2));padding-left:32px}}@media(max-width:1000px){main{padding:36px 28px}.sidebar{width:205px;padding:24px 16px}main{margin-left:205px}.entry-status{display:none}}@media(max-width:700px){.sidebar{position:static;width:auto;padding:18px 20px;border-right:0;border-bottom:1px solid #303138}.sidebar-label,.sidebar-foot{display:none}.sidebar nav{display:flex;overflow:auto;gap:8px;margin-top:16px;white-space:nowrap}.sidebar nav a{padding:5px 9px}.sidebar nav span{display:none}main{margin:0;padding:30px 20px}.overview-grid{gap:14px}.overview-grid strong{font-size:12px}.overview-grid p{font-size:11px}.section-heading{display:block}.section-heading>span{display:block;margin-top:6px}.tag{font-size:9px!important}footer{gap:16px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}}
+@layer components{.searchbar{display:flex;align-items:center;gap:12px;background:#18191d;border:1px solid #303138;border-radius:8px;padding:11px 14px}.searchbar label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.searchbar input{color:#e8e9ec;background:transparent;border:0;min-width:0;flex:1;font-size:13px;outline:none}.searchbar kbd{font:11px ui-monospace,monospace;border:1px solid #3c3e48;color:#9498a4;padding:0 6px;border-radius:3px}#search-status{min-height:20px;margin:7px 0 0}.entry{border-bottom:1px solid #2b2d34}.entry:first-of-type{border-top:1px solid #2b2d34}summary{list-style:none;display:flex;gap:12px;align-items:center;padding:14px 4px;cursor:pointer;font-size:13px}summary::-webkit-details-marker{display:none}summary::after{content:'+';color:#7e818c;margin-left:8px;font-size:16px}details[open]>summary::after{content:'−'}summary:hover{background:#17181d}.entry-title{flex:1;font-weight:500}.status-icon{width:16px;flex-shrink:0}.tag{font-size:10px;color:#9ca0ae;background:#202229;padding:2px 7px;border:1px solid #30333e;border-radius:4px}.entry-status{width:140px;text-align:right;font-size:11px;color:#8c919e}.entry-body{padding:8px 20px 22px;color:#b5b8c3;font-size:13px}.entry-body>p{max-width:780px}dl{display:grid;grid-template-columns:95px 1fr;gap:9px 16px;margin-bottom:0}dt{color:#888d9a;font-size:11px}dd{margin:0}.prose{line-height:1.85}.prose h2{font-size:20px;margin-top:28px;margin-bottom:14px}.prose h3{font-size:16px}.prose li{margin:5px 0}.prose blockquote{border-left:2px solid #7764aa;padding-left:16px;margin-left:0;color:#a7a4bd}.table-wrap,.prose{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #303138;vertical-align:top}th{font-size:10px;color:#969cad;font-weight:500}td{color:#b1b6c2}.app-grid{display:flex;flex-wrap:wrap;gap:8px}.app-grid code{border:1px solid #303138;border-radius:5px;padding:5px 9px;color:#a7afc0;font-size:11px}time{color:#8f95a5;font-size:11px}.review-control{display:flex;gap:8px;align-items:center;font-size:11px;color:#979dac;border-top:1px solid #303138;padding-top:14px;margin-top:20px}.review-control input{accent-color:#a699e3}.copy-button{float:right;padding:3px 8px;color:#b8b0dd;background:#292532;border:1px solid #484058;border-radius:4px;font-size:10px}.task-list-item{list-style:none}.task-list-item input{accent-color:#8dd5ae}}
+
+@layer components{.technology-legend{display:flex;gap:10px 20px;flex-wrap:wrap}.technology-group{border:1px solid #303138;border-radius:8px;margin:12px 0;overflow:hidden}.technology-group>summary{padding:14px 16px;background:#16171b}.group-number{font:11px ui-monospace,monospace;color:#8d83bb;min-width:18px}.technology-table{table-layout:fixed}.technology-table thead th:nth-child(1){width:98px}.technology-table thead th:nth-child(2){width:34%}.technology-table tbody th{font-size:12px;color:#d0d3dc;font-weight:500}.technology-table td{font-size:12px;padding:12px 16px}.technology-table th{padding:12px 16px}.technology-table tr:last-child>*{border-bottom:0}.technology-state{font:11px ui-monospace,monospace;white-space:nowrap}.component-source{color:inherit;text-decoration:none}.component-source:hover{color:#c5b7f0;text-decoration:underline}.release-star{color:#c5af76}.watch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#303138}.watch-grid a{display:flex;align-items:center;gap:9px;padding:14px 16px;background:#17181c;color:#c5c7d0;font-size:12px}.watch-grid a>span:last-child{margin-left:auto;color:#777e8c}.technology-table tr:hover{background:#18191e}@media(max-width:700px){.technology-table{min-width:570px}.watch-grid{grid-template-columns:repeat(2,1fr)}.technology-group>summary{font-size:12px}.technology-group>summary .muted{font-size:10px}}}
+
+@layer components{.overview-links{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.overview-links a{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border:1px solid #303138;border-radius:8px;color:#c7c8d3;background:#17181c;font-size:13px}.overview-links a:hover{border-color:#756998;background:#201d2a;text-decoration:none}.overview-links a>span:last-child{color:#8d83b1}.overview-pages{padding-top:10px}@media(max-width:700px){.overview-links{grid-template-columns:1fr}}}
+
+@layer components {
+  .history-toolbar { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:14px; }
+  .history-toolbar p { max-width:550px; margin:0; }
+  .history-scale { display:flex; flex-shrink:0; padding:3px; border:1px solid #33313d; background:#17171c; border-radius:7px; }
+  .history-scale button { border:0; background:transparent; color:#999daa; padding:5px 10px; font-size:11px; border-radius:4px; }
+  .history-scale button[aria-pressed="true"] { color:#e1d9f0; background:#373040; }
+  .history-scroll { --history-label:150px; --history-earlier:130px; --history-month-day:6px; --history-week-day:10px; overflow-x:auto; border:1px solid #303138; border-radius:8px; scrollbar-color:#615473 #17181c; isolation:isolate; }
+  .history-scroll[data-scale="months"] { --history-week-day:6px; }
+  .history-scroll[data-scale="weeks"] { --history-month-day:10px; }
+  .history-axis,.history-week-axis,.history-lane { display:grid; grid-template-columns:var(--history-grid); min-width:max-content; }
+  .history-axis { background:#19191f; border-bottom:1px solid #303138; align-items:center; font:11px ui-monospace,monospace; }
+  .history-axis>span,.history-axis>time { padding:14px 10px; border-right:1px solid #34313d; text-align:center; color:#b5afc1; }
+  .history-axis-label { position:sticky; left:0; z-index:3; background:#19191f; text-align:left!important; }
+  .history-earlier-label { color:#7f8390!important; }
+  .history-week-axis { background:#141419; font:9px ui-monospace,monospace; color:#737887; border-bottom:1px solid #292930; min-height:24px; }
+  .history-week { padding:5px 2px; text-align:center; border-right:1px solid #25252d; visibility:hidden; }
+  .history-week.is-dense,.history-scroll[data-scale="weeks"] .history-week { visibility:visible; }
+  .history-scroll[data-scale="months"] .history-week-axis { display:none; }
+  .history-lane { align-items:center; border-bottom:1px solid #252730; min-height:54px; }
+  .history-lane:last-child { border-bottom:0; }
+  .history-lane>h3 { grid-column:1; grid-row:1; position:sticky; left:0; z-index:2; margin:0; padding:18px 12px; background:#101113; border-right:1px solid #292930; color:#b9bdc9; font-size:11px; }
+  .history-bar { display:flex; justify-content:space-between; align-items:center; gap:6px; min-width:0; margin:0 3px; padding:8px 9px; border:1px solid #665276; border-radius:5px; background:#32263e; color:#ddd0e9; text-align:left; font-size:11px; }
+  .history-bar>span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .history-bar.tone-1 { background:#243a38; border-color:#426861; color:#c4e4dd; }
+  .history-bar.tone-2 { background:#27334a; border-color:#475d80; color:#cddbf2; }
+  .history-bar.unknown-start { border-left-style:dashed; }
+  .history-bar.open-end { border-right-style:dashed; }
+  .history-bar:hover { filter:brightness(1.22); }
+  .history-caption { margin-top:14px; font-size:11px; }
+  #history-dialog { position:fixed; width:min(460px,calc(100vw - 32px)); padding:24px; border:1px solid #61536d; border-radius:10px; color:#d6d1dd; background:#1c1a22; box-shadow:0 16px 70px #0008; }
+  #history-dialog::backdrop { background:#060509b0; }
+  #history-dialog h3 { margin:0 0 12px; padding-right:60px; }
+  #history-dialog p { font-size:13px; line-height:1.8; }
+  #history-dialog .history-period { color:#b9a7d1; font:12px ui-monospace,monospace; }
+  .history-close { float:right; padding:4px 8px; border:1px solid #4b4355; border-radius:4px; background:#2c2635; color:#bcb0cb; font-size:10px; }
+  @media(max-width:700px) { .history-toolbar { align-items:flex-start; flex-direction:column; gap:12px; } .history-scroll { --history-label:112px; --history-earlier:110px; } .history-lane>h3 { font-size:10px; } }
+}
+
+@layer components {
+ .history-relations{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:12px;color:#a3a4b3;font-size:11px}
+ .history-source-pin{font-size:11px;margin-bottom:16px}
+ .history-lane>h3{align-self:stretch;display:flex;align-items:center}
+ .history-bar-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .history-kind{flex-shrink:0;color:inherit;font-size:12px}
+ .history-bar.is-ended{opacity:.7}
+ .history-bar.event-marker{min-width:24px;max-width:24px;padding:5px;margin-left:0;z-index:1;background:#40252b;border-color:#865160;color:#efb8bd}
+ .history-bar.event-marker .history-bar-label{display:none}
+ .history-change-label{display:inline-block;padding:3px 8px;border:1px solid #51485d;border-radius:4px;color:#cbbce0;font-size:11px!important}
+ .history-relationship{padding-left:10px;border-left:2px solid #5c5270}
+ .history-evidence{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px;font-size:11px}
+ .history-evidence>span{color:#8f94a2;margin-right:4px}
+ .history-evidence a{padding:3px 8px;border:1px solid #413b4d;border-radius:4px;background:#27232d}
+}
+
+@layer components{.history-terminal{flex-shrink:0;color:#cfb7d8;font-size:12px}}
+
+        </style>
+    </head>
+    <body>
+        <a class="skip" href="#content">Skip to content</a>
+        <aside class="sidebar">
+            <a class="brand" href="index.html"
+                ><span class="brand-mark">S</span> Shadow <span class="brand-sub">/ docs</span></a
+            >
+            <p class="sidebar-label">TECHNICAL HANDBOOK</p>
+            <nav aria-label="Handbook">
+                <a href="index.html"
+                    >Overview</a
+                >
+
+                <a
+                    href="technologies.html"
+
+                    >Technologies<span
+                        >9 areas</span
+                    ></a
+                >
+
+                <a
+                    href="reference.html"
+
+                    >Technical reference</a
+                >
+
+                <a
+                    href="configuration.html"
+
+                    >Configuration</a
+                >
+
+                <a
+                    href="revisions.html"
+
+                    >Input revisions</a
+                >
+
+                <a
+                    href="roadmap.html"
+
+                    >Roadmap</a
+                >
+
+                <a
+                    href="history.html"
+
+                    class="active"
+                    aria-current="page"
+
+                    >History</a
+                >
+
+                <a
+                    href="maintaining.html"
+
+                    >Editing the guide</a
+                >
+
+            </nav>
+            <div class="sidebar-foot">
+                Local · offline · source driven<br />No command execution
+            </div>
+        </aside>
+        <main id="content">
+
+            <div class="eyebrow">SHADOW / HISTORY</div>
+
+            <div class="searchbar">
+                <label for="search">Search this page</label
+                ><input
+                    id="search"
+                    type="search"
+                    placeholder="Search this page…"
+                    autocomplete="off"
+                /><kbd>/</kbd>
+            </div>
+            <p id="search-status" class="muted" role="status" aria-live="polite"></p>
+              <section id="history">
+  <div class="section-heading"><h2>History</h2><span>14 lanes · 40 transitions</span></div>
+  <div class="history-toolbar">
+    <p class="muted">Replacement and removal end a bar. Additions stay on separate tracks; configuration updates retain the underlying technology.</p>
+    <div class="history-scale" role="group" aria-label="Timeline scale">
+      <button type="button" data-history-scale="auto" aria-pressed="true">Adaptive</button>
+      <button type="button" data-history-scale="months" aria-pressed="false">Months</button>
+      <button type="button" data-history-scale="weeks" aria-pressed="false">Weeks</button>
+    </div>
+  </div>
+  <div class="history-relations"><span>↔ Replacement</span><span>+ Added alongside</span><span>↑ Updated</span><span>↗ Configuration</span><span>× Removed</span><span>→ Retained in recorded history</span></div>
+
+  <p class="muted history-source-pin">NixOS source pin: <a href="https://github.com/NixOS/nixpkgs/commit/6510408d147d8c5e6d76043e899e9251756f6a75"><code>6510408d147d</code></a> · upstream 10 Oct 2026. Source version history and compatibility settings do not prove system activation.</p>
+  <div class="history-scroll" data-scale="auto" tabindex="0" role="region" aria-label="Technology periods; scroll horizontally" style="--history-grid: ZgotmplZ">
+    <div class="history-axis">
+      <span class="history-axis-label">Technology</span><span class="history-earlier-label">Earlier</span>
+      <time datetime="2026-06" style="grid-column: 3 / span 30">Jun 2026</time><time datetime="2026-07" style="grid-column: 33 / span 31">Jul 2026</time><time datetime="2026-08" style="grid-column: 64 / span 31">Aug 2026</time><time datetime="2026-09" style="grid-column: 95 / span 30">Sep 2026</time><time datetime="2026-10" style="grid-column: 125 / span 31">Oct 2026</time>
+    </div>
+    <div class="history-week-axis" aria-hidden="true">
+      <span class="history-week " style="grid-column: 3 / span 7">1–7</span><span class="history-week " style="grid-column: 10 / span 7">8–14</span><span class="history-week " style="grid-column: 17 / span 7">15–21</span><span class="history-week " style="grid-column: 24 / span 7">22–28</span><span class="history-week " style="grid-column: 31 / span 2">29–30</span><span class="history-week is-dense" style="grid-column: 33 / span 7">1–7</span><span class="history-week is-dense" style="grid-column: 40 / span 7">8–14</span><span class="history-week is-dense" style="grid-column: 47 / span 7">15–21</span><span class="history-week is-dense" style="grid-column: 54 / span 7">22–28</span><span class="history-week is-dense" style="grid-column: 61 / span 3">29–31</span><span class="history-week " style="grid-column: 64 / span 7">1–7</span><span class="history-week " style="grid-column: 71 / span 7">8–14</span><span class="history-week " style="grid-column: 78 / span 7">15–21</span><span class="history-week " style="grid-column: 85 / span 7">22–28</span><span class="history-week " style="grid-column: 92 / span 3">29–31</span><span class="history-week is-dense" style="grid-column: 95 / span 7">1–7</span><span class="history-week is-dense" style="grid-column: 102 / span 7">8–14</span><span class="history-week is-dense" style="grid-column: 109 / span 7">15–21</span><span class="history-week is-dense" style="grid-column: 116 / span 7">22–28</span><span class="history-week is-dense" style="grid-column: 123 / span 2">29–30</span><span class="history-week is-dense" style="grid-column: 125 / span 7">1–7</span><span class="history-week is-dense" style="grid-column: 132 / span 7">8–14</span><span class="history-week is-dense" style="grid-column: 139 / span 7">15–21</span><span class="history-week is-dense" style="grid-column: 146 / span 7">22–28</span><span class="history-week is-dense" style="grid-column: 153 / span 3">29–31</span>
+    </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Browser</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-firefox" class="history-bar tone-0 change-baseline  is-ended " data-search data-search-text="Firefox configuration is present in the initial repository snapshot; the installation date is not established. 2026-06-26 Firefox Browser baseline" data-start="28" data-end="42" data-history-id="firefox" aria-haspopup="dialog" title="Baseline · Firefox · 26 Jun 2026 → 10 Jul 2026" style="grid-column: 28 / 42; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">Firefox</span><span class="history-terminal" title="Replaced on 10 Jul 2026">↔</span>
+            <template><h3>Firefox</h3><p class="history-period">26 Jun 2026 → 10 Jul 2026</p><p class="history-change-label">Baseline</p><p>Firefox configuration is present in the initial repository snapshot; the installation date is not established.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 10 Jul 2026 by <strong>Zen</strong>.</p>
+              <p class="muted">Browser · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/145fe34"><code>145fe34</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/08f53e4..145fe34">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-zen" class="history-bar tone-1 change-replaced  is-ended " data-search data-search-text="Zen replaces the Firefox application module and browser settings. 2026-07-10 Zen Browser replaced" data-start="42" data-end="52" data-history-id="zen" aria-haspopup="dialog" title="Replacement · Zen · 10 Jul 2026 → 20 Jul 2026" style="grid-column: 42 / 52; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Zen</span><span class="history-terminal" title="Replaced on 20 Jul 2026">↔</span>
+            <template><h3>Zen</h3><p class="history-period">10 Jul 2026 → 20 Jul 2026</p><p class="history-change-label">Replacement</p><p>Zen replaces the Firefox application module and browser settings.</p>
+              <p class="history-relationship">Replaces <strong>Firefox</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Replaced on 20 Jul 2026 by <strong>LibreWolf</strong>.</p>
+              <p class="muted">Browser · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/145fe34"><code>145fe34</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/598cd21"><code>598cd21</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/145fe34..598cd21">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-browser-1" class="history-bar tone-2 change-replaced  is-ended " data-search data-search-text="Browser module selection changes; personal usage dates remain unknown. 2026-07-20 LibreWolf Browser replaced" data-start="52" data-end="96" data-history-id="browser-1" aria-haspopup="dialog" title="Replacement · LibreWolf · 20 Jul 2026 → 02 Sep 2026" style="grid-column: 52 / 96; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">LibreWolf</span><span class="history-terminal" title="Replaced on 02 Sep 2026">↔</span>
+            <template><h3>LibreWolf</h3><p class="history-period">20 Jul 2026 → 02 Sep 2026</p><p class="history-change-label">Replacement</p><p>Browser module selection changes; personal usage dates remain unknown.</p>
+              <p class="history-relationship">Replaces <strong>Zen</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Replaced on 02 Sep 2026 by <strong>Brave Origin</strong>.</p>
+              <p class="muted">Browser · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/598cd21"><code>598cd21</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/596d36a"><code>596d36a</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/598cd21..596d36a">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-browser-2" class="history-bar tone-0 change-replaced  open-end " data-search data-search-text="Program imports and web MIME defaults change; not a claim about exclusive usage. 2026-09-02 Brave Origin Browser replaced" data-start="96" data-end="156" data-history-id="browser-2" aria-haspopup="dialog" title="Replacement · Brave Origin · 02 Sep 2026 → Retained in recorded history →" style="grid-column: 96 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Brave Origin</span><span aria-hidden="true">→</span>
+            <template><h3>Brave Origin</h3><p class="history-period">02 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>Program imports and web MIME defaults change; not a claim about exclusive usage.</p>
+              <p class="history-relationship">Replaces <strong>LibreWolf</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Browser · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/596d36a"><code>596d36a</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(2, 44px)">
+        <h3 style="grid-row: 1 / span 2">Desktop</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-gnome-session" class="history-bar tone-0 change-baseline unknown-start is-ended " data-search data-search-text="Previous desktop session; its initial adoption date is not recorded.  GNOME Desktop baseline" data-start="2" data-end="60" data-history-id="gnome-session" aria-haspopup="dialog" title="Baseline · GNOME · Earlier / unknown → 28 Jul 2026" style="grid-column: 2 / 60; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">GNOME</span><span class="history-terminal" title="Removed on 28 Jul 2026">×</span>
+            <template><h3>GNOME</h3><p class="history-period">Earlier / unknown → 28 Jul 2026</p><p class="history-change-label">Baseline</p><p>Previous desktop session; its initial adoption date is not recorded.</p>
+
+
+
+
+
+              <p class="history-relationship">Removed on 28 Jul 2026 by <strong>GNOME session removed</strong>.</p>
+              <p class="muted">Desktop · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/baf823d"><code>baf823d</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/08f53e4..baf823d">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-niri-session" class="history-bar tone-1 change-added  is-ended " data-search data-search-text="GNOME remained available while the new desktop was integrated. 2026-07-10 Niri &#43; Noctalia Desktop added" data-start="42" data-end="96" data-history-id="niri-session" aria-haspopup="dialog" title="Added alongside · Niri &#43; Noctalia · 10 Jul 2026 → 02 Sep 2026" style="grid-column: 42 / 96; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">Niri &#43; Noctalia</span><span class="history-terminal" title="Updated on 02 Sep 2026">↑</span>
+            <template><h3>Niri &#43; Noctalia</h3><p class="history-period">10 Jul 2026 → 02 Sep 2026</p><p class="history-change-label">Added alongside</p><p>GNOME remained available while the new desktop was integrated.</p>
+
+
+
+
+
+              <p class="history-relationship">Updated on 02 Sep 2026 by <strong>Store-managed Niri</strong>.</p>
+              <p class="muted">Desktop · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/de38398"><code>de38398</code> ↗</a><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/62b2285"><code>62b2285</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/5a6d6c2"><code>5a6d6c2</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/de38398..5a6d6c2">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-gnome-removed" class="history-bar tone-2 change-removed  is-ended event-marker" data-search data-search-text="GNOME session removed; GNOME/GTK applications and integration remain. 2026-07-28 GNOME session removed Desktop removed" data-start="60" data-end="61" data-history-id="gnome-removed" aria-haspopup="dialog" title="Removed · GNOME session removed · 28 Jul 2026 → Removal event" style="grid-column: 60 / 61; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">×</span><span class="history-bar-label">GNOME session removed</span>
+            <template><h3>GNOME session removed</h3><p class="history-period">28 Jul 2026 → Removal event</p><p class="history-change-label">Removed</p><p>GNOME session removed; GNOME/GTK applications and integration remain.</p>
+
+
+              <p class="history-relationship">Removes <strong>GNOME</strong>.</p>
+
+
+
+              <p class="muted">Desktop · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/baf823d"><code>baf823d</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-niri-store-managed" class="history-bar tone-0 change-updated  open-end " data-search data-search-text="Home Manager deployment replaces direct out-of-store links. 2026-09-02 Store-managed Niri Desktop updated" data-start="96" data-end="156" data-history-id="niri-store-managed" aria-haspopup="dialog" title="Updated · Store-managed Niri · 02 Sep 2026 → Retained in recorded history →" style="grid-column: 96 / 156; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Store-managed Niri</span><span aria-hidden="true">→</span>
+            <template><h3>Store-managed Niri</h3><p class="history-period">02 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Updated</p><p>Home Manager deployment replaces direct out-of-store links.</p>
+
+              <p class="history-relationship">Updates <strong>Niri &#43; Noctalia</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Desktop · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/5a6d6c2"><code>5a6d6c2</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">NixOS release line</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-nixos-2611" class="history-bar tone-0 change-baseline  open-end " data-search data-search-text="The initial locked Nixpkgs revision declares release line 26.11, and the current source pin also declares 26.11. This is source/channel history, not evidence of an installed-release transition. stateVersion controls compatibility defaults and must not be read as the running OS version. 2026-06-26 NixOS 26.11 · unstable NixOS release line baseline" data-start="28" data-end="156" data-history-id="nixos-2611" aria-haspopup="dialog" title="Baseline · NixOS 26.11 · unstable · 26 Jun 2026 → Retained in recorded history →" style="grid-column: 28 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">NixOS 26.11 · unstable</span><span aria-hidden="true">→</span>
+            <template><h3>NixOS 26.11 · unstable</h3><p class="history-period">26 Jun 2026 → Retained in recorded history →</p><p class="history-change-label">Baseline</p><p>The initial locked Nixpkgs revision declares release line 26.11, and the current source pin also declares 26.11. This is source/channel history, not evidence of an installed-release transition. stateVersion controls compatibility defaults and must not be read as the running OS version.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">NixOS release line · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/dfb1def"><code>dfb1def</code> ↗</a></div>
+
+
+              <p><a href="https://github.com/NixOS/nixpkgs/blob/567a49d1913ce81ac6e9582e3553dd90a955875f/lib/.version">Pinned upstream source ↗</a></p>
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Shell releases</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-v5" class="history-bar tone-0 change-added  is-ended " data-search data-search-text="The Noctalia input and shell integration are introduced alongside Niri. This records repository selection, not a firmware or OS release. 2026-07-10 Noctalia v5 · unpinned Shell releases added" data-start="42" data-end="102" data-history-id="noctalia-v5" aria-haspopup="dialog" title="Added alongside · Noctalia v5 · unpinned · 10 Jul 2026 → 08 Sep 2026" style="grid-column: 42 / 102; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">Noctalia v5 · unpinned</span><span class="history-terminal" title="Updated on 08 Sep 2026">↑</span>
+            <template><h3>Noctalia v5 · unpinned</h3><p class="history-period">10 Jul 2026 → 08 Sep 2026</p><p class="history-change-label">Added alongside</p><p>The Noctalia input and shell integration are introduced alongside Niri. This records repository selection, not a firmware or OS release.</p>
+
+
+
+
+
+              <p class="history-relationship">Updated on 08 Sep 2026 by <strong>Noctalia v5.0.1</strong>.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/de38398"><code>de38398</code> ↗</a><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/62b2285"><code>62b2285</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/f1b853a"><code>f1b853a</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/de38398..f1b853a">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-501" class="history-bar tone-1 change-updated  is-ended " data-search data-search-text="The flake selects the v5.0.1 release; Noctalia remains the shell. 2026-09-08 Noctalia v5.0.1 Shell releases updated" data-start="102" data-end="113" data-history-id="noctalia-501" aria-haspopup="dialog" title="Updated · Noctalia v5.0.1 · 08 Sep 2026 → 19 Sep 2026" style="grid-column: 102 / 113; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Noctalia v5.0.1</span><span class="history-terminal" title="Updated on 19 Sep 2026">↑</span>
+            <template><h3>Noctalia v5.0.1</h3><p class="history-period">08 Sep 2026 → 19 Sep 2026</p><p class="history-change-label">Updated</p><p>The flake selects the v5.0.1 release; Noctalia remains the shell.</p>
+
+              <p class="history-relationship">Updates <strong>Noctalia v5 · unpinned</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Updated on 19 Sep 2026 by <strong>Noctalia v5.1.0</strong>.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/f1b853a"><code>f1b853a</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d687e16"><code>d687e16</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/f1b853a..d687e16">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-510" class="history-bar tone-2 change-updated  is-ended " data-search data-search-text="The Noctalia release pin advances to v5.1.0. 2026-09-19 Noctalia v5.1.0 Shell releases updated" data-start="113" data-end="122" data-history-id="noctalia-510" aria-haspopup="dialog" title="Updated · Noctalia v5.1.0 · 19 Sep 2026 → 28 Sep 2026" style="grid-column: 113 / 122; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Noctalia v5.1.0</span><span class="history-terminal" title="Updated on 28 Sep 2026">↑</span>
+            <template><h3>Noctalia v5.1.0</h3><p class="history-period">19 Sep 2026 → 28 Sep 2026</p><p class="history-change-label">Updated</p><p>The Noctalia release pin advances to v5.1.0.</p>
+
+              <p class="history-relationship">Updates <strong>Noctalia v5.0.1</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Updated on 28 Sep 2026 by <strong>Noctalia v5.2.0</strong>.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d687e16"><code>d687e16</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d9a0f8e"><code>d9a0f8e</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/d687e16..d9a0f8e">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-520" class="history-bar tone-0 change-updated  is-ended " data-search data-search-text="Repository release-pin update, not the upstream release or activation date. 2026-09-28 Noctalia v5.2.0 Shell releases updated" data-start="122" data-end="131" data-history-id="noctalia-520" aria-haspopup="dialog" title="Updated · Noctalia v5.2.0 · 28 Sep 2026 → 07 Oct 2026" style="grid-column: 122 / 131; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Noctalia v5.2.0</span><span class="history-terminal" title="Updated on 07 Oct 2026">↑</span>
+            <template><h3>Noctalia v5.2.0</h3><p class="history-period">28 Sep 2026 → 07 Oct 2026</p><p class="history-change-label">Updated</p><p>Repository release-pin update, not the upstream release or activation date.</p>
+
+              <p class="history-relationship">Updates <strong>Noctalia v5.1.0</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Updated on 07 Oct 2026 by <strong>Noctalia v5.2.1</strong>.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d9a0f8e"><code>d9a0f8e</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/dfb1def"><code>dfb1def</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/d9a0f8e..dfb1def">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-521" class="history-bar tone-1 change-updated  is-ended " data-search data-search-text="The separate Noctalia flake input is pinned to v5.2.1. A later configuration update changes package and module ownership. 2026-10-07 Noctalia v5.2.1 Shell releases updated" data-start="131" data-end="136" data-history-id="noctalia-521" aria-haspopup="dialog" title="Updated · Noctalia v5.2.1 · 07 Oct 2026 → 12 Oct 2026" style="grid-column: 131 / 136; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Noctalia v5.2.1</span><span class="history-terminal" title="Updated on 12 Oct 2026">↑</span>
+            <template><h3>Noctalia v5.2.1</h3><p class="history-period">07 Oct 2026 → 12 Oct 2026</p><p class="history-change-label">Updated</p><p>The separate Noctalia flake input is pinned to v5.2.1. A later configuration update changes package and module ownership.</p>
+
+              <p class="history-relationship">Updates <strong>Noctalia v5.2.0</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Updated on 12 Oct 2026 by <strong>Noctalia · Nixpkgs</strong>.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/dfb1def"><code>dfb1def</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/e1fc26a7ff9ca9ee83792893271ec5db12f81bfb"><code>e1fc26a7ff9ca9ee83792893271ec5db12f81bfb</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/dfb1def..e1fc26a7ff9ca9ee83792893271ec5db12f81bfb">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-noctalia-nixpkgs" class="history-bar tone-2 change-updated  open-end " data-search data-search-text="The separate release-pinned input is removed. Home Manager&#39;s built-in module and the Nixpkgs package now own the shell integration. This records configuration ownership, not an activation date or a guessed release version. 2026-10-12 Noctalia · Nixpkgs Shell releases updated" data-start="136" data-end="156" data-history-id="noctalia-nixpkgs" aria-haspopup="dialog" title="Updated · Noctalia · Nixpkgs · 12 Oct 2026 → Retained in recorded history →" style="grid-column: 136 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Noctalia · Nixpkgs</span><span aria-hidden="true">→</span>
+            <template><h3>Noctalia · Nixpkgs</h3><p class="history-period">12 Oct 2026 → Retained in recorded history →</p><p class="history-change-label">Updated</p><p>The separate release-pinned input is removed. Home Manager&#39;s built-in module and the Nixpkgs package now own the shell integration. This records configuration ownership, not an activation date or a guessed release version.</p>
+
+              <p class="history-relationship">Updates <strong>Noctalia v5.2.1</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Shell releases · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/e1fc26a7ff9ca9ee83792893271ec5db12f81bfb"><code>e1fc26a7ff9ca9ee83792893271ec5db12f81bfb</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Application stack</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-application-stack-0" class="history-bar tone-0 change-baseline  is-ended " data-search data-search-text="GNOME applications replace these integrations; desktop compositor remained Niri. 2026-09-05 COSMIC apps Application stack baseline" data-start="99" data-end="113" data-history-id="application-stack-0" aria-haspopup="dialog" title="Baseline · COSMIC apps · 05 Sep 2026 → 19 Sep 2026" style="grid-column: 99 / 113; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">COSMIC apps</span><span class="history-terminal" title="Replaced on 19 Sep 2026">↔</span>
+            <template><h3>COSMIC apps</h3><p class="history-period">05 Sep 2026 → 19 Sep 2026</p><p class="history-change-label">Baseline</p><p>GNOME applications replace these integrations; desktop compositor remained Niri.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 19 Sep 2026 by <strong>GNOME apps</strong>.</p>
+              <p class="muted">Application stack · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/77ceecf"><code>77ceecf</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d687e16"><code>d687e16</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/77ceecf..d687e16">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-application-stack-1" class="history-bar tone-1 change-replaced  open-end " data-search data-search-text="An application-stack change, not a COSMIC compositor migration. 2026-09-19 GNOME apps Application stack replaced" data-start="113" data-end="156" data-history-id="application-stack-1" aria-haspopup="dialog" title="Replacement · GNOME apps · 19 Sep 2026 → Retained in recorded history →" style="grid-column: 113 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">GNOME apps</span><span aria-hidden="true">→</span>
+            <template><h3>GNOME apps</h3><p class="history-period">19 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>An application-stack change, not a COSMIC compositor migration.</p>
+              <p class="history-relationship">Replaces <strong>COSMIC apps</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Application stack · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/d687e16"><code>d687e16</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(2, 44px)">
+        <h3 style="grid-row: 1 / span 2">Editor defaults</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-editor-defaults-0" class="history-bar tone-0 change-baseline unknown-start is-ended " data-search data-search-text="Previous editor defaults; not an installation date.  micro Editor defaults baseline" data-start="2" data-end="96" data-history-id="editor-defaults-0" aria-haspopup="dialog" title="Baseline · micro · Earlier / unknown → 02 Sep 2026" style="grid-column: 2 / 96; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">micro</span><span class="history-terminal" title="Replaced on 02 Sep 2026">↔</span>
+            <template><h3>micro</h3><p class="history-period">Earlier / unknown → 02 Sep 2026</p><p class="history-change-label">Baseline</p><p>Previous editor defaults; not an installation date.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 02 Sep 2026 by <strong>Helix / Zed</strong>.</p>
+              <p class="muted">Editor defaults · repository history</p>
+              <p class="muted">Initial adoption commit is not established.</p>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/c97ec51"><code>c97ec51</code> ↗</a></div>
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-editor-defaults-1" class="history-bar tone-1 change-replaced  open-end " data-search data-search-text="EDITOR and VISUAL change; this is not their first installation date. 2026-09-02 Helix / Zed Editor defaults replaced" data-start="96" data-end="156" data-history-id="editor-defaults-1" aria-haspopup="dialog" title="Replacement · Helix / Zed · 02 Sep 2026 → Retained in recorded history →" style="grid-column: 96 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Helix / Zed</span><span aria-hidden="true">→</span>
+            <template><h3>Helix / Zed</h3><p class="history-period">02 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>EDITOR and VISUAL change; this is not their first installation date.</p>
+              <p class="history-relationship">Replaces <strong>micro</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Editor defaults · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/c97ec51"><code>c97ec51</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-zed-oxc" class="history-bar tone-2 change-configured  open-end " data-search data-search-text="Zed adopts workspace Oxc/Oxfmt, Tombi, scoped save actions, navigation keymaps and centrally declared subscription-agent defaults. This extends the existing editor setup; account authentication and editor behavior remain runtime checks. 2026-10-12 Zed · Oxc / Oxfmt Editor defaults configured" data-start="136" data-end="156" data-history-id="zed-oxc" aria-haspopup="dialog" title="Configuration change · Zed · Oxc / Oxfmt · 12 Oct 2026 → Retained in recorded history →" style="grid-column: 136 / 156; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">↗</span><span class="history-bar-label">Zed · Oxc / Oxfmt</span><span aria-hidden="true">→</span>
+            <template><h3>Zed · Oxc / Oxfmt</h3><p class="history-period">12 Oct 2026 → Retained in recorded history →</p><p class="history-change-label">Configuration change</p><p>Zed adopts workspace Oxc/Oxfmt, Tombi, scoped save actions, navigation keymaps and centrally declared subscription-agent defaults. This extends the existing editor setup; account authentication and editor behavior remain runtime checks.</p>
+
+
+
+
+              <p class="history-relationship">Added alongside: <strong>Helix / Zed</strong>; this is an independent layer.</p>
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Editor defaults · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/8dac6de60ea93b0282edb6ab7bdc9fe9386ad6ea"><code>8dac6de60ea93b0282edb6ab7bdc9fe9386ad6ea</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Gaming</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-gaming-0" class="history-bar tone-0 change-baseline unknown-start is-ended " data-search data-search-text="Previous gaming integration; adoption date unknown.  Jovian integration Gaming baseline" data-start="2" data-end="60" data-history-id="gaming-0" aria-haspopup="dialog" title="Baseline · Jovian integration · Earlier / unknown → 28 Jul 2026" style="grid-column: 2 / 60; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">Jovian integration</span><span class="history-terminal" title="Replaced on 28 Jul 2026">↔</span>
+            <template><h3>Jovian integration</h3><p class="history-period">Earlier / unknown → 28 Jul 2026</p><p class="history-change-label">Baseline</p><p>Previous gaming integration; adoption date unknown.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 28 Jul 2026 by <strong>Standard Steam</strong>.</p>
+              <p class="muted">Gaming · repository history</p>
+              <p class="muted">Initial adoption commit is not established.</p>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/9825f67"><code>9825f67</code> ↗</a></div>
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-gaming-1" class="history-bar tone-1 change-replaced  open-end " data-search data-search-text="Simpler desktop gaming ownership without a dedicated Jovian session. 2026-07-28 Standard Steam Gaming replaced" data-start="60" data-end="156" data-history-id="gaming-1" aria-haspopup="dialog" title="Replacement · Standard Steam · 28 Jul 2026 → Retained in recorded history →" style="grid-column: 60 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Standard Steam</span><span aria-hidden="true">→</span>
+            <template><h3>Standard Steam</h3><p class="history-period">28 Jul 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>Simpler desktop gaming ownership without a dedicated Jovian session.</p>
+              <p class="history-relationship">Replaces <strong>Jovian integration</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Gaming · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/9825f67"><code>9825f67</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(3, 44px)">
+        <h3 style="grid-row: 1 / span 3">Storage</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-storage-foundation" class="history-bar tone-0 change-baseline  open-end " data-search data-search-text="Tmpfs root, encrypted Btrfs and explicit persistence are a baseline, not a proven adoption date. The later scrub, SMART and zRAM additions do not replace this foundation. 2026-06-26 LUKS / Btrfs / Preservation Storage baseline" data-start="28" data-end="156" data-history-id="storage-foundation" aria-haspopup="dialog" title="Baseline · LUKS / Btrfs / Preservation · 26 Jun 2026 → Retained in recorded history →" style="grid-column: 28 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">LUKS / Btrfs / Preservation</span><span aria-hidden="true">→</span>
+            <template><h3>LUKS / Btrfs / Preservation</h3><p class="history-period">26 Jun 2026 → Retained in recorded history →</p><p class="history-change-label">Baseline</p><p>Tmpfs root, encrypted Btrfs and explicit persistence are a baseline, not a proven adoption date. The later scrub, SMART and zRAM additions do not replace this foundation.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Storage · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-storage-integrity" class="history-bar tone-1 change-added  open-end " data-search data-search-text="Monthly scrub and SMART added. Retained logs changed again later; always consult the current persistence declaration. 2026-07-20 Scrub / SMART Storage added" data-start="52" data-end="156" data-history-id="storage-integrity" aria-haspopup="dialog" title="Added alongside · Scrub / SMART · 20 Jul 2026 → Retained in recorded history →" style="grid-column: 52 / 156; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">Scrub / SMART</span><span aria-hidden="true">→</span>
+            <template><h3>Scrub / SMART</h3><p class="history-period">20 Jul 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>Monthly scrub and SMART added. Retained logs changed again later; always consult the current persistence declaration.</p>
+
+
+
+              <p class="history-relationship">Builds on: <strong>LUKS / Btrfs / Preservation</strong>.</p>
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Storage · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/6bb7096"><code>6bb7096</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-storage-swap" class="history-bar tone-2 change-added  open-end " data-search data-search-text="Compressed RAM swap reduces disk pressure; disk swap remains overflow. 2026-09-18 zRAM &#43; disk swap Storage added" data-start="112" data-end="156" data-history-id="storage-swap" aria-haspopup="dialog" title="Added alongside · zRAM &#43; disk swap · 18 Sep 2026 → Retained in recorded history →" style="grid-column: 112 / 156; grid-row: 3">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">zRAM &#43; disk swap</span><span aria-hidden="true">→</span>
+            <template><h3>zRAM &#43; disk swap</h3><p class="history-period">18 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>Compressed RAM swap reduces disk pressure; disk swap remains overflow.</p>
+
+
+
+
+              <p class="history-relationship">Added alongside: <strong>LUKS / Btrfs / Preservation</strong>; this is an independent layer.</p>
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Storage · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/23b3038"><code>23b3038</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Kernel</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-kernel-0" class="history-bar tone-0 change-baseline unknown-start is-ended " data-search data-search-text="Previous kernel policy; numeric version and start date unknown.  Default kernel set Kernel baseline" data-start="2" data-end="28" data-history-id="kernel-0" aria-haspopup="dialog" title="Baseline · Default kernel set · Earlier / unknown → 26 Jun 2026" style="grid-column: 2 / 28; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">Default kernel set</span><span class="history-terminal" title="Updated on 26 Jun 2026">↑</span>
+            <template><h3>Default kernel set</h3><p class="history-period">Earlier / unknown → 26 Jun 2026</p><p class="history-change-label">Baseline</p><p>Previous kernel policy; numeric version and start date unknown.</p>
+
+
+
+
+
+              <p class="history-relationship">Updated on 26 Jun 2026 by <strong>Latest kernel set</strong>.</p>
+              <p class="muted">Kernel · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/466d829"><code>466d829</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/08f53e4..466d829">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-kernel-1" class="history-bar tone-1 change-updated  open-end " data-search data-search-text="Hardware-support policy changed; this does not identify a numeric kernel version. 2026-06-26 Latest kernel set Kernel updated" data-start="28" data-end="156" data-history-id="kernel-1" aria-haspopup="dialog" title="Updated · Latest kernel set · 26 Jun 2026 → Retained in recorded history →" style="grid-column: 28 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↑</span><span class="history-bar-label">Latest kernel set</span><span aria-hidden="true">→</span>
+            <template><h3>Latest kernel set</h3><p class="history-period">26 Jun 2026 → Retained in recorded history →</p><p class="history-change-label">Updated</p><p>Hardware-support policy changed; this does not identify a numeric kernel version.</p>
+
+              <p class="history-relationship">Updates <strong>Default kernel set</strong>; the underlying component remains.</p>
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Kernel · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/466d829"><code>466d829</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Power</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-power-0" class="history-bar tone-0 change-baseline unknown-start open-end " data-search data-search-text="Present in the first snapshot and committed HEAD. No recorded TLP, TuneD or auto-cpufreq migration.  Power Profiles Daemon Power baseline" data-start="2" data-end="156" data-history-id="power-0" aria-haspopup="dialog" title="Baseline · Power Profiles Daemon · Earlier / unknown → Retained in recorded history →" style="grid-column: 2 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">Power Profiles Daemon</span><span aria-hidden="true">→</span>
+            <template><h3>Power Profiles Daemon</h3><p class="history-period">Earlier / unknown → Retained in recorded history →</p><p class="history-change-label">Baseline</p><p>Present in the first snapshot and committed HEAD. No recorded TLP, TuneD or auto-cpufreq migration.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Power · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(4, 44px)">
+        <h3 style="grid-row: 1 / span 4">Security</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-c-sudo" class="history-bar tone-0 change-baseline unknown-start is-ended " data-search data-search-text="Previous sudo implementation; initial installation date is not established.  sudo Security baseline" data-start="2" data-end="108" data-history-id="c-sudo" aria-haspopup="dialog" title="Baseline · sudo · Earlier / unknown → 14 Sep 2026" style="grid-column: 2 / 108; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">sudo</span><span class="history-terminal" title="Replaced on 14 Sep 2026">↔</span>
+            <template><h3>sudo</h3><p class="history-period">Earlier / unknown → 14 Sep 2026</p><p class="history-change-label">Baseline</p><p>Previous sudo implementation; initial installation date is not established.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 14 Sep 2026 by <strong>sudo-rs</strong>.</p>
+              <p class="muted">Security · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/08f53e4"><code>08f53e4</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/148ea5f"><code>148ea5f</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/08f53e4..148ea5f">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-sops" class="history-bar tone-1 change-added  open-end " data-search data-search-text="Encrypted declarative host secrets are added; identities remain in persistent storage. 2026-07-19 sops-nix Security added" data-start="51" data-end="156" data-history-id="sops" aria-haspopup="dialog" title="Added alongside · sops-nix · 19 Jul 2026 → Retained in recorded history →" style="grid-column: 51 / 156; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">sops-nix</span><span aria-hidden="true">→</span>
+            <template><h3>sops-nix</h3><p class="history-period">19 Jul 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>Encrypted declarative host secrets are added; identities remain in persistent storage.</p>
+
+
+
+              <p class="history-relationship">Builds on: <strong>LUKS / Btrfs / Preservation</strong>.</p>
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Security · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/effc9ab"><code>effc9ab</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-sudo-rs" class="history-bar tone-2 change-replaced  open-end " data-search data-search-text="Rust sudo replaces the C sudo implementation. This does not replace the independent AppArmor or secret-management layers. 2026-09-14 sudo-rs Security replaced" data-start="108" data-end="156" data-history-id="sudo-rs" aria-haspopup="dialog" title="Replacement · sudo-rs · 14 Sep 2026 → Retained in recorded history →" style="grid-column: 108 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">sudo-rs</span><span aria-hidden="true">→</span>
+            <template><h3>sudo-rs</h3><p class="history-period">14 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>Rust sudo replaces the C sudo implementation. This does not replace the independent AppArmor or secret-management layers.</p>
+              <p class="history-relationship">Replaces <strong>sudo</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Security · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/148ea5f"><code>148ea5f</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-apparmor" class="history-bar tone-0 change-added  open-end " data-search data-search-text="AppArmor is enabled as an additional access-control layer. Enablement is not proof of complete application confinement. 2026-09-14 AppArmor support Security added" data-start="108" data-end="156" data-history-id="apparmor" aria-haspopup="dialog" title="Added alongside · AppArmor support · 14 Sep 2026 → Retained in recorded history →" style="grid-column: 108 / 156; grid-row: 3">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">AppArmor support</span><span aria-hidden="true">→</span>
+            <template><h3>AppArmor support</h3><p class="history-period">14 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>AppArmor is enabled as an additional access-control layer. Enablement is not proof of complete application confinement.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Security · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/148ea5f"><code>148ea5f</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-usbguard" class="history-bar tone-1 change-added  open-end " data-search data-search-text="USB authorization policy and further kernel hardening are added alongside existing privilege and secret-management controls. 2026-09-18 USBGuard &#43; kernel hardening Security added" data-start="112" data-end="156" data-history-id="usbguard" aria-haspopup="dialog" title="Added alongside · USBGuard &#43; kernel hardening · 18 Sep 2026 → Retained in recorded history →" style="grid-column: 112 / 156; grid-row: 4">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">USBGuard &#43; kernel hardening</span><span aria-hidden="true">→</span>
+            <template><h3>USBGuard &#43; kernel hardening</h3><p class="history-period">18 Sep 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>USB authorization policy and further kernel hardening are added alongside existing privilege and secret-management controls.</p>
+
+
+
+
+              <p class="history-relationship">Added alongside: <strong>AppArmor support</strong>; this is an independent layer.</p>
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Security · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/51964e9"><code>51964e9</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(3, 44px)">
+        <h3 style="grid-row: 1 / span 3">Networking</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-dnscrypt" class="history-bar tone-0 change-added  open-end " data-search data-search-text="NetworkManager stops owning DNS; resolver configuration was corrected the following day. 2026-07-16 DNSCrypt Networking added" data-start="48" data-end="156" data-history-id="dnscrypt" aria-haspopup="dialog" title="Added alongside · DNSCrypt · 16 Jul 2026 → Retained in recorded history →" style="grid-column: 48 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">&#43;</span><span class="history-bar-label">DNSCrypt</span><span aria-hidden="true">→</span>
+            <template><h3>DNSCrypt</h3><p class="history-period">16 Jul 2026 → Retained in recorded history →</p><p class="history-change-label">Added alongside</p><p>NetworkManager stops owning DNS; resolver configuration was corrected the following day.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Networking · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/6206fe5"><code>6206fe5</code> ↗</a><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/11fc4ad"><code>11fc4ad</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-dns-providers" class="history-bar tone-1 change-configured  open-end " data-search data-search-text="Cloudflare and Scaleway replace discovery across the full catalog. 2026-08-16 Explicit DNS providers Networking configured" data-start="79" data-end="156" data-history-id="dns-providers" aria-haspopup="dialog" title="Configuration change · Explicit DNS providers · 16 Aug 2026 → Retained in recorded history →" style="grid-column: 79 / 156; grid-row: 2">
+            <span class="history-kind" aria-hidden="true">↗</span><span class="history-bar-label">Explicit DNS providers</span><span aria-hidden="true">→</span>
+            <template><h3>Explicit DNS providers</h3><p class="history-period">16 Aug 2026 → Retained in recorded history →</p><p class="history-change-label">Configuration change</p><p>Cloudflare and Scaleway replace discovery across the full catalog.</p>
+
+
+
+              <p class="history-relationship">Builds on: <strong>DNSCrypt</strong>.</p>
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Networking · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/be176c4"><code>be176c4</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-network-policy" class="history-bar tone-2 change-configured  open-end " data-search data-search-text="Loopback resolver alignment, Kavita LAN opening removed, native NetworkManager VPN workflow documented. 2026-10-07 Loopback / native VPN Networking configured" data-start="131" data-end="156" data-history-id="network-policy" aria-haspopup="dialog" title="Configuration change · Loopback / native VPN · 07 Oct 2026 → Retained in recorded history →" style="grid-column: 131 / 156; grid-row: 3">
+            <span class="history-kind" aria-hidden="true">↗</span><span class="history-bar-label">Loopback / native VPN</span><span aria-hidden="true">→</span>
+            <template><h3>Loopback / native VPN</h3><p class="history-period">07 Oct 2026 → Retained in recorded history →</p><p class="history-change-label">Configuration change</p><p>Loopback resolver alignment, Kavita LAN opening removed, native NetworkManager VPN workflow documented.</p>
+
+
+
+
+              <p class="history-relationship">Added alongside: <strong>DNSCrypt</strong>; this is an independent layer.</p>
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Networking · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/573c599"><code>573c599</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Repository</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-repository-0" class="history-bar tone-0 change-configured  open-end " data-search data-search-text="shadow/ directly selects modules; no extra profiles layer is needed for one host/user. 2026-08-21 Flat host / user layout Repository configured" data-start="84" data-end="156" data-history-id="repository-0" aria-haspopup="dialog" title="Configuration change · Flat host / user layout · 21 Aug 2026 → Retained in recorded history →" style="grid-column: 84 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↗</span><span class="history-bar-label">Flat host / user layout</span><span aria-hidden="true">→</span>
+            <template><h3>Flat host / user layout</h3><p class="history-period">21 Aug 2026 → Retained in recorded history →</p><p class="history-change-label">Configuration change</p><p>shadow/ directly selects modules; no extra profiles layer is needed for one host/user.</p>
+
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Repository · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/21ead94"><code>21ead94</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+
+      <div class="history-lane" style="grid-template-rows: repeat(1, 44px)">
+        <h3 style="grid-row: 1 / span 1">Handbook</h3>
+
+
+
+
+
+
+
+          <button type="button" id="history-handbook-0" class="history-bar tone-0 change-baseline  is-ended " data-search data-search-text="CHEATSHEET.md preceded the interactive guide. 2026-06-28 Operator cheatsheet Handbook baseline" data-start="30" data-end="131" data-history-id="handbook-0" aria-haspopup="dialog" title="Baseline · Operator cheatsheet · 28 Jun 2026 → 07 Oct 2026" style="grid-column: 30 / 131; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">·</span><span class="history-bar-label">Operator cheatsheet</span><span class="history-terminal" title="Replaced on 07 Oct 2026">↔</span>
+            <template><h3>Operator cheatsheet</h3><p class="history-period">28 Jun 2026 → 07 Oct 2026</p><p class="history-change-label">Baseline</p><p>CHEATSHEET.md preceded the interactive guide.</p>
+
+
+
+
+
+              <p class="history-relationship">Replaced on 07 Oct 2026 by <strong>Interactive guide</strong>.</p>
+              <p class="muted">Handbook · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/5a1af97"><code>5a1af97</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/dfb1def"><code>dfb1def</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/5a1af97..dfb1def">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-handbook-1" class="history-bar tone-1 change-replaced  is-ended " data-search data-search-text="Offline lessons, app catalog and simulations become the operator entry point. 2026-10-07 Interactive guide Handbook replaced" data-start="131" data-end="135" data-history-id="handbook-1" aria-haspopup="dialog" title="Replacement · Interactive guide · 07 Oct 2026 → 11 Oct 2026" style="grid-column: 131 / 135; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Interactive guide</span><span class="history-terminal" title="Replaced on 11 Oct 2026">↔</span>
+            <template><h3>Interactive guide</h3><p class="history-period">07 Oct 2026 → 11 Oct 2026</p><p class="history-change-label">Replacement</p><p>Offline lessons, app catalog and simulations become the operator entry point.</p>
+              <p class="history-relationship">Replaces <strong>Operator cheatsheet</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Replaced on 11 Oct 2026 by <strong>Minimal technical handbook</strong>.</p>
+              <p class="muted">Handbook · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/dfb1def"><code>dfb1def</code> ↗</a></div>
+              <div class="history-evidence"><span>End / transition evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/678c45f"><code>678c45f</code> ↗</a></div>
+              <p><a href="https://github.com/AbdulrahmanNahhas/nixos-config/compare/dfb1def..678c45f">Compare this period's boundary commits ↗</a></p>
+
+            </template>
+          </button>
+
+
+
+
+
+
+
+          <button type="button" id="history-minimal-handbook" class="history-bar tone-2 change-replaced  open-end " data-search data-search-text="The guide changes to a compact source-based handbook. The Hugo migration and later relationship-aware timeline are separate subsequent changes. 2026-10-11 Minimal technical handbook Handbook replaced" data-start="135" data-end="156" data-history-id="minimal-handbook" aria-haspopup="dialog" title="Replacement · Minimal technical handbook · 11 Oct 2026 → Retained in recorded history →" style="grid-column: 135 / 156; grid-row: 1">
+            <span class="history-kind" aria-hidden="true">↔</span><span class="history-bar-label">Minimal technical handbook</span><span aria-hidden="true">→</span>
+            <template><h3>Minimal technical handbook</h3><p class="history-period">11 Oct 2026 → Retained in recorded history →</p><p class="history-change-label">Replacement</p><p>The guide changes to a compact source-based handbook. The Hugo migration and later relationship-aware timeline are separate subsequent changes.</p>
+              <p class="history-relationship">Replaces <strong>Interactive guide</strong>.</p>
+
+
+
+
+              <p class="history-relationship">Still retained in the recorded configuration; later independent additions do not end this bar.</p>
+              <p class="muted">Handbook · repository history</p>
+              <div class="history-evidence"><span>Commit evidence</span><a href="https://github.com/AbdulrahmanNahhas/nixos-config/commit/678c45f"><code>678c45f</code> ↗</a></div>
+
+
+
+            </template>
+          </button>
+
+      </div>
+
+  </div>
+  <p class="muted history-caption">Repository selection and configuration history, not installation or activation dates. A bar ends only when a linked event replaces, updates or removes it. Additions on separate tracks coexist. Uncommitted changes remain undated. Adaptive view expands months with multiple changes in one lane, and the current month, into weekly detail. Select a bar for exact dates.</p>
+  <dialog id="history-dialog" aria-labelledby="history-dialog-title"><button type="button" class="history-close" data-history-close aria-label="Close period details">Close ×</button><div id="history-dialog-content"></div></dialog>
+</section>
+
+            <footer>
+                Shadow · Technical handbook <span>Built 2026-10-12 · Hugo</span>
+            </footer>
+        </main>
+        <script>
+            "use strict";
+const search=document.querySelector('#search');
+const entries=[...document.querySelectorAll('[data-search]')];
+const groups=[...document.querySelectorAll('.technology-group')];
+const originalOpen=new Map(groups.map(g=>[g,g.open]));
+search?.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;for(const el of entries){el.hidden=!!q&&!(el.textContent+' '+(el.dataset.searchText||'')).toLowerCase().includes(q);if(!el.hidden)count++;}for(const group of groups){const rows=[...group.querySelectorAll('[data-search]')];group.hidden=!!q&&rows.every(r=>r.hidden);group.open=q&&!group.hidden?true:originalOpen.get(group);}
+document.querySelector('#search-status').textContent=q?count+' matching entries':'';});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){if(search){e.preventDefault();search.focus();}}if(e.key==='Escape'&&search&&document.activeElement===search){search.value='';search.dispatchEvent(new Event('input'));search.blur();}});
+function openTarget(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const el=document.getElementById(id);if(!el)return;el.hidden=false;if(el.matches('details')){el.hidden=false;el.open=true;}const parent=el.closest('details');if(parent){parent.hidden=false;parent.open=true;}el.scrollIntoView();}
+window.addEventListener('hashchange',openTarget);if(location.hash)openTarget();
+for(const el of document.querySelectorAll('.document')){const label=document.createElement('label');label.className='review-control';const box=document.createElement('input');box.type='checkbox';const key='shadow-guide.review.'+el.id;try{box.checked=localStorage.getItem(key)==='true';}catch{}box.addEventListener('change',()=>{try{localStorage.setItem(key,String(box.checked));}catch{}});label.append(box,document.createTextNode('Reviewed by me · stored only in this browser'));el.querySelector('article').append(label);}
+if(navigator.clipboard&&window.isSecureContext)for(const pre of document.querySelectorAll('pre')){const button=document.createElement('button');button.type='button';button.className='copy-button';button.textContent='Copy';const content=pre.textContent;button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(content);button.textContent='Copied';setTimeout(()=>button.textContent='Copy',1500);}catch{button.textContent='Select text';}});pre.prepend(button);}
+
+const timeline=document.querySelector('.history-scroll');
+for(const button of document.querySelectorAll('[data-history-scale]')){
+  button.addEventListener('click',()=>{
+    timeline.dataset.scale=button.dataset.historyScale;
+    for(const control of document.querySelectorAll('[data-history-scale]'))control.setAttribute('aria-pressed',String(control===button));
+  });
+}
+const periodDialog=document.querySelector('#history-dialog');
+if(periodDialog){
+  for(const bar of document.querySelectorAll('.history-bar'))bar.addEventListener('click',()=>{
+    document.querySelector('#history-dialog-content').replaceChildren(bar.querySelector('template').content.cloneNode(true));
+    document.querySelector('#history-dialog-content h3').id='history-dialog-title';
+    periodDialog.showModal();
+  });
+  document.querySelector('[data-history-close]').addEventListener('click',()=>periodDialog.close());
+  periodDialog.addEventListener('click',event=>{if(event.target===periodDialog){const bounds=periodDialog.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)periodDialog.close();}});
+}
+
+        </script>
+    </body>
+</html>

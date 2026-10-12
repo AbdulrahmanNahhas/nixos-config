@@ -1,3 +1,23 @@
+{
+  "title": "Check → build → test → switch",
+  "group": "DAILY WORK",
+  "weight": 5,
+  "sources": [
+    [
+      "NixOS changing configuration",
+      "https://nixos.org/manual/nixos/stable/#sec-changing-config"
+    ],
+    [
+      "nh project",
+      "https://github.com/nix-community/nh"
+    ]
+  ],
+  "build": {
+    "render": "link",
+    "list": "always"
+  }
+}
+
 **Evaluation** computes the configuration and derivations. **Building** realizes the required store paths, using caches where possible. **Activation** updates system links, service definitions, users, and managed files. **Booting** loads the selected kernel/initrd and starts the generation from cold state.
 
 | Action | Changes running system? | Meaning |

@@ -1,3 +1,23 @@
+{
+"title": "Add, deploy & rotate a secret",
+"group": "STATE & IDENTITY",
+"weight": 11,
+"sources": [
+[
+"sops-nix examples and templates",
+"https://github.com/Mic92/sops-nix"
+],
+[
+"SOPS CLI and key rotation",
+"https://getsops.io/docs/"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 **age** supplies identities. **SOPS** encrypts and edits versionable secret files. **sops-nix** decrypts declared secrets during activation, assigns ownership/modes, and exposes runtime paths. An encrypted archive without a consumer is not an active service configuration.
 
 ## Your deployed secrets

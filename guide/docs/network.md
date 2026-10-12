@@ -1,3 +1,27 @@
+{
+"title": "DNS, VPN & the firewall",
+"group": "NETWORK & PROTECTION",
+"weight": 12,
+"sources": [
+[
+"DNSCrypt configuration reference",
+"https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml"
+],
+[
+"NetworkManager reference",
+"https://networkmanager.dev/docs/api/latest/"
+],
+[
+"WireGuard overview",
+"https://www.wireguard.com/"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 **DNS** translates names to addresses. **DNSCrypt/DoH** encrypts queries to a resolver. **DNSSEC** provides validation-related assurances about DNS data, not secrecy. **HTTPS** protects an application connection. A **VPN** tunnels routed traffic to another network. A **firewall** allows or rejects traffic according to rules.
 
 Encrypted DNS is not anonymity: the resolver still sees queries, and connection destinations can reveal activity. A VPN moves trust to the VPN operator; it does not make logged-in web accounts anonymous. Temporary IPv6 addresses and randomized Wi-Fi MACs reduce some stable network identifiers but do not replace routing or app privacy.

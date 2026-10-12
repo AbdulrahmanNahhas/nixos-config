@@ -3,9 +3,13 @@
 NixOS + Home Manager for Aqua's Razer Blade 14: Niri/Noctalia, an encrypted
 Btrfs persistent store, and an ephemeral root.
 
-Open [the interactive guide](guide/index.html) in your browser for the system
-map, concepts, app catalog, secrets/VPN workflows, maintenance, and sources.
-It works offline and does not run commands on your machine.
+Open [the system handbook](guide/index.html) for searchable technologies,
+technical reference, source previews, locked revisions and the roadmap.
+It is built with Hugo and works offline with a separate page for each sidebar section.
+
+Edit Markdown in `guide/docs/` and the catalog data in `guide/*.json`, then run
+`./guide/build.sh`. Source previews, Flatpak IDs and input revisions are derived
+from the repository. See [guide maintenance and GitHub Pages deployment](guide/README.md).
 
 ```sh
 nix flake check

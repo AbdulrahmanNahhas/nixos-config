@@ -1,66 +1,613 @@
 {
-  "reviewed": "2026-10-11",
+  "reviewed": "2026-10-12",
+  "groups": [
+    "Firmware & boot security",
+    "Disk & filesystem architecture",
+    "Kernel, drivers & power",
+    "Core systems, networking & security",
+    "Display, graphics & audio",
+    "Desktop & application runtimes",
+    "Nix tooling & workflow",
+    "Backup & maintenance",
+    "Technology watch"
+  ],
   "items": [
-    {"id":"ppd","name":"Power Profiles Daemon (PPD)","category":"Power","status":"Configured","owner":"modules/nixos/services/power.nix","purpose":"Selected power-policy backend; Noctalia exposes profile switching.","alternative":"TuneD with tuned-ppd or TLP with tlp-pd, subject to pinned package/API support; neither is an automatic battery winner.","decision":"Keep PPD as the measured baseline. Trial only one backend at a time with repeatable workload, energy and resume checks."},
-    {"id":"power-alternatives","name":"TLP, auto-cpufreq and TuneD candidates","category":"Power","status":"Available / optional","owner":"modules/nixos/services/power.nix","purpose":"Alternative policy paths, not selected: TLP and auto-cpufreq are explicitly disabled; TuneD is not declared.","alternative":"Retain PPD; detailed AC/BAT policy or broader TuneD profiles only when a specific missing control warrants them.","decision":"Availability means a candidate, not an installed binary. Check pinned options before replacing PPD; do not stack tuning daemons."},
-    {"id":"gpu-rtd3","name":"NVIDIA PRIME offload and RTD3","category":"Power","status":"Needs verification","owner":"modules/nixos/hardware/graphics.nix","purpose":"Razer hardware import supplies PRIME/runtime-PM defaults; local NVIDIA persistence is disabled and open beta driver selected.","alternative":"A compatible stable driver or iGPU-only specialization; these can trade hardware support, CUDA and external outputs for simplicity.","decision":"Verify inherited effective options and return to PCI runtime suspend after games, CUDA, displays and resume. Import presence is not a runtime result."},
-    {"id":"amd-epp","name":"AMD P-state / EPP policy","category":"Power","status":"Configured","owner":"modules/nixos/core/boot.nix","purpose":"Declares amd_pstate=active plus hardware-specific backlight parameters.","alternative":"Firmware/platform profiles or another supported P-state mode after measurement, not extra governor scripts alongside PPD.","decision":"Verify actual driver and supported profiles on the host; retain overrides only while their hardware benefit is reproducible."},
-    {"id":"idle-lock","name":"Noctalia idle lock and suspend","category":"Power","status":"Configured","owner":"modules/home/wm/noctalia/config.toml","purpose":"Declares lock at 600 seconds, screen-off at 720 and lock-and-suspend at 1800; lockscreen enabled.","alternative":"A separate idle manager only if the shell policy is insufficient; do not duplicate timers.","decision":"Test lock-before-suspend and wake behavior. Fingerprint UI enablement does not prove fingerprint authentication is configured."},
-    {"id":"hibernation","name":"Hibernation / resume design","category":"Power","status":"Proposed","owner":"shadow/disk.nix","purpose":"Potential disk-backed suspend; the declared 16G encrypted swapfile alone does not configure resume.","alternative":"Keep ordinary suspend with encrypted overflow swap; zram cannot hold a power-off resume image.","decision":"Defer until a resume device/offset strategy, memory sizing, NVIDIA behavior and recovery are tested; no hibernation guarantee."},
-    {"id":"disko","name":"Disko disk layout","category":"Storage","status":"Configured","owner":"shadow/disk.nix","purpose":"Declares NVMe GPT, 1G EFI partition, encrypted Btrfs and tmpfs root; selected through the host's Disko import.","alternative":"Hand-maintained filesystem declarations reduce installer automation but can drift from installation layout.","decision":"Treat as a desired layout, not proof of existing partitions. Never execute formatting or installation commands as validation."},
-    {"id":"luks","name":"LUKS encrypted storage","category":"Storage","status":"Configured","owner":"shadow/disk.nix","purpose":"Declares the crypted container for /nix, /saved and /swap; allows discards through encryption.","alternative":"Disable discards for less allocation-pattern disclosure at an SSD-maintenance cost; TPM unlock is a separate proposal.","decision":"Keep independent unlock credentials and header recovery. Verify on-disk metadata rather than inferring it from comments; /boot is outside this container."},
-    {"id":"btrfs","name":"Btrfs subvolumes and compression","category":"Storage","status":"Configured","owner":"shadow/disk.nix","purpose":"Separate /nix, /saved and /swap subvolumes on one filesystem; zstd compression and noatime for store/persistent data.","alternative":"Ext4 for simpler filesystem semantics; snapshots add local rollback convenience but are not off-device backup.","decision":"Keep the layout unless evidence warrants migration; one physical device remains a shared failure domain."},
-    {"id":"preservation","name":"Preservation and tmpfs root","category":"Storage","status":"Configured","owner":"modules/nixos/storage/preservation.nix","purpose":"Restores selected system/user state from /saved across ephemeral-root reboots; derives Flatpak state paths from the app list.","alternative":"A persistent root or impermanence module changes state-management semantics rather than merely improving them.","decision":"Audit every new stateful tool's paths. Downloads is not in the preserved user-directory list; persistence is neither backup nor secure deletion."},
-    {"id":"zram","name":"zram plus encrypted disk swap","category":"Storage","status":"Configured","owner":"modules/nixos/storage/default.nix","purpose":"Enables compressed RAM swap ahead of the disk swapfile declared in shadow/disk.nix.","alternative":"Disk-only swap avoids compression CPU cost; RAM-only swap loses overflow capacity.","decision":"Measure pressure and responsiveness before tuning sizes or algorithms; swap capacity does not establish hibernation."},
-    {"id":"scrub-smart","name":"Btrfs scrub and SMART monitoring","category":"Storage","status":"Configured","owner":"modules/nixos/storage/default.nix","purpose":"Monthly scrub via /saved covers the shared Btrfs filesystem; smartd is enabled for drive-health monitoring.","alternative":"AC-gated scheduling and supported self-tests after hardware review; neither replaces backups.","decision":"Verify timer execution, progress persistence and warning delivery. Checksums detect damage; repair needs a valid redundant copy."},
-    {"id":"trim","name":"Periodic SSD TRIM","category":"Storage","status":"Configured","owner":"modules/nixos/services/power.nix","purpose":"Enables fstrim; the encrypted container permits discard pass-through.","alternative":"Manual or AC-gated TRIM; disabling pass-through trades maintenance for less allocation leakage.","decision":"Verify the effective timer and discard support. Keep maintenance separate from power-policy comparisons."},
-    {"id":"backups","name":"Independent encrypted backups (Restic / Borg)","category":"Storage","status":"Proposed","owner":"modules/nixos/storage/default.nix","purpose":"Close the off-device recovery gap; no Restic/Borg job or repository is declared in the local Nix graph.","alternative":"Restic or Borg according to destination, retention and recovery requirements; same-disk snapshots only supplement either.","decision":"Inventory any existing external/manual backups first. Define coverage and independently recoverable keys, then prove an isolated restore before automation."},
-    {"id":"boot","name":"systemd-boot, systemd initrd and Plymouth","category":"Security","status":"Configured","owner":"modules/nixos/core/boot.nix","purpose":"UEFI loader with eight-entry limit, systemd initrd and graphical unlock/progress prompt; latest kernel selected.","alternative":"Compatible stable kernel or another loader only for demonstrated support/recovery needs; Plymouth is presentation, not boot integrity.","decision":"Build and reboot-test each kernel/driver change. Eight boot entries do not guarantee eight retained generations after cleanup."},
-    {"id":"secure-boot","name":"Lanzaboote / signed UKI Secure Boot","category":"Security","status":"Proposed","owner":"modules/nixos/core/boot.nix","purpose":"Possible authenticated boot chain; no Lanzaboote input/import or signing policy is locally declared.","alternative":"Keep current systemd-boot/manual unlock with documented unsigned-boot risk until recovery and key handling are ready.","decision":"Recovery first, then reviewed signing setup, persistent protected PKI, ESP headroom and firmware enrollment. UKI signing alone is not out-of-tree module signing."},
-    {"id":"tpm-unlock","name":"TPM measured LUKS unlock","category":"Security","status":"Proposed","owner":"shadow/disk.nix","purpose":"Optional measured-boot-bound unlock; no enrollment or PCR policy is declared.","alternative":"Manual passphrase unlock is simpler and avoids accidental policy lockout; a PIN may complement a future TPM policy.","decision":"Separate this from Secure Boot. Establish threat model, authenticated/measured artifacts, update policy and independent recovery before enrollment."},
-    {"id":"sudo-rs","name":"sudo-rs","category":"Security","status":"Configured","owner":"modules/nixos/security/baseline.nix","purpose":"Memory-safe privilege elevation selected instead of C sudo; preserves EDITOR and VISUAL.","alternative":"C sudo may provide needed compatibility; language choice alone does not validate authorization policy.","decision":"Keep sudoers changes under security.sudo-rs and test privileged workflows; do not enable both implementations."},
-    {"id":"usbguard","name":"USBGuard","category":"Security","status":"Configured","owner":"modules/nixos/security/baseline.nix","purpose":"USB allowlist for built-in keyboard controller, Bluetooth and camera; Aqua can use the IPC approval interface.","alternative":"Unrestricted USB is convenient but removes this control; narrower rules require tested device identifiers.","decision":"Test recovery input before changing rules. Approvals are security decisions; device ID/name matches are not cryptographic identity."},
-    {"id":"apparmor","name":"AppArmor coverage","category":"Security","status":"Needs verification","owner":"modules/nixos/security/baseline.nix","purpose":"Enables the LSM and available package profiles, but declares no blanket per-service confinement policy.","alternative":"Targeted AppArmor profiles and systemd hardening can complement each other; enabling an LSM is not universal isolation.","decision":"Inventory loaded enforcing profiles and actual process labels before claiming coverage; add policy only with reproduction and denial tests."},
-    {"id":"hardening","name":"Kernel, journal and crash-data baseline","category":"Security","status":"Configured","owner":"modules/nixos/core/boot.nix","purpose":"Memory initialization, IOMMU and sysctl hardening; security/baseline.nix disables coredumps and bounds persistent journal retention.","alternative":"More restrictive ptrace/lockdown/module-signature settings can break debugging, Proton and unsigned NVIDIA/OpenRazer modules.","decision":"Retain explicit tradeoffs; verify effective settings and avoid blanket hardening recipes that invalidate recovery or hardware support."},
-    {"id":"sops","name":"SOPS, age and sops-nix","category":"Security","status":"Configured","owner":"modules/nixos/security/secrets.nix","purpose":"Decrypts ciphertext for account hash, VPN import, Nix configuration and Noctalia template using a pre-provisioned persistent age identity.","alternative":"Password/key managers or hardware-backed identities serve different consumers; GnuPG is also package-listed for manual encryption/signing.","decision":"Back up the identity independently. Commit only ciphertext; never expose plaintext to the Nix store. CLI age/sops/gnupg come from home/packages/cli.nix."},
-    {"id":"secret-helper","name":"secret ciphertext helper","category":"Security","status":"Configured","owner":"modules/home/programs/secrets.nix","purpose":"Installs repository-specific list/status/edit/add/add-token wrapper with private plaintext input and no-clobber ciphertext publication.","alternative":"Direct SOPS commands are more general but require careful format and output handling.","decision":"Adding ciphertext is not deployment: declare and review its consumer separately. Keep plaintext sources outside the repository."},
-    {"id":"password-managers","name":"KeePassXC and GNOME Secrets","category":"Security","status":"Configured","owner":"modules/home/programs/keepassxc.nix","purpose":"Package-installs KeePassXC, seeds writable private settings and browser bridge; GNOME Secrets is separately Flatpak-listed.","alternative":"Choose one primary vault workflow; the GNOME login keyring is a Secret Service provider, not an automatic vault backup.","decision":"Confirm Brave/native bridge pairing and vault location. This uses custom activation, not programs.keepassxc.settings; database recovery needs separate coverage."},
-    {"id":"fwupd","name":"fwupd / LVFS firmware updates","category":"Maintenance","status":"Configured","owner":"modules/nixos/hardware/peripherals.nix","purpose":"Enables firmware-update service while unused scanner, modem, online-account and iOS stacks are disabled.","alternative":"Vendor firmware tools when supported devices are absent from LVFS; not all Razer/device firmware is available here.","decision":"Inspect offered updates and recovery instructions; service enablement does not prove firmware currency or device support."},
-    {"id":"networkmanager","name":"NetworkManager","category":"Networking","status":"Configured","owner":"modules/nixos/networking/networkmanager.nix","purpose":"Connection management, randomized Wi-Fi addressing and IPv6 temporary addresses; DNS handed to loopback rather than NM or resolved.","alternative":"systemd-networkd/resolved suit other network models but would change DNS, GUI and VPN integration.","decision":"Keep native connection management; verify inherited Wi-Fi backend, reconnect and captive-portal behavior rather than assuming defaults."},
-    {"id":"dnscrypt","name":"dnscrypt-proxy encrypted DNS","category":"Networking","status":"Configured","owner":"modules/nixos/networking/dnscrypt.nix","purpose":"Loopback DNS cache with Cloudflare/Scaleway selection and DNSCrypt/DoH enabled; systemd-resolved disabled elsewhere.","alternative":"Resolved encrypted DNS or another resolver may simplify integration, but protocol support, VPN DNS and bootstrap need comparison.","decision":"Explicit server_names bypass require_* selection filters. Provider no-log claims are not an audit; test IPv4/IPv6, startup and VPN leaks."},
-    {"id":"firewall","name":"Host firewall and local-only services","category":"Networking","status":"Configured","owner":"modules/nixos/networking/firewall.nix","purpose":"Enables the host firewall with no locally declared inbound allowances; Samba and Avahi are disabled in networkmanager.nix.","alternative":"Narrow per-interface allowances only when a reviewed service actually needs LAN exposure.","decision":"Inspect effective rules after all imports. Firewall enablement is not a substitute for loopback binding or application authentication."},
-    {"id":"wireguard","name":"WireGuard VPN import material","category":"Networking","status":"Available / optional","owner":"modules/nixos/security/secrets.nix","purpose":"Provides root-only decrypted WireGuard configuration for manual NetworkManager import; does not declare an active VPN connection.","alternative":"Declarative NetworkManager profile or native WireGuard service after DNS, route and credential review.","decision":"Existing NM profiles remain authoritative. Verify connection, routes, DNS and leak behavior before claiming VPN coverage or a kill switch."},
-    {"id":"ssh","name":"OpenSSH server","category":"Networking","status":"Available / optional","owner":"modules/nixos/services/ssh.nix","purpose":"Server explicitly disabled; preservation conditionally retains host keys only if later enabled.","alternative":"Keep no inbound SSH or enable a narrowly scoped key-only server when remote administration is required.","decision":"This is not an installed/running-server claim. Enabling requires authentication, firewall and stable host-identity review."},
-    {"id":"network-cli","name":"curl, xh, dig and nmap","category":"Networking","status":"Configured","owner":"modules/home/packages/cli.nix","purpose":"Package-listed HTTP, DNS and network diagnostics; curl is system-listed in core/packages.nix and http aliases to xh.","alternative":"xh is convenient for interactive HTTP; curl remains suitable for scripts. DNS tests must distinguish local, VPN and upstream answers.","decision":"No services or scan schedules are configured. Use nmap only on authorized targets; shell aliases do not preserve original CLI syntax."},
-    {"id":"niri","name":"Niri Wayland desktop","category":"Desktop","status":"Configured","owner":"modules/nixos/desktop/niri.nix","purpose":"Enables Niri/default session and Wayland application hints; Home Manager installs module-owned KDL and brightnessctl.","alternative":"GNOME/KDE or another compositor offers different integration and layout, not an automatic modernization.","decision":"Validate effective KDL including Noctalia's generated include; test AMD rendering, external screens and session startup."},
-    {"id":"noctalia","name":"Noctalia shell and generated themes","category":"Desktop","status":"Configured","owner":"modules/home/wm/noctalia/default.nix","purpose":"Enables shell user service; links SOPS-rendered TOML and immutable SVG, with generated Niri/Ghostty/Helix themes.","alternative":"Independent bar, launcher, locker and theme tools permit granular choices but add integration owners.","decision":"Keep shell assets beside the module. Verify generated files, template secret access and lock behavior rather than treating TOML as runtime proof."},
-    {"id":"greetd","name":"greetd / tuigreet and GNOME keyring","category":"Desktop","status":"Configured","owner":"modules/nixos/desktop/greetd.nix","purpose":"TTY login into niri-session, keyring PAM unlock and bounded greeter restarts; includes a nested systemd-user PAM bypass.","alternative":"Another display manager may avoid the workaround but changes session/login integration.","decision":"Retest the documented deadlock and recovery login before removing the bypass; its security/session effects deserve a separate review."},
-    {"id":"portals","name":"XDG portals and file/media sharing","category":"Desktop","status":"Needs verification","owner":"modules/nixos/desktop/niri.nix","purpose":"Niri module integration and desktop preferences support portal-mediated app access; no explicit local portal backend selection is declared.","alternative":"Targeted backend preferences if effective routing is wrong; broad filesystem access is not a safe substitute for broken portals.","decision":"Inspect evaluated/inherited portal setup and test file chooser, screencast and browser/Flatpak camera paths. Do not infer success from installation."},
-    {"id":"pipewire","name":"PipeWire, WirePlumber and RTKit","category":"Desktop","status":"Configured","owner":"modules/nixos/services/audio.nix","purpose":"Enables PipeWire with ALSA, 32-bit ALSA and PulseAudio compatibility plus RTKit; preservation retains WirePlumber/PipeWire user state.","alternative":"PulseAudio-only would remove the unified media path; dedicated tools are useful diagnostics, not replacements by default.","decision":"Verify effective session manager, audio, Bluetooth and portal capture; microphone/camera permissions remain per application."},
-    {"id":"desktop-integration","name":"GTK, dconf, fonts, XDG and GVfs","category":"Desktop","status":"Configured","owner":"modules/home/desktop/default.nix","purpose":"Selects themes, multilingual UI preferences, MIME handlers, bookmarks and user directories; system modules supply fonts, keyring and GVfs.","alternative":"Toolkit defaults simplify theming but may weaken cross-app consistency and multilingual rendering.","decision":"Review MIME references against actual app declarations. Read-only bindfs font/icon projection for Flatpak lives in desktop/flatpak-theming.nix."},
-    {"id":"flatpak","name":"nix-flatpak and sandbox policy","category":"Apps","status":"Configured","owner":"modules/nixos/services/flatpak.nix","purpose":"Installs declared apps, daily updates, unmanaged-app cleanup and replacement system overrides; verified/default/full/beta remote choices are explicit.","alternative":"Native Nix packages avoid a second update plane but do not automatically provide Flatpak-style confinement.","decision":"Review per-app manifest plus system/user overrides; global denials do not erase every specific grant. Flatpak versions are not pinned by flake.lock."},
-    {"id":"native-apps","name":"Native GNOME utility applications","category":"Apps","status":"Configured","owner":"modules/nixos/desktop/apps.nix","purpose":"System package list: Nautilus, Text Editor, Loupe, Showtime, Papers, Resources, Disks and Calendar; no individual programs.* settings.","alternative":"Selected Flatpak equivalents or other toolkit apps where sandbox or feature requirements justify them.","decision":"Keep package installation distinct from settings/MIME management in Home Manager; Showtime and Flatpak Cine coexist, with Cine selected for media MIME types."},
-    {"id":"home-apps","name":"Obsidian, Mullvad Browser, Anki and Stremio","category":"Apps","status":"Configured","owner":"modules/home/packages/apps.nix","purpose":"Home package list installs standalone apps plus wl-screenrec; these entries are not dedicated program/service modules.","alternative":"SiYuan and Zotero are separately Flatpak-declared; browser isolation choices do not establish a VPN.","decision":"Check each app's persistent data and actual use. Anki and Obsidian paths are preserved; app install alone does not manage content or accounts."},
-    {"id":"brave","name":"Brave Origin browser","category":"Apps","status":"Configured","owner":"modules/home/programs/brave.nix","purpose":"Managed through programs.chromium with Brave package, extensions, Wayland/video flags and AMD render-node override.","alternative":"Mullvad Browser is package-listed for another privacy workflow; Firefox-family choices require separate settings and extension review.","decision":"Verify render-node identity and hardware decoding; ignore-gpu-blocklist is an explicit tradeoff, not proof of safe acceleration."},
-    {"id":"flatpak-library","name":"Flatpak productivity, reading and communication suite","category":"Apps","status":"Configured","owner":"modules/nixos/services/flatpak-apps.nix","purpose":"Declares LibreOffice, Planify, Foliate, PDF Arranger, Zotero, SiYuan, Telegram, Signal, Discord, Element, Tuba, NewsFlash, Tsukimi and Reflection.","alternative":"Native packages or fewer overlapping apps can simplify upkeep; full/beta remote apps need a separate trust decision from verified-subset apps.","decision":"App IDs are the install/override/persistence source of truth; reviewed membership does not prove login, usability or sandbox behavior."},
-    {"id":"flatpak-media","name":"Flatpak media and specialist utilities","category":"Apps","status":"Configured","owner":"modules/nixos/services/flatpak-apps.nix","purpose":"Declares Cine, Archives, Ear Tag, Nocturne, Upscaler, Video Trimmer, Subtitle Composer, Raider and Impression, with selected strict/offline exceptions.","alternative":"Native FFmpeg and ouch suit scripted jobs; GUI conveniences and device-access tools have different permission needs.","decision":"Test file grants and offline restrictions. Impression's broad device access is intentional and deserves caution; GNOME Secrets is cataloged with password managers."},
-    {"id":"gaming","name":"Steam, Proton GE, GameMode and Prism Launcher","category":"Apps","status":"Configured","owner":"modules/nixos/gaming/steam.nix","purpose":"Enables Steam/protontricks/GameMode, 32-bit graphics and XWayland; Flatpak Prism declares NVIDIA offload and X11 hints.","alternative":"Native Wayland where games support it, or other launchers for a specific library; compatibility remains game-dependent.","decision":"Test offload return-to-idle and actual Flatpak X11 permissions: global !x11/!fallback-x11 policy may conflict with Prism's intent."},
-    {"id":"appimage-webapps","name":"AppImage and browser desktop launchers","category":"Apps","status":"Needs verification","owner":"modules/home/desktop/local-apps.nix","purpose":"Declares NahhasCinema launcher pointing to /saved/apps/NahhasCinema.AppImage; system AppImage binfmt enabled. Web-app module adds WhatsApp/Rust Book entries.","alternative":"A packaged app gives reproducible provenance; browser apps avoid maintaining another native wrapper.","decision":"Launcher declarations do not fetch the local AppImage or install a Brave WhatsApp profile app. Check file provenance, executable presence and browser app registration."},
-    {"id":"kavita","name":"Kavita local book server","category":"Apps","status":"Configured","owner":"modules/nixos/services/kavita.nix","purpose":"Declares loopback-only port 8083, private persisted data and read-only Books binding with systemd hardening.","alternative":"Foliate for local reading or another library service if actual features warrant it.","decision":"wantedBy is explicitly empty: configured for manual start, not autostart/running. Review library access and token-key persistence before use."},
-    {"id":"peripheral-tools","name":"Bluetooth and OpenRazer / Polychromatic","category":"Desktop","status":"Configured","owner":"modules/nixos/hardware/default.nix","purpose":"Imports Bluetooth enabled but not powered on at boot, OpenRazer access and package-listed Polychromatic.","alternative":"Firmware defaults or narrower peripheral tools reduce extra kernel/service surface if features are unused.","decision":"Verify USBGuard permits required devices and test resume. OpenRazer's out-of-tree module matters to future signing/lockdown decisions."},
-    {"id":"shell","name":"Fish, Starship, Atuin, fzf and zoxide","category":"Development","status":"Configured","owner":"modules/home/shell/fish/default.nix","purpose":"Managed interactive shell, prompt, history, fuzzy selection and navigation; Atuin owns Ctrl-R and system users select Fish.","alternative":"Bash/Zsh for different compatibility; external history synchronization requires a separate privacy/credential decision.","decision":"Interactive aliases are not POSIX command replacements. Preserve history intentionally; this declaration does not prove a remote Atuin account/sync setup."},
-    {"id":"modern-cli","name":"eza, bat, fd, ripgrep, dust, duf, procs and btop","category":"Development","status":"Configured","owner":"modules/home/packages/cli.nix","purpose":"Package-list modern inspection tools plus chafa, fastfetch, FFmpeg, ouch, zip and unzip for media/archives; aliases are owned by Fish modules. zip also serves Noctalia's office theme.","alternative":"Coreutils/findutils/procps remain better compatibility targets for many scripts; newer UI does not imply identical flags/output.","decision":"Use explicit binaries in scripts and documentation when semantics matter; Fastfetch display is information, not an audit guarantee."},
-
-    {"id":"ghostty","name":"Ghostty terminal","category":"Development","status":"Configured","owner":"modules/home/programs/ghostty/default.nix","purpose":"Program module manages font, keys, clipboard behavior, Fish integration and generated Noctalia theme.","alternative":"Foot, Kitty or another terminal according to accessibility, rendering and workflow needs.","decision":"Test theme bootstrap, clipboard and font fallback; avoid changing a working terminal merely because another is newer."},
-    {"id":"editors","name":"Helix and Zed editors","category":"Development","status":"Configured","owner":"modules/home/programs/zed/default.nix","purpose":"Managed Zed FHS wrapper, settings/extensions/LSP plus AMD-only Vulkan visibility; Helix is separately managed and selected as EDITOR.","alternative":"VS Code/Neovim or project-local tools when extensions/workflows require them; no universal editor winner.","decision":"Keep editor preferences separate from compiler/toolchain declarations. VISUAL uses zeditor --wait; test language tools through trusted project environments."},
-    {"id":"nix-dev","name":"nixd, nixfmt, statix and deadnix","category":"Development","status":"Configured","owner":"modules/home/packages/development.nix","purpose":"Package-list Nix language server, formatter and linters; Zed wires nixd/nixfmt, and flake.nix supplies the repository formatter.","alternative":"nil or other lint/format choices if a concrete gap exists; lint suggestions are not automatically safe module edits.","decision":"Use formatting/linting deliberately. Project Rust/C++/JS compiler and LSP settings do not prove global toolchain installation."},
-    {"id":"devenv-direnv","name":"devenv, direnv and nix-direnv","category":"Development","status":"Configured","owner":"modules/nixos/core/nix.nix","purpose":"Enables direnv/nix-direnv; development package list adds devenv and Zed loads direnv directly.","alternative":"Plain flake devShells minimize extra workflow machinery; devenv adds project environment/service conventions.","decision":"No root devShell is declared in this flake. Review .envrc before allowing execution and use project-local toolchains rather than global language bundles."},
-    {"id":"git-forge","name":"Git, gh and lazygit","category":"Development","status":"Configured","owner":"modules/home/packages/development.nix","purpose":"Home package list installs forge CLI and Git TUI; Git is system-listed and its user configuration/gh state are preserved.","alternative":"Direct Git or a graphical forge workflow for different interaction needs; gh implies no configured login.","decision":"Keep credential state private and separate CLI installation from authentication, signing and repository permissions."},
-    {"id":"cloud-agents","name":"Codex, OpenCode, ACP and ChatGPT desktop","category":"Development","status":"Configured","owner":"modules/home/programs/ai/default.nix","purpose":"Enables CLI agents/persona and Zed custom ACP adapters; desktop/chatgpt.nix enables the community-packaged ChatGPT/Codex GUI.","alternative":"Built-in Zed provider, another remote provider or the parked local stack; compare privacy, cost and tool permissions, not only model claims.","decision":"Provider login is runtime state. Keep Codex config writable for the GUI, review third-party wrapper/input updates, and do not assume sandbox settings cover every external agent."},
-    {"id":"local-ai","name":"Parked llama.cpp CUDA / llama-swap stack","category":"Development","status":"Available / optional","owner":"modules/home/programs/ai/local.nix","purpose":"Existing unimported module describes local model router, manual ai function, model directory and Zed endpoint; parent import is commented out.","alternative":"Retain remote agents or reconsider a CPU/backend/model combination with acceptable quality, energy and build costs.","decision":"Not configured in the active graph. Re-import and restore launcher together only after CUDA build cost, model provenance, VRAM and endpoint permissions are reviewed."},
-    {"id":"delta-app","name":"Zed Delta application","category":"Development","status":"Configured","owner":"modules/home/programs/delta.nix","purpose":"Home package list selects the delta-nix flake application; AI module supplies its instruction file and preservation retains state.","alternative":"Existing Zed/Codex/OpenCode workflows may avoid another overlapping application.","decision":"This is the Zed Delta input/package, not git-delta diff pagination. Audit external input trust and actual credentials/tool permissions separately."},
-    {"id":"agent-sandbox","name":"Zed agent sandbox and language-tool downloads","category":"Security","status":"Needs verification","owner":"modules/home/programs/zed/settings.nix","purpose":"Declares native-agent host allowlist and disallows unsandboxed operation; development.nix comments out bubblewrap/socat and Biome requires project config.","alternative":"Verified project-local binaries and narrower permissions reduce downloaded execution; FHS/bubblewrap packaging alone does not prove agent confinement.","decision":"Verify the installed Zed sandbox support, failures and external-agent boundary. Private-file globs are not a comprehensive data-loss prevention policy."},
-    {"id":"flake-maintenance","name":"Flakes, binary caches, nh and garbage collection","category":"Maintenance","status":"Configured","owner":"modules/nixos/core/nix.nix","purpose":"Enables flakes/Nix commands, root-only daemon trust, declared cache keys, Friday optimization and nh cleanup retaining minimum generations/age.","alternative":"Manual maintenance or narrower named-input updates offer more control at an operator-time cost.","decision":"Review flake.lock diffs and cache trust; keep a known-good generation. Boot-entry limits and cleanup retention are distinct; never bump stateVersion simply to update."},
-    {"id":"validation","name":"Gitleaks, flake checks and no-link builds","category":"Maintenance","status":"Configured","owner":"flake.nix","purpose":"Declares Gitleaks flake check and nixfmt/fd formatter; repository workflow requires flake evaluation, diff checks and full-system no-link build.","alternative":"Targeted evaluation is quicker feedback but cannot replace full integration/build and reboot tests for hardware changes.","decision":"A check declaration is not a passing result. Use nh os test only for reviewed system changes; this catalog does not authorize switching or Disko operations."}
+    {
+      "id": "firmware",
+      "name": "Coreboot / Libreboot",
+      "category": "Firmware & boot security",
+      "purpose": "Open firmware alternatives; compatibility with this Razer hardware is unverified.",
+      "state": "verify",
+      "source": "https://coreboot.org/"
+    },
+    {
+      "id": "boot",
+      "name": "systemd-boot + systemd initrd",
+      "category": "Firmware & boot security",
+      "purpose": "UEFI boot menu, generation fallback and systemd early boot.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/boot.nix",
+          "pattern": "systemd-boot\\.enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/core/boot.nix",
+          "pattern": "initrd\\.systemd\\.enable\\s*=\\s*true"
+        }
+      ],
+      "watch": "https://github.com/systemd/systemd/releases",
+      "watchName": "systemd"
+    },
+    {
+      "id": "usbguard",
+      "name": "USBGuard",
+      "category": "Firmware & boot security",
+      "purpose": "Authorize USB devices through an explicit allowlist.",
+      "checks": [
+        {
+          "file": "modules/nixos/security/baseline.nix",
+          "pattern": "services\\.usbguard\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "secure-boot",
+      "name": "Lanzaboote + UKI / measured boot",
+      "category": "Firmware & boot security",
+      "purpose": "Candidate for signed boot and measured unlock; requires firmware and key recovery planning.",
+      "state": "disabled",
+      "source": "https://nix-community.github.io/lanzaboote/"
+    },
+    {
+      "id": "hardware-auth",
+      "name": "TPM2 / FIDO2 unlock + pam_u2f",
+      "category": "Firmware & boot security",
+      "purpose": "Optional disk unlocking and security-key authentication; no enrollment or PAM policy declared.",
+      "state": "disabled",
+      "source": "https://www.freedesktop.org/software/systemd/man/latest/systemd-cryptenroll.html"
+    },
+    {
+      "id": "recovery",
+      "name": "Boot & key recovery",
+      "category": "Firmware & boot security",
+      "purpose": "Verify independent recovery media, encryption credentials and a known-good boot generation.",
+      "state": "verify"
+    },
+    {
+      "id": "luks",
+      "name": "LUKS + Btrfs",
+      "category": "Disk & filesystem architecture",
+      "purpose": "Encrypted persistent storage with subvolumes, compression and checksums; ESP remains outside LUKS.",
+      "checks": [
+        {
+          "file": "shadow/disk.nix",
+          "pattern": "type\\s*=\\s*\"luks\""
+        },
+        {
+          "file": "shadow/disk.nix",
+          "pattern": "type\\s*=\\s*\"btrfs\""
+        }
+      ],
+      "watch": "https://btrfs.readthedocs.io/en/latest/CHANGES.html",
+      "watchName": "Btrfs + btrfs-progs"
+    },
+    {
+      "id": "layout",
+      "name": "Disko + Preservation",
+      "category": "Disk & filesystem architecture",
+      "purpose": "Declarative disk layout and explicit persistence over a temporary root.",
+      "checks": [
+        {
+          "file": "shadow/disk.nix",
+          "pattern": "disko\\.devices"
+        },
+        {
+          "file": "modules/nixos/storage/preservation.nix",
+          "pattern": "preservation\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "snapshots",
+      "name": "Snapper / btrbk",
+      "category": "Disk & filesystem architecture",
+      "purpose": "Optional snapshot scheduling, retention and replication; neither is configured.",
+      "state": "disabled",
+      "source": "https://digint.ch/btrbk/"
+    },
+    {
+      "id": "disk-health",
+      "name": "Btrfs scrub + SMART monitoring",
+      "category": "Disk & filesystem architecture",
+      "purpose": "Scheduled checksum verification and drive-health monitoring; verify completed runs and alert delivery.",
+      "checks": [
+        {
+          "file": "modules/nixos/storage/default.nix",
+          "pattern": "services\\.btrfs\\.autoScrub\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/storage/default.nix",
+          "pattern": "services\\.smartd\\.enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "swap-trim",
+      "name": "zRAM + encrypted disk swap + TRIM",
+      "category": "Disk & filesystem architecture",
+      "purpose": "Compressed RAM swap, disk overflow and periodic SSD maintenance.",
+      "checks": [
+        {
+          "file": "modules/nixos/storage/default.nix",
+          "pattern": "zramSwap\\.enable\\s*=\\s*true"
+        },
+        {
+          "file": "shadow/disk.nix",
+          "pattern": "swapfile"
+        },
+        {
+          "file": "modules/nixos/services/power.nix",
+          "pattern": "services\\.fstrim\\.enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "kernel",
+      "name": "Linux latest kernel",
+      "category": "Kernel, drivers & power",
+      "purpose": "Track modern hardware support; retain a working generation when updating.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/boot.nix",
+          "pattern": "kernelPackages\\s*=\\s*pkgs\\.linuxPackages_latest"
+        }
+      ],
+      "watch": "https://kernel.org/",
+      "watchName": "Linux kernel"
+    },
+    {
+      "id": "nvidia",
+      "name": "NVIDIA open driver · latest channel",
+      "category": "Kernel, drivers & power",
+      "purpose": "RTX support and offload; runtime GPU sleep must be checked after workloads and resume.",
+      "checks": [
+        {
+          "file": "modules/nixos/hardware/graphics.nix",
+          "pattern": "nvidiaPackages\\.latest"
+        },
+        {
+          "file": "modules/nixos/hardware/graphics.nix",
+          "pattern": "open\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "hardening",
+      "name": "Kernel mitigations + AppArmor",
+      "category": "Kernel, drivers & power",
+      "purpose": "Kernel access restrictions and AppArmor support; enablement does not imply full profile coverage.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/boot.nix",
+          "pattern": "kernel\\.sysctl"
+        },
+        {
+          "file": "modules/nixos/security/baseline.nix",
+          "pattern": "security\\.apparmor\\.enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "microcode",
+      "name": "AMD microcode + PRIME / RTD3",
+      "category": "Kernel, drivers & power",
+      "purpose": "Hardware-dependent and inherited settings; confirm effective options and runtime behavior.",
+      "state": "verify"
+    },
+    {
+      "id": "ppd",
+      "name": "Power Profiles Daemon + AMD P-state",
+      "category": "Kernel, drivers & power",
+      "purpose": "Desktop power profiles and CPU energy preference; UPower supplies battery state.",
+      "checks": [
+        {
+          "file": "modules/nixos/services/power.nix",
+          "pattern": "services\\.power-profiles-daemon\\.enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/core/boot.nix",
+          "pattern": "amd_pstate=active"
+        }
+      ]
+    },
+    {
+      "id": "alternate-power",
+      "name": "TLP / TuneD / auto-cpufreq",
+      "category": "Kernel, drivers & power",
+      "purpose": "Alternative policy backends; compare only if the current backend has a measured gap.",
+      "state": "disabled"
+    },
+    {
+      "id": "service-hardening",
+      "name": "systemd service sandboxing",
+      "category": "Kernel, drivers & power",
+      "purpose": "Kavita has explicit restrictions; service hardening is applied per service.",
+      "checks": [
+        {
+          "file": "modules/nixos/services/kavita.nix",
+          "pattern": "serviceConfig"
+        },
+        {
+          "file": "modules/nixos/services/kavita.nix",
+          "pattern": "ProtectSystem"
+        }
+      ]
+    },
+    {
+      "id": "nixos",
+      "name": "NixOS & Nix",
+      "category": "Core systems, networking & security",
+      "purpose": "Declarative builds, pinned dependencies and system generations.",
+      "checks": [
+        {
+          "file": "flake.nix",
+          "pattern": "nixosSystem"
+        },
+        {
+          "file": "modules/nixos/core/nix.nix",
+          "pattern": "\"flakes\""
+        }
+      ],
+      "watch": "https://nixos.org/blog/announcements/",
+      "watchName": "NixOS & Nix"
+    },
+    {
+      "id": "home-manager",
+      "name": "Home Manager + sops-nix",
+      "category": "Core systems, networking & security",
+      "purpose": "User configuration and encrypted declarative secrets.",
+      "checks": [
+        {
+          "file": "shadow/default.nix",
+          "pattern": "inputs\\.home-manager"
+        },
+        {
+          "file": "shadow/default.nix",
+          "pattern": "inputs\\.sops-nix"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "name": "NetworkManager + DNSCrypt + firewall",
+      "category": "Core systems, networking & security",
+      "purpose": "Network connections, encrypted DNS and inbound filtering.",
+      "checks": [
+        {
+          "file": "modules/nixos/networking/networkmanager.nix",
+          "pattern": "networkmanager\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/networking/dnscrypt.nix",
+          "pattern": "enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/networking/firewall.nix",
+          "pattern": "enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "wireguard",
+      "name": "WireGuard tunnel",
+      "category": "Core systems, networking & security",
+      "purpose": "Secret material is prepared for NetworkManager import; an active tunnel is not established by that declaration.",
+      "state": "verify"
+    },
+    {
+      "id": "privilege",
+      "name": "sudo-rs + USB authorization",
+      "category": "Core systems, networking & security",
+      "purpose": "Rust sudo implementation and user-controlled device authorization.",
+      "checks": [
+        {
+          "file": "modules/nixos/security/baseline.nix",
+          "pattern": "security\\.sudo-rs\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "bluetooth",
+      "name": "BlueZ / Bluetooth",
+      "category": "Core systems, networking & security",
+      "purpose": "Bluetooth support with the radio disabled at boot.",
+      "checks": [
+        {
+          "file": "modules/nixos/hardware/bluetooth.nix",
+          "pattern": "hardware\\.bluetooth\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "network-policy",
+      "name": "OpenSnitch / nftables custom policy",
+      "category": "Core systems, networking & security",
+      "purpose": "Optional outbound application filtering or custom packet rules; no such policy declared.",
+      "state": "disabled"
+    },
+    {
+      "id": "wayland",
+      "name": "Wayland + Mesa",
+      "category": "Display, graphics & audio",
+      "purpose": "Compositor display infrastructure and integrated-GPU graphics; confirm effective driver stack.",
+      "state": "verify",
+      "watch": "https://wayland.freedesktop.org/releases.html",
+      "watchName": "Wayland"
+    },
+    {
+      "id": "protocols",
+      "name": "Wayland protocols",
+      "category": "Display, graphics & audio",
+      "purpose": "Follow HDR, color management, capture and scaling support; protocol availability is not feature acceptance.",
+      "state": "monitored",
+      "watch": "https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases",
+      "watchName": "Wayland protocols"
+    },
+    {
+      "id": "media",
+      "name": "PipeWire + WirePlumber",
+      "category": "Display, graphics & audio",
+      "purpose": "Audio/video transport and session policy; PipeWire is explicitly enabled.",
+      "checks": [
+        {
+          "file": "modules/nixos/services/audio.nix",
+          "pattern": "services\\.pipewire\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "niri",
+      "name": "Niri",
+      "category": "Desktop & application runtimes",
+      "purpose": "Scrollable tiling compositor with an integrated-GPU rendering preference.",
+      "checks": [
+        {
+          "file": "modules/nixos/desktop/niri.nix",
+          "pattern": "programs\\.niri\\.enable\\s*=\\s*true"
+        }
+      ],
+      "watch": "https://github.com/niri-wm/niri/releases",
+      "watchName": "Niri"
+    },
+    {
+      "id": "noctalia",
+      "name": "Noctalia v5 · shell, lock & idle",
+      "category": "Desktop & application runtimes",
+      "purpose": "Launcher, notifications, system controls and session locking; verify lock and wake behavior.",
+      "checks": [
+        {
+          "file": "modules/home/wm/noctalia/default.nix",
+          "pattern": "programs\\.noctalia\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ],
+      "watch": "https://docs.noctalia.dev/noctalia/changelogs/",
+      "watchName": "Noctalia"
+    },
+    {
+      "id": "flatpak",
+      "name": "Flatpak + nix-flatpak / Bubblewrap",
+      "category": "Desktop & application runtimes",
+      "purpose": "Declarative sandboxed app distribution; permissions remain application-specific.",
+      "checks": [
+        {
+          "file": "modules/nixos/services/flatpak.nix",
+          "pattern": "services\\.flatpak\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        },
+        {
+          "file": "shadow/default.nix",
+          "pattern": "inputs\\.nix-flatpak"
+        }
+      ],
+      "watch": "https://github.com/flatpak/flatpak/releases",
+      "watchName": "Flatpak"
+    },
+    {
+      "id": "desktop-bridges",
+      "name": "XDG portals + keyring + Polkit / user session",
+      "category": "Desktop & application runtimes",
+      "purpose": "Desktop integration, credential storage, authorization and service lifecycle; verify actual routing and agents.",
+      "state": "verify"
+    },
+    {
+      "id": "compatibility",
+      "name": "Steam / Proton + Xwayland-satellite",
+      "category": "Desktop & application runtimes",
+      "purpose": "Gaming compatibility and X11 support under Niri.",
+      "checks": [
+        {
+          "file": "modules/nixos/gaming/steam.nix",
+          "pattern": "steam\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/gaming/steam.nix",
+          "pattern": "xwayland-satellite"
+        }
+      ]
+    },
+    {
+      "id": "nix-ld",
+      "name": "nix-ld / external binaries",
+      "category": "Desktop & application runtimes",
+      "purpose": "Runtime library compatibility inherited from external modules; inspect effective settings.",
+      "state": "verify"
+    },
+    {
+      "id": "gamescope",
+      "name": "Gamescope",
+      "category": "Desktop & application runtimes",
+      "purpose": "Optional gaming compositor and presentation controls; not declared.",
+      "state": "disabled",
+      "source": "https://github.com/ValveSoftware/gamescope"
+    },
+    {
+      "id": "nh",
+      "name": "nh + generation maintenance",
+      "category": "Nix tooling & workflow",
+      "purpose": "Build, test, switch, search and retained-generation cleanup.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/nix.nix",
+          "pattern": "programs\\.nh\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "dev-shells",
+      "name": "devenv + direnv / nix-direnv",
+      "category": "Nix tooling & workflow",
+      "purpose": "Project-specific environments with cached activation.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/nix.nix",
+          "pattern": "nix-direnv\\.enable\\s*=\\s*true"
+        },
+        {
+          "file": "modules/home/packages/development.nix",
+          "pattern": "(?m)^\\s*devenv\\s*$"
+        }
+      ]
+    },
+    {
+      "id": "nix-tools",
+      "name": "nixd + nixfmt + statix / deadnix",
+      "category": "Nix tooling & workflow",
+      "purpose": "Nix language support, consistent formatting and linting.",
+      "checks": [
+        {
+          "file": "modules/home/packages/development.nix",
+          "pattern": "(?m)^\\s*nixd\\s*$"
+        },
+        {
+          "file": "modules/home/packages/development.nix",
+          "pattern": "(?m)^\\s*nixfmt\\s*$"
+        },
+        {
+          "file": "modules/home/packages/development.nix",
+          "pattern": "(?m)^\\s*statix\\s*$"
+        },
+        {
+          "file": "modules/home/packages/development.nix",
+          "pattern": "(?m)^\\s*deadnix\\s*$"
+        }
+      ]
+    },
+    {
+      "id": "index",
+      "name": "nix-index-database + comma",
+      "category": "Nix tooling & workflow",
+      "purpose": "Candidate for finding and running commands without permanently installing packages.",
+      "state": "disabled",
+      "source": "https://github.com/nix-community/nix-index-database"
+    },
+    {
+      "id": "build-tools",
+      "name": "nom + nvd",
+      "category": "Nix tooling & workflow",
+      "purpose": "Optional build-progress display and generation package comparisons.",
+      "state": "disabled",
+      "source": "https://github.com/maralorn/nix-output-monitor"
+    },
+    {
+      "id": "validation",
+      "name": "Pinned inputs + flake checks",
+      "category": "Nix tooling & workflow",
+      "purpose": "Locked dependencies and configured flake checks; a declared check is not a recorded passing run.",
+      "checks": [
+        {
+          "file": "flake.nix",
+          "pattern": "checks\\."
+        },
+        {
+          "file": "flake.nix",
+          "pattern": "formatter\\."
+        }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "name": "Nix store optimisation + cleanup",
+      "category": "Backup & maintenance",
+      "purpose": "Scheduled deduplication and generation retention.",
+      "checks": [
+        {
+          "file": "modules/nixos/core/nix.nix",
+          "pattern": "nix\\.optimise\\s*=\\s*\\{(?s:.*?)automatic\\s*=\\s*true"
+        },
+        {
+          "file": "modules/nixos/core/nix.nix",
+          "pattern": "clean\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
+        }
+      ]
+    },
+    {
+      "id": "persistent-identity",
+      "name": "Persistent journal, identity & keys",
+      "category": "Backup & maintenance",
+      "purpose": "Retain bounded logs and selected machine/security state across ephemeral-root reboots.",
+      "checks": [
+        {
+          "file": "modules/nixos/security/baseline.nix",
+          "pattern": "Storage\\s*=\\s*\"persistent\""
+        },
+        {
+          "file": "modules/nixos/storage/preservation.nix",
+          "pattern": "/etc/machine-id"
+        },
+        {
+          "file": "modules/nixos/storage/preservation.nix",
+          "pattern": "key"
+        }
+      ]
+    },
+    {
+      "id": "backup",
+      "name": "Restic / Borg + restore verification",
+      "category": "Backup & maintenance",
+      "purpose": "Independent encrypted backups and recovery drills; no automated backup job is declared.",
+      "state": "disabled",
+      "source": "https://restic.readthedocs.io/en/stable/050_restore.html"
+    },
+    {
+      "id": "vulnerability",
+      "name": "vulnix / Trivy / Grype",
+      "category": "Backup & maintenance",
+      "purpose": "Optional vulnerability scanning; results require applicability and false-positive review.",
+      "state": "disabled",
+      "source": "https://github.com/nix-community/vulnix"
+    },
+    {
+      "id": "rust",
+      "name": "Rust in Linux / uutils + Landlock",
+      "category": "Technology watch",
+      "purpose": "Follow memory-safe systems work and unprivileged sandboxing; not a claim of deployment here.",
+      "state": "monitored",
+      "source": "https://docs.kernel.org/userspace-api/landlock.html"
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME ecosystem",
+      "category": "Technology watch",
+      "purpose": "Follow desktop, portal, graphics and accessibility developments relevant to the selected stack.",
+      "state": "monitored",
+      "source": "https://release.gnome.org/"
+    },
+    {
+      "id": "librephone",
+      "name": "LibrePhone",
+      "category": "Technology watch",
+      "purpose": "Follow the FSF effort toward a free mobile software ecosystem; external to the laptop configuration.",
+      "state": "monitored",
+      "source": "https://www.fsf.org/campaigns/librephone"
+    }
   ]
 }

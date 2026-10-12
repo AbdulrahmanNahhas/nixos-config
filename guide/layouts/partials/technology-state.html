@@ -1,0 +1,5 @@
+{{- $state := .state | default "verify" -}}{{- with .checks -}}{{- $state = "enabled" -}}{{- range .
+-}}{{- $resource := resources.Get (printf "config/%s" .file) -}}{{- if not $resource -}}{{- errorf
+"Technology check source is missing: %s" .file -}}{{- end -}}{{- $source := replaceRE `(?m)#.*$` ""
+$resource.Content -}}{{- if not (findRE .pattern $source) -}}{{- $state = "disabled" -}}{{- end
+-}}{{- end -}}{{- end -}}{{- return $state -}}

@@ -1,0 +1,27 @@
+<section id="roadmap">
+    <div class="section-heading">
+        <h2>Roadmap</h2>
+        <span>Proposals / not enabled features</span>
+    </div>
+    {{ range hugo.Data.roadmap.items }}
+    <details class="entry" data-search>
+        <summary>
+            <span class="pending">○</span><span class="tag">{{ .priority }}</span
+            ><span class="entry-title">{{ .title }}</span>
+        </summary>
+        <div class="entry-body">
+            <p>{{ .why }}</p>
+            <dl>
+                <dt>Next</dt>
+                <dd>{{ .next }}</dd>
+                <dt>Acceptance</dt>
+                <dd>{{ .acceptance }}</dd>
+                <dt>Owner</dt>
+                <dd><code>{{ .owner }}</code></dd>
+                <dt>Risk</dt>
+                <dd>{{ .risk }}</dd>
+            </dl>
+        </div>
+    </details>
+    {{ end }}
+</section>

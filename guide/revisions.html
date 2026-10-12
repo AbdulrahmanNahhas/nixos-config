@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="color-scheme" content="dark light" />
+        <title>Input revisions · Shadow · Technical handbook</title>
+        <style>
+            @layer base,layout,components;
+@layer base{*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:#101113;color:#e8e9ec;font:15px/1.65 ui-sans-serif,system-ui,-apple-system,sans-serif}a{color:#b4afff;text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit}button{cursor:pointer}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(36px,5vw,58px);line-height:1.12;letter-spacing:-.055em;font-weight:650;margin-bottom:22px}h2{font-size:23px;letter-spacing:-.035em;margin:0}h3{font-size:18px;margin-top:30px}code,pre,.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{font-size:.85em;overflow-wrap:anywhere}pre{background:#17181c;border:1px solid #303138;border-radius:8px;padding:18px;overflow:auto;line-height:1.6}pre code{overflow-wrap:normal}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid #aba2ff;outline-offset:4px}[hidden]{display:none!important}.muted{color:#989ba6;font-size:13px}.check{color:#86d6ab}.pending{color:#90949f}.verify{color:#e1c080}.skip{position:absolute;left:16px;top:-60px}.skip:focus{top:12px;background:#202126;padding:8px;z-index:10}}
+@layer layout{.sidebar{width:238px;position:fixed;inset:0 auto 0 0;border-right:1px solid #292a30;padding:30px 22px;display:flex;flex-direction:column;background:#121316}.brand{display:flex;gap:10px;align-items:center;font-weight:650;color:#ededf1;font-size:19px}.brand-mark{display:grid;place-items:center;border:1px solid #645e93;background:#242137;color:#c9c3ff;width:30px;height:30px;border-radius:8px;font-size:16px}.brand-sub{font-size:14px;font-weight:400;color:#8c8d99}.sidebar-label{font-size:10px;letter-spacing:.12em;color:#818490;margin:38px 0 12px}.sidebar nav{display:grid;gap:4px}.sidebar nav a{padding:8px 10px;border-radius:6px;color:#a6a9b4;font-size:13px;display:flex;justify-content:space-between}.sidebar nav a:hover,.sidebar nav a.active{background:#24222f;color:#d2cbff;text-decoration:none}.sidebar nav span{font-size:11px;color:#797488}.sidebar-foot{margin-top:auto;font-size:11px;color:#777b88;line-height:1.9}main{max-width:1220px;margin-left:238px;padding:62px 64px 24px}header{padding-bottom:32px}.eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;color:#aaa0eb;margin-bottom:22px}.lead{color:#a5a8b2;max-width:560px;font-size:17px}.overview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;border-top:1px solid #303138;margin-top:34px;padding-top:22px}.overview-grid span{font-size:9px;letter-spacing:.1em;color:#808491}.overview-grid strong{display:block;font-size:14px;margin:8px 0}.overview-grid p{font-size:12px;color:#90949f;margin:0}section{padding:34px 0 14px;scroll-margin-top:20px}.section-heading{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:17px}.section-heading>span{font-size:11px;color:#858995}.section-intro{color:#969aa6;font-size:12px}footer{border-top:1px solid #303138;margin-top:45px;padding-top:22px;display:flex;justify-content:space-between;font-size:11px;color:#777d8a}@media(min-width:1700px){main{margin-left:max(238px,calc((100vw - 1000px)/2));padding-left:32px}}@media(max-width:1000px){main{padding:36px 28px}.sidebar{width:205px;padding:24px 16px}main{margin-left:205px}.entry-status{display:none}}@media(max-width:700px){.sidebar{position:static;width:auto;padding:18px 20px;border-right:0;border-bottom:1px solid #303138}.sidebar-label,.sidebar-foot{display:none}.sidebar nav{display:flex;overflow:auto;gap:8px;margin-top:16px;white-space:nowrap}.sidebar nav a{padding:5px 9px}.sidebar nav span{display:none}main{margin:0;padding:30px 20px}.overview-grid{gap:14px}.overview-grid strong{font-size:12px}.overview-grid p{font-size:11px}.section-heading{display:block}.section-heading>span{display:block;margin-top:6px}.tag{font-size:9px!important}footer{gap:16px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}}
+@layer components{.searchbar{display:flex;align-items:center;gap:12px;background:#18191d;border:1px solid #303138;border-radius:8px;padding:11px 14px}.searchbar label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.searchbar input{color:#e8e9ec;background:transparent;border:0;min-width:0;flex:1;font-size:13px;outline:none}.searchbar kbd{font:11px ui-monospace,monospace;border:1px solid #3c3e48;color:#9498a4;padding:0 6px;border-radius:3px}#search-status{min-height:20px;margin:7px 0 0}.entry{border-bottom:1px solid #2b2d34}.entry:first-of-type{border-top:1px solid #2b2d34}summary{list-style:none;display:flex;gap:12px;align-items:center;padding:14px 4px;cursor:pointer;font-size:13px}summary::-webkit-details-marker{display:none}summary::after{content:'+';color:#7e818c;margin-left:8px;font-size:16px}details[open]>summary::after{content:'−'}summary:hover{background:#17181d}.entry-title{flex:1;font-weight:500}.status-icon{width:16px;flex-shrink:0}.tag{font-size:10px;color:#9ca0ae;background:#202229;padding:2px 7px;border:1px solid #30333e;border-radius:4px}.entry-status{width:140px;text-align:right;font-size:11px;color:#8c919e}.entry-body{padding:8px 20px 22px;color:#b5b8c3;font-size:13px}.entry-body>p{max-width:780px}dl{display:grid;grid-template-columns:95px 1fr;gap:9px 16px;margin-bottom:0}dt{color:#888d9a;font-size:11px}dd{margin:0}.prose{line-height:1.85}.prose h2{font-size:20px;margin-top:28px;margin-bottom:14px}.prose h3{font-size:16px}.prose li{margin:5px 0}.prose blockquote{border-left:2px solid #7764aa;padding-left:16px;margin-left:0;color:#a7a4bd}.table-wrap,.prose{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #303138;vertical-align:top}th{font-size:10px;color:#969cad;font-weight:500}td{color:#b1b6c2}.app-grid{display:flex;flex-wrap:wrap;gap:8px}.app-grid code{border:1px solid #303138;border-radius:5px;padding:5px 9px;color:#a7afc0;font-size:11px}time{color:#8f95a5;font-size:11px}.review-control{display:flex;gap:8px;align-items:center;font-size:11px;color:#979dac;border-top:1px solid #303138;padding-top:14px;margin-top:20px}.review-control input{accent-color:#a699e3}.copy-button{float:right;padding:3px 8px;color:#b8b0dd;background:#292532;border:1px solid #484058;border-radius:4px;font-size:10px}.task-list-item{list-style:none}.task-list-item input{accent-color:#8dd5ae}}
+
+@layer components{.technology-legend{display:flex;gap:10px 20px;flex-wrap:wrap}.technology-group{border:1px solid #303138;border-radius:8px;margin:12px 0;overflow:hidden}.technology-group>summary{padding:14px 16px;background:#16171b}.group-number{font:11px ui-monospace,monospace;color:#8d83bb;min-width:18px}.technology-table{table-layout:fixed}.technology-table thead th:nth-child(1){width:98px}.technology-table thead th:nth-child(2){width:34%}.technology-table tbody th{font-size:12px;color:#d0d3dc;font-weight:500}.technology-table td{font-size:12px;padding:12px 16px}.technology-table th{padding:12px 16px}.technology-table tr:last-child>*{border-bottom:0}.technology-state{font:11px ui-monospace,monospace;white-space:nowrap}.component-source{color:inherit;text-decoration:none}.component-source:hover{color:#c5b7f0;text-decoration:underline}.release-star{color:#c5af76}.watch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#303138}.watch-grid a{display:flex;align-items:center;gap:9px;padding:14px 16px;background:#17181c;color:#c5c7d0;font-size:12px}.watch-grid a>span:last-child{margin-left:auto;color:#777e8c}.technology-table tr:hover{background:#18191e}@media(max-width:700px){.technology-table{min-width:570px}.watch-grid{grid-template-columns:repeat(2,1fr)}.technology-group>summary{font-size:12px}.technology-group>summary .muted{font-size:10px}}}
+
+@layer components{.overview-links{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.overview-links a{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;border:1px solid #303138;border-radius:8px;color:#c7c8d3;background:#17181c;font-size:13px}.overview-links a:hover{border-color:#756998;background:#201d2a;text-decoration:none}.overview-links a>span:last-child{color:#8d83b1}.overview-pages{padding-top:10px}@media(max-width:700px){.overview-links{grid-template-columns:1fr}}}
+
+@layer components {
+  .history-toolbar { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:14px; }
+  .history-toolbar p { max-width:550px; margin:0; }
+  .history-scale { display:flex; flex-shrink:0; padding:3px; border:1px solid #33313d; background:#17171c; border-radius:7px; }
+  .history-scale button { border:0; background:transparent; color:#999daa; padding:5px 10px; font-size:11px; border-radius:4px; }
+  .history-scale button[aria-pressed="true"] { color:#e1d9f0; background:#373040; }
+  .history-scroll { --history-label:150px; --history-earlier:130px; --history-month-day:6px; --history-week-day:10px; overflow-x:auto; border:1px solid #303138; border-radius:8px; scrollbar-color:#615473 #17181c; isolation:isolate; }
+  .history-scroll[data-scale="months"] { --history-week-day:6px; }
+  .history-scroll[data-scale="weeks"] { --history-month-day:10px; }
+  .history-axis,.history-week-axis,.history-lane { display:grid; grid-template-columns:var(--history-grid); min-width:max-content; }
+  .history-axis { background:#19191f; border-bottom:1px solid #303138; align-items:center; font:11px ui-monospace,monospace; }
+  .history-axis>span,.history-axis>time { padding:14px 10px; border-right:1px solid #34313d; text-align:center; color:#b5afc1; }
+  .history-axis-label { position:sticky; left:0; z-index:3; background:#19191f; text-align:left!important; }
+  .history-earlier-label { color:#7f8390!important; }
+  .history-week-axis { background:#141419; font:9px ui-monospace,monospace; color:#737887; border-bottom:1px solid #292930; min-height:24px; }
+  .history-week { padding:5px 2px; text-align:center; border-right:1px solid #25252d; visibility:hidden; }
+  .history-week.is-dense,.history-scroll[data-scale="weeks"] .history-week { visibility:visible; }
+  .history-scroll[data-scale="months"] .history-week-axis { display:none; }
+  .history-lane { align-items:center; border-bottom:1px solid #252730; min-height:54px; }
+  .history-lane:last-child { border-bottom:0; }
+  .history-lane>h3 { grid-column:1; grid-row:1; position:sticky; left:0; z-index:2; margin:0; padding:18px 12px; background:#101113; border-right:1px solid #292930; color:#b9bdc9; font-size:11px; }
+  .history-bar { display:flex; justify-content:space-between; align-items:center; gap:6px; min-width:0; margin:0 3px; padding:8px 9px; border:1px solid #665276; border-radius:5px; background:#32263e; color:#ddd0e9; text-align:left; font-size:11px; }
+  .history-bar>span:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .history-bar.tone-1 { background:#243a38; border-color:#426861; color:#c4e4dd; }
+  .history-bar.tone-2 { background:#27334a; border-color:#475d80; color:#cddbf2; }
+  .history-bar.unknown-start { border-left-style:dashed; }
+  .history-bar.open-end { border-right-style:dashed; }
+  .history-bar:hover { filter:brightness(1.22); }
+  .history-caption { margin-top:14px; font-size:11px; }
+  #history-dialog { position:fixed; width:min(460px,calc(100vw - 32px)); padding:24px; border:1px solid #61536d; border-radius:10px; color:#d6d1dd; background:#1c1a22; box-shadow:0 16px 70px #0008; }
+  #history-dialog::backdrop { background:#060509b0; }
+  #history-dialog h3 { margin:0 0 12px; padding-right:60px; }
+  #history-dialog p { font-size:13px; line-height:1.8; }
+  #history-dialog .history-period { color:#b9a7d1; font:12px ui-monospace,monospace; }
+  .history-close { float:right; padding:4px 8px; border:1px solid #4b4355; border-radius:4px; background:#2c2635; color:#bcb0cb; font-size:10px; }
+  @media(max-width:700px) { .history-toolbar { align-items:flex-start; flex-direction:column; gap:12px; } .history-scroll { --history-label:112px; --history-earlier:110px; } .history-lane>h3 { font-size:10px; } }
+}
+
+@layer components {
+ .history-relations{display:flex;flex-wrap:wrap;gap:8px 18px;margin-bottom:12px;color:#a3a4b3;font-size:11px}
+ .history-source-pin{font-size:11px;margin-bottom:16px}
+ .history-lane>h3{align-self:stretch;display:flex;align-items:center}
+ .history-bar-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .history-kind{flex-shrink:0;color:inherit;font-size:12px}
+ .history-bar.is-ended{opacity:.7}
+ .history-bar.event-marker{min-width:24px;max-width:24px;padding:5px;margin-left:0;z-index:1;background:#40252b;border-color:#865160;color:#efb8bd}
+ .history-bar.event-marker .history-bar-label{display:none}
+ .history-change-label{display:inline-block;padding:3px 8px;border:1px solid #51485d;border-radius:4px;color:#cbbce0;font-size:11px!important}
+ .history-relationship{padding-left:10px;border-left:2px solid #5c5270}
+ .history-evidence{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:16px;font-size:11px}
+ .history-evidence>span{color:#8f94a2;margin-right:4px}
+ .history-evidence a{padding:3px 8px;border:1px solid #413b4d;border-radius:4px;background:#27232d}
+}
+
+@layer components{.history-terminal{flex-shrink:0;color:#cfb7d8;font-size:12px}}
+
+        </style>
+    </head>
+    <body>
+        <a class="skip" href="#content">Skip to content</a>
+        <aside class="sidebar">
+            <a class="brand" href="index.html"
+                ><span class="brand-mark">S</span> Shadow <span class="brand-sub">/ docs</span></a
+            >
+            <p class="sidebar-label">TECHNICAL HANDBOOK</p>
+            <nav aria-label="Handbook">
+                <a href="index.html"
+                    >Overview</a
+                >
+
+                <a
+                    href="technologies.html"
+
+                    >Technologies<span
+                        >9 areas</span
+                    ></a
+                >
+
+                <a
+                    href="reference.html"
+
+                    >Technical reference</a
+                >
+
+                <a
+                    href="configuration.html"
+
+                    >Configuration</a
+                >
+
+                <a
+                    href="revisions.html"
+
+                    class="active"
+                    aria-current="page"
+
+                    >Input revisions</a
+                >
+
+                <a
+                    href="roadmap.html"
+
+                    >Roadmap</a
+                >
+
+                <a
+                    href="history.html"
+
+                    >History</a
+                >
+
+                <a
+                    href="maintaining.html"
+
+                    >Editing the guide</a
+                >
+
+            </nav>
+            <div class="sidebar-foot">
+                Local · offline · source driven<br />No command execution
+            </div>
+        </aside>
+        <main id="content">
+
+            <div class="eyebrow">SHADOW / INPUT REVISIONS</div>
+
+            <div class="searchbar">
+                <label for="search">Search this page</label
+                ><input
+                    id="search"
+                    type="search"
+                    placeholder="Search this page…"
+                    autocomplete="off"
+                /><kbd>/</kbd>
+            </div>
+            <p id="search-status" class="muted" role="status" aria-live="polite"></p>
+              <section id="revisions">
+    <div class="section-heading">
+        <h2>Input revisions</h2>
+        <span>Generated from flake.lock</span>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Revision</th>
+                    <th>Upstream date</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr data-search>
+                    <td>codex-desktop-linux</td>
+                    <td>
+                        <code
+                            >839dbb50fbd2</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-10
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>delta</td>
+                    <td>
+                        <code
+                            >6aa23dbf48a7</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-09
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>disko</td>
+                    <td>
+                        <code
+                            >725ea35e410a</code
+                        >
+                    </td>
+                    <td>
+                        2026-09-19
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>home-manager</td>
+                    <td>
+                        <code
+                            >c58f54c733a7</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-10
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>nix-flatpak</td>
+                    <td>
+                        <code
+                            >0f392e302963</code
+                        >
+                    </td>
+                    <td>
+                        2026-09-13
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>nixos-hardware</td>
+                    <td>
+                        <code
+                            >60a624466c08</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-11
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>nixpkgs</td>
+                    <td>
+                        <code
+                            >6510408d147d</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-10
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>preservation</td>
+                    <td>
+                        <code
+                            >93416f4614ad</code
+                        >
+                    </td>
+                    <td>
+                        2025-09-09
+                    </td>
+                </tr>
+
+                <tr data-search>
+                    <td>sops-nix</td>
+                    <td>
+                        <code
+                            >ee48786c6f91</code
+                        >
+                    </td>
+                    <td>
+                        2026-10-11
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <p class="muted">Upstream dates are not installation or activation dates.</p>
+</section>
+
+            <footer>
+                Shadow · Technical handbook <span>Built 2026-10-12 · Hugo</span>
+            </footer>
+        </main>
+        <script>
+            "use strict";
+const search=document.querySelector('#search');
+const entries=[...document.querySelectorAll('[data-search]')];
+const groups=[...document.querySelectorAll('.technology-group')];
+const originalOpen=new Map(groups.map(g=>[g,g.open]));
+search?.addEventListener('input',()=>{const q=search.value.trim().toLowerCase();let count=0;for(const el of entries){el.hidden=!!q&&!(el.textContent+' '+(el.dataset.searchText||'')).toLowerCase().includes(q);if(!el.hidden)count++;}for(const group of groups){const rows=[...group.querySelectorAll('[data-search]')];group.hidden=!!q&&rows.every(r=>r.hidden);group.open=q&&!group.hidden?true:originalOpen.get(group);}
+document.querySelector('#search-status').textContent=q?count+' matching entries':'';});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){if(search){e.preventDefault();search.focus();}}if(e.key==='Escape'&&search&&document.activeElement===search){search.value='';search.dispatchEvent(new Event('input'));search.blur();}});
+function openTarget(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}const el=document.getElementById(id);if(!el)return;el.hidden=false;if(el.matches('details')){el.hidden=false;el.open=true;}const parent=el.closest('details');if(parent){parent.hidden=false;parent.open=true;}el.scrollIntoView();}
+window.addEventListener('hashchange',openTarget);if(location.hash)openTarget();
+for(const el of document.querySelectorAll('.document')){const label=document.createElement('label');label.className='review-control';const box=document.createElement('input');box.type='checkbox';const key='shadow-guide.review.'+el.id;try{box.checked=localStorage.getItem(key)==='true';}catch{}box.addEventListener('change',()=>{try{localStorage.setItem(key,String(box.checked));}catch{}});label.append(box,document.createTextNode('Reviewed by me · stored only in this browser'));el.querySelector('article').append(label);}
+if(navigator.clipboard&&window.isSecureContext)for(const pre of document.querySelectorAll('pre')){const button=document.createElement('button');button.type='button';button.className='copy-button';button.textContent='Copy';const content=pre.textContent;button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(content);button.textContent='Copied';setTimeout(()=>button.textContent='Copy',1500);}catch{button.textContent='Select text';}});pre.prepend(button);}
+
+const timeline=document.querySelector('.history-scroll');
+for(const button of document.querySelectorAll('[data-history-scale]')){
+  button.addEventListener('click',()=>{
+    timeline.dataset.scale=button.dataset.historyScale;
+    for(const control of document.querySelectorAll('[data-history-scale]'))control.setAttribute('aria-pressed',String(control===button));
+  });
+}
+const periodDialog=document.querySelector('#history-dialog');
+if(periodDialog){
+  for(const bar of document.querySelectorAll('.history-bar'))bar.addEventListener('click',()=>{
+    document.querySelector('#history-dialog-content').replaceChildren(bar.querySelector('template').content.cloneNode(true));
+    document.querySelector('#history-dialog-content h3').id='history-dialog-title';
+    periodDialog.showModal();
+  });
+  document.querySelector('[data-history-close]').addEventListener('click',()=>periodDialog.close());
+  periodDialog.addEventListener('click',event=>{if(event.target===periodDialog){const bounds=periodDialog.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)periodDialog.close();}});
+}
+
+        </script>
+    </body>
+</html>

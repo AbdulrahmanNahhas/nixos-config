@@ -1,3 +1,23 @@
+{
+"title": "Understand app permissions",
+"group": "DAILY WORK",
+"weight": 8,
+"sources": [
+[
+"Flatpak sandbox permissions",
+"https://docs.flatpak.org/en/latest/sandbox-permissions.html"
+],
+[
+"Flatpak command reference",
+"https://docs.flatpak.org/en/latest/flatpak-command-reference.html"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 Flatpak separates an application from much of the host, then grants capabilities. Filesystems expose paths; sockets expose display/audio interfaces; devices expose hardware; shared namespaces permit networking or IPC; D-Bus policy permits named services. Every grant should match a task the app needs.
 
 `xdg-download:ro` gives read-only Downloads access. Without `:ro`, a filesystem grant normally permits writing. `dri` exposes graphics devices. `all` is much broader and is retained for specific apps requiring direct device access. An XWayland exception trades isolation for compatibility.

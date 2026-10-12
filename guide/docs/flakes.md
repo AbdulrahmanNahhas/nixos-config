@@ -1,3 +1,23 @@
+{
+"title": "Flakes, locks & trust",
+"group": "FOUNDATIONS",
+"weight": 4,
+"sources": [
+[
+"Flakes explained",
+"https://nix.dev/concepts/flakes"
+],
+[
+"Official Delta flake",
+"https://github.com/zed-industries/delta-nix"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 `flake.nix` describes inputs and outputs. `flake.lock` records resolved revisions and hashes. The unstable channel URL is a moving source, but the lock records the revision you actually use. Updating inputs changes that pin; it does not immediately change the running system.
 
 The host output is `nixosConfigurations.shadow`. Its `config.system.build.toplevel` is the complete system derivation. The formatter is exposed separately, and the Gitleaks source scan is a check. These are named outputs selected with the `#` part of a flake reference.
@@ -13,8 +33,8 @@ delta = {
 
 ## Three different kinds of trust
 
--   A source hash establishes identity of fetched content. It does not prove that code is harmless.
--   A cache public key verifies signatures on substituted build results. Private signing keys belong to the cache operator.
--   Nix `trusted-users` grants powerful daemon permissions. Shadow trusts root, not the wheel group. You do not need root-equivalent Nix trust just to use a declared binary cache.
+- A source hash establishes identity of fetched content. It does not prove that code is harmless.
+- A cache public key verifies signatures on substituted build results. Private signing keys belong to the cache operator.
+- Nix `trusted-users` grants powerful daemon permissions. Shadow trusts root, not the wheel group. You do not need root-equivalent Nix trust just to use a declared binary cache.
 
 Git-backed flakes exclude untracked new files. Use `git add` for new module files before evaluation; staging is not committing. Read the lock diff after an update. Delta updates through its official input, and its packaged updater is disabled by upstream.

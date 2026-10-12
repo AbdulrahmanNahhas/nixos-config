@@ -1,3 +1,23 @@
+{
+"title": "Modules, options & merging",
+"group": "FOUNDATIONS",
+"weight": 3,
+"sources": [
+[
+"Nix module-system tutorial",
+"https://nix.dev/tutorials/module-system/"
+],
+[
+"NixOS option search",
+"https://search.nixos.org/options"
+]
+],
+"build": {
+"render": "link",
+"list": "always"
+}
+}
+
 Modules contribute definitions to named options. The module system checks types and combines definitions according to each option’s rules. Package lists normally combine; contradictory ordinary scalar definitions normally produce an error rather than silently choosing the last file.
 
 `config` is the evaluated configuration. `pkgs` provides packages. `lib` provides module helpers. `options` describes the available option declarations. Your `inputs` and `username` arguments are passed from the host composition, not magically available in every unrelated Nix project.
