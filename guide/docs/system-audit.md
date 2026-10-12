@@ -26,7 +26,7 @@ complete no-link Shadow system build passed. This supersedes the initial sandbox
 build limitation and the warning about an unverified dirty build. No configuration
 was activated in this follow-up; battery duration, suspend/resume and editor/provider
 behavior still require observation on the running laptop. Current declarations and
-input revisions are generated in Configuration and Input revisions.
+input revisions are generated in Configuration, under Build details.
 
 ## Evidence and scope
 

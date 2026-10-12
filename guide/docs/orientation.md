@@ -22,13 +22,19 @@
 
 ### Explain it, then change it.
 
-Follow the lessons in order once. Afterward, search by task: add an app, rotate a token, recover a generation, or debug DNS. Mark a lesson understood only when you can answer its question in your own words.
+Read the foundational topics once. Afterward, use global search by task: add an app,
+rotate a token, recover a generation, or debug DNS. Press `/` or `Ctrl+K` / `Cmd+K`
+from any page. Results open the relevant topic, technology, roadmap item, history
+card or configuration file. Review marks are stored only in your browser.
 
 **The boundary**
 
 ### Source is not the running system.
 
-This guide describes the revised repository. Settings become active only after activation; boot changes may require a reboot. The simulators never change your machine.
+This guide describes the repository. Settings become active only after activation;
+boot changes may require a reboot. The guide does not execute commands or change
+your machine. The Configuration tree describes source relationships; Build details
+contains pinned input revisions. Neither establishes runtime health.
 
 ## What the names mean
 

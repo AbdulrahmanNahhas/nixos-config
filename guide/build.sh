@@ -23,4 +23,9 @@ fi
 for page in "$build_dir"/*.html; do
   sed 's/[[:blank:]]*$//' "$page" > "./$(basename -- "$page")"
 done
+for page in ./*.html; do
+  if [[ ! -f "$build_dir/$(basename -- "$page")" ]]; then
+    rm -- "$page"
+  fi
+done
 printf 'Built %s/index.html\n' "$PWD"

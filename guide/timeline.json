@@ -547,6 +547,18 @@
           "track": 1,
           "change": "replaced",
           "replaces": "handbook-1"
+        },
+        {
+          "id": "hugo-handbook",
+          "date": "2026-10-12",
+          "label": "Hugo · source-driven pages",
+          "detail": "The handbook migrates to a local Hugo theme with separate section pages, a generated release watchlist, explicit history relationships, offline output and a GitHub Pages build workflow. Later navigation and search improvements extend this foundation.",
+          "commits": [
+            "7cc377f"
+          ],
+          "track": 1,
+          "change": "updated",
+          "updates": "minimal-handbook"
         }
       ]
     }

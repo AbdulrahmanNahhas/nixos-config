@@ -46,24 +46,26 @@
             </div>
         </aside>
         <main id="content">
+            <div class="global-search">
+                <div class="searchbar">
+                    <label for="global-search">Search the handbook</label>
+                    <input id="global-search" type="search" placeholder="Search the handbook…" autocomplete="off" aria-controls="global-search-results" aria-describedby="global-search-status" />
+                    <kbd>/</kbd>
+                </div>
+                <div id="global-search-panel" hidden>
+                    <div class="search-panel-heading"><p id="global-search-status" role="status" aria-live="polite"></p><button type="button" id="global-search-close" aria-label="Close search results">Close ×</button></div>
+                    <ul id="global-search-results" aria-label="Search results"></ul>
+                </div>
+            </div>
+            <noscript><p class="muted">Search and the single-file viewer need JavaScript. All reference topics and source files remain readable below.</p></noscript>
             {{ if not .IsHome }}
             <div class="eyebrow">SHADOW / {{ .Title | upper }}</div>
-            {{ if ne .Params.handbook "maintaining" }}
-            <div class="searchbar">
-                <label for="search">Search this page</label
-                ><input
-                    id="search"
-                    type="search"
-                    placeholder="Search this page…"
-                    autocomplete="off"
-                /><kbd>/</kbd>
-            </div>
-            <p id="search-status" class="muted" role="status" aria-live="polite"></p>
-            {{ end }} {{ end }} {{ block "main" . }}{{ end }}
+            {{ end }} {{ block "main" . }}{{ end }}
             <footer>
                 Shadow · Technical handbook <span>Built {{ now.Format "2006-01-02" }} · Hugo</span>
             </footer>
         </main>
+        <script id="handbook-search-index" type="application/json">{{ partialCached "search-index.html" . | jsonify | safeJS }}</script>
         <script>
             {{ (resources.Get "app.js").Content | safeJS }}
         </script>

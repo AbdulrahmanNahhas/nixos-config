@@ -1,0 +1,22 @@
+{{- $items := slice -}}
+{{- range sort (where site.RegularPages "Params.handbook" "ne" nil) "Weight" -}}
+  {{- $items = $items | append (dict "title" .Title "section" "Page" "href" (path.Base .RelPermalink) "text" .Title) -}}
+{{- end -}}
+{{- range (where site.RegularPages "Params.group" "ne" nil).ByWeight -}}
+  {{- $items = $items | append (dict "title" .Title "section" "Reference" "href" (printf "reference.html#guide-%s" .File.ContentBaseName) "text" (printf "%s %s" .Params.group .Plain)) -}}
+{{- end -}}
+{{- range hugo.Data.tools.items -}}
+  {{- $state := partial "technology-state.html" . -}}
+  {{- $items = $items | append (dict "title" .name "section" "Technologies" "href" (printf "technologies.html#tech-%s" .id) "text" (printf "%s %s %s" .category .purpose $state)) -}}
+{{- end -}}
+{{- range hugo.Data.roadmap.items -}}
+  {{- $items = $items | append (dict "title" .title "section" "Roadmap" "href" (printf "roadmap.html#roadmap-%s" .id) "text" (printf "%s %s %s %s %s %s %s" .priority .category .status .why .next .acceptance .owner)) -}}
+{{- end -}}
+{{- range hugo.Data.timeline.lanes -}}{{- $lane := .name -}}{{- range .stages -}}
+  {{- $items = $items | append (dict "title" .label "section" "History" "href" (printf "history.html#history-%s" .id) "text" (printf "%s %s %s %s" $lane (.date | default "Earlier") .detail (delimit (.commits | default slice) " "))) -}}
+{{- end -}}{{- end -}}
+{{- range partialCached "configuration-data.html" . -}}
+  {{- $items = $items | append (dict "title" .path "section" "Configuration" "href" (printf "configuration.html#%s" .id) "text" .content) -}}
+{{- end -}}
+{{- $items = $items | append (dict "title" "Build details / input revisions" "section" "Configuration" "href" "configuration.html#revisions" "text" "Pinned inputs flake.lock reproducibility upstream revisions") -}}
+{{- return $items -}}

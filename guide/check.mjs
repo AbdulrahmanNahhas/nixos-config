@@ -37,6 +37,56 @@ const generated = fs.readdirSync(output).filter(name => output !== source || nam
 for (const name of generated) {
   if (!expected.includes(name) && name !== '.nojekyll') errors.push('Unexpected publication file: ' + name);
 }
+// Every offline page carries the same derived index, with exact working targets.
+let canonicalIndex;
+for (const [name, html] of pages) {
+  const json = html.match(/<script id="handbook-search-index" type="application\/json">([\s\S]*?)<\/script>/)?.[1];
+  let index;
+  try { index = JSON.parse(json); } catch { errors.push(name + ': invalid search index'); continue; }
+  if (!Array.isArray(index) || !index.length) { errors.push(name + ': empty search index'); continue; }
+  if (!canonicalIndex) canonicalIndex = json;
+  else if (canonicalIndex !== json) errors.push(name + ': inconsistent global search index');
+  const seen = new Set();
+  for (const item of index) {
+    if (['title','section','href','text'].some(key => typeof item[key] !== 'string')) {
+      errors.push(name + ': invalid search record'); continue;
+    }
+    if (seen.has(item.href)) errors.push(name + ': duplicate search destination ' + item.href);
+    seen.add(item.href);
+    const [target, anchor] = item.href.split('#');
+    if (!pages.has(target) || (anchor && !ids.get(target)?.has(anchor))) errors.push(name + ': invalid search destination ' + item.href);
+  }
+  for (const section of ['Reference','Technologies','Roadmap','History','Configuration']) {
+    if (!index.some(item => item.section === section)) errors.push(name + ': missing search section ' + section);
+  }
+}
+const decodeAttribute = text => text.replace(/&(?:quot|amp|lt|gt|apos);|&#(?:x[\da-f]+|\d+);/gi, entity => {
+  const named = {'&quot;':'"','&amp;':'&','&lt;':'<','&gt;':'>','&apos;':"'"};
+  if (named[entity]) return named[entity];
+  return String.fromCodePoint(entity[2].toLowerCase() === 'x' ? parseInt(entity.slice(3,-1),16) : parseInt(entity.slice(2,-1),10));
+});
+const configuration = pages.get('configuration.html');
+const sources = new Map();
+for (const match of configuration.matchAll(/<details class="config-source" id="([^"]+)" data-config-path="([^"]+)" data-config-imports="([^"]*)"[^>]*>([\s\S]*?)<\/details>/g)) {
+  const [,id,file,imports,body] = match;
+  try {
+    sources.set(file, {id,imports:JSON.parse(decodeAttribute(imports)),parents:JSON.parse(decodeAttribute(body.match(/data-config-parents="([^"]*)"/)?.[1] || 'null')),body});
+  } catch { errors.push('Configuration: invalid relationships for ' + file); }
+}
+if (!sources.size) errors.push('Configuration: missing source files');
+const fileLinks = [...configuration.matchAll(/class="config-file-link" href="#([^"]+)" data-file-path="([^"]+)"/g)];
+if (fileLinks.length !== sources.size || new Set(fileLinks.map(match => match[2])).size !== sources.size) errors.push('Configuration: file tree does not match source viewer');
+for (const [,id,file] of fileLinks) if (sources.get(file)?.id !== id) errors.push('Configuration: invalid tree link ' + file);
+for (const [file, record] of sources) {
+  if (!Array.isArray(record.imports) || !Array.isArray(record.parents)) { errors.push('Configuration: invalid relationship lists ' + file); continue; }
+  for (const target of record.imports) {
+    if (!sources.has(target) || !sources.get(target).parents.includes(file)) errors.push('Configuration: missing reverse import ' + file + ' → ' + target);
+  }
+  for (const parent of record.parents) if (!sources.get(parent)?.imports.includes(file)) errors.push('Configuration: invalid importer ' + parent + ' → ' + file);
+}
+if (!sources.get('shadow/default.nix')?.imports.includes('shadow/home.nix')) errors.push('Configuration: missing host/home relationship');
+const buildDetails = configuration.match(/<details class="entry build-details"[^>]*>/)?.[0];
+if (!buildDetails || /\bopen(?:\s|>)/.test(buildDetails)) errors.push('Configuration: Build details must be collapsed');
 // Only explicit replacement, update and removal edges end a component period.
 const history = JSON.parse(fs.readFileSync(path.join(source, 'timeline.json'), 'utf8'));
 const stages = history.lanes.flatMap(lane => lane.stages);
@@ -68,4 +118,4 @@ if (errors.length) {
   console.error(errors.join('\n'));
   process.exit(1);
 }
-console.log('Checked ' + pages.size + ' pages: navigation, links, period boundaries, watchlist and publication contents.');
+console.log('Checked ' + pages.size + ' pages: navigation, links, global search, ' + sources.size + ' source files/import relationships, history, watchlist and publication contents.');

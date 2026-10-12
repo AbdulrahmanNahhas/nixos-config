@@ -22,13 +22,36 @@ The script uses installed Hugo, or gets Hugo from this flake's pinned Nixpkgs in
 | Proposed work | `roadmap.json` |
 | History lanes and milestones | `timeline.json` |
 | Configuration previews and Flatpak IDs | Actual `modules/` and `shadow/` files; mounted by Hugo |
-| Input revisions | Actual `flake.lock`; mounted by Hugo |
+| Input revisions / Build details | Actual `flake.lock`; shown inside Configuration |
 | Sidebar pages and ordering | `pages/*.md` front matter |
 | Presentation | `layouts/` and `assets/` |
 
 Add a Markdown file with front matter containing `title`, `group` and optional `weight` / `sources`. It appears automatically on the technical reference page. Ordinary Markdown links between documents work across the offline handbook. Checklists render natively; personal review marks are separate browser-local state. Historical audit notes are dated evidence, not current inventory.
 
 Only configuration files are mounted; encrypted secrets and decrypted runtime files are excluded. A build updates source snapshots, not runtime verification or manually written decisions. Review those decisions when the underlying policy changes.
+
+## Search and configuration navigation
+
+Global search is available on every page. Press `/` or `Ctrl+K` / `Cmd+K`, then
+search by topic, component, file path or Nix option. Results are ranked by title
+and include snippets from the matching source. Use arrow keys to move through
+results, Enter to open one and Escape to close the panel. The index is derived
+from the same documents, technology entries, roadmap, history and mounted files;
+it is embedded in each page for offline use without runtime fetches.
+
+Configuration has a generated folder tree, a path filter, and a single-file code
+viewer. File selection is stored in the URL fragment, so links from search and
+technologies open the exact source. Imports and imported-by links are derived
+from literal relative paths in `imports` / `modules` lists and direct `import`
+expressions; directory paths resolve to `default.nix`. Commented imports are
+excluded. This is a static navigation aid, not a Nix parser or evaluator: dynamic
+imports, upstream modules and actual enablement are not resolved. No relationship
+list is maintained by hand.
+
+Input revisions live in Configuration's collapsed **Build details** section.
+The application-ID list is also collapsed. Without JavaScript the folder links,
+source accordions and reference content remain available. The local build removes
+obsolete generated HTML after a successful build and validation.
 
 Technology status checks update from local declarations on build. Inherited/runtime-dependent entries remain marked for verification. The release watchlist is generated from the same rows; do not maintain another list of names and links. See the checklist conventions in the handbook.
 
@@ -40,7 +63,7 @@ node guide/check.mjs guide
 git diff --check
 ```
 
-The local build automatically runs the checker when Node is available. The checker verifies generated files, sidebar links, current-page markers, IDs and cross-page anchors. The same check runs in GitHub Actions. Hugo warnings fail the build. Keep all generated HTML pages together; do not edit them directly.
+The local build automatically runs the checker when Node is available. The checker verifies generated files, sidebar links, current-page markers, IDs, cross-page anchors, global search destinations and configuration relationships. The same check runs in GitHub Actions. Hugo warnings fail the build. Keep all generated HTML pages together; do not edit them directly.
 
 ## GitHub Pages
 

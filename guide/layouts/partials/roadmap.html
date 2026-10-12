@@ -4,7 +4,7 @@
         <span>Proposals / not enabled features</span>
     </div>
     {{ range hugo.Data.roadmap.items }}
-    <details class="entry" data-search>
+    <details class="entry" data-search id="roadmap-{{ .id }}">
         <summary>
             <span class="pending">○</span><span class="tag">{{ .priority }}</span
             ><span class="entry-title">{{ .title }}</span>

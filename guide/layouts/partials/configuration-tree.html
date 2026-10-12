@@ -1,0 +1,18 @@
+{{- $prefix := .prefix -}}{{- $files := .files -}}{{- $folders := slice -}}
+{{- range $files -}}
+  {{- if strings.HasPrefix .path $prefix -}}
+    {{- $relative := strings.TrimPrefix $prefix .path -}}
+    {{- if strings.Contains $relative "/" -}}{{- $folders = $folders | append (index (split $relative "/") 0) -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range sort (uniq $folders) -}}
+  <details class="config-folder" {{ if eq $prefix "" }}open{{ end }}>
+    <summary><span class="folder-symbol" aria-hidden="true">▸</span>{{ . }}/</summary>
+    <div class="folder-children">{{ partial "configuration-tree.html" (dict "prefix" (printf "%s%s/" $prefix .) "files" $files) }}</div>
+  </details>
+{{- end -}}
+{{- range $files -}}
+  {{- if and (strings.HasPrefix .path $prefix) (not (strings.Contains (strings.TrimPrefix $prefix .path) "/")) -}}
+    <a class="config-file-link" href="#{{ .id }}" data-file-path="{{ .path }}"><span aria-hidden="true">·</span>{{ path.Base .path }}</a>
+  {{- end -}}
+{{- end -}}

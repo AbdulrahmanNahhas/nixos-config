@@ -1,0 +1,27 @@
+{{- /* Static local imports only. This is source navigation, not a Nix evaluator. */ -}}
+{{- $files := slice -}}
+{{- range resources.Match "config/**" -}}
+  {{- if in (slice ".nix" ".kdl" ".toml" ".conf" ".txt" ".svg" ".lock") (path.Ext .Name) -}}
+    {{- $name := replaceRE "^/?config/" "" .Name -}}
+    {{- $files = $files | append (dict "path" $name "id" (printf "file-%s" (anchorize $name)) "content" .Content "imports" slice) -}}
+  {{- end -}}
+{{- end -}}
+{{- $result := slice -}}
+{{- range $files -}}
+  {{- $file := . -}}{{- $imports := slice -}}
+  {{- if eq (path.Ext .path) ".nix" -}}
+    {{- $source := replaceRE `(?s)/\*.*?\*/` "" .content -}}
+    {{- $source = replaceRE `(?m)#.*$` "" $source -}}
+    {{- $blocks := findRE `(?s)\b(?:imports|modules)\s*=\s*\[.*?\]` $source -}}
+    {{- range findRE `\bimport\s+(?:\./|\.\./)[A-Za-z0-9_./-]+` $source -}}{{- $blocks = $blocks | append . -}}{{- end -}}
+    {{- range $blocks -}}
+      {{- range findRE `(?:\./|\.\./)[A-Za-z0-9_./-]+` . -}}
+        {{- $target := path.Clean (printf "%s/%s" (path.Dir $file.path) .) -}}
+        {{- if not (where $files "path" $target) -}}{{- $target = printf "%s/default.nix" $target -}}{{- end -}}
+        {{- if where $files "path" $target -}}{{- $imports = $imports | append $target -}}{{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $result = $result | append (merge $file (dict "imports" (sort (uniq $imports)))) -}}
+{{- end -}}
+{{- return $result -}}

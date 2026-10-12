@@ -37,4 +37,10 @@ some.option = lib.mkForce "deliberate override";
 
 A `default.nix` inside a domain is an explicit aggregator. Files omitted from its import list do nothing. Local AI currently illustrates this: its module exists, but its import is parked, so the system does not automatically build or start it.
 
+Use the [Configuration file tree](configuration.html) to select a source file and
+follow its **Imports** and **Imported by** links. Directory imports resolve to
+`default.nix`; commented paths are excluded. These links describe literal local
+paths in imports/modules lists and direct import expressions. They do not resolve
+external inputs, dynamic expressions, conditional enablement or final option values.
+
 > To inspect the effective value: `nix eval /saved/nixos-config#nixosConfigurations.shadow.config.networking.firewall.enable`. Source comments explain intent; evaluated values establish what the module graph actually produces.
