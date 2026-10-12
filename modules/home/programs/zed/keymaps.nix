@@ -41,6 +41,11 @@ _: {
         "alt-down" = "editor::MoveLineDown";
         "shift-alt-down" = "editor::DuplicateLineDown";
         "ctrl-/" = "editor::ToggleComments";
+        "ctrl-." = "editor::ToggleCodeActions";
+        "f2" = "editor::Rename";
+        "f12" = "editor::GoToDefinition";
+        "shift-f12" = "editor::FindAllReferences";
+        "ctrl-shift-i" = "editor::Format";
       };
     }
   ];

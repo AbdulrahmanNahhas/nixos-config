@@ -1,3 +1,27 @@
+{
+  "title": "Project environments & editors",
+  "group": "OPERATIONS",
+  "weight": 15,
+  "sources": [
+    [
+      "devenv getting started",
+      "https://devenv.sh/getting-started/"
+    ],
+    [
+      "direnv documentation",
+      "https://direnv.net/"
+    ],
+    [
+      "Delta’s Nix packaging",
+      "https://github.com/zed-industries/delta-nix"
+    ]
+  ],
+  "build": {
+    "render": "link",
+    "list": "always"
+  }
+}
+
 Home Manager provides shared tools such as Zed, Delta, devenv, direnv, nixd, nixfmt, statix, and deadnix. Rust, Node, Bun, package managers, formatters, and language servers should follow each project’s requirements in its devenv configuration.
 
 ```
@@ -13,6 +37,8 @@ Commit the project’s environment source and locks. Generated .devenv/.direnv s
 ## Editor ownership
 
 Zed’s configuration is divided into settings, languages, LSP definitions, keymaps, and extensions because those are substantial. Delta comes from the official flake; its user configuration/state remains retained. Both still operate with application and agent permissions independent of package reproducibility.
+
+JavaScript and TypeScript use project-local Oxc/Oxfmt and vtsls when available. Save actions use the dedicated Oxc fix action; broad `quickfix` automation stays disabled. TOML uses Tombi. The repository's `.zed/settings.json` recognizes Hugo layouts as Go HTML Template files so formatters preserve template syntax. The ownership and authentication notes live beside the module in `modules/home/programs/zed/README.md`; provider sessions and credentials remain runtime state.
 
 ## Local AI costs
 

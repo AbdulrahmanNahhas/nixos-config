@@ -6,16 +6,25 @@ _: {
       };
     };
 
-    biome = {
-      settings = {
-        # Avoid Zed downloading and running its own Biome in projects that
-        # have not explicitly opted in with biome.json or biome.jsonc.
-        require_config_file = true;
+    # Let the Oxc extension prefer each project's dependencies, including
+    # pnpm installations, over its own fallback installation.
+    oxlint = {
+      initialization_options.settings = {
+        run = "onSave";
+        configPath = null;
+        disableNestedConfig = false;
+        # Follow the project's type-aware policy and installed tsgolint.
+        typeAware = null;
       };
+    };
+    oxfmt.initialization_options.settings = {
+      "fmt.configPath" = null;
+      "fmt.disableNestedConfig" = false;
     };
 
     vtsls = {
       settings = {
+        vtsls.autoUseWorkspaceTsdk = true;
         typescript = {
           updateImportsOnFileMove = {
             enabled = "always";
@@ -71,7 +80,7 @@ _: {
             enable = "fieldless";
           };
           closingBraceHints = {
-            enable = true;
+            enable = false;
             minLines = 1;
           };
         };
@@ -95,7 +104,7 @@ _: {
             };
           };
           run = {
-            enable = true;
+            enable = false;
           };
           debug = {
             enable = true;

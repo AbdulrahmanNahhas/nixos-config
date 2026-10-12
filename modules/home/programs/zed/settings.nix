@@ -1,12 +1,18 @@
 { lib, ... }:
 let
   extensions = import ./extensions.nix;
+  chatgptModel = {
+    provider = "openai-subscribed";
+    model = "gpt-6.1-sol";
+    effort = "high";
+  };
 in
 {
   programs.zed-editor.userSettings = {
-    # Keep Zed from prompting to install/update extensions already declared
-    # in default.nix.
-    auto_install_extensions = lib.genAttrs extensions (_: true);
+    auto_install_extensions = lib.genAttrs extensions (_: true) // {
+      # Override the old value retained by mutable Home Manager settings.
+      biome = false;
+    };
 
     # ── Privacy ──────────────────────────────────────────
     redact_private_values = false;
@@ -21,6 +27,8 @@ in
 
     # ── Core behavior ────────────────────────────────────
     cli_default_open_behavior = "new_window";
+    # Nix owns the editor binary; Zed manages its extensions separately.
+    auto_update = false;
     confirm_quit = true;
     base_keymap = "VSCode";
     vim_mode = false;
@@ -145,8 +153,8 @@ in
       enabled = true;
       scroll_debounce_ms = 50;
       edit_debounce_ms = 700;
-      show_other_hints = true;
-      show_parameter_hints = true;
+      show_other_hints = false;
+      show_parameter_hints = false;
       show_type_hints = true;
       show_background = false;
     };
@@ -154,10 +162,18 @@ in
     snippet_sort_order = "inline";
     unnecessary_code_fade = 0.5;
     enable_language_server = true;
+    # Projects can explicitly select a different toolchain when needed.
+    language_servers = [
+      "!biome"
+      "!eslint"
+      "!typescript-language-server"
+      "..."
+    ];
 
     diagnostics = {
       inline = {
         enabled = true;
+        update_debounce_ms = 300;
         min_column = 0;
         padding = 4;
       };
@@ -227,6 +243,7 @@ in
     git = {
       inline_blame = {
         enabled = true;
+        delay_ms = 800;
       };
     };
     calls = {
@@ -238,19 +255,27 @@ in
     disable_ai = false;
     agent = {
       dock = "left";
-      sidebar_side = "right";
+      threads_sidebar.position = "right";
       default_profile = "ask";
-      default_model = {
-        provider = "zed.dev";
-        model = "claude-sonnet-5";
-        effort = "high";
-        enable_thinking = true;
+      default_model = chatgptModel;
+      # Override previously selected API models retained in mutable settings.
+      inline_assistant_model = chatgptModel;
+      commit_message_model = chatgptModel;
+      thread_summary_model = chatgptModel;
+      auto_compact = {
+        enabled = true;
+        threshold = "90%";
       };
+      show_turn_stats = true;
+      # Shadow's desktop portal rejects the idle inhibition request. Let
+      # the desktop's existing power policy govern sleep during AI work.
+      prevent_idle_sleep = false;
       tool_permissions = {
         tools = {
           fetch = {
             always_allow = [
-              { pattern = "^https?://biomejs\\.dev"; }
+              { pattern = "^https?://oxc\\.rs(?:/|$)"; }
+              { pattern = "^https?://zed\\.dev(?:/|$)"; }
               { pattern = "^https?://ui\\.shadcn\\.com"; }
               { pattern = "^https?://(.*\\.)?rust-lang\\.org"; }
               { pattern = "^https?://docs\\.rs"; }
@@ -269,6 +294,9 @@ in
         allow_unsandboxed = false;
         network_hosts = [
           "github.com"
+          "raw.githubusercontent.com"
+          "oxc.rs"
+          "zed.dev"
           "gitlab.com"
           "wikipedia.org"
           "docs.rs"
@@ -284,10 +312,17 @@ in
         ];
       };
     };
-    show_edit_predictions = true;
+    # ChatGPT's provider does not supply Zed edit predictions. The previous
+    # Zed prediction provider returned 403 with this account.
+    show_edit_predictions = false;
     edit_predictions = {
-      provider = "zed";
-      disabled_globs = [ ];
+      provider = "none";
+      disabled_globs = [
+        "..."
+        "**/secrets.yaml"
+        "**/.npmrc"
+        "**/.netrc"
+      ];
     };
 
     # ── Tasks ────────────────────────────────────────────
