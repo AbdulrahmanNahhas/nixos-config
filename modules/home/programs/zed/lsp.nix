@@ -115,7 +115,7 @@ _: {
 
     clangd = {
       initialization_options = {
-        fallbackFlags = [ "-std=c++20" ];
+        fallbackFlags = [ ];
       };
     };
   };

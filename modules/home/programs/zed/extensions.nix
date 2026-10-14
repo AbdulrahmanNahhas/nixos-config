@@ -5,6 +5,7 @@
 [
   "oxc"
   "gotmpl"
+  "java"
   "kdl"
   "nix"
   "toml"

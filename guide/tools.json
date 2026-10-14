@@ -462,6 +462,27 @@
       ]
     },
     {
+      "id": "zed-java-cpp",
+      "name": "Zed · Java / C / C++",
+      "category": "Nix tooling & workflow",
+      "purpose": "JDTLS with a project-provided Java runtime and built-in clangd support; project environments own build toolchains and compiler flags.",
+      "checks": [
+        {
+          "file": "modules/home/programs/zed/extensions.nix",
+          "pattern": "\"java\""
+        },
+        {
+          "file": "modules/home/programs/zed/languages.nix",
+          "pattern": "formatter\\.language_server\\.name\\s*=\\s*\"jdtls\""
+        },
+        {
+          "file": "modules/home/programs/zed/languages.nix",
+          "pattern": "formatter\\.language_server\\.name\\s*=\\s*\"clangd\""
+        }
+      ],
+      "source": "https://zed.dev/docs/languages/java"
+    },
+    {
       "id": "dev-shells",
       "name": "devenv + direnv / nix-direnv",
       "category": "Nix tooling & workflow",

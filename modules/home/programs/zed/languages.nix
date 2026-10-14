@@ -61,12 +61,28 @@ in
         formatter = "language_server";
         format_on_save = "on";
       };
+      Java = {
+        language_servers = [
+          "jdtls"
+          "..."
+        ];
+        formatter.language_server.name = "jdtls";
+        format_on_save = "on";
+      };
       C = {
-        formatter = "language_server";
+        language_servers = [
+          "clangd"
+          "..."
+        ];
+        formatter.language_server.name = "clangd";
         format_on_save = "on";
       };
       "C++" = {
-        formatter = "language_server";
+        language_servers = [
+          "clangd"
+          "..."
+        ];
+        formatter.language_server.name = "clangd";
         format_on_save = "on";
       };
       # The TOML extension supplies syntax; Tombi supplies its language server.
