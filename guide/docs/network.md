@@ -9,7 +9,7 @@
 ],
 [
 "NetworkManager reference",
-"https://networkmanager.dev/docs/api/latest/"
+"https://www.networkmanager.dev/docs/api/latest/NetworkManager.conf.html"
 ],
 [
 "WireGuard overview",
@@ -31,6 +31,10 @@ Encrypted DNS is not anonymity: the resolver still sees queries, and connection 
 NetworkManager manages connections. `dns = "none"` keeps it from replacing the DNS policy. DNSCrypt provides the system resolver. Browser-internal encrypted DNS can bypass that system path, so inspect browser settings when testing. Split-DNS corporate VPNs need deliberate integration rather than assuming a fixed public resolver fits them.
 
 The revised configuration listens on both 127.0.0.1 and ::1. Cloudflare and Scaleway remain the deliberately selected resolvers: their catalog stamps advertise DNSSEC, no logging, and no filtering. The require\_\* settings apply only if automatic selection replaces server\_names, so they are not presented as enforcement on those named providers. Resolver bootstrap and endpoint resolution still need network access before the tunnel can connect. Captive portals and filtered networks can behave differently, so connection testing matters.
+
+The resolver catalog and associated signature survive in DNSCrypt's private systemd state directory. This avoids discarding the catalog every reboot but does not create internet access, guarantee an expired catalog is accepted, or preserve the in-memory DNS-answer cache. NetworkManager's internal identity/state is retained alongside its separately preserved connection profiles; Wi-Fi MAC randomization remains enabled. Migrate existing state before first activation and verify DNS/connection behavior afterward.
+
+The hardware module selects iwd as NetworkManager's Wi-Fi backend. iwd keeps saved network credentials in `/var/lib/iwd`, independently of `/etc/NetworkManager/system-connections`; both must survive the tmpfs root reset. Preservation retains iwd's directory with root ownership and mode `0700`. Live inspection found iwd active and its state on tmpfs when Wi-Fi passwords were reported lost after reboot. This closes the missing storage declaration; it still needs migration, activation and a reboot check. Before first activation, copy the current iwd state into `/saved/var/lib/iwd` as root with ownership and permissions preserved. After activation, confirm the mount and reconnect without entering the password, then repeat after reboot. Do not print `.psk` or `.8021x` file contents during diagnosis.
 
 ## Firewall direction matters
 

@@ -86,6 +86,36 @@ in
         }
         "/var/lib/kavita"
         {
+          # DynamicUser state: systemd recreates the public /var/lib symlink
+          # and assigns the private directory's runtime ownership.
+          directory = "/var/lib/private/dnscrypt-proxy";
+          user = "root";
+          group = "root";
+          mode = "0755";
+        }
+        {
+          # Stable network identity and internal state, separate from profiles.
+          directory = "/var/lib/NetworkManager";
+          user = "root";
+          group = "root";
+          mode = "0755";
+        }
+        {
+          # The hardware module selects iwd; its saved Wi-Fi credentials
+          # live here independently of NetworkManager's connection profiles.
+          directory = "/var/lib/iwd";
+          user = "root";
+          group = "root";
+          mode = "0700";
+        }
+        {
+          # Firmware-update history and pending-update bookkeeping.
+          directory = "/var/lib/fwupd";
+          user = "root";
+          group = "root";
+          mode = "0755";
+        }
+        {
           directory = "/etc/NetworkManager/system-connections";
           user = "root";
           group = "root";
@@ -182,6 +212,7 @@ in
           ".local/state/nix"
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
+
           {
             # Avoid losing Nix fetch/evaluation metadata on every reboot.
             directory = ".cache/nix";
@@ -260,6 +291,18 @@ in
 
   # Set up base directories with appropriate user ownership before app creation loops.
   systemd.tmpfiles.settings.preservation = {
+    # DynamicUser backing state must remain inaccessible to other users.
+    "/saved/var/lib/private".d = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
+    "/var/lib/private".d = {
+      user = "root";
+      group = "root";
+      mode = "0700";
+    };
+
     "/home/${username}/.config".d = {
       user = username;
       group = "users";
