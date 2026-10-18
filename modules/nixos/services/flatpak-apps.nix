@@ -1,9 +1,7 @@
 # App IDs are the single source for installation, exceptions, and saved Flatpak data.
 {
-  "com.github.ADBeveridge.Raider" = {
-  };
-  "dev.geopjr.Tuba" = {
-  };
+  "com.github.ADBeveridge.Raider" = { };
+  "dev.geopjr.Tuba" = { };
   "io.gitlab.news_flash.NewsFlash" = {
     overrides = {
       Context.filesystems = [ "~/.config/dconf:ro" ];
@@ -21,8 +19,7 @@
       };
     };
   };
-  "org.telegram.desktop" = {
-  };
+  "org.telegram.desktop" = { };
   "io.github.diegopvlk.Cine" = {
     strictFilesystems = true;
     overrides = {
@@ -79,8 +76,7 @@
       Context.filesystems = [ "~/.config/dconf:ro" ];
     };
   };
-  "dev.geopjr.Archives" = {
-  };
+  "dev.geopjr.Archives" = { };
   "org.libreoffice.LibreOffice" = {
     overrides = {
       # LibreOffice's VCL still uses GTK3 for this integration.
@@ -126,33 +122,6 @@
         filesystems = [ "xdg-download" ];
       };
     };
-  };
-  "org.prismlauncher.PrismLauncher" = {
-    overrides = {
-      Environment = {
-        "__NV_PRIME_RENDER_OFFLOAD" = "1";
-        "__NV_PRIME_RENDER_OFFLOAD_PROVIDER" = "NVIDIA-G0";
-        "__GLX_VENDOR_LIBRARY_NAME" = "nvidia";
-        "__VK_LAYER_NV_optimus" = "NVIDIA_only";
-
-        # Force Minecraft/GLFW to use XWayland instead of native Wayland.
-        "XDG_SESSION_TYPE" = "x11";
-      };
-
-      Context = {
-        # Expose /dev/dri/card* and /dev/dri/renderD*
-        devices = [ "dri" ];
-
-        sockets = [
-          "pulseaudio"
-          "pipewire"
-          "wayland"
-          "fallback-x11"
-        ];
-      };
-    };
-  };
-  "org.kde.subtitlecomposer" = {
   };
   "org.signal.Signal" = {
     origin = "flathub";

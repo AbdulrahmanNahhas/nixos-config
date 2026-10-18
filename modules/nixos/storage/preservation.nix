@@ -172,6 +172,12 @@ in
           ".local/share/delta"
           ".config/delta"
 
+          {
+            # Native Nahhasio client state; media files are stored separately.
+            directory = ".local/state/nahhasio";
+            mode = "0700";
+          }
+
           # ── Shell History & State ────────────────────────────
           ".local/state/nix"
           ".config/atuin"

@@ -1,11 +1,11 @@
 {
   xdg.desktopEntries.nahhascinema = {
-    name = "Nahhas Cinema";
+    name = "Nahhasio";
     genericName = "Family Media Center";
     comment = "Family-focused media center for torrents, Jellyfin, local media, and your personal library.";
 
-    exec = "/saved/apps/NahhasCinema.AppImage";
-    icon = ./icons/nahhas-cinema.png;
+    exec = "/saved/apps/Nahhasio.AppImage";
+    icon = ./icons/nahhasio.png;
 
     terminal = false;
 
@@ -15,7 +15,7 @@
     ];
 
     settings = {
-      StartupWMClass = "nahhascinema";
+      StartupWMClass = "nahhasio";
       Keywords = "Watch;Cinema;Movies;TV;Jellyfin;Torrent;Media;Library;";
     };
   };

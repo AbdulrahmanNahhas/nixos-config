@@ -48,4 +48,6 @@ System and user installations are distinct. This repository owns the system inst
 
 `strictFilesystems = true;` opts into resetting inherited filesystem grants before applying read-only GTK theme access and this entry’s explicit paths. It is enabled for EarTag, Upscaler, Cine, and Nocturne. Other apps retain their existing narrower manifest permissions until their workflows are reviewed.
 
+PrismLauncher and Subtitle Composer have been removed from the managed catalog. With `uninstallUnmanaged = true`, the next successful system reconciliation can uninstall those system apps and prune PrismLauncher's managed override. Their old backing data under `/saved` remains until explicitly reviewed and removed; their per-app preservation mounts are no longer declared. There is no longer a PrismLauncher X11 exception in this catalog.
+
 The daily Flatpak timer updates apps independently of `flake.lock`. NixOS generation rollback does not restore a frozen Flatpak application/data snapshot. Removing the catalog entry stops managing its persistence, but old backing data under `/saved` should be removed only after a deliberate data review.

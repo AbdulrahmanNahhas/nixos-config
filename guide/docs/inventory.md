@@ -31,6 +31,6 @@ Use the app catalog below to locate a Flatpak entry. Origin is the configured re
 | Obsidian, Anki, Mullvad Browser | `modules/home/packages/apps.nix`                   |
 | GNOME file/system apps          | `modules/nixos/desktop/apps.nix`                   |
 | Steam and game tools            | `modules/nixos/gaming/steam.nix`                   |
-| Nahhas Cinema local AppImage    | `modules/home/desktop/local-apps.nix`              |
+| Nahhasio local AppImage         | `modules/home/desktop/local-apps.nix`              |
 
-Binary updates for the local AppImage are still outside the flake graph. Keep its provenance and update method clear. No extra launcher is needed for Delta because the official package supplies one.
+The Nahhasio launcher opens `/saved/apps/Nahhasio.AppImage` and uses the module's `icons/nahhasio.png` icon. See the persistence lesson for its retained client state. Binary updates for the local AppImage are still outside the flake graph. Keep its provenance and update method clear. No extra launcher is needed for Delta because the official package supplies one.
