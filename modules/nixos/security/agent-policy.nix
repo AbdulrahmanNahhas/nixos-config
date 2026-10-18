@@ -17,13 +17,15 @@ let
     ".config/rclone"
     ".config/BraveSoftware"
     ".config/Codex"
-    ".docker/config.json"
-    ".cargo/credentials.toml"
-    ".cargo/credentials"
+    # Match existing optional credential files (and backups) at sandbox startup.
+    # Avoid exact child masks beneath absent parents: Bubblewrap can fail while
+    # constructing mounts, especially for unpreserved /saved aliases.
+    ".docker/config.json*"
+    ".cargo/credentials*"
     ".local/share/keyrings"
-    ".local/share/opencode/auth.json"
-    ".codex/auth.json"
-    ".codex/config.toml"
+    ".local/share/opencode/auth.json*"
+    ".codex/auth.json*"
+    ".codex/config.toml*"
   ];
 in
 {
