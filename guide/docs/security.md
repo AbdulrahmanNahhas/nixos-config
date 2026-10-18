@@ -24,7 +24,7 @@
 
 LUKS protects retained data while the disk is locked. It does not block malware running as you after login. SOPS protects selected secrets in Git/store copies, but applications consuming them can read them. An ephemeral root removes undeclared root state after reboot, while preserved histories and app profiles remain.
 
-USBGuard controls USB device authorization. Its built-in allowlist is essential: blindly blocking those devices can break the keyboard, camera, and Bluetooth. Runtime approval needs a persistent policy path if it should survive activation. Review a device before allowing it.
+USBGuard controls USB device authorization. Its built-in allowlist is essential: blindly blocking those devices can break the keyboard, camera, and Bluetooth. This configuration supplies an immutable declarative policy: `usbguard allow-device <id>` approves temporarily, while permanent approvals must be added to `services.usbguard.rules`. The `-p` IPC flag cannot write the Nix-store policy. Review a device before allowing it.
 
 AppArmor is loaded, but useful protection requires enforced profiles that cover actual workloads. A native app without a profile is not magically confined. Service hardening can restrict writable paths, devices, namespaces, privileges, and address families. Add restrictions with the service’s data and workflow in mind.
 

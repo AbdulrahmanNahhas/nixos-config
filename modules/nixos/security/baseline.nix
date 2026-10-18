@@ -11,8 +11,9 @@
 
   # Blocks any USB device not matched below, including ones present at boot.
   # The built-in devices must be listed or the laptop loses its keyboard
-  # controller, Bluetooth, and camera. New devices are approved with
-  # `usbguard list-devices` / `usbguard allow-device -p <id>`.
+  # controller, Bluetooth, and camera. Inspect with `usbguard list-devices`;
+  # `allow-device <id>` is temporary. Permanent approvals belong in rules
+  # below: NixOS supplies an immutable policy, so IPC cannot write it with -p.
   services.usbguard = {
     enable = true;
     IPCAllowedUsers = [
