@@ -52,6 +52,8 @@ PrismLauncher and Subtitle Composer have been removed from the managed catalog. 
 
 The daily Flatpak timer updates apps independently of `flake.lock`. NixOS generation rollback does not restore a frozen Flatpak application/data snapshot. Removing the catalog entry stops managing its persistence, but old backing data under `/saved` should be removed only after a deliberate data review.
 
+Discord, SiYuan and Zotero have been removed from the catalog, including their app-specific permissions. After activation, a successful managed reconciliation uninstalls these system apps and prunes their managed overrides. Their saved backing data remains under `/saved/home/aqua/.var/app`; no account data, notes or Zotero library files are deleted by this source change. KeePassXC and its browser bridge/extension declaration are also removed; Secrets remains the managed password application. Removing the extension declaration stops requesting installation; an existing browser profile may retain its installed extension until removed there.
+
 ## Heroic Games Launcher
 
 `com.heroicgameslauncher.hgl` uses verified Flathub. Its app-specific exception enables X11/XWayland and shared IPC for Wine games, network and audio, GPU rendering, and input devices for controllers. Read-only `/run/udev` access supplies device metadata. The shared credential-path denials still apply.

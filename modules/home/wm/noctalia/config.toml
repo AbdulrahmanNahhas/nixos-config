@@ -521,8 +521,8 @@ telemetry_enabled = false
         prefix = "edit"
         glyph = "file-code"
         global = false
-        command = 'printf "Helix (Terminal)\tOpen nix-config in helix\nZed (GUI)\tOpen nix-config in Zed\n"'
-        exec = 'case "{selection}" in Helix*) ghostty -e fish -c "$EDITOR /saved/nixos-config" ;; Zed*) zeditor /saved/nixos-config ;; esac'
+        command = 'printf "Zed (GUI)\tOpen nix-config in Zed\n"'
+        exec = 'zeditor /saved/nixos-config'
 
         # ── Window Controls ──────────────────────────────────────────────────────────
 
@@ -636,7 +636,7 @@ source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
     [theme.templates]
-    builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "ghostty", "helix", "niri" ]
+    builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "ghostty", "niri" ]
     community_ids = [ "brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode" ]
     enable_builtin_templates = true
     enable_community_templates = true

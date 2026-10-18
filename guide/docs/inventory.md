@@ -27,7 +27,6 @@ Use the app catalog below to locate a Flatpak entry. Origin is the configured re
 | Delta                           | Official flake + `modules/home/programs/delta.nix` |
 | Brave                           | `modules/home/programs/brave.nix`                  |
 | Zed                             | `modules/home/programs/zed/`                       |
-| KeePassXC                       | `modules/home/programs/keepassxc.nix`              |
 | Obsidian, Anki, Mullvad Browser | `modules/home/packages/apps.nix`                   |
 | GNOME file/system apps          | `modules/nixos/desktop/apps.nix`                   |
 | Steam and game tools            | `modules/nixos/gaming/steam.nix`                   |

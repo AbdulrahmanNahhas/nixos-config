@@ -188,10 +188,6 @@ in
         ++ [
 
           {
-            directory = ".config/keepassxc";
-            mode = "0700";
-          }
-          {
             directory = ".config/rust-book-brave";
             mode = "0700";
           }

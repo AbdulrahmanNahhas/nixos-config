@@ -7,7 +7,6 @@ _: {
     top = "btop";
     htop = "btop";
     ps = "procs";
-    nano = "hx";
 
     # Quick Utils
     df = "duf";

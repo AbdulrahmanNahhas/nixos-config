@@ -125,31 +125,6 @@
   };
   "org.gnome.gitlab.YaLTeR.VideoTrimmer" = {
   };
-  "org.zotero.Zotero" = {
-    overrides = {
-      Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-      Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-      Context.filesystems = [ "xdg-run/speech-dispatcher:ro" ];
-    };
-  };
-  "com.discordapp.Discord" = {
-    overrides = {
-      Environment = {
-        ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-      };
-      Context = {
-        # GPU access only; camera support needs a mediated, tested solution.
-        devices = [ "dri" ];
-        sockets = [ "pulseaudio" ];
-        filesystems = [
-          "xdg-download"
-          "xdg-pictures:ro"
-          "xdg-videos:ro"
-          "xdg-run/pipewire-0"
-        ];
-      };
-    };
-  };
   "org.signal.Signal" = {
     origin = "flathub";
     overrides = {
@@ -160,21 +135,6 @@
         sockets = [ "pulseaudio" ];
         filesystems = [ "xdg-download" ];
       };
-    };
-  };
-  "org.b3log.siyuan" = {
-    origin = "flathub";
-    overrides = {
-      Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-      Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-      Context.filesystems = [
-        "xdg-documents"
-        "xdg-desktop"
-        "xdg-download"
-        "xdg-music:ro"
-        "xdg-pictures:ro"
-        "xdg-videos:ro"
-      ];
     };
   };
   "im.riot.Riot" = {

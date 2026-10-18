@@ -42,6 +42,8 @@ Commit the project's environment source and locks. Generated `.devenv`/`.direnv`
 
 ## Editor ownership
 
+Helix has been removed. `EDITOR=nano` keeps terminal editing available through the system's existing Nano package, while `VISUAL="zeditor --wait"` selects Zed. The Fish `nano` alias and Noctalia's Helix launcher/theme integration have also been removed; the configuration-editing launcher opens Zed.
+
 Zed’s configuration is divided into settings, languages, LSP definitions, keymaps, and extensions because those are substantial. Delta comes from the official flake; its user configuration/state remains retained. Both still operate with application and agent permissions independent of package reproducibility.
 
 JavaScript and TypeScript use project-local Oxc/Oxfmt and vtsls when available. Save actions use the dedicated Oxc fix action; broad `quickfix` automation stays disabled. TOML uses Tombi. The repository's `.zed/settings.json` excludes the entire `guide/` directory from Zed's scans, project search, file finder and project tree while retaining the guide on disk and in Git. It also retains the Hugo Go HTML Template file association for files opened explicitly. The desired extension list feeds `userSettings.auto_install_extensions` only, preserving the explicit `biome = false` override instead of letting Home Manager replace the map. Zed still manages extension downloads and updates; provider sessions and credentials remain runtime state. Agent fetch auto-approvals require HTTPS and an exact hostname boundary, with deliberate subdomain support; network-host restrictions remain a separate policy.

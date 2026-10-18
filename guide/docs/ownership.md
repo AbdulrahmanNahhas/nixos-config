@@ -30,7 +30,7 @@ Start with the behavior you want. A device driver or system service belongs to N
 | System service                    | Relevant `modules/nixos/` domain          |
 | Machine-specific fact             | `shadow/`                                 |
 
-Configured modules install their own applications when appropriate. Do not repeat Delta, Brave, or KeePassXC in a plain package list. Delta now comes from the official input with its own desktop entry; the old custom wrapper is removed.
+Configured modules install their own applications when appropriate. Do not repeat Delta or Brave in a plain package list. Delta now comes from the official input with its own desktop entry; the old custom wrapper is removed.
 
 The Flatpak catalog is intentionally ordinary Nix data, not a custom module framework. The service adapter derives installation and overrides. Preservation derives data directories from the same entries. Native applications still need their own persistence declarations because there is no reliable universal rule for where every native app writes.
 

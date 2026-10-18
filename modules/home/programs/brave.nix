@@ -7,7 +7,6 @@
     # Extracted Extensions
     extensions = [
       { id = "hlepfoohegkhhmjieoechaddaejaokhf"; } # Refined GitHub
-      { id = "oboonakemofpalcgghocfoadofidjkkk"; } # KeePassXC Browser
     ];
 
     # Translated brave://flags & GPU Power-Saving Overrides
