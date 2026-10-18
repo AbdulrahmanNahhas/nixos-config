@@ -36,16 +36,11 @@ in
     lib.genAttrs [ "JavaScript" "JSX" "TypeScript" "TSX" ] (_: web)
     // lib.genAttrs [
       "CSS"
-      "SCSS"
-      "LESS"
       "JSON"
       "JSONC"
-      "JSON5"
       "HTML"
       "Markdown"
-      "MDX"
       "YAML"
-      "GraphQL"
     ] (_: oxfmt)
     // {
       Nix = {

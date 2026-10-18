@@ -4,7 +4,7 @@ let
   chatgptModel = {
     provider = "openai-subscribed";
     model = "gpt-6.1-sol";
-    effort = "high";
+    effort = "medium";
   };
 in
 {
@@ -274,18 +274,18 @@ in
         tools = {
           fetch = {
             always_allow = [
-              { pattern = "^https?://oxc\\.rs(?:/|$)"; }
-              { pattern = "^https?://zed\\.dev(?:/|$)"; }
-              { pattern = "^https?://ui\\.shadcn\\.com"; }
-              { pattern = "^https?://(.*\\.)?rust-lang\\.org"; }
-              { pattern = "^https?://docs\\.rs"; }
-              { pattern = "^https?://crates\\.io"; }
-              { pattern = "^https?://(.*\\.)?nixos\\.org"; }
-              { pattern = "^https?://noogle\\.dev"; }
-              { pattern = "^https?://developer\\.mozilla\\.org"; }
-              { pattern = "^https?://(.*\\.)?typescriptlang\\.org"; }
-              { pattern = "^https?://(www\\.)?npmjs\\.com"; }
-              { pattern = "^https?://en\\.cppreference\\.com"; }
+              { pattern = "^https://oxc\\.rs(?:/|$)"; }
+              { pattern = "^https://zed\\.dev(?:/|$)"; }
+              { pattern = "^https://ui\\.shadcn\\.com(?:/|$)"; }
+              { pattern = "^https://(?:[a-zA-Z0-9-]+\\.)*rust-lang\\.org(?:/|$)"; }
+              { pattern = "^https://docs\\.rs(?:/|$)"; }
+              { pattern = "^https://crates\\.io(?:/|$)"; }
+              { pattern = "^https://(?:[a-zA-Z0-9-]+\\.)*nixos\\.org(?:/|$)"; }
+              { pattern = "^https://noogle\\.dev(?:/|$)"; }
+              { pattern = "^https://developer\\.mozilla\\.org(?:/|$)"; }
+              { pattern = "^https://(?:[a-zA-Z0-9-]+\\.)*typescriptlang\\.org(?:/|$)"; }
+              { pattern = "^https://(?:www\\.)?npmjs\\.com(?:/|$)"; }
+              { pattern = "^https://en\\.cppreference\\.com(?:/|$)"; }
             ];
           };
         };
