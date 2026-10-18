@@ -629,26 +629,6 @@
       "purpose": "Follow the FSF effort toward a free mobile software ecosystem; external to the laptop configuration.",
       "state": "monitored",
       "source": "https://www.fsf.org/campaigns/librephone"
-    },
-    {
-      "id": "agent-policy",
-      "name": "Managed agent execution policy",
-      "category": "Core systems, networking & security",
-      "purpose": "System-owned workspace/read-only profile limits and credential read denials for supported local clients; other native processes remain separately trusted.",
-      "checks": [
-        {
-          "file": "modules/nixos/security/agent-policy.nix",
-          "pattern": "default_permissions\\s*=\\s*\":workspace\""
-        },
-        {
-          "file": "modules/nixos/security/agent-policy.nix",
-          "pattern": "permissions\\.filesystem\\.deny_read"
-        },
-        {
-          "file": "modules/home/packages/development.nix",
-          "pattern": "(?m)^\\s*bubblewrap\\s*$"
-        }
-      ]
     }
   ]
 }

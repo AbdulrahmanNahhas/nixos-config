@@ -16,8 +16,8 @@
 "https://nix-community.github.io/lanzaboote/explanation/troubleshooting.html"
 ],
 [
-"Managed agent configuration",
-"https://developers.openai.com/codex/enterprise/managed-configuration"
+"Agent sandbox and approvals",
+"https://learn.chatgpt.com/docs/agent-approvals-security"
 ],
 [
 "Zed agent sandboxing",
@@ -52,19 +52,15 @@ Existing processes keep their supplementary groups until a fresh login. After ac
 
 ## Credential reads by development agents
 
-`modules/nixos/security/agent-policy.nix` generates `/etc/codex/requirements.toml`, a system-owned policy for supported local clients. Its default is the workspace permission profile, and the selectable profiles are workspace and read-only. Managed read denials cover SSH/GPG/cloud identities, package-manager credentials, browser/app credential stores, agent authentication/config files, Wi-Fi profiles and decrypted SOPS secrets. Home paths and their `/saved/home` backing aliases are both covered. Mutable user settings and repository configuration cannot weaken these managed read denials in supported execution paths.
+The ChatGPT desktop app and Codex CLI use their built-in sandbox and approval controls. This configuration no longer installs a system-managed `/etc/codex/requirements.toml`. The additional policy was retired after repeated Bubblewrap startup failures blocked development commands, including approved commands. Isolated checks of a filename-glob repair did not establish recovery in the affected desktop session. Do not create persistent credential directories merely to satisfy sandbox mount targets.
 
-The policy does not contain credentials and does not modify the mutable `~/.codex/config.toml`. Authentication is performed by the client outside its command sandbox; this policy restricts agent execution. Confirm support for every client version independently, including bundled desktop and ACP runtimes. With the installed CLI 0.162.1, isolated tests allowed source reads and workspace writes while denying synthetic SSH and SOPS credentials, including backing paths and the runtime symlink. A local server inspection confirmed that a full-access request resolves to a workspace-write sandbox with networking disabled. The legacy CLI mode selector is constrained alongside the modern profile selector. Existing sessions must be restarted to load the policy.
+Use the workspace sandbox with approvals for normal development. Grant additional access deliberately when Git, Nix development environments or GTK application workflows need it. Removing the managed policy does not disable the client's sandbox, but does remove our extra credential-read denials and enforced profile restrictions. Workspace write restrictions are not a promise that all readable credentials in the account are hidden. Client permission settings remain a runtime choice; verify the selected mode in each session.
 
-Optional credential files beneath Cargo, Docker and agent directories use bounded filename globs, including backup suffixes. This avoids requesting an exact child mask beneath a missing parent, such as the unpreserved `/saved/home/aqua/.cargo` directory implicated in a reported Bubblewrap startup failure. Keep directory-wide denials for credential-only stores such as SSH. Do not create empty persistent directories merely to satisfy a sandbox mount. Linux resolves deny-glob matches at each sandboxed process startup; files created later are not protected inside an already-running process. Start a new sandboxed process after credentials change. See the [permission matching rules](https://learn.chatgpt.com/docs/permissions) for this limitation.
-
-Repair checks cover sandbox startup with optional backing directories absent, ordinary Cargo configuration reads, Git diff and synthetic credential denial. The original mount error was not reproduced with the installed standalone CLI or bundled desktop engine in isolation, so a successful build does not establish recovery in the affected live session. Verify that session after activation and restart, including its approved command path.
-
-This is a scoped agent control. It does not sandbox an ordinary terminal, a language server, OpenCode, a separate MCP process or code you later run yourself. Project `.env` files, secrets already exported into the environment and credentials supplied by separate services are not covered by this fixed credential-path list. Review `.envrc`, devenv trust, extensions and build scripts before enabling them. Use a disposable VM without personal credentials for unfamiliar code that needs broader execution; read-denial policy is not a substitute for that separate environment.
+After activating this removal, fully quit and reopen the desktop app so its execution environment is recreated. Verify ordinary Git reads and the approved command path in the affected project. Build validation alone does not establish that the live session recovered. Review `.envrc`, devenv trust, extensions and build scripts before enabling them. For unfamiliar code that needs broader execution, use a separate development user or disposable VM without personal credentials. Ordinary terminals, language servers and separate MCP processes require their own trust decisions.
 
 Zed has a declared non-setuid Bubblewrap dependency for its built-in agent sandbox. That sandbox restricts terminal writes/network access and protects Git metadata, but allows filesystem reads and does not cover external agents, extensions, language servers or ordinary terminals. Private-value redaction is enabled for visual privacy; it is not a read prohibition or a promise that content cannot be sent to a provider.
 
-The policy and its prerequisites add no persistent secret stores. Existing SSH, keyring, agent and SOPS persistence remains owned by the persistence module. Roll back the declarative policy through a reviewed generation if a legitimate credential workflow needs redesign; never copy private keys into a workspace to bypass a denial.
+Retiring the managed policy changes no persistent secret stores. Existing SSH, keyring, agent and SOPS persistence remains owned by the persistence module.
 
 ## Boot trust is a separate layer
 
