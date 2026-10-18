@@ -34,6 +34,12 @@ Root password login is locked; Aqua authenticates with a SOPS-deployed hash and 
 
 Niri/Noctalia supplies idle locking and suspend behavior. Locking before suspend must be tested interactively. An unlocked keyring can serve credentials to authorized apps; secret-service access should be granted intentionally.
 
+## Device access follows the desktop session
+
+The personal account no longer has permanent `input`, `audio`, `video` or `dialout` membership. logind and udev mediate seat-device access for the active graphical session; applications normally use PipeWire for audio. Raw input-group access can expose keyboard events, and serial devices are not needed by the declared laptop workflows. GPU rendering, GameMode and OpenRazer retain their declared groups. This reduces standing privileges; active-session device ACLs and privileged services still need their own review.
+
+Existing processes keep their supplementary groups until a fresh login. After activation, fully log out and back in, then check `id` in a new terminal and test Niri input, audio input/output, GPU offload, Steam controllers and Polychromatic. A missing serial workflow should receive a device-specific rule after identifying the hardware, rather than restoring blanket `dialout` access.
+
 ## Boot trust is a separate layer
 
 Secure Boot and TPM auto-unlock are not configured by these stages. Secure Boot signs/verifies boot artifacts; it does not replace disk encryption. TPM unlock links access to measurements/policy and needs a recovery credential. NVIDIA and OpenRazer complicate module-signing/lockdown decisions. Enrollment belongs to a prepared recovery exercise, not a quick cleanup.

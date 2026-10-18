@@ -19,13 +19,12 @@
         extraGroups = [
           "wheel"
           "networkmanager"
-          "video"
-          "input"
-          "audio"
+          # logind grants seat devices to the active desktop session; PipeWire
+          # handles audio. Permanent input/audio/video access bypasses that
+          # lifecycle, and raw keyboard or serial access is not needed here.
           "render"
           "gamemode"
           "openrazer"
-          "dialout"
         ];
         shell = pkgs.fish;
       };
