@@ -46,7 +46,7 @@ flatpak override --user --show org.example.App
 
 System and user installations are distinct. This repository owns the system installation, including managed override files. Manual system installs can be removed by reconciliation; manual user installs do not automatically gain declared persistence. A user override may take precedence over system policy and must be inspected when behavior differs.
 
-`strictFilesystems = true;` opts into resetting inherited filesystem grants before applying read-only GTK theme access and this entry’s explicit paths. It is enabled for EarTag, Upscaler, Cine, and Nocturne. Other apps retain their existing narrower manifest permissions until their workflows are reviewed.
+Every catalog entry receives `!host:reset` before read-only GTK theme access, the entry's explicit paths and the shared credential-path denials. New inherited manifest paths are not accepted implicitly. Declare a required runtime endpoint or folder beside the app; use file portals when possible. The permission lesson explains device and credential boundaries. Check user overrides as well as system policy: a per-user grant can take precedence.
 
 PrismLauncher and Subtitle Composer have been removed from the managed catalog. With `uninstallUnmanaged = true`, the next successful system reconciliation can uninstall those system apps and prune PrismLauncher's managed override. Their old backing data under `/saved` remains until explicitly reviewed and removed; their per-app preservation mounts are no longer declared. There is no longer a PrismLauncher X11 exception in this catalog.
 

@@ -397,7 +397,7 @@
       "id": "flatpak",
       "name": "Flatpak + nix-flatpak / Bubblewrap",
       "category": "Desktop & application runtimes",
-      "purpose": "Declarative sandboxed app distribution; permissions remain application-specific.",
+      "purpose": "Sandboxed app distribution with explicit filesystem allowlists and credential-path denials.",
       "checks": [
         {
           "file": "modules/nixos/services/flatpak.nix",

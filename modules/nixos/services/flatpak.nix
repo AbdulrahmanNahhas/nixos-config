@@ -5,17 +5,38 @@ let
     "xdg-config/gtk-3.0:ro"
     "xdg-config/gtk-4.0:ro"
   ];
+  # These paths have no role in the managed desktop apps. Include the backing
+  # store as well as the normal home paths so persistence is not an alternate
+  # route to credentials. Named Secret Service access remains app-specific.
+  privatePaths = [
+    "!/saved"
+    "!/run/secrets"
+    "!~/.ssh"
+    "!~/.gnupg"
+    "!~/.aws"
+    "!~/.kube"
+    "!~/.codex"
+    "!xdg-config/sops"
+    "!xdg-config/gh"
+    "!xdg-config/BraveSoftware"
+    "!xdg-data/keyrings"
+    "!xdg-data/opencode"
+    "!xdg-run/keyring"
+  ];
   appOverrides =
     app:
     let
       overrides = app.overrides or { };
     in
-    if app.strictFilesystems or false then
-      lib.recursiveUpdate overrides {
-        Context.filesystems = [ "!host:reset" ] ++ themePaths ++ (overrides.Context.filesystems or [ ]);
-      }
-    else
-      overrides;
+    lib.recursiveUpdate overrides {
+      # Do not inherit new filesystem access silently when a manifest updates.
+      Context.filesystems = [
+        "!host:reset"
+      ]
+      ++ themePaths
+      ++ (overrides.Context.filesystems or [ ])
+      ++ privatePaths;
+    };
 in
 {
   services.flatpak = {
@@ -66,8 +87,7 @@ in
           };
 
           Context = {
-            # Broad home/host grants are denied; specific manifest paths remain.
-            # Per-app exceptions and portals provide the intended file access.
+            # Per-app resets below own the complete filesystem allowlist.
             filesystems = [
               "!host"
               "!home"
@@ -75,7 +95,8 @@ in
               # Read-only access to GTK 3 & 4 user configurations
               "xdg-config/gtk-3.0:ro"
               "xdg-config/gtk-4.0:ro"
-            ];
+            ]
+            ++ privatePaths;
 
             # Wayland only. Audio stays under each upstream manifest because
             # Flatpak's PulseAudio socket is also the PipeWire compat path.
@@ -83,10 +104,21 @@ in
               "wayland"
               "!x11"
               "!fallback-x11"
+              "!session-bus"
+              "!system-bus"
+              "!ssh-auth"
+              "!gpg-agent"
             ];
 
-            # Drop the broad device access most manifests request.
-            devices = [ "!all" ];
+            # Apps use GPU access and mediated services, without raw input,
+            # USB, KVM or the host shared-memory device grants.
+            devices = [
+              "!all"
+              "!input"
+              "!usb"
+              "!kvm"
+              "!shm"
+            ];
 
             # Wayland apps do not need the shared IPC namespace X11 requires.
             shared = [ "!ipc" ];

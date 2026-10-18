@@ -8,7 +8,6 @@
     };
   };
   "io.gitlab.theevilskeleton.Upscaler" = {
-    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
@@ -21,7 +20,6 @@
   };
   "org.telegram.desktop" = { };
   "io.github.diegopvlk.Cine" = {
-    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
@@ -38,7 +36,8 @@
   "io.gitlab.adhami3310.Impression" = {
     overrides = {
       Context = {
-        devices = [ "all" ];
+        # Image writing is mediated by UDisks2 (upstream's device policy).
+        devices = [ "dri" ];
         filesystems = [
           "~/.config/dconf:ro"
           "xdg-pictures"
@@ -47,7 +46,6 @@
     };
   };
   "app.drey.EarTag" = {
-    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
@@ -60,7 +58,6 @@
     };
   };
   "com.jeffser.Nocturne" = {
-    strictFilesystems = true;
     overrides = {
       Context = {
         filesystems = [
@@ -84,6 +81,8 @@
       Context.filesystems = [
         "xdg-documents"
         "xdg-download"
+        "xdg-config/fontconfig:ro"
+        "xdg-run/gvfsd"
         "~/.local/state/noctalia:ro" # Read-only Noctalia theme state.
       ];
     };
@@ -99,6 +98,7 @@
     };
   };
   "com.github.johnfactotum.Foliate" = {
+    overrides.Context.filesystems = [ "xdg-run/speech-dispatcher:ro" ];
   };
   "com.github.jeromerobert.pdfarranger" = {
   };
@@ -108,6 +108,7 @@
     overrides = {
       Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+      Context.filesystems = [ "xdg-run/speech-dispatcher:ro" ];
     };
   };
   "com.discordapp.Discord" = {
@@ -116,10 +117,15 @@
         ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       };
       Context = {
-        # "dri" provides GPU acceleration. Change to [ "all" ] if you use a webcam for video calls.
+        # GPU access only; camera support needs a mediated, tested solution.
         devices = [ "dri" ];
         sockets = [ "pulseaudio" ];
-        filesystems = [ "xdg-download" ];
+        filesystems = [
+          "xdg-download"
+          "xdg-pictures:ro"
+          "xdg-videos:ro"
+          "xdg-run/pipewire-0"
+        ];
       };
     };
   };
@@ -128,7 +134,8 @@
     overrides = {
       Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       Context = {
-        devices = [ "all" ];
+        # Do not expose every device for an Electron messenger.
+        devices = [ "dri" ];
         sockets = [ "pulseaudio" ];
         filesystems = [ "xdg-download" ];
       };
@@ -139,6 +146,14 @@
     overrides = {
       Environment.ELECTRON_OZONE_PLATFORM_HINT = "wayland";
       Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
+      Context.filesystems = [
+        "xdg-documents"
+        "xdg-desktop"
+        "xdg-download"
+        "xdg-music:ro"
+        "xdg-pictures:ro"
+        "xdg-videos:ro"
+      ];
     };
   };
   "im.riot.Riot" = {
@@ -155,6 +170,7 @@
       };
       Context.filesystems = [
         "~/.config/dconf:ro"
+        "xdg-run/pipewire-0"
       ];
     };
   };
