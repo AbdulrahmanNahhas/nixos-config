@@ -15,7 +15,8 @@ in
     };
 
     # ── Privacy ──────────────────────────────────────────
-    redact_private_values = false;
+    # Visual redaction; filesystem read protection is a separate boundary.
+    redact_private_values = true;
     private_files = [
       "**/.env*"
       "**/*.pem"
@@ -23,6 +24,11 @@ in
       "**/*.cert"
       "**/*.crt"
       "**/secrets.yml"
+      "**/secrets.yaml"
+      "**/.npmrc"
+      "**/.pypirc"
+      "**/credentials.json"
+      "**/credentials.toml"
     ];
 
     # ── Core behavior ────────────────────────────────────

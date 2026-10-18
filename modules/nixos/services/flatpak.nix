@@ -75,6 +75,15 @@ in
       pruneUnmanagedOverrides = true;
       settings = lib.mapAttrs (_: appOverrides) apps // {
         global = {
+          # Access to a credential service can supply secrets even when its
+          # backing files are hidden. Element opts into Secret Service below
+          # through its catalog entry; other apps need an explicit review.
+          "Session Bus Policy" = {
+            "org.freedesktop.secrets" = "none";
+            "org.kde.kwalletd" = "none";
+            "org.kde.kwalletd5" = "none";
+            "org.kde.kwalletd6" = "none";
+          };
           Environment = {
             # Flatpak already bind-mounts host icon themes read-only at
             # /run/host; this only points the cursor loader at them.

@@ -28,6 +28,8 @@ Denying `host` and `home` removes those broad grants. It does not remove narrowe
 
 Explicit denials also cover `/saved`, `/run/secrets`, SSH/GPG/cloud credentials, raw keyring storage and selected application credentials. The `/saved` denial closes the alternate backing-store route to retained home data. Raw keyring/SSH/GPG-agent sockets and unfiltered session/system buses are denied; named filtered D-Bus grants, including Element's Secret Service integration, remain deliberate exceptions. User overrides can still supersede system policy and must be reviewed after activation.
 
+Secret Service and KWallet names are denied by default, including when an upstream manifest requests them. Element explicitly re-enables Secret Service in its catalog entry. A new credential-service grant requires its own review; raw file denials alone would not prevent a service from returning a secret.
+
 The isolation pass checked every installed app's merged permissions with Flatpak 1.18.4 against the generated catalog allowlists. A shell-only launch with synthetic home data and a private D-Bus session confirmed that SSH, persistent backing paths and SOPS runtime credentials were inaccessible. The private test environment could not mount the document portal because its synthetic `/dev` had no FUSE device; file dialogs, media calls and image writing still require normal desktop acceptance after activation. No personal application data was used in that test.
 
 A **portal** lets the desktop mediate a request, such as selecting a file or sharing a screen. Granting a directory permanently is different from selecting a file through a portal. Previously granted portal access can outlive a single dialog. A network permission is usually all-or-nothing, not a domain allowlist.

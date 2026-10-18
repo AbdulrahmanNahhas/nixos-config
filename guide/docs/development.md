@@ -50,6 +50,8 @@ Java uses the declared Java extension and JDTLS for formatting on save. The exte
 
 C and C++ use Zed's built-in support, explicitly selecting clangd for formatting on save. Zed prefers a working clangd from the project PATH and otherwise downloads one. `.clang-format` controls style; `compile_commands.json` or `.clangd` supplies compiler standards and include paths. For CMake, configure with `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` and expose the generated database at the project root, such as a symlink to `build/compile_commands.json`. The shared `-std=c++20` fallback is cleared so C files are not parsed with a C++-only flag. Build tools and debuggers stay in project environments. No new persistence paths are declared; build validation does not prove Java import, completion or editor formatting at runtime.
 
+The security lesson owns agent credential-read policy and the limits of each sandbox. A reproducible devenv is still executable project code. Approving its environment, starting a language server or running a build in a normal terminal grants that code the terminal user's access. Review unfamiliar projects before granting trust; use a disposable VM with only the required project files when their code is untrusted.
+
 ## Local AI costs
 
 The optional local-AI module is currently parked. It would expose a loopback llama-swap endpoint and load models on demand. CUDA compilation can be expensive when Nixpkgs changes; importing the module has build consequences even if the service does not run at boot. Model files belong in retained storage and need their own space/backup policy. Provider-hosted inference has different privacy and account costs.

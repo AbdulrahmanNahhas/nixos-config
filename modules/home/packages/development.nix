@@ -11,8 +11,7 @@
     gh
     lazygit
 
-    # Sandboxing (used by Zed IDE AI Sandbox)
-    # bubblewrap
-    # socat
+    # Zed's agent requires a non-setuid bwrap on PATH for OS sandboxing.
+    bubblewrap
   ];
 }
