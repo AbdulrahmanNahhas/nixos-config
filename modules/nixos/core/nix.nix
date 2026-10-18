@@ -6,19 +6,12 @@
       "nix-command"
       "flakes"
     ];
-    # Only root is trusted. A trusted user can push arbitrary paths into the
-    # store and is effectively root; rebuilds go through the daemon anyway.
     trusted-users = [ "root" ];
 
-    # Declared system-wide so untrusted users still get cache hits. A
-    # non-trusted user cannot add these at runtime, which would otherwise make
-    # every devenv shell build from source.
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
       "https://devenv.cachix.org"
-      # Official CUDA cache: serves the CUDA runtime libraries llama-cpp-cuda
-      # links against, so only llama-cpp itself compiles locally.
       "https://cache.nixos-cuda.org"
     ];
     trusted-public-keys = [
@@ -44,8 +37,4 @@
     };
   };
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 }

@@ -484,17 +484,17 @@
     },
     {
       "id": "dev-shells",
-      "name": "devenv + direnv / nix-direnv",
+      "name": "devenv + direnv",
       "category": "Nix tooling & workflow",
-      "purpose": "Project-specific environments with cached activation.",
+      "purpose": "Native Fish environment activation with direct direnv loading in Zed; nix-direnv disabled.",
       "checks": [
         {
-          "file": "modules/nixos/core/nix.nix",
-          "pattern": "nix-direnv\\.enable\\s*=\\s*true"
+          "file": "modules/home/shell/development.nix",
+          "pattern": "nix-direnv\\.enable\\s*=\\s*false"
         },
         {
-          "file": "modules/home/packages/development.nix",
-          "pattern": "(?m)^\\s*devenv\\s*$"
+          "file": "modules/home/shell/development.nix",
+          "pattern": "programs\\.devenv\\s*=\\s*\\{\\s*enable\\s*=\\s*true;\\s*enableFishIntegration\\s*=\\s*true;"
         }
       ]
     },

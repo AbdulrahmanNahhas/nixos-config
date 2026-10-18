@@ -36,6 +36,7 @@ Preservation exposes selected backing directories/files at the paths application
 - Downloads is intentionally temporary. Move valuable downloads into a retained directory.
 - Flatpak directories derive from the catalog. Theme extensions are excluded.
 - KeePassXC settings and the Rust Book browser profile are now retained with private directory modes.
+- Development state retains direnv approvals, devenv trust/GC-root metadata, and Nix fetch/evaluation metadata in `~/.cache/nix`. Zoxide's learned directory rankings remain temporary by choice; Atuin's command history is retained separately. Project-local `.devenv` and `.direnv` survive when the project is under retained `~/Projects`; runtime sockets under `/run/user` remain temporary.
 - Runtime decrypted files under `/run/secrets` remain ephemeral.
 - Logs retain up to seven days / 128 MiB. Core dumps are disabled.
 

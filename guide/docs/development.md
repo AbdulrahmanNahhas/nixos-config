@@ -25,14 +25,20 @@
 Home Manager provides shared tools such as Zed, Delta, devenv, direnv, nixd, nixfmt, statix, and deadnix. Rust, Node, Bun, package managers, formatters, and language servers should follow each project’s requirements in its devenv configuration.
 
 ```
-devenv-new my-project
-# In an existing project with devenv.nix:
-devenv-enable
+# In a new project directory:
+devenv init --include-envrc
+# Review the generated files before these approvals:
+direnv allow
+devenv allow
 ```
 
-Your helpers initialize a new environment without replacing an existing one, or add the canonical .envrc if missing. Review .envrc before approval: entering a directory with an approved .envrc can execute its environment setup. Changing its contents requires new approval.
+Home Manager's `programs.devenv` installs devenv and enables its native Fish hook. Home Manager groups devenv and direnv in `modules/home/shell/development.nix`; direnv is installed for Zed with its terminal hooks and nix-direnv disabled. System Nix daemon/cache/cleanup policy stays in `modules/nixos/core/nix.nix`, and plain shared tools remain in `modules/home/packages/development.nix`. Native devenv activates a trusted project in a subshell; Zed's `load_direnv = "direct"` reads the project's `.envrc` independently for editor tools and tasks. An integrated terminal that already has `DEVENV_ROOT` does not need another native activation.
 
-Commit the project’s environment source and locks. Generated .devenv/.direnv state stays out of Git. Retained direnv approvals and devenv state avoid repeating trust setup every reboot. Nix GC roots protect referenced environments.
+For a new project, run `devenv init --include-envrc`, review the generated environment and `.envrc`, then run `direnv allow` and `devenv allow`. The approvals are separate: direnv approves `.envrc` contents, while devenv trusts the project directory. Changing `.envrc` requires renewed direnv approval. Existing projects need review and approvals, not another initialization.
+
+Use the standard devenv and direnv commands rather than custom shell helpers. Approval permits environment setup code to execute. Projects using `use flake` or `use nix` no longer receive nix-direnv's environment caching and GC-root handling.
+
+Commit the project's environment source and locks. Generated `.devenv`/`.direnv` state stays out of Git but should remain in a persistent project directory. Retained direnv approvals and devenv state avoid repeating trust setup every reboot. Verify that GC roots protect the environment's required store paths. This activation split does not fix missing caches or establish offline readiness: prepare dependencies while online, then test `devenv shell --offline` and the actual project workflow after reboot without networking. The Nix fetch/evaluation cache at `~/.cache/nix` is now declared persistent; devenv 2.4 keeps its evaluation database in each project's `.devenv` directory. Keep projects under `~/Projects` or another retained location. Global language/package-manager caches still need review for the actual project tooling; there is no blanket cache preservation.
 
 ## Editor ownership
 

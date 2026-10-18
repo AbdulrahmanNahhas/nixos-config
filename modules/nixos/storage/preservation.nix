@@ -177,6 +177,11 @@ in
           ".config/atuin"
           ".local/share/atuin" # Atuin history database
           {
+            # Avoid losing Nix fetch/evaluation metadata on every reboot.
+            directory = ".cache/nix";
+            mode = "0700";
+          }
+          {
             # Approved .envrc hashes; losing these prompts for direnv allow
             # after every reboot on the tmpfs root.
             directory = ".local/share/direnv";

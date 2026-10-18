@@ -3,7 +3,6 @@
   home.packages = with pkgs; [
     # Nix development
     deadnix
-    devenv
     nixd
     nixfmt
     statix
