@@ -1,5 +1,26 @@
 # App IDs are the single source for installation, exceptions, and saved Flatpak data.
 {
+  "com.heroicgameslauncher.hgl" = {
+    overrides.Context = {
+      # Wine games need XWayland and shared IPC even on a Wayland desktop.
+      sockets = [
+        "wayland"
+        "x11"
+        "pulseaudio"
+      ];
+      shared = [
+        "ipc"
+        "network"
+      ];
+      devices = [
+        "dri"
+        "input"
+      ];
+      # Upstream persists its sandbox home (including Games/Heroic) inside
+      # the app directory. Keep games there so the derived persistence owns them.
+      filesystems = [ "/run/udev:ro" ];
+    };
+  };
   "com.github.ADBeveridge.Raider" = { };
   "dev.geopjr.Tuba" = { };
   "io.gitlab.news_flash.NewsFlash" = {

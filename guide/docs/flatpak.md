@@ -51,3 +51,11 @@ Every catalog entry receives `!host:reset` before read-only GTK theme access, th
 PrismLauncher and Subtitle Composer have been removed from the managed catalog. With `uninstallUnmanaged = true`, the next successful system reconciliation can uninstall those system apps and prune PrismLauncher's managed override. Their old backing data under `/saved` remains until explicitly reviewed and removed; their per-app preservation mounts are no longer declared. There is no longer a PrismLauncher X11 exception in this catalog.
 
 The daily Flatpak timer updates apps independently of `flake.lock`. NixOS generation rollback does not restore a frozen Flatpak application/data snapshot. Removing the catalog entry stops managing its persistence, but old backing data under `/saved` should be removed only after a deliberate data review.
+
+## Heroic Games Launcher
+
+`com.heroicgameslauncher.hgl` uses verified Flathub. Its app-specific exception enables X11/XWayland and shared IPC for Wine games, network and audio, GPU rendering, and input devices for controllers. Read-only `/run/udev` access supplies device metadata. The shared credential-path denials still apply.
+
+Keep the default `~/Games/Heroic` location **inside Heroic's sandbox**. Upstream's `--persist=.` stores that sandbox home under `~/.var/app/com.heroicgameslauncher.hgl`, alongside launcher settings, downloaded runners, Wine prefixes, and saves stored there. The catalog automatically declares preservation of that entire directory under `/saved/home/aqua/.var/app/com.heroicgameslauncher.hgl`; activate the NixOS configuration before first launch to establish its preservation mount. This is separate from a host `~/Games/Heroic` folder, which is not granted or retained by this entry. External game libraries and Steam/Lutris integration need explicit path access and persistence review before use.
+
+Sign in to the desired stores in Heroic, then install a compatible runner through its Wine Manager. Select the runner for each game as needed; no store credentials or game-specific runner choices are managed by Nix. Installation and permission checks do not establish game compatibility or reboot persistence.

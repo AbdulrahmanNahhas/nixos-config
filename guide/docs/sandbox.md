@@ -22,6 +22,8 @@ Flatpak separates an application from much of the host, then grants capabilities
 
 `xdg-download:ro` gives read-only Downloads access. Without `:ro`, a filesystem grant normally permits writing. `dri` exposes graphics devices. The managed catalog has no unrestricted `all` device exception. Impression uses its upstream UDisks2 interface for image writing; Signal has GPU access instead of access to every device. Direct V4L2 webcam access is consequently unavailable to Signal under this policy; camera support requires a tested mediated implementation. An XWayland exception trades isolation for compatibility.
 
+Heroic has a scoped X11/shared-IPC exception for Wine games, plus GPU and input-device access for rendering and controllers. Its reviewed filesystem list keeps the default game library inside its persistent sandbox home and permits read-only udev metadata. The Flatpak lesson describes that storage choice; this declaration does not establish compatibility with every game or controller.
+
 ## Two different filesystem policies
 
 Denying `host` and `home` removes those broad grants. It does not remove narrower inherited permissions such as Documents. Every managed application now receives a filesystem reset before its explicit catalog allowlist, including read-only GTK theme paths. An upstream manifest update therefore cannot silently add another static filesystem path. Reviewed runtime endpoints for speech, GVfs and PipeWire are declared beside the apps that use them. Application-private storage and approved document-portal grants are separate from this static list.

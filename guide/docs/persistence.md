@@ -35,6 +35,7 @@ Preservation exposes selected backing directories/files at the paths application
 - Documents, Projects, Books, media, keyring state, browser state, editor data, and selected desktop state are retained.
 - Downloads is intentionally temporary. Move valuable downloads into a retained directory.
 - Flatpak directories derive from the catalog. Theme extensions are excluded.
+- Heroic's retained app directory includes its sandbox home and default game library; keep games and Wine prefixes inside that sandbox until another library path has explicit access and persistence. The Flatpak lesson owns the path and permission details.
 - KeePassXC settings and the Rust Book browser profile are now retained with private directory modes.
 - Native Nahhasio client state at `~/.local/state/nahhasio` is retained with mode `0700`. Media files have separate storage paths; this declaration does not establish that every client feature persists its state there.
 - Development state retains direnv approvals, devenv trust/GC-root metadata, and Nix fetch/evaluation metadata in `~/.cache/nix`. Zoxide's learned directory rankings remain temporary by choice; Atuin's command history is retained separately. Project-local `.devenv` and `.direnv` survive when the project is under retained `~/Projects`; runtime sockets under `/run/user` remain temporary.
