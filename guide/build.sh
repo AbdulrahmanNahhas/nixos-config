@@ -21,7 +21,13 @@ if command -v node >/dev/null 2>&1; then
   node check.mjs "$build_dir"
 fi
 for page in "$build_dir"/*.html; do
-  sed 's/[[:blank:]]*$//' "$page" > "./$(basename -- "$page")"
+  # Hugo's injected generator tag can mix spaces and a leading tab. Normalize
+  # indentation as well as trailing whitespace so generated pages pass diff checks.
+  sed -E \
+    -e ':indent' \
+    -e 's/^([[:blank:]]* )\t/\1    /' \
+    -e 't indent' \
+    -e 's/[[:blank:]]*$//' "$page" > "./$(basename -- "$page")"
 done
 for page in ./*.html; do
   if [[ ! -f "$build_dir/$(basename -- "$page")" ]]; then

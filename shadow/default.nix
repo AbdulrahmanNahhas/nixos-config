@@ -30,6 +30,14 @@
   networking.hostName = hostname;
   system.stateVersion = "26.05";
 
+  # 16 GiB RAM and 20 CPU threads: the defaults allow 20 simultaneous builds,
+  # each told to use every core. Leave headroom for the desktop and dev tools.
+  # Builders that ignore NIX_BUILD_CORES still need workload-specific limits.
+  nix.settings = {
+    max-jobs = 2;
+    cores = 4;
+  };
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;

@@ -32,6 +32,14 @@
 
 LUKS protects retained data while the disk is locked. It does not block malware running as you after login. SOPS protects selected secrets in Git/store copies, but applications consuming them can read them. An ephemeral root removes undeclared root state after reboot, while preserved histories and app profiles remain.
 
+Kernel crash dumps are discarded through `kernel.core_pattern`, with systemd-coredump disabled. Disabling the systemd handler alone is insufficient: the pinned NixOS module falls back to a `core` file in the crashing process's working directory. The discard helper prevents that fallback from saving process memory, including credentials and decrypted documents. Debugging with saved crash dumps requires a deliberate temporary policy change. This does not erase existing dumps or control an application's own crash-report files. Linux documents the pipe-handler behavior in its [core_pattern reference](https://docs.kernel.org/admin-guide/sysctl/kernel.html#core-pattern).
+
+The `fs.protected_regular` and `fs.protected_fifos` policies extend sticky-directory protections to group-writable directories as well as world-writable ones. They constrain certain opens of files owned by other users, reducing temporary-file substitution attacks; an old script relying on those opens may need repair. The [kernel filesystem reference](https://docs.kernel.org/admin-guide/sysctl/fs.html) explains their exact scope.
+
+## Shell-history privacy
+
+Atuin's history search remains available locally. Automatic sync and independent update checks are disabled declaratively; Nix owns package updates. Manual `atuin sync` remains possible, and previously uploaded history is not deleted. The built-in secret-pattern filter is explicitly enabled, but only recognizes supported formats and does not remove earlier entries. Keep secrets out of command arguments and history. The configuration and data directories, including sync identity and encryption keys, use mode `0700`. This does not constrain other programs running as Aqua. See [Atuin's configuration reference](https://docs.atuin.sh/18.17/configuration/config/) for the settings and limitations.
+
 USBGuard controls USB device authorization. Its built-in allowlist is essential: blindly blocking those devices can break the keyboard, camera, and Bluetooth. This configuration supplies an immutable declarative policy: `usbguard allow-device <id>` approves temporarily, while permanent approvals must be added to `services.usbguard.rules`. The `-p` IPC flag cannot write the Nix-store policy. Review a device before allowing it.
 
 AppArmor is loaded, but useful protection requires enforced profiles that cover actual workloads. A native app without a profile is not magically confined. Service hardening can restrict writable paths, devices, namespaces, privileges, and address families. Add restrictions with the service’s data and workflow in mind.

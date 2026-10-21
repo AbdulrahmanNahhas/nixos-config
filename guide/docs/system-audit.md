@@ -11,6 +11,28 @@
 
 Audit date: **2026-10-11**. Goal: modern hardware support, measured battery efficiency, recoverability, and understandable maintenance. Recommendations and primary sources: [research](research.md).
 
+## Follow-up: 2026-10-21
+
+This review started from a clean worktree and covered the flake/lock, host and disk declarations, NixOS modules, Home Manager applications/shell/desktop configuration, and the existing security/recovery roadmap. The main host Nixpkgs input maps to lock node `nixpkgs_2`, revision `02c087f3fe673c9e317f206a627cb6b910336dbe`, dated 2026-10-20. The older `nixpkgs` node belongs to a separate input dependency; it is not the host pin. No input revisions were changed.
+
+The merged configuration and read-only host sample confirmed a 20-thread CPU and approximately 14 GiB usable RAM on the nominal 16 GiB laptop. Nix defaulted to automatic concurrent jobs and all-core builders. DNSCrypt, PPD and smartd were running. The firewall declares no open TCP/UDP ports, SSH is disabled, and the listening-socket sample had only loopback DNS TCP listeners. UDP sockets included WireGuard and multicast DNS; this sample does not establish effective firewall rules or which application owns every multicast socket.
+
+| Finding | Declarative revision | Practical limit |
+| --- | --- | --- |
+| Disabling systemd-coredump left `kernel.core_pattern = core`; the live sysctl agreed. | Discard the kernel dump stream instead of writing a working-directory core file. | Application-owned crash reports and existing files are separate; saved kernel dumps need an explicit debugging policy. |
+| File/FIFO sticky-directory protections were at level 1 in the live sample. | Extend both to group-writable sticky directories at level 2. | Legacy scripts relying on prohibited cross-owner opens need repair. |
+| Atuin had no declared privacy settings and its configuration/data directories used mode 0755. | Disable automatic sync/update checks, retain the built-in secret filter, and use private directory modes for Atuin and GitHub CLI state. | Manual sync remains possible; historical/local/remote entries are not deleted. |
+| NetworkManager had no declared connection privacy defaults beyond the existing address randomization. | Default IPv4/IPv6 DHCP hostname sending to false. | Explicit stored-profile choices can override this; local DHCP name registration can change. |
+| Build defaults can oversubscribe the laptop during parallel source builds. | Start with two Nix jobs and four cores per builder in the host configuration. | This is a contention-reduction policy, not a measured speedup or hard resource limit. |
+| Persistent `nh-clean` catch-up had normal scheduling priority. | Use idle CPU/I/O scheduling and nice 19. | Retention stays unchanged; Nix optimisation and scrub already have low priority upstream. |
+| Scrub/PPD state was not retained; smartd had no explicit writable save-state prefix. | Preserve the actual service-state paths and give smartd an explicit private state directory/prefix. | Migrate existing state before new mounts hide it; reboot survival and alert delivery remain unverified. |
+
+The host's only failed unit in this sample was `fwupd-refresh.service`. Its journal showed an LVFS HTTP 503 response and a later metadata download timeout. This is evidence of failed firmware-metadata retrieval, not evidence that a Nix module is malformed. Firmware support remains enabled; no firmware was installed or runtime service restarted.
+
+Formatting, the flake check including gitleaks, and the complete no-link Shadow system build passed for the configuration revision. The guide includes the new behavior and pre-activation migration notes. No activation, state migration, cleanup, reboot, firmware update, account sync or history deletion was performed. These are source/build results; battery improvement, DHCP behavior, resumed-session behavior and persistence after reboot require host acceptance.
+
+The highest remaining priorities are independently recoverable encrypted backups and a restore drill; prepared Secure Boot recovery/enrollment; actual AppArmor profile coverage; the Signal database-key migration rehearsal; and repeatable battery/suspend measurements. The PAM workaround and known-working graphics/power defaults retain their existing acceptance requirements. These decisions need concrete recovery material or measurements, so this pass does not replace them with speculative settings.
+
 ## Follow-up: 2026-10-12
 
 The initial audit below is dated evidence. The current source selects the NVIDIA

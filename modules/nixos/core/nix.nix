@@ -37,4 +37,11 @@
     };
   };
 
+  # Persistent cleanup can catch up just after login. Let interactive work
+  # take priority; keep the existing schedule and generation-retention policy.
+  systemd.services.nh-clean.serviceConfig = {
+    Nice = 19;
+    CPUSchedulingPolicy = "idle";
+    IOSchedulingClass = "idle";
+  };
 }

@@ -78,6 +78,16 @@ in
           mode = "0755";
         }
         "/var/lib/systemd/timers"
+        # Scrub progress/results and the selected power profile must outlive
+        # the tmpfs root. These are the services' real StateDirectory paths.
+        "/var/lib/btrfs"
+        "/var/lib/power-profiles-daemon"
+        {
+          directory = "/var/lib/smartmontools";
+          user = "root";
+          group = "root";
+          mode = "0700";
+        }
         {
           directory = "/var/log/journal";
           user = "root";
@@ -165,7 +175,10 @@ in
           }
 
           # ── Git & Forge CLI Tools ────────────────────────────
-          ".config/gh"
+          {
+            directory = ".config/gh";
+            mode = "0700";
+          }
           {
             directory = ".local/share/keyrings";
             mode = "0700";
@@ -206,8 +219,15 @@ in
 
           # ── Shell History & State ────────────────────────────
           ".local/state/nix"
-          ".config/atuin"
-          ".local/share/atuin" # Atuin history database
+          {
+            directory = ".config/atuin";
+            mode = "0700";
+          }
+          {
+            # Command history, sync identity and encryption key.
+            directory = ".local/share/atuin";
+            mode = "0700";
+          }
 
           {
             # Avoid losing Nix fetch/evaluation metadata on every reboot.

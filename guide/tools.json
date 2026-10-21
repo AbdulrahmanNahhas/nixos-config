@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-12",
+  "reviewed": "2026-10-21",
   "groups": [
     "Firmware & boot security",
     "Disk & filesystem architecture",
@@ -119,7 +119,7 @@
       "id": "disk-health",
       "name": "Btrfs scrub + SMART monitoring",
       "category": "Disk & filesystem architecture",
-      "purpose": "Scheduled checksum verification and drive-health monitoring; verify completed runs and alert delivery.",
+      "purpose": "Scheduled checksum verification and drive-health monitoring with retained progress/state; verify completed runs and alert delivery.",
       "checks": [
         {
           "file": "modules/nixos/storage/default.nix",
@@ -127,7 +127,7 @@
         },
         {
           "file": "modules/nixos/storage/default.nix",
-          "pattern": "services\\.smartd\\.enable\\s*=\\s*true"
+          "pattern": "services\\.smartd\\s*=\\s*\\{(?s:.*?)enable\\s*=\\s*true"
         }
       ]
     },
@@ -185,7 +185,7 @@
       "id": "hardening",
       "name": "Kernel mitigations + AppArmor",
       "category": "Kernel, drivers & power",
-      "purpose": "Kernel access restrictions and AppArmor support; enablement does not imply full profile coverage.",
+      "purpose": "Kernel access and sticky-directory restrictions, discarded kernel crash dumps, and AppArmor support; enablement does not imply full profile coverage.",
       "checks": [
         {
           "file": "modules/nixos/core/boot.nix",
@@ -558,7 +558,7 @@
       "id": "maintenance",
       "name": "Nix store optimisation + cleanup",
       "category": "Backup & maintenance",
-      "purpose": "Scheduled deduplication and generation retention.",
+      "purpose": "Scheduled deduplication and generation retention; cleanup yields CPU and I/O priority to interactive work.",
       "checks": [
         {
           "file": "modules/nixos/core/nix.nix",

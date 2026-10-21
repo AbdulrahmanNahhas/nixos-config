@@ -66,6 +66,14 @@
     atuin = {
       enable = true;
       enableFishIntegration = true;
+      settings = {
+        # History stays local unless an explicit `atuin sync` is requested.
+        auto_sync = false;
+        # Nix owns upgrades; avoid Atuin's independent update requests.
+        update_check = false;
+        # A best-effort filter, not a replacement for keeping secrets out of argv.
+        secrets_filter = true;
+      };
     };
     fzf = {
       enable = true;

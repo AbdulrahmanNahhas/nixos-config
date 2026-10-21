@@ -1,4 +1,4 @@
-{ username, ... }:
+{ pkgs, username, ... }:
 {
   # Memory-safe sudo. Disables the C sudo (the modules assert against each
   # other), so sudoers settings must live under sudo-rs, not security.sudo.
@@ -32,9 +32,18 @@
   # per-service profiles rather than a policy in itself.
   security.apparmor.enable = true;
 
-  # Core dumps can contain credentials, decrypted documents, and other process
-  # memory. Keep crash diagnostics opt-in instead of persisting them by default.
+  # Disabling systemd-coredump alone falls back to a `core` file in the
+  # crashing process's working directory. Discard the kernel's dump stream
+  # too, so a crash cannot write credentials or decrypted documents to disk.
   systemd.coredump.enable = false;
+  boot.kernel.sysctl = {
+    "kernel.core_pattern" = "|${pkgs.coreutils}/bin/false";
+
+    # Extend the kernel's sticky-directory file/FIFO protections to group-
+    # writable directories too; prevent privileged opens of another user's file.
+    "fs.protected_regular" = 2;
+    "fs.protected_fifos" = 2;
+  };
 
   # Keep enough encrypted, persistent history to diagnose failures that require
   # booting an older generation, while bounding retained activity tightly.

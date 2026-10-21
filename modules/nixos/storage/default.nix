@@ -14,5 +14,14 @@
   zramSwap.enable = true;
 
   # Monitor the NVMe drive's health and notify logged-in users on warnings.
-  services.smartd.enable = true;
+  services.smartd = {
+    enable = true;
+    # The package has no default writable state prefix on NixOS. Match the
+    # explicit systemd directory and Preservation entry below.
+    extraOptions = [ "--savestates=/var/lib/smartmontools/" ];
+  };
+  systemd.services.smartd.serviceConfig = {
+    StateDirectory = "smartmontools";
+    StateDirectoryMode = "0700";
+  };
 }
