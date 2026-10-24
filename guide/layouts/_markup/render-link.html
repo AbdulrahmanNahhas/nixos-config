@@ -1,8 +1,0 @@
-{{ $url := .Destination }} {{ $path := index (split $url "#") 0 }} {{ if and (not (strings.Contains
-$url "://")) (strings.HasSuffix $path ".md") }} {{ if eq (path.Base $path) "README.md" }} {{ $url =
-"maintaining.html" }} {{ else }} {{ $url = printf "%s#guide-%s" "reference.html" (strings.TrimSuffix
-".md" (path.Base $path)) }} {{ end }} {{ else if eq $url "../tools.json" }} {{ $url =
-"technologies.html" }} {{ end }}
-<a href="{{ $url | safeURL }}" {{ with .Title }} title="{{ . }}" {{ end }}
-    >{{ .Text | safeHTML }}</a
->

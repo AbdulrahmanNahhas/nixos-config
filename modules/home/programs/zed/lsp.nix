@@ -6,8 +6,7 @@ _: {
       };
     };
 
-    # Let the Oxc extension prefer each project's dependencies, including
-    # pnpm installations, over its own fallback installation.
+    # Prefer project dependencies, including pnpm, over extension fallbacks.
     oxlint = {
       initialization_options.settings = {
         run = "onSave";

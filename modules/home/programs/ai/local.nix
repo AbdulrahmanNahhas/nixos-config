@@ -7,14 +7,12 @@ let
   llama-server = lib.getExe' pkgs.llama-cpp-cuda "llama-server";
   models = "/saved/models";
 
-  # One OpenAI-compatible endpoint that loads the requested model on demand,
-  # unloads it after `ttl` seconds, and serves llama.cpp's chat UI at
-  # /upstream/<model>/. `--jinja` enables the native tool-call template.
+  # Load models on demand; unload after ttl. --jinja enables tool templates.
+  # Chat UI: /upstream/<model>/.
   settings = {
     healthCheckTimeout = 120;
     models = {
-      # q8 KV cache keeps 32k context inside the 8 GiB of VRAM. The dGPU wakes
-      # on load and sleeps again after the ttl unload.
+      # Fit 32k context in 8 GiB VRAM with q8 KV cache; sleep the GPU after unload.
       qwen-main = {
         cmd = "${llama-server} -m ${models}/Qwen3.5-9B-Q4_K_M.gguf -ngl 99 -c 32768 -fa on -ctk q8_0 -ctv q8_0 --jinja --port \${PORT} --host 127.0.0.1";
         ttl = 600;
@@ -71,8 +69,7 @@ in
     end
   '';
 
-  # Zed's agent panel: pick "Local" as the provider. It asks for an API key
-  # once; any value works, llama-swap ignores it.
+  # Select Zed’s Local provider; llama-swap accepts any API-key value.
   programs.zed-editor.userSettings.language_models.openai_compatible.Local = {
     api_url = "http://127.0.0.1:8080/v1";
     available_models = [

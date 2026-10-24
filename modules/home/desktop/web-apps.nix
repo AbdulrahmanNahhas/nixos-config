@@ -1,7 +1,6 @@
 { pkgs, config, ... }:
 {
-  # WhatsApp Web installed as an app from Brave's own menu; the app id is
-  # derived from its URL, so it is stable across profiles.
+  # Use Brave’s URL-derived WhatsApp app ID.
   xdg.desktopEntries.brave-whatsapp = {
     name = "WhatsApp";
     genericName = "Messaging";

@@ -1,7 +1,5 @@
 binds {
-    // ─────────────────────────────────────────────────────────────────────────
     // Core shell
-    // ─────────────────────────────────────────────────────────────────────────
 
     // Visual view of all workspaces and windows.
     Mod+Tab repeat=false hotkey-overlay-title="Window Overview" {
@@ -62,9 +60,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Session and security
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+Alt+L repeat=false allow-inhibiting=false hotkey-overlay-title="Lock Screen" {
         spawn "noctalia" "msg" "session" "lock"
@@ -75,8 +71,7 @@ binds {
         quit
     }
 
-    // Escape hatch for remote desktop, virtual machines, games, and
-    // applications that request exclusive shortcuts.
+    // Allow shortcut inhibition to be escaped in games, VMs and remote sessions.
     Mod+Escape repeat=false allow-inhibiting=false hotkey-overlay-title="Release Captured Shortcuts" {
         toggle-keyboard-shortcuts-inhibit
     }
@@ -86,9 +81,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Audio
-    // ─────────────────────────────────────────────────────────────────────────
 
     XF86AudioRaiseVolume allow-when-locked=true {
         spawn "wpctl" "set-volume" "-l" "1.0" "@DEFAULT_AUDIO_SINK@" "3%+"
@@ -123,12 +116,9 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Brightness
-    // ─────────────────────────────────────────────────────────────────────────
 
-    // The internal display is driven by the AMD iGPU. Explicitly selecting its
-    // backlight prevents brightnessctl from choosing the NVIDIA interface.
+    // Select AMD’s backlight; automatic selection may choose NVIDIA.
     XF86MonBrightnessUp allow-when-locked=true {
         spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%+"
     }
@@ -138,9 +128,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Window state
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+Q repeat=false hotkey-overlay-title="Close Window" {
         close-window
@@ -173,9 +161,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Focus
-    // ─────────────────────────────────────────────────────────────────────────
 
     // Arrow keys: horizontal window focus, vertical workspace navigation.
     Mod+Left {
@@ -195,9 +181,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Move windows and columns
-    // ─────────────────────────────────────────────────────────────────────────
 
 
     Mod+Shift+Left hotkey-overlay-title=null {
@@ -217,9 +201,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Column positions
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+Home {
         focus-column-first
@@ -238,9 +220,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Workspaces
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+U hotkey-overlay-title="Next Workspace" {
         focus-workspace-down
@@ -292,9 +272,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Numbered workspaces
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
@@ -317,9 +295,7 @@ binds {
     Mod+Shift+9 { move-column-to-workspace 9; }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Tabs and column grouping
-    // ─────────────────────────────────────────────────────────────────────────
 
     // Super + Alt + Left/Right to stack into or pop out of adjacent columns
     Mod+Alt+Left { consume-or-expel-window-left; }
@@ -334,9 +310,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Width and positioning
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+R hotkey-overlay-title="Cycle Column Width" {
         switch-preset-column-width
@@ -373,12 +347,9 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Occasional external-monitor support
-    // ─────────────────────────────────────────────────────────────────────────
 
-    // These bindings are retained but hidden from the shortcut overlay because
-    // the laptop normally runs with one output.
+    // Keep external-monitor bindings hidden on the usual single-output setup.
     Mod+Ctrl+Left hotkey-overlay-title=null {
         focus-monitor-left
     }
@@ -436,9 +407,7 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Mouse-wheel navigation
-    // ─────────────────────────────────────────────────────────────────────────
 
     Mod+WheelScrollDown cooldown-ms=150 {
         focus-workspace-down
@@ -473,12 +442,9 @@ binds {
     }
 
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Screen recording
 
-    // ─────────────────────────────────────────────────────────────────────────
     // Screenshots
-    // ─────────────────────────────────────────────────────────────────────────
 
     Print repeat=false hotkey-overlay-title="Screenshot Area" {
         screenshot show-pointer=false

@@ -15,8 +15,7 @@
     };
 
     preservation.url = "github:nix-community/preservation";
-    # Pinned past v0.7.0 for `overrides.writeMode = "replace"`, which is not in a
-    # tagged release yet.
+    # Pin the unreleased overrides.writeMode = "replace" support.
     nix-flatpak.url = "github:gmodena/nix-flatpak/0f392e302963bce69787c495aa95ef1d50dda889";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -25,10 +24,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # OpenAI's signed Linux .deb (ChatGPT + Codex GUI) repackaged for Nix;
-    # nixpkgs' `chatgpt` is the macOS bundle. Community-maintained: the .deb
-    # hash it pins is verified against OpenAI's apt signature, but the Nix
-    # wrapper itself is third-party code, so glance at the diff on bumps.
+    # Community wrapper for the signed Linux .deb; review wrapper changes on updates.
     codex-desktop-linux = {
       url = "github:ilysenko/codex-desktop-linux";
       inputs.nixpkgs.follows = "nixpkgs";

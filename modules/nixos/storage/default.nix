@@ -1,23 +1,20 @@
 {
   imports = [ ./preservation.nix ];
 
-  # /nix, /saved, and /swap are subvolumes of one Btrfs filesystem. Scrubbing
-  # one mount checks all data and metadata without scheduling duplicate work.
+  # One scrub covers the shared /nix, /saved and /swap filesystem.
   services.btrfs.autoScrub = {
     enable = true;
     fileSystems = [ "/saved" ];
     interval = "monthly";
   };
 
-  # Compressed swap in RAM, tried before the 16 GiB swapfile (priority 5 vs
-  # -1). Keeps the disk swap as overflow for large model loads.
+  # Prefer zRAM (priority 5); use disk swap (-1) as overflow.
   zramSwap.enable = true;
 
   # Monitor the NVMe drive's health and notify logged-in users on warnings.
   services.smartd = {
     enable = true;
-    # The package has no default writable state prefix on NixOS. Match the
-    # explicit systemd directory and Preservation entry below.
+    # Match SMART’s save prefix to its persistent StateDirectory.
     extraOptions = [ "--savestates=/var/lib/smartmontools/" ];
   };
   systemd.services.smartd.serviceConfig = {

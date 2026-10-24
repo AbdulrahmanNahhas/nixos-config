@@ -37,8 +37,7 @@
     };
   };
 
-  # Persistent cleanup can catch up just after login. Let interactive work
-  # take priority; keep the existing schedule and generation-retention policy.
+  # Give interactive work priority over scheduled cleanup.
   systemd.services.nh-clean.serviceConfig = {
     Nice = 19;
     CPUSchedulingPolicy = "idle";

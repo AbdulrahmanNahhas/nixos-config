@@ -16,8 +16,7 @@
         "dri"
         "input"
       ];
-      # Upstream persists its sandbox home (including Games/Heroic) inside
-      # the app directory. Keep games there so the derived persistence owns them.
+      # Keep Heroic games in its sandbox home for derived persistence.
       filesystems = [ "/run/udev:ro" ];
     };
   };

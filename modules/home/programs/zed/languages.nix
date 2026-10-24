@@ -8,8 +8,7 @@ let
       "!biome"
       "..."
     ];
-    # Mutable settings retain old entries after activation. Explicitly turn
-    # off the former Biome actions as well as broad quick fixes.
+    # Explicitly disable retained Biome actions and broad quick fixes.
     code_actions_on_format = {
       "source.fixAll.biome" = false;
       "source.organizeImports.biome" = false;
@@ -91,8 +90,7 @@ in
         ];
         format_on_save = "on";
       };
-      # Go templates can contain HTML attributes that plain HTML formatters
-      # cannot parse. Use a template formatter only after one is configured.
+      # Leave Go templates unformatted until a compatible formatter is configured.
       "Go HTML Template" = {
         format_on_save = "off";
         formatter = "none";

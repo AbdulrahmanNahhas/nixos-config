@@ -433,7 +433,7 @@ telemetry_enabled = false
     show_icons = true
     sort_by_usage = false
 
-        # ── Arbitrary Shell Command ──────────────────────────────────────────────────
+        # Arbitrary Shell Command
 
         [shell.launcher.dmenu.entry.command]
         label = "Command"
@@ -443,7 +443,7 @@ telemetry_enabled = false
         freeform = true
         exec = '{query}'
 
-        # ── NixOS System Maintenance ────────────────────────────────────────────────
+        # NixOS System Maintenance
 
         [shell.launcher.dmenu.entry.nixos]
         label = "NixOS Management"
@@ -477,7 +477,7 @@ telemetry_enabled = false
         ghostty -e fish -lc "$cmd; exec fish"
         '''
 
-        # ── Local AI (uncomment with home/programs/ai/local.nix) ───────────────────
+        # Local AI (uncomment with home/programs/ai/local.nix)
 #
 #         [shell.launcher.dmenu.entry.ai]
 #         label = "Local AI"
@@ -504,7 +504,7 @@ telemetry_enabled = false
 #         esac
 #         '''
 
-        # ── Nix Package Search ───────────────────────────────────────────────────────
+        # Nix Package Search
 
         [shell.launcher.dmenu.entry.search]
         label = "Nix Package Search"
@@ -514,7 +514,7 @@ telemetry_enabled = false
         freeform = true
         exec = "ghostty -e fish -lc 'sys-search $argv[1]; exec fish' -- \"{query}\""
 
-        # ── Configuration Editing ────────────────────────────────────────────────────
+        # Configuration Editing
 
         [shell.launcher.dmenu.entry.edit_nix]
         label = "Edit Nix Config"
@@ -524,7 +524,7 @@ telemetry_enabled = false
         command = 'printf "Zed (GUI)\tOpen nix-config in Zed\n"'
         exec = 'zeditor /saved/nixos-config'
 
-        # ── Window Controls ──────────────────────────────────────────────────────────
+        # Window Controls
 
         [shell.launcher.dmenu.entry.kill_window]
         label = "Kill Active Window"
@@ -534,7 +534,7 @@ telemetry_enabled = false
         command = 'printf "Kill Active Window\tClose current window\n"'
         exec = 'niri msg action close-window'
 
-        # ── Noctalia Settings ────────────────────────────────────────────────────────
+        # Noctalia Settings
 
         [shell.launcher.dmenu.entry.noctalia_settings]
         label = "Noctalia Settings"
@@ -544,7 +544,7 @@ telemetry_enabled = false
         command = 'printf "Noctalia Settings\tOpen settings panel\n"'
         exec = 'noctalia msg settings-open'
 
-        # ── Wallpaper Picker ─────────────────────────────────────────────────────────
+        # Wallpaper Picker
 
         [shell.launcher.dmenu.entry.wall]
         label = "Wallpaper"
@@ -554,7 +554,7 @@ telemetry_enabled = false
         command = 'printf "Wallpaper Picker\tOpen Noctalia wallpaper panel\n"'
         exec = 'noctalia msg panel-toggle wallpaper'
 
-        # ── Interactive Sub-Menu: Audio Volume ────────────────────────────────────────
+        # Interactive Sub-Menu: Audio Volume
 
         [shell.launcher.dmenu.entry.volume]
         label = "Audio Volume"
@@ -564,7 +564,7 @@ telemetry_enabled = false
         command = 'printf "Set Audio Volume\tOpen interactive volume picker\n"'
         exec = 'LEVEL="$(printf "%s\n" 25% 50% 75% 100% 125% 150% | noctalia dmenu -p "Set Sink Volume")"; [ -n "$LEVEL" ] && noctalia msg volume-set "$LEVEL"'
 
-        # ── Interactive Sub-Menu: Power Profiles ─────────────────────────────────────
+        # Interactive Sub-Menu: Power Profiles
 
         [shell.launcher.dmenu.entry.power_profile]
         label = "Power Profile"
@@ -574,7 +574,7 @@ telemetry_enabled = false
         command = 'printf "Change Power Profile\tSelect performance or saver mode\n"'
         exec = 'MODE="$(printf "%s\n" performance balanced power-saver | noctalia dmenu -p "Power Profile")"; [ -n "$MODE" ] && noctalia msg power-set "$MODE"'
 
-        # ── Built-in Launcher Providers ──────────────────────────────────────────────
+        # Built-in Launcher Providers
 
         [shell.launcher.providers.calculator]
         global = true

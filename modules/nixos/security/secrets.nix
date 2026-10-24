@@ -10,9 +10,7 @@ in
 {
   sops = {
     age = {
-      # This identity lives on the encrypted, persistent /saved filesystem.
-      # Provision and back it up before activating a configuration that declares
-      # encrypted secrets; generating a replacement cannot decrypt old secrets.
+      # Back up this age key before activation; a replacement cannot decrypt old secrets.
       keyFile = "/saved/var/lib/sops-nix/key.txt";
       generateKey = false;
     };
@@ -25,8 +23,7 @@ in
         neededForUsers = true;
       };
 
-      # Native NetworkManager can import this runtime file when needed.
-      # Existing NetworkManager connections stay authoritative and untouched.
+      # Provide a runtime VPN import file; existing NetworkManager profiles stay authoritative.
       vpn-shadow = {
         sopsFile = encryptedSecretRoot + /wireguard-shadow.conf.enc;
         format = "binary";

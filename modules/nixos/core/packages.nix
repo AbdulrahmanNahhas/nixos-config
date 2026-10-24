@@ -3,13 +3,13 @@
   programs.fish.enable = true;
 
   environment.systemPackages = with pkgs; [
-    # ─── Network / Downloads ─── #
+    # Network / Downloads
     curl
 
-    # ─── Version Control ─── #
+    # Version Control
     git
 
-    # ─── System Utilities ─── #
+    # System Utilities
     usbutils # lsusb
     pciutils # lspci
 

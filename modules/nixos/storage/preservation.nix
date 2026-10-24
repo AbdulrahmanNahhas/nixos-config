@@ -48,7 +48,7 @@ in
           how = "symlink";
         }
 
-        # ── GTK application settings ─────────────────────────
+        # GTK application settings
         {
           file = "/home/${username}/.config/dconf/user";
           how = "symlink";
@@ -70,16 +70,14 @@ in
         }
 
         {
-          # tuigreet's remembered user and session; without it the greeter
-          # forgets both on every boot of the tmpfs root.
+          # Retain the greeter’s selected user and session.
           directory = "/var/cache/tuigreet";
           user = "greeter";
           group = "greeter";
           mode = "0755";
         }
         "/var/lib/systemd/timers"
-        # Scrub progress/results and the selected power profile must outlive
-        # the tmpfs root. These are the services' real StateDirectory paths.
+        # Retain scrub results and the selected power profile.
         "/var/lib/btrfs"
         "/var/lib/power-profiles-daemon"
         {
@@ -96,8 +94,7 @@ in
         }
         "/var/lib/kavita"
         {
-          # DynamicUser state: systemd recreates the public /var/lib symlink
-          # and assigns the private directory's runtime ownership.
+          # Persist private state; systemd manages the public link and runtime owner.
           directory = "/var/lib/private/dnscrypt-proxy";
           user = "root";
           group = "root";
@@ -111,8 +108,7 @@ in
           mode = "0755";
         }
         {
-          # The hardware module selects iwd; its saved Wi-Fi credentials
-          # live here independently of NetworkManager's connection profiles.
+          # iwd stores Wi-Fi credentials separately from NetworkManager profiles.
           directory = "/var/lib/iwd";
           user = "root";
           group = "root";
@@ -137,7 +133,7 @@ in
         commonMountOptions = [ "x-gvfs-hide" ];
 
         directories = [
-          # ── XDG User Directories ─────────────────────────────
+          # XDG User Directories
           "Desktop"
           "Documents"
           "Music"
@@ -148,7 +144,7 @@ in
           "Videos"
           "Books"
 
-          # ── Identity / Secrets ───────────────────────────────
+          # Identity / Secrets
           {
             directory = ".ssh";
             mode = "0700";
@@ -163,8 +159,7 @@ in
             mode = "0700";
           }
           {
-            # Codex CLI and the ChatGPT desktop app: ChatGPT login
-            # (auth.json), config.toml, sessions, plugins, and skills.
+            # Retain agent login, settings, sessions, plugins and skills.
             directory = ".codex";
             mode = "0700";
           }
@@ -174,7 +169,7 @@ in
             mode = "0700";
           }
 
-          # ── Git & Forge CLI Tools ────────────────────────────
+          # Git & Forge CLI Tools
           {
             directory = ".config/gh";
             mode = "0700";
@@ -184,16 +179,15 @@ in
             mode = "0700";
           }
 
-          # ── Web Browser ──────────────────────────────────────
+          # Web Browser
           {
             directory = ".config/BraveSoftware/Brave-Origin";
             mode = "0700";
           } # Brave history, bookmarks, extensions, sessions, and cookies
 
         ]
-        # ── Flatpak Application Data ───────────────────────────
-        # Derived from the Flatpak module so the two lists cannot drift. The
-        # GTK theme extensions installed there have no per-app data.
+        # Flatpak Application Data
+        # Derive app data from the catalog; theme extensions have no app data.
         ++ map (appId: {
           directory = ".var/app/${appId}";
           mode = "0700";
@@ -205,7 +199,7 @@ in
             mode = "0700";
           }
 
-          # ── Editor / IDE State ───────────────────────────────
+          # Editor / IDE State
           ".local/share/zed"
           ".config/zed"
           ".local/share/delta"
@@ -217,7 +211,7 @@ in
             mode = "0700";
           }
 
-          # ── Shell History & State ────────────────────────────
+          # Shell History & State
           ".local/state/nix"
           {
             directory = ".config/atuin";
@@ -235,8 +229,7 @@ in
             mode = "0700";
           }
           {
-            # Approved .envrc hashes; losing these prompts for direnv allow
-            # after every reboot on the tmpfs root.
+            # Retain direnv approvals across reboots.
             directory = ".local/share/direnv";
             user = username;
             group = "users";
@@ -250,11 +243,11 @@ in
             mode = "0700";
           }
 
-          # ── GNOME Calendar / Evolution Data Server ───────────────
+          # GNOME Calendar / Evolution Data Server
           ".local/share/evolution"
           ".config/evolution"
 
-          # ── Desktop Session State ────────────────────────────
+          # Desktop Session State
           {
             # Noctalia runtime state and setup wizard flags
             directory = ".local/state/noctalia";
@@ -264,34 +257,31 @@ in
           }
           ".local/share/noctalia" # Plugin files and downloads
 
-          # ── ChatGPT Desktop ──────────────────────────────────
+          # ChatGPT Desktop
           {
-            # Electron profile of the ChatGPT app (window state, local data;
-            # the session token itself is in the keyring above).
+            # Retain the desktop profile; session tokens live in the keyring.
             directory = ".config/Codex";
             mode = "0700";
           }
-          # ~400 MB of Node/Python/LibreOffice the app fetches on first launch
-          # for its document tools; not worth re-downloading every boot.
+          # Retain downloaded document runtimes across reboots.
           ".cache/codex-runtimes"
 
-          # ── Vulkan Shader Caches ──────────────────────────────────
-          # Steam's per-game shadercache is below .local/share/Steam; retain the
-          # driver-level compiled caches too so RADV/Mesa can reuse them.
+          # Vulkan Shader Caches
+          # Retain driver shader caches alongside Steam’s per-game cache.
           ".cache/mesa_shader_cache"
           ".cache/radv_builtin_shaders"
 
-          # ── Audio Per-App State ──────────────────────────────
+          # Audio Per-App State
           ".local/state/wireplumber" # Audio volumes and default device selections
           ".local/state/pipewire"
 
-          # ── Obsidian ─────────────────────────────────────────
+          # Obsidian
           ".config/obsidian" # App preferences. Note: Vaults live in ~/Documents
 
-          # ── Anki ─────────────────────────────────────────────
+          # Anki
           ".local/share/Anki2" # Collection, media, add-ons, and prefs21.db
 
-          # ── Steam ───────────────────────────────
+          # Steam
           ".local/share/Steam"
           ".steam"
 
@@ -345,10 +335,7 @@ in
       mode = "0755";
     };
 
-    # niri and ghostty both read noctalia-generated theme files that only
-    # exist after noctalia starts, and both fail hard without them (ghostty
-    # aborts home-manager activation). "f" bootstraps empty placeholders and
-    # leaves the real content alone once noctalia writes it.
+    # Create missing theme placeholders; keep Noctalia’s generated contents.
     "/home/${username}/.config/niri".d = {
       user = username;
       group = "users";
@@ -375,10 +362,7 @@ in
       mode = "0644";
     };
 
-    # Parents of the per-app .var/app/<id> mounts above. A brand-new app whose
-    # parents do not exist yet gets them created by flatpak.s rootless bwrap
-    # instead, owned by nobody:nogroup -- which then breaks the app
-    # ("mkdirat(data): Permission denied", hit live with LibreOffice).
+    # Create user-owned Flatpak parents before rootless bwrap can own them.
     "/home/${username}/.var".d = {
       user = username;
       group = "users";
@@ -389,8 +373,7 @@ in
       group = "users";
       mode = "0755";
     };
-    # Repairs the directory already broken that way; the rules above only
-    # prevent it for apps added since.
+    # Repair existing LibreOffice data ownership.
     "/home/${username}/.var/app/org.libreoffice.LibreOffice".Z = {
       user = username;
       group = "users";
@@ -430,8 +413,7 @@ in
       group = "root";
       mode = lib.mkForce "0700";
     };
-    # NetworkManager rejects profiles not owned by root. Recursively repair
-    # profiles that may have been created with the user's ownership.
+    # Repair profile ownership; NetworkManager requires root-owned files.
     "/saved/etc/NetworkManager/system-connections".Z = {
       user = "root";
       group = "root";
@@ -454,8 +436,7 @@ in
       mode = "0444";
     };
 
-    # These rules become active together with the conditional Preservation
-    # entries above, so a future SSH server has a stable, protected identity.
+    # Protect the persistent host keys when SSH is enabled.
     "/saved/etc/ssh/ssh_host_ed25519_key".z = lib.mkIf config.services.openssh.enable {
       user = "root";
       group = "root";

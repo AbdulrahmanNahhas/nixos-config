@@ -1,8 +1,6 @@
 _: {
   programs.fish.shellAbbrs = {
-    # NVIDIA dGPU Offload, Usage:
-    # - if flatpak: `nv flatpak run org.blender.Blender` (flatpak list)
-    # - if nix pkg: `nv blender` (blender = name of pkg)
+    # Offload: nv blender or nv flatpak run org.blender.Blender.
     nv = "nvidia-offload";
     wp = "wallpaper";
 

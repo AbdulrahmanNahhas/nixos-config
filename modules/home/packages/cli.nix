@@ -2,7 +2,7 @@
 
 {
   home.packages = with pkgs; [
-    # ─── Modern CLI ────────────────────────────── #
+    # Modern CLI
 
     eza # Better ls (aliases: ls, ll, la, tree)
     bat # Better cat (alias: cat)
@@ -18,24 +18,24 @@
 
     xh # Friendly HTTP client (curl alternative)
 
-    # ─── Archives ──────────────────────────────── #
+    # Archives
 
     ouch # Compress/extract almost any archive
     zip # Used by noctalia's libreoffice theme template to build its .oxt
     unzip
 
-    # ─── Networking ────────────────────────────── #
+    # Networking
 
     dig # DNS lookup tool
     nmap # Network scanner
 
-    # ─── Security ──────────────────────────────── #
+    # Security
 
     age # Modern file encryption
     sops # Manage encrypted secrets
     gnupg # GPG encryption & signing
 
-    # ─── Media ─────────────────────────────────── #
+    # Media
 
     ffmpeg # Audio/video conversion & processing
 

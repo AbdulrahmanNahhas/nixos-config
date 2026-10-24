@@ -1,7 +1,6 @@
 { config, lib, ... }:
 let
-  # One entry per handler; every type listed becomes that desktop file's
-  # default. The GNOME applications are installed by modules/nixos/desktop/apps.nix.
+  # Set MIME defaults; desktop/apps.nix installs the GNOME handlers.
   handlers = {
     "brave-origin.desktop" = [
       "text/html"

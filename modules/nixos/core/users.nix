@@ -5,8 +5,7 @@
   ...
 }:
 {
-  # Keep authentication reproducible across the tmpfs root. Password changes
-  # must be made by updating the encrypted hash rather than with `passwd`.
+  # Update the encrypted password hash; passwd changes are not durable.
   users = {
     mutableUsers = false;
 
@@ -19,9 +18,7 @@
         extraGroups = [
           "wheel"
           "networkmanager"
-          # logind grants seat devices to the active desktop session; PipeWire
-          # handles audio. Permanent input/audio/video access bypasses that
-          # lifecycle, and raw keyboard or serial access is not needed here.
+          # Use logind/PipeWire access; permanent device groups bypass session controls.
           "render"
           "gamemode"
           "openrazer"

@@ -7,7 +7,6 @@ _: {
     sys-clean = "nh clean all --keep 3 --keep-since 7d --no-gcroots $argv";
     sys-optimise = "sudo nix store optimise";
     sys-update = "nix flake update --flake /saved/nixos-config $argv";
-    sys-guide = "xdg-open /saved/nixos-config/guide/index.html";
 
     sys-search = ''
       set -l initial_query (string join ' ' -- $argv)
@@ -33,8 +32,7 @@ _: {
 
       test -n "$selected"; or return 0
 
-      # fzf's output is newline-split by command substitution; strip ANSI and
-      # pull the fields out of the record.
+      # Split fzf records, strip ANSI and extract fields.
       set -l lines (string replace -ra '\e\[[0-9;]*m' "" -- $selected)
       set -l package (string replace -r '\s+\(.*$' "" -- $lines[1])
       set -l version (string replace -r '^.*\((.*)\)$' '$1' -- $lines[1])
@@ -98,17 +96,15 @@ _: {
 
       switch $argv[1]
         case set
-          # Ensure the base directory exists
           if not test -d $base_dir
             echo "Directory $base_dir does not exist."
             return 1
           end
 
-          # Save current directory and move into Wallpapers for a clean fzf list
+          # Select wallpapers relative to their directory.
           set -l old_pwd $PWD
           cd $base_dir
 
-          # fd searches current dir, fzf shows clean names, chafa previews locally
           set -l target (command fd -t f -e jpg -e jpeg -e png -e webp | fzf \
             --height=80% \
             --layout=reverse \
@@ -116,10 +112,8 @@ _: {
             --prompt="󰸉 Select Wallpaper > " \
             --preview 'chafa -f symbols --size={$FZF_PREVIEW_COLUMNS}x{$FZF_PREVIEW_LINES} {}')
 
-          # Return to the original directory transparently
           cd $old_pwd
 
-          # If a choice was made, construct the absolute path and apply
           if test -n "$target"
             set -l abs_path (realpath "$base_dir/$target")
 
@@ -132,16 +126,14 @@ _: {
           end
 
         case random
-          # Ensure the base directory exists
           if not test -d $base_dir
             echo "Directory $base_dir does not exist."
             return 1
           end
 
-          # Use -a to force absolute paths for the random background selection
+          # Use absolute paths for random selection.
           set -l target (command fd -a -t f -e jpg -e jpeg -e png -e webp . $base_dir | shuf -n 1)
 
-          # If an image was found, apply it
           if test -n "$target"
             set -l abs_path (realpath "$target")
 
@@ -154,11 +146,10 @@ _: {
           end
 
         case info
-          # Fetch URIs from GNOME and trim surrounding single quotes
+          # Strip gsettings quoting from wallpaper URIs.
           set -l raw_light (gsettings get org.gnome.desktop.background picture-uri | string trim -c "'")
           set -l raw_dark (gsettings get org.gnome.desktop.background picture-uri-dark | string trim -c "'")
 
-          # Clean the paths by stripping the "file://" prefix
           set -l path_light (string replace "file://" "" $raw_light)
           set -l path_dark (string replace "file://" "" $raw_dark)
 

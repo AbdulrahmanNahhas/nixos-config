@@ -1,6 +1,0 @@
-# Temporary Hugo build and preview output; HTML beside the sources is intentional.
-/public/
-/dist/
-/resources/
-/.cache/
-/.hugo_build.lock

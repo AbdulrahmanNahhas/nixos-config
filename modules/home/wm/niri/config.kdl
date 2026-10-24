@@ -2,9 +2,7 @@
 // Additional key bindings live in binds.kdl.
 // Noctalia generates noctalia.kdl automatically.
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Input
-// ─────────────────────────────────────────────────────────────────────────────
 
 gestures {
     hot-corners { off; }
@@ -27,9 +25,7 @@ input {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Layout
-// ─────────────────────────────────────────────────────────────────────────────
 
 layout {
     background-color "transparent"
@@ -67,9 +63,7 @@ layout {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Overview and shell integration
-// ─────────────────────────────────────────────────────────────────────────────
 
 overview {
     backdrop-color "#000000d9"
@@ -90,9 +84,7 @@ prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Animations
-// ─────────────────────────────────────────────────────────────────────────────
 
 animations {
     workspace-switch {
@@ -111,13 +103,13 @@ animations {
         spring damping-ratio=0.80 stiffness=450 epsilon=0.0001
     }
 
-    // ── GLITCH POP OPEN ───────────────────────────────────────────────────
+    // GLITCH POP OPEN
     // Low damping causes severe overshoot; high stiffness makes it jitter instantly.
     window-open {
         spring damping-ratio=0.32 stiffness=1300 epsilon=0.0001
     }
 
-    // ── GLITCH SNAP CLOSE ──────────────────────────────────────────────────
+    // GLITCH SNAP CLOSE
     window-close {
         spring damping-ratio=0.38 stiffness=1500 epsilon=0.0001
     }
@@ -136,9 +128,7 @@ animations {
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Window behavior
-// ─────────────────────────────────────────────────────────────────────────────
 
 window-rule {
     open-floating false
@@ -194,9 +184,7 @@ window-rule {
     background-effect { blur true; }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Recent-window switcher
-// ─────────────────────────────────────────────────────────────────────────────
 
 recent-windows {
     binds {
@@ -214,21 +202,16 @@ recent-windows {
     highlight { corner-radius 16; }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Graphics
-// ─────────────────────────────────────────────────────────────────────────────
 
 debug {
     honor-xdg-activation-with-invalid-serial
 
-    // Keep niri on the Radeon 880M. Applications can use the RTX 5060 through
-    // nvidia-offload without moving the compositor to the discrete GPU.
+    // Render on AMD; use nvidia-offload for applications.
     render-drm-device "/dev/dri/by-path/pci-0000:c5:00.0-render"
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Internal display
-// ─────────────────────────────────────────────────────────────────────────────
 
 output "eDP-1" {
     mode "2880x1800@120.000"
@@ -236,9 +219,7 @@ output "eDP-1" {
     variable-refresh-rate
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
 // Included configuration
-// ─────────────────────────────────────────────────────────────────────────────
 
 include "binds.kdl"
 

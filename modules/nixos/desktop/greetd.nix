@@ -18,8 +18,7 @@ let
       --cursor on \
       --clear=all 2>/dev/null || true
 
-    # The UID window covers real accounts only; nixbld build users start at
-    # 30001 and would otherwise fill the user menu.
+    # Limit the menu to real users; nixbld UIDs start at 30001.
     exec ${lib.getExe pkgs.tuigreet} \
       --greeting ${lib.escapeShellArg "SYSTEM // SECURE LOGIN"} \
       --time \
@@ -70,10 +69,8 @@ in
   # Unlock the login keyring for apps launched in the greetd session.
   security.pam.services.greetd.enableGnomeKeyring = true;
 
-  # The systemd-user PAM stack deadlocks on Shadow, blocking greetd and every
-  # login for the full 90-second user@.service timeout. Only the nested PAM
-  # call that launches `systemd --user` is bypassed (the greetd login stack is
-  # untouched), so the runtime directory pam_systemd adds is supplied here.
+  # Bypass the nested PAM call that causes 90-second login stalls on Shadow.
+  # Keep greetd PAM; supply the runtime directory normally added by pam_systemd.
   systemd.services."user@" = {
     environment.XDG_RUNTIME_DIR = "/run/user/%i";
     serviceConfig.PAMName = lib.mkForce "";

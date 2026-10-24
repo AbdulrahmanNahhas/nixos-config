@@ -14,7 +14,7 @@ in
       biome = false;
     };
 
-    # ── Privacy ──────────────────────────────────────────
+    # Privacy
     # Visual redaction; filesystem read protection is a separate boundary.
     redact_private_values = true;
     private_files = [
@@ -31,7 +31,7 @@ in
       "**/credentials.toml"
     ];
 
-    # ── Core behavior ────────────────────────────────────
+    # Core behavior
     cli_default_open_behavior = "new_window";
     # Nix owns the editor binary; Zed manages its extensions separately.
     auto_update = false;
@@ -46,11 +46,10 @@ in
     code_lens = "on";
     diff_view_style = "unified";
     use_on_type_format = false;
-    # direnv integration: "direct" works with any shell (fish included),
-    # doesn't require the shell hook to have fired. Good default for HM setups.
+    # Load direnv directly without relying on a shell hook.
     load_direnv = "direct";
 
-    # ── Theme / appearance ───────────────────────────────
+    # Theme / appearance
     theme = {
       mode = "dark";
       light = "Rust & Brown";
@@ -113,7 +112,7 @@ in
       dark = "Warm Charmed Icons";
     };
 
-    # ── Font / typography ────────────────────────────────
+    # Font / typography
     ui_font_family = "GeistMono Nerd Font Propo";
     buffer_font_family = "GeistMono Nerd Font Propo";
     ui_font_size = 18;
@@ -125,7 +124,7 @@ in
       liga = true;
     };
 
-    # ── Editor behavior ──────────────────────────────────
+    # Editor behavior
     autosave = "on_focus_change";
     format_on_save = "on";
     hover_popover_enabled = true;
@@ -185,7 +184,7 @@ in
       };
     };
 
-    # ── UI panels ────────────────────────────────────────
+    # UI panels
     bottom_dock_layout = "full";
     resize_all_panels_in_dock = [
       "left"
@@ -232,7 +231,7 @@ in
       runnables = true;
     };
 
-    # ── Terminal ─────────────────────────────────────────
+    # Terminal
     terminal = {
       dock = "bottom";
       font_size = 18;
@@ -245,7 +244,7 @@ in
       };
     };
 
-    # ── Git ──────────────────────────────────────────────
+    # Git
     git = {
       inline_blame = {
         enabled = true;
@@ -257,7 +256,7 @@ in
       share_on_join = false;
     };
 
-    # ── AI / Agent ────────────────────────────────────────
+    # AI / Agent
     disable_ai = false;
     agent = {
       dock = "left";
@@ -273,8 +272,7 @@ in
         threshold = "90%";
       };
       show_turn_stats = true;
-      # Shadow's desktop portal rejects the idle inhibition request. Let
-      # the desktop's existing power policy govern sleep during AI work.
+      # Use desktop sleep policy; Shadow’s portal rejects idle inhibition.
       prevent_idle_sleep = false;
       tool_permissions = {
         tools = {
@@ -318,8 +316,7 @@ in
         ];
       };
     };
-    # ChatGPT's provider does not supply Zed edit predictions. The previous
-    # Zed prediction provider returned 403 with this account.
+    # Disable predictions: this provider lacks them; the previous one returned 403.
     show_edit_predictions = false;
     edit_predictions = {
       provider = "none";
@@ -331,7 +328,7 @@ in
       ];
     };
 
-    # ── Tasks ────────────────────────────────────────────
+    # Tasks
     tasks = {
       prefer_lsp = true;
     };

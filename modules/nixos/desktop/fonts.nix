@@ -1,14 +1,10 @@
 { pkgs, ... }:
 {
-  # Collects every font below into the system font dir;
-  # desktop/flatpak-theming.nix mirrors the same set onto /usr/share/fonts so
-  # flatpak sandboxes see more than their runtime's own handful.
+  # Expose fonts to Flatpak through desktop/flatpak-theming.nix.
   fonts.fontDir.enable = true;
 
   fonts.packages = with pkgs; [
-    # UI sans-serif. desktop/dconf.nix names Adwaita Sans/Mono explicitly;
-    # without the package fontconfig silently resolves it to whatever sorts
-    # first (observed live: Noto Sans CJK KR).
+    # Provide the Adwaita fonts named by desktop/dconf.nix; avoid fallback substitution.
     adwaita-fonts
 
     # Monospace / developer

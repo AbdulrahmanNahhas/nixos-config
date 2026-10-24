@@ -10,7 +10,7 @@ _: {
         "ctrl-shift-c" = "collab_panel::ToggleFocus";
         "ctrl-shift-g" = "git_panel::ToggleFocus";
         "ctrl-shift-d" = "debug_panel::ToggleFocus";
-        "ctrl-shift-f" = "project_search::ToggleFocus"; # Replaced pane search with global search focus
+        "ctrl-shift-f" = "project_search::ToggleFocus";
         "ctrl-shift-m" = "diagnostics::Deploy";
 
         # Dock and sidebar toggles
@@ -24,7 +24,7 @@ _: {
     {
       context = "Pane";
       bindings = {
-        # Linear sequential tab navigation (left-to-right order)
+        # Tabs in pane order
         "ctrl-tab" = "pane::ActivateNextItem";
         "ctrl-shift-tab" = "pane::ActivatePreviousItem";
 
@@ -36,7 +36,7 @@ _: {
     {
       context = "Editor";
       bindings = {
-        # Line manipulation & editing enhancements
+        # Editing
         "alt-up" = "editor::MoveLineUp";
         "alt-down" = "editor::MoveLineDown";
         "shift-alt-down" = "editor::DuplicateLineDown";

@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
-  # Standalone desktop applications with no dedicated home-manager `programs.*`
-  # module and no natural grouping elsewhere.
+  # Desktop apps without a dedicated Home Manager module.
   home.packages = with pkgs; [
     obsidian # Notes
     mullvad-browser

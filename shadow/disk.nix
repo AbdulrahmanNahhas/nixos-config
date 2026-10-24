@@ -2,9 +2,8 @@
 {
   disko.devices = {
 
-    # ── tmpfs root ──────────────────────────────────────────────────────────
-    # The entire / is RAM — wiped clean on every reboot.
-    # /nix, /saved, /swap and the ESP persist; Preservation restores selected paths.
+    # tmpfs root
+    # Root resets on reboot; /nix, /saved, /swap and the ESP persist.
     nodev."/" = {
       fsType = "tmpfs";
       mountOptions = [
@@ -22,7 +21,7 @@
 
         partitions = {
 
-          # ── EFI System Partition ─────────────────────────────────────────
+          # EFI System Partition
           ESP = {
             priority = 1;
             name = "ESP";
@@ -39,7 +38,7 @@
             };
           };
 
-          # ── LUKS2 encrypted container (rest of disk) ─────────────────────
+          # LUKS2 encrypted container (rest of disk)
           luks = {
             size = "100%";
             content = {
@@ -49,8 +48,7 @@
               settings = {
                 # Allow SSD TRIM through LUKS; leaks allocation patterns, not plaintext.
                 allowDiscards = true;
-                # TPM unlock needs a measured-boot policy and independent recovery key;
-                # a crypttab flag alone does not establish trusted boot.
+                # TPM unlock needs measured-boot policy and an independent recovery key.
               };
 
               content = {
@@ -78,8 +76,7 @@
                     ];
                   };
 
-                  # Encrypted disk swap backs up zram under memory pressure.
-                  # This size alone does not enable hibernation; resume needs separate setup.
+                  # Encrypted zRAM overflow; hibernation needs separate resume setup.
                   "/swap" = {
                     mountpoint = "/swap";
                     mountOptions = [ "x-gvfs-hide" ];

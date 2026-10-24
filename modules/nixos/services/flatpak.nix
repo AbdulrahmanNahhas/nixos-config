@@ -5,9 +5,7 @@ let
     "xdg-config/gtk-3.0:ro"
     "xdg-config/gtk-4.0:ro"
   ];
-  # These paths have no role in the managed desktop apps. Include the backing
-  # store as well as the normal home paths so persistence is not an alternate
-  # route to credentials. Named Secret Service access remains app-specific.
+  # Deny credential paths in both home and /saved; review service access per app.
   privatePaths = [
     "!/saved"
     "!/run/secrets"
@@ -75,9 +73,7 @@ in
       pruneUnmanagedOverrides = true;
       settings = lib.mapAttrs (_: appOverrides) apps // {
         global = {
-          # Access to a credential service can supply secrets even when its
-          # backing files are hidden. Element opts into Secret Service below
-          # through its catalog entry; other apps need an explicit review.
+          # Deny credential services globally; Element opts into Secret Service.
           "Session Bus Policy" = {
             "org.freedesktop.secrets" = "none";
             "org.kde.kwalletd" = "none";
@@ -85,14 +81,10 @@ in
             "org.kde.kwalletd6" = "none";
           };
           Environment = {
-            # Flatpak already bind-mounts host icon themes read-only at
-            # /run/host; this only points the cursor loader at them.
+            # Use the read-only host icon themes for cursors.
             XCURSOR_PATH = "/run/host/user-share/icons:/run/host/share/icons";
 
-            # GTK_THEME is deliberately not global: it is GTK3-only, and a
-            # GTK4/libadwaita app that sees it looks for a gtk-4.0 stylesheet
-            # adw-gtk3 does not ship and ends up with none at all. GTK4 apps
-            # already follow the portal, so it is set per-app below instead.
+            # Set GTK_THEME per GTK3 app; GTK4 uses portals and lacks adw-gtk3 styles.
           };
 
           Context = {
@@ -107,8 +99,7 @@ in
             ]
             ++ privatePaths;
 
-            # Wayland only. Audio stays under each upstream manifest because
-            # Flatpak's PulseAudio socket is also the PipeWire compat path.
+            # Use Wayland; retain upstream audio access for PipeWire compatibility.
             sockets = [
               "wayland"
               "!x11"
@@ -119,8 +110,7 @@ in
               "!gpg-agent"
             ];
 
-            # Apps use GPU access and mediated services, without raw input,
-            # USB, KVM or the host shared-memory device grants.
+            # Allow GPU access without raw input, USB, KVM or host shared memory.
             devices = [
               "!all"
               "!input"

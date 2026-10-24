@@ -5,10 +5,9 @@
     systemd.enable = true;
   };
 
-  # Keep your existing sops-nix rendered configuration.
+  # Read the runtime configuration rendered by sops-nix.
   xdg.configFile."noctalia/config.toml".source =
     config.lib.file.mkOutOfStoreSymlink "/run/secrets/rendered/noctalia-config.toml";
 
-  # Keep your immutable asset.
   xdg.configFile."noctalia-assets/nixos.svg".source = ./nixos.svg;
 }

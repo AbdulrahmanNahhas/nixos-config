@@ -16,11 +16,8 @@ in
         "[::1]:53"
       ];
 
-      # Avoid probing the entire public resolver catalog after every rebuild.
-      # DNS is unavailable until dnscrypt-proxy finishes its initial selection.
-      # These entries advertise DNSSEC, no logging, and no filtering in the
-      # signed resolver catalog. Those are operator claims, not an audit.
-      # Explicit server_names bypass require_*; keep that distinction visible.
+      # Pin resolvers for faster startup; server_names bypasses require_* filters.
+      # Resolver privacy claims come from the signed catalog, not an audit.
       server_names = [
         "cloudflare"
         "scaleway-fr"

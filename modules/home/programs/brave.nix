@@ -4,26 +4,26 @@
     enable = true;
     package = pkgs.brave-origin;
 
-    # Extracted Extensions
+    # Extensions
     extensions = [
       { id = "hlepfoohegkhhmjieoechaddaejaokhf"; } # Refined GitHub
     ];
 
-    # Translated brave://flags & GPU Power-Saving Overrides
+    # Browser flags
     commandLineArgs = [
       # Load Noctalia theme from local cache
       "--load-extension=/home/${username}/.cache/noctalia/brave-origin-theme"
 
-      # Force rendering & video decoding strictly on AMD 880M (Keeps NVIDIA sleeping)
+      # Prefer the selected render node; verify GPU use and sleep on the host.
       "--render-node-override=/dev/dri/renderD128"
       "--ignore-gpu-blocklist"
 
-      # Hardware Acceleration & Performance Flags
+      # Hardware acceleration
       "--enable-gpu-rasterization"
       "--enable-zero-copy"
       "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization,WebRtcPipeWireCamera,OverlayScrollbar,ParallelDownloading"
 
-      # Display & Visual Flags
+      # Display
       "--enable-force-dark"
       "--force-color-profile=display-p3-d65"
       "--smooth-scrolling"

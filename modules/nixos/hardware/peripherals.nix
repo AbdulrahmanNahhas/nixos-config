@@ -1,6 +1,5 @@
 {
-  # Keep unused peripheral stacks disabled, but retain fwupd so UEFI and device
-  # security updates remain available through LVFS.
+  # Keep fwupd for firmware updates; disable unused peripheral stacks.
   hardware.sane.enable = false;
   networking.modemmanager.enable = false;
   services = {

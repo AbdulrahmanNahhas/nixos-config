@@ -44,8 +44,7 @@
       # Disable vsyscalls as they are fixed-address (ASLR bypass)
       "vsyscall=none"
 
-      # No module.sig_enforce / lockdown: NixOS does not sign modules, and the
-      # out-of-tree NVIDIA and OpenRazer modules would be refused.
+      # Unsigned NVIDIA/OpenRazer modules prevent enforcing module signatures.
 
       # AMD EPP policy and laptop backlight overrides; recheck after driver updates.
       "amd_pstate=active"
@@ -56,8 +55,7 @@
     # Kernel Security Hardening
     kernel.sysctl = {
       "kernel.unprivileged_bpf_disabled" = 1; # Blocks BPF JIT spraying
-      # 1 restricts ptrace to descendants; 2 would also break debuggers (Zed,
-      # gdb attach) and Proton's use of ptrace on its own processes.
+      # Scope 1 keeps descendant debugging and Proton working; scope 2 blocks them.
       "kernel.yama.ptrace_scope" = 1;
       "kernel.dmesg_restrict" = 1;
       "kernel.kptr_restrict" = 2; # Hides kernel pointers from dmesg
