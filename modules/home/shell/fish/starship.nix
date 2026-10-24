@@ -1,172 +1,164 @@
 _: {
+  programs.fish.interactiveShellInit = ''
+    # Space completed commands without adding a line on startup or screen redraw.
+    function __starship_local_spacing --on-event fish_postexec
+        set -l command_status $status
+        set -l last_command (string trim -- "$argv[1]")
+
+        # Let a standalone clear (including flags) leave the prompt at the top.
+        if string match --quiet --regex '^(command[ \t]+)?clear([ \t]+[^;&|\n]*)?;?$' -- "$last_command"
+            return $command_status
+        end
+
+        printf '\n'
+        return $command_status
+    end
+  '';
+
   programs.starship = {
     enable = true;
     settings = {
+      "$schema" = "https://starship.rs/config-schema.json";
       add_newline = false;
-      palette = "vercel";
-
-      format = "$username$sudo$nix_shell$directory$git_branch$git_status$container$fill$rust$nodejs$python$jobs$status$cmd_duration$time$line_break$character";
-
-      palettes.vercel = {
-        bg = "#0f0f10";
-        fg = "#ededed";
-        muted = "#7d7d7d";
-        soft = "#1a1a1c";
-        surface = "#161618";
-        border = "#2a2a2d";
-        green = "#4ade80";
-        yellow = "#facc15";
-        red = "#fb7185";
-        blue = "#60a5fa";
+      palette = "moonlit";
+      format = "$username$hostname$directory($git_branch$git_commit$git_status$git_state[](fg:git_bg) )$nix_shell$container$fill$rust$nodejs$python$cmd_duration$jobs$sudo$status$time$line_break$character";
+      palettes = {
+        moonlit = {
+          ink = "#191b26";
+          text = "#dce1ef";
+          muted = "#a0a8bd";
+          surface = "#292d3e";
+          lavender = "#c4b5fd";
+          blue = "#b9d6fb";
+          path_bg = "#25354d";
+          mint = "#a7dfbc";
+          git_bg = "#253c34";
+          amber = "#f1cf91";
+          red = "#f29aa5";
+        };
       };
-
-      # Every module below follows the same pattern:
-      #   format = "[ $symbol content ]($style) ";
-      # i.e. a flat square block with one space of internal padding
-      # on each side, and exactly one space of gap after it.
-      # No powerline arrow glyphs — flat blocks read as "square",
-      # and avoids the glyph-loss problem that caused the empty
-      # `[]()` segments (and the resulting stray spacing) before.
-
       username = {
-        disabled = false;
         show_always = true;
-        format = "[ 󰧱 $user ]($style) ";
-        style_user = "bg:surface fg:fg";
-        style_root = "bg:surface fg:red";
+        style_user = "bold fg:ink bg:lavender";
+        style_root = "bold fg:ink bg:red";
+        format = "[](fg:lavender)[ $user]($style)[](fg:lavender) ";
       };
-
+      hostname = {
+        ssh_only = true;
+        ssh_symbol = "󰣀 ";
+        style = "fg:amber bg:surface";
+        format = "[](fg:surface)[$ssh_symbol$hostname]($style)[](fg:surface) ";
+      };
+      directory = {
+        style = "bold fg:blue bg:path_bg";
+        format = "[](fg:path_bg)[󰉋 $path]($style)[$read_only](fg:red bg:path_bg)[](fg:path_bg) ";
+        home_symbol = "~";
+        read_only = " ";
+        truncation_length = 3;
+        truncation_symbol = "…/";
+        truncate_to_repo = true;
+        fish_style_pwd_dir_length = 1;
+      };
+      git_branch = {
+        symbol = "";
+        style = "fg:mint bg:git_bg";
+        format = "[](fg:git_bg)[$symbol $branch]($style)";
+        truncation_length = 22;
+        truncation_symbol = "…";
+      };
+      git_commit = {
+        only_detached = true;
+        tag_disabled = true;
+        style = "fg:mint bg:git_bg";
+        format = "[ @$hash]($style)";
+      };
+      git_status = {
+        style = "fg:mint bg:git_bg";
+        format = "([ $all_status$ahead_behind]($style))";
+        conflicted = "=$count ";
+        stashed = "*$count ";
+        staged = "+$count ";
+        modified = "~$count ";
+        renamed = "»$count ";
+        deleted = "-$count ";
+        untracked = "?$count ";
+        ahead = "↑$count ";
+        behind = "↓$count ";
+        diverged = "↑$ahead_count ↓$behind_count ";
+      };
+      git_state = {
+        style = "bold fg:amber bg:git_bg";
+        format = "[ $state( $progress_current/$progress_total)]($style)";
+      };
+      nix_shell = {
+        disabled = false;
+        symbol = "";
+        style = "fg:lavender bg:surface";
+        format = "[](fg:surface)[$symbol dev]($style)[](fg:surface) ";
+      };
+      container = {
+        symbol = "";
+        style = "fg:blue bg:surface";
+        format = "[](fg:surface)[$symbol $name]($style)[](fg:surface) ";
+      };
+      rust = {
+        symbol = " ";
+        style = "fg:amber";
+        format = "[$symbol$version]($style) ";
+      };
+      nodejs = {
+        symbol = " ";
+        style = "fg:mint";
+        format = "[$symbol$version]($style) ";
+      };
+      python = {
+        symbol = " ";
+        style = "fg:blue";
+        format = "[\${symbol}\${version}( $virtualenv)]($style) ";
+      };
+      fill = {
+        symbol = " ";
+      };
+      cmd_duration = {
+        min_time = 2000;
+        style = "fg:amber";
+        format = "[󰔟 $duration]($style) ";
+      };
+      jobs = {
+        symbol = "";
+        number_threshold = 1;
+        style = "fg:amber";
+        format = "[$symbol $number]($style) ";
+      };
       sudo = {
         disabled = false;
         symbol = "󰌾";
-        style = "bg:surface fg:red";
-        format = "[ $symbol ]($style) ";
+        style = "fg:amber";
+        format = "[$symbol]($style) ";
       };
-
-      nix_shell = {
-        disabled = false;
-        symbol = "";
-        style = "bg:surface fg:blue";
-        format = "[ $symbol $name ]($style) ";
-      };
-
-      directory = {
-        format = "[ $path ]($style) ";
-        style = "bg:surface fg:fg";
-        truncation_length = 2;
-        truncation_symbol = "…/";
-        truncate_to_repo = true;
-        read_only = " ";
-        home_symbol = "~";
-      };
-
-      directory.substitutions = {
-        Documents = "󰈙";
-        Downloads = " ";
-        Music = " ";
-        Pictures = " ";
-        Programming = "󰲋";
-        Projects = "󰲋";
-      };
-
-      fill = {
-        style = "fg:border";
-        symbol = " ";
-      };
-
-      character = {
-        disabled = false;
-        success_symbol = "[❯](fg:green)";
-        error_symbol = "[❯](fg:red)";
-        vimcmd_symbol = "[❮](fg:blue)";
-      };
-
-      git_branch = {
-        format = "[ $symbol $branch ]($style) ";
-        style = "bg:surface fg:fg";
-        symbol = "";
-      };
-
-      # Wrapped entirely in ( ) so a clean repo renders nothing at
-      # all — not even a stray gap — instead of an empty pill.
-      git_status = {
-        disabled = false;
-        format = "([ $staged$modified$deleted$untracked ]($style) )";
-        style = "bg:surface fg:yellow";
-
-        staged = "[+$count ](bg:surface fg:green)";
-        modified = "[~$count ](bg:surface fg:yellow)";
-        deleted = "[-$count ](bg:surface fg:red)";
-        untracked = "[?$count ](bg:surface fg:blue)";
-      };
-
-      container = {
-        format = "[ $symbol $name ]($style) ";
-        symbol = "⬢";
-        style = "bg:surface fg:blue";
-      };
-
-      rust = {
-        style = "bg:surface fg:fg";
-        format = "[ $symbol$version ]($style) ";
-        symbol = " ";
-        disabled = false;
-      };
-
-      nodejs = {
-        style = "bg:surface fg:fg";
-        format = "[ $symbol$version ]($style) ";
-        symbol = "󰎙 ";
-        disabled = false;
-      };
-
-      python = {
-        style = "bg:surface fg:fg";
-        format = "[ $symbol$version ]($style) ";
-        symbol = " ";
-        disabled = false;
-      };
-
-      jobs = {
-        symbol = "";
-        style = "bg:surface fg:yellow";
-        format = "[ $symbol $number ]($style) ";
-        disabled = false;
-      };
-
       status = {
         disabled = false;
-        format = "[ ✘ $status ]($style) ";
-        style = "bg:surface fg:red";
+        symbol = "×";
+        style = "fg:red";
+        format = "[$symbol $status]($style) ";
       };
-
-      cmd_duration = {
-        min_time = 1000;
-        format = "[ took $duration ]($style) ";
-        style = "bg:surface fg:muted";
-      };
-
       time = {
         disabled = false;
-        format = "[ 󰴈 $time ]($style) ";
-        style = "bg:surface fg:muted";
         time_format = "%I:%M%P";
+        style = "fg:muted bg:surface";
+        format = "[](fg:surface)[󰥔 $time]($style)[](fg:surface)";
       };
-
-      # Languages / package managers not in use — trimmed to one line.
-      c.disabled = true;
-      elixir.disabled = true;
-      elm.disabled = true;
-      golang.disabled = true;
-      haskell.disabled = true;
-      java.disabled = true;
-      julia.disabled = true;
-      nim.disabled = true;
-      scala.disabled = true;
-      conda.disabled = true;
-      php.disabled = true;
-      ruby.disabled = true;
-      package.disabled = true;
+      character = {
+        success_symbol = "[❯](bold fg:lavender)";
+        error_symbol = "[❯](bold fg:red)";
+        vimcmd_symbol = "[❮](bold fg:mint)";
+        vimcmd_replace_one_symbol = "[❮](bold fg:amber)";
+        vimcmd_replace_symbol = "[❮](bold fg:amber)";
+        vimcmd_visual_symbol = "[❮](bold fg:blue)";
+      };
+      package = {
+        disabled = true;
+      };
     };
   };
 }
