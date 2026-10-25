@@ -7,16 +7,16 @@ Personal NixOS and Home Manager configuration for Aqua's Razer Blade 14
 
 ## System
 
-| Area | Setup |
-| --- | --- |
-| Base | NixOS unstable, pinned flake inputs, Home Manager |
-| Desktop | Niri, Noctalia, greetd/tuigreet, Ghostty, Fish |
-| Graphics | AMD Radeon 880M for the desktop; NVIDIA RTX 5060 for offload |
-| Storage | LUKS2 + Btrfs, Disko layout, Preservation, temporary root |
-| Network | NetworkManager with iwd, local DNSCrypt resolver, inbound firewall |
-| Secrets | SOPS + age through sops-nix; ciphertext in Git |
-| Applications | Nix packages and a declarative Flatpak catalog |
-| Development | Zed, Delta, devenv, direnv, Nix language tools |
+| Area         | Setup                                                              |
+| ------------ | ------------------------------------------------------------------ |
+| Base         | NixOS unstable, pinned flake inputs, Home Manager                  |
+| Desktop      | Niri, Noctalia, greetd/tuigreet, Ghostty, Fish                     |
+| Graphics     | AMD Radeon 880M for the desktop; NVIDIA RTX 5060 for offload       |
+| Storage      | LUKS2 + Btrfs, Disko layout, Preservation, temporary root          |
+| Network      | NetworkManager with iwd, local DNSCrypt resolver, inbound firewall |
+| Secrets      | SOPS + age through sops-nix; ciphertext in Git                     |
+| Applications | Nix packages and a declarative Flatpak catalog                     |
+| Development  | Zed, Delta, devenv, direnv, Nix language tools                     |
 
 These describe repository declarations. Check the running host after activation.
 `system.stateVersion` and `home.stateVersion` preserve compatibility defaults;
@@ -24,17 +24,17 @@ they do not identify the installed NixOS release. `flake.lock` pins dependencies
 
 ## Repository
 
-| Path | Owns |
-| --- | --- |
-| [`flake.nix`](flake.nix) / [`flake.lock`](flake.lock) | Inputs, host output, formatter, secret scan |
-| [`shadow/default.nix`](shadow/default.nix) | Hardware imports, system module selection, build limits |
-| [`shadow/home.nix`](shadow/home.nix) | User identity and Home Manager module selection |
-| [`shadow/disk.nix`](shadow/disk.nix) | Disk layout and persistent mounts |
-| [`modules/nixos/`](modules/nixos/) | Boot, hardware, networking, security, storage, services |
-| [`modules/home/`](modules/home/) | Desktop, programs, shell, editor, key bindings |
-| [`modules/nixos/services/flatpak-apps.nix`](modules/nixos/services/flatpak-apps.nix) | Flatpak IDs, permissions, persistence selection |
-| [`modules/nixos/storage/preservation.nix`](modules/nixos/storage/preservation.nix) | Saved files, directories, ownership and bootstrap rules |
-| [`encrypted-secrets/`](encrypted-secrets/) | SOPS ciphertext |
+| Path                                                                                 | Owns                                                    |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| [`flake.nix`](flake.nix) / [`flake.lock`](flake.lock)                                | Inputs, host output, formatter, secret scan             |
+| [`shadow/default.nix`](shadow/default.nix)                                           | Hardware imports, system module selection, build limits |
+| [`shadow/home.nix`](shadow/home.nix)                                                 | User identity and Home Manager module selection         |
+| [`shadow/disk.nix`](shadow/disk.nix)                                                 | Disk layout and persistent mounts                       |
+| [`modules/nixos/`](modules/nixos/)                                                   | Boot, hardware, networking, security, storage, services |
+| [`modules/home/`](modules/home/)                                                     | Desktop, programs, shell, editor, key bindings          |
+| [`modules/nixos/services/flatpak-apps.nix`](modules/nixos/services/flatpak-apps.nix) | Flatpak IDs, permissions, persistence selection         |
+| [`modules/nixos/storage/preservation.nix`](modules/nixos/storage/preservation.nix)   | Saved files, directories, ownership and bootstrap rules |
+| [`encrypted-secrets/`](encrypted-secrets/)                                           | SOPS ciphertext                                         |
 
 `shadow/` selects system and user modules directly. Keep hardware facts there
 and application assets beside their modules. Add another composition layer only
