@@ -10,7 +10,8 @@
       systemd-boot.configurationLimit = 8;
     };
 
-    initrd.systemd.enable = true;
+    # REVISE: GET IT BACK? (there was nixos error when building from this)
+    # initrd.systemd.enable = true;
 
     # Track new hardware support; reboot-test NVIDIA and suspend on each bump.
     kernelPackages = pkgs.linuxPackages_latest;
