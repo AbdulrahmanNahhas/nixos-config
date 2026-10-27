@@ -167,6 +167,7 @@ Check the installed Flatpak’s current key backend and migration warnings befor
 | ✓ Configured | [Niri](modules/nixos/desktop/niri.nix)                                   | Scrollable tiling compositor with an integrated-GPU rendering preference.                                       |
 | ✓ Configured | [Noctalia v5 · shell, lock & idle](modules/home/wm/noctalia/default.nix) | Launcher, notifications, system controls and session locking; verify lock and wake behavior.                    |
 | ✓ Configured | [Flatpak + nix-flatpak / Bubblewrap](modules/nixos/services/flatpak.nix) | Sandboxed app distribution with explicit filesystem allowlists and credential-path denials.                     |
+| ✓ Configured | [Nahhasio Flatpak](modules/nixos/services/flatpak-apps.nix) | Signed alpha remote, branch updates, scoped media access and derived profile persistence; pending profile migration, system installation and host verification. |
 | ? Verify     | XDG portals + keyring + Polkit / user session                            | Desktop integration, credential storage, authorization and service lifecycle; verify actual routing and agents. |
 | ✓ Configured | [Steam / Proton + Xwayland-satellite](modules/nixos/gaming/steam.nix)    | Gaming compatibility and X11 support under Niri.                                                                |
 | ? Verify     | nix-ld / external binaries                                               | Runtime library compatibility inherited from external modules; inspect effective settings.                      |

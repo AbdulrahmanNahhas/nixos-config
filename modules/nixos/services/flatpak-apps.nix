@@ -22,6 +22,21 @@
   };
   "com.github.ADBeveridge.Raider" = { };
   "dev.geopjr.Tuba" = { };
+  "io.nahhasio.Linux" = {
+    origin = "nahhasio-alpha";
+    # The signed reference selects alpha while keeping the catalog key a plain ID.
+    flatpakref = "https://github.com/AbdulrahmanNahhas/nahhasio/releases/download/nahhasio-v0.1.1/nahhasio.flatpakref";
+    sha256 = "6be1ef3f592e003ea995e45cd4bb8fd7ab8570d7caf484aa8077d22012bfc6b3";
+    overrides.Context = {
+      sockets = [
+        "wayland"
+        "pulseaudio"
+      ];
+      shared = [ "network" ];
+      devices = [ "dri" ];
+      filesystems = [ "xdg-videos/nahhasio:create" ];
+    };
+  };
   "io.gitlab.news_flash.NewsFlash" = {
     overrides = {
       Context.filesystems = [ "~/.config/dconf:ro" ];

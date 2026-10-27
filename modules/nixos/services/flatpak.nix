@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   apps = import ./flatpak-apps.nix;
   themePaths = [
@@ -53,13 +53,28 @@ in
         name = "flathub-beta";
         location = "https://dl.flathub.org/beta-repo/flathub-beta.flatpakrepo";
       }
+      {
+        name = "nahhasio-alpha";
+        # Pin the repository descriptor and signing key; app updates follow alpha.
+        location = "${pkgs.fetchurl {
+          url = "https://github.com/AbdulrahmanNahhas/nahhasio/releases/download/nahhasio-v0.1.1/nahhasio.flatpakrepo";
+          sha256 = "4bbbc3e053aae2f7eb1bb649ecf5a1ed1b83e04115ff8b18dbb707bc142b50e3";
+        }}";
+      }
     ];
-    packages = lib.mapAttrsToList (appId: app: {
-      inherit appId;
-      origin = app.origin or "flathub-verified";
-    }) apps;
+    packages = lib.mapAttrsToList (
+      appId: app:
+      {
+        inherit appId;
+        origin = app.origin or "flathub-verified";
+      }
+      // lib.optionalAttrs (app ? flatpakref) {
+        inherit (app) flatpakref sha256;
+      }
+    ) apps;
     update = {
-      onActivation = false;
+      # Reconcile installed versions on rebuild as well as the daily timer.
+      onActivation = true;
       auto = {
         enable = true;
         onCalendar = "daily";

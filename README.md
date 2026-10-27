@@ -84,7 +84,22 @@ git diff -- flake.lock
 Nix builds allow two concurrent derivations with four cores each. Weekly cleanup
 retains at least three generations and generations from the last seven days,
 while preserving explicit GC roots. Keep a known-good generation before cleanup.
-Flatpak updates have their own lifecycle.
+Flatpak installation and updates are declared through `services.flatpak`.
+NixOS activation updates the managed system applications, and a daily systemd
+timer checks for further updates. These updates follow the declared remotes;
+they are not pinned by `flake.lock` or rolled back with a NixOS generation.
+
+Nahhasio is managed system-wide through the
+[Flatpak catalog](modules/nixos/services/flatpak-apps.nix), using its signed
+`nahhasio-alpha` remote and `alpha` branch. The repository descriptor and signing
+key are pinned to the 0.1.1 release; activation and daily updates follow the alpha
+branch rather than pinning the app version. Its permissions allow Wayland, audio,
+GPU, network and `Videos/nahhasio` downloads. The Flatpak supplies its launcher and icon.
+
+The earlier test installation is per-user and takes precedence over a system
+installation when launching by app ID. After activation and verification of the
+managed system copy, retire the test copy without deleting its app data. This
+scope cleanup is separate from system configuration activation.
 
 ## Persistent state
 
@@ -102,6 +117,10 @@ Preservation exposes selected saved paths where applications expect them.
 Projects, documents, media, browser profiles, keyrings, editor state and selected
 service state are retained. **Downloads is temporary.** Flatpak data selection
 comes from the app catalog; external game libraries need their own persistence.
+Nahhasio's catalog entry retains `.var/app/io.nahhasio.Linux`; downloaded media
+under `Videos/nahhasio` is covered by the existing `Videos` entry. Its test profile
+must be migrated into `/saved/home/aqua/.var/app/io.nahhasio.Linux` before first
+activation of that new persistence mount, following the migration guidance below.
 The exact list belongs in
 [`preservation.nix`](modules/nixos/storage/preservation.nix).
 
