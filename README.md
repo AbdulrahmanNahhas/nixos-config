@@ -70,6 +70,9 @@ sudo nh os switch /saved/nixos-config
 
 Kernel, initrd and driver changes also need a reboot into the selected generation.
 A temporary activation cannot establish boot or suspend/resume acceptance.
+The pinned nixpkgs uses systemd initrd without the removed
+`boot.initrd.systemd.enable` selector. Preservation must include upstream fix
+`717cdb87` or later so it no longer reads that removed option.
 
 Update selected dependencies deliberately, then repeat the checks:
 
