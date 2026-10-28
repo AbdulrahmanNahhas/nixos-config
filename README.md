@@ -124,6 +124,12 @@ activation of that new persistence mount, following the migration guidance below
 The exact list belongs in
 [`preservation.nix`](modules/nixos/storage/preservation.nix).
 
+T3 Code retains `.t3` for chat databases and settings, plus `.config/t3code-v2`
+for its desktop profile and local preferences. The live `.t3` mount was verified
+against `/saved`; the desktop profile entry still needs activation and a mount
+check. Close T3 before activating that entry; its profile may start fresh without
+migration. Chat and preference retention across reboot still needs verification.
+
 Before activating a new persistence entry, migrate existing data into the matching
 path under `/saved`. Stop the owning service while copying, preserve permissions,
 and use a coherent backup for an active database. An empty backing mount can hide
@@ -135,6 +141,19 @@ at `/var/lib/btrfs`, `/var/lib/smartmontools` and
 checks, service write checks and reboot verification. Earlier network, firmware
 and Nix-cache entries also need verification if they have not been migrated.
 See [storage work](ROADMAP.md#disk--filesystem-architecture).
+
+To diagnose a full temporary filesystem, check its capacity and the largest
+directories without crossing into persistent mounts:
+
+```sh
+df -h /home /tmp /saved
+du -xhd2 /home /tmp 2>/dev/null | sort -h | tail -30
+```
+
+`/home` and `/tmp` currently share the same 4 GiB tmpfs allocation. The `-x`
+option keeps saved bind mounts out of the totals. If `df` reports substantially
+more usage than `du`, check for inaccessible directories or deleted files still
+held open by running programs.
 
 Persistence, snapshots and system generations each serve a different purpose.
 An independent encrypted backup and a restore drill remain the first recovery
