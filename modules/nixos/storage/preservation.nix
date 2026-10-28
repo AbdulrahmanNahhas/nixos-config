@@ -164,6 +164,16 @@ in
             mode = "0700";
           }
           {
+            # Retain T3 chat databases, settings and downloaded tools.
+            directory = ".t3";
+            mode = "0700";
+          }
+          {
+            # Retain the Electron profile, including local UI preferences.
+            directory = ".config/t3code-v2";
+            mode = "0700";
+          }
+          {
             # OpenCode provider credentials (auth.json) and session history.
             directory = ".local/share/opencode";
             mode = "0700";
@@ -204,6 +214,11 @@ in
           ".config/zed"
           ".local/share/delta"
           ".config/delta"
+          {
+            # Keep Java workspace indexes and build output off tmpfs.
+            directory = ".cache/jdtls";
+            mode = "0700";
+          }
 
           {
             # Native Nahhasio client state; media files are stored separately.
