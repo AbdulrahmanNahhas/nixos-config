@@ -11,95 +11,95 @@ enabled = true
 tint_intensity = 0.28
 
 [bar]
-order = [ "default", "Utilities" ]
+order = ["default", "Utilities"]
 
-    [bar.Utilities]
-    background_opacity = 0.8
-    border_width = 2.0
-    capsule_thickness = 0.75
-    center = [ "wallpaper", "wallhaven_2", "group:g1", "widget_2", "caffeine" ]
-    contact_shadow = true
-    enabled = true
-    end = []
-    font_weight = 400
-    margin_edge = 5
-    margin_ends = 305
-    margin_opposite_edge = 150
-    padding = 10
-    panel_overlap = 0
-    position = "right"
-    radius = 80
-    reserve_space = false
-    scale = 1.4
-    shadow = false
-    smart_auto_hide = true
-    start = []
-    thickness = 50
-    widget_spacing = 15
+[bar.Utilities]
+background_opacity = 0.8
+border_width = 2.0
+capsule_thickness = 0.75
+center = ["wallpaper", "wallhaven_2", "group:g1", "widget_2", "caffeine"]
+contact_shadow = true
+enabled = true
+end = []
+font_weight = 400
+margin_edge = 5
+margin_ends = 305
+margin_opposite_edge = 150
+padding = 10
+panel_overlap = 0
+position = "right"
+radius = 80
+reserve_space = false
+scale = 1.4
+shadow = false
+smart_auto_hide = true
+start = []
+thickness = 50
+widget_spacing = 15
 
-        [[bar.Utilities.capsule_group]]
-        accordion = false
-        accordion_direction = "end"
-        enabled = true
-        fill = "surface_variant"
-        id = "g1"
-        members = [ "keyboard_layout", "launcher" ]
-        opacity = 0.5
-        padding = 7.0
-        widget_spacing = 14
+[[bar.Utilities.capsule_group]]
+accordion = false
+accordion_direction = "end"
+enabled = true
+fill = "surface_variant"
+id = "g1"
+members = ["keyboard_layout", "launcher"]
+opacity = 0.5
+padding = 7.0
+widget_spacing = 14
 
-    [bar.default]
-    auto_hide = false
-    background_opacity = 0.8
-    border = "outline"
-    border_width = 0.0
-    capsule = false
-    capsule_fill = "surface_variant"
-    capsule_foreground = "on_surface"
-    capsule_opacity = 0.8
-    capsule_radius = 10
-    capsule_thickness = 0.85
-    center = [ "nix-monitor", "tray", "notifications", "bar", "clock", "session" ]
-    concave_edge_corners = false
-    contact_shadow = false
-    enabled = true
-    end = [ "audio_visualizer", "bluetooth", "brightness", "volume", "network", "battery", "control-center" ]
-    font_family = "GeistMono Nerd Font Mono"
-    font_weight = 500
-    hover_highlight = true
-    layer = "top"
-    margin_edge = 3
-    margin_ends = 6
-    margin_opposite_edge = 0
-    padding = 10
-    panel_overlap = 0
-    position = "bottom"
-    radius = 15
-    radius_bottom_left = 15
-    radius_bottom_right = 15
-    radius_top_left = 15
-    radius_top_right = 15
-    reserve_space = true
-    scale = 1.2500000111758709
-    shadow = false
-    show_on_workspace_switch = true
-    smart_auto_hide = false
-    start = [ "group:g1", "workspaces", "clipboard", "recorder" ]
-    thickness = 40
-    widget_spacing = 15
+[bar.default]
+auto_hide = false
+background_opacity = 0.8
+border = "outline"
+border_width = 0.0
+capsule = false
+capsule_fill = "surface_variant"
+capsule_foreground = "on_surface"
+capsule_opacity = 0.8
+capsule_radius = 10
+capsule_thickness = 0.85
+center = ["nix-monitor", "tray", "notifications", "bar", "clock", "session"]
+concave_edge_corners = false
+contact_shadow = false
+enabled = true
+end = ["audio_visualizer", "bluetooth", "brightness", "volume", "network", "battery", "control-center"]
+font_family = "GeistMono Nerd Font Mono"
+font_weight = 500
+hover_highlight = true
+layer = "top"
+margin_edge = 3
+margin_ends = 6
+margin_opposite_edge = 0
+padding = 10
+panel_overlap = 0
+position = "bottom"
+radius = 15
+radius_bottom_left = 15
+radius_bottom_right = 15
+radius_top_left = 15
+radius_top_right = 15
+reserve_space = true
+scale = 1.2500000111758709
+shadow = false
+show_on_workspace_switch = true
+smart_auto_hide = false
+start = ["group:g1", "workspaces", "clipboard", "recorder"]
+thickness = 40
+widget_spacing = 15
 
-        [[bar.default.capsule_group]]
-        accordion = true
-        accordion_direction = "end"
-        enabled = true
-        fill = "on_primary"
-        foreground = "on_surface"
-        id = "g1"
-        members = [ "active_window", "launcher" ]
-        opacity = 0.0
-        padding = 0.0
-        radius = 10.0
-        widget_spacing = 14
+[[bar.default.capsule_group]]
+accordion = true
+accordion_direction = "end"
+enabled = true
+fill = "on_primary"
+foreground = "on_surface"
+id = "g1"
+members = ["active_window", "launcher"]
+opacity = 0.0
+padding = 0.0
+radius = 10.0
+widget_spacing = 14
 
 [battery]
 warning_threshold = 20
@@ -114,73 +114,73 @@ width = 800
 [desktop_widgets]
 enabled = true
 schema_version = 2
-widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-0000000000000002", "desktop-widget-0000000000000004" ]
+widget_order = ["desktop-widget-0000000000000001", "desktop-widget-0000000000000002", "desktop-widget-0000000000000004"]
 
-    [desktop_widgets.grid]
-    cell_size = 32
-    major_interval = 4
-    visible = true
+[desktop_widgets.grid]
+cell_size = 32
+major_interval = 4
+visible = true
 
-    [desktop_widgets.widget.desktop-widget-0000000000000001]
-    box_height = 192.0
-    box_width = 224.0
-    cx = 144.0
-    cy = 130.0
-    output = "eDP-2"
-    placement_height = 0.0
-    placement_width = 0.0
-    rotation = 0.0
-    type = "fancy_audio_visualizer"
+[desktop_widgets.widget.desktop-widget-0000000000000001]
+box_height = 192.0
+box_width = 224.0
+cx = 144.0
+cy = 130.0
+output = "eDP-2"
+placement_height = 0.0
+placement_width = 0.0
+rotation = 0.0
+type = "fancy_audio_visualizer"
 
-        [desktop_widgets.widget.desktop-widget-0000000000000001.settings]
-        background = false
-        bar_width = 0.20000000000000001
-        bloom_intensity = 1.0
-        fade_when_idle = true
-        inner_diameter = 0.5
-        ring_opacity = 1.0
-        rotation_speed = 0.5
-        sensitivity = 1.3
-        visualization_mode = "all"
-        wave_thickness = 1.0
+[desktop_widgets.widget.desktop-widget-0000000000000001.settings]
+background = false
+bar_width = 0.20000000000000001
+bloom_intensity = 1.0
+fade_when_idle = true
+inner_diameter = 0.5
+ring_opacity = 1.0
+rotation_speed = 0.5
+sensitivity = 1.3
+visualization_mode = "all"
+wave_thickness = 1.0
 
-    [desktop_widgets.widget.desktop-widget-0000000000000002]
-    box_height = 64.0
-    box_width = 224.0
-    cx = 1312.0
-    cy = 802.0
-    output = "eDP-1"
-    placement_height = 900.0
-    placement_width = 1440.0
-    rotation = 0.0
-    type = "clock"
+[desktop_widgets.widget.desktop-widget-0000000000000002]
+box_height = 64.0
+box_width = 224.0
+cx = 1312.0
+cy = 802.0
+output = "eDP-1"
+placement_height = 900.0
+placement_width = 1440.0
+rotation = 0.0
+type = "clock"
 
-        [desktop_widgets.widget.desktop-widget-0000000000000002.settings]
-        background = false
-        center_text = true
-        clock_style = "digital"
-        format = "{:%I:%M %p}"
-        shadow = true
+[desktop_widgets.widget.desktop-widget-0000000000000002.settings]
+background = false
+center_text = true
+clock_style = "digital"
+format = "{:%I:%M %p}"
+shadow = true
 
-    [desktop_widgets.widget.desktop-widget-0000000000000004]
-    box_height = 256.0
-    box_width = 160.0
-    cx = 96.000007629394531
-    cy = 706.0
-    output = "eDP-1"
-    placement_height = 900.0
-    placement_width = 1440.0
-    rotation = 0.0
-    type = "media_player"
+[desktop_widgets.widget.desktop-widget-0000000000000004]
+box_height = 256.0
+box_width = 160.0
+cx = 96.000007629394531
+cy = 706.0
+output = "eDP-1"
+placement_height = 900.0
+placement_width = 1440.0
+rotation = 0.0
+type = "media_player"
 
-        [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
-        background = false
-        background_opacity = 0.0
-        background_padding = 0
-        background_radius = 32
-        hide_when_no_media = true
-        layout = "vertical"
-        shadow = true
+[desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+background = false
+background_opacity = 0.0
+background_padding = 0
+background_radius = 32
+hide_when_no_media = true
+layout = "vertical"
+shadow = true
 
 [dock]
 enabled = false
@@ -189,38 +189,38 @@ enabled = false
 delay_ms = 120
 enabled = true
 
-    [hot_corners.bottom_left]
-    action = "launcher"
+[hot_corners.bottom_left]
+action = "launcher"
 
-    [hot_corners.bottom_right]
-    action = "control_center"
+[hot_corners.bottom_right]
+action = "control_center"
 
-    [hot_corners.top_left]
-    action = "command"
-    command = "noctalia msg wallpaper-random"
+[hot_corners.top_left]
+action = "command"
+command = "noctalia msg wallpaper-random"
 
-    [hot_corners.top_right]
-    action = "command"
-    command = "noctalia msg panel-toggle launcher /"
+[hot_corners.top_right]
+action = "command"
+command = "noctalia msg panel-toggle launcher /"
 
 [idle]
-behavior_order = [ "lock", "screen-off", "lock-and-suspend" ]
+behavior_order = ["lock", "screen-off", "lock-and-suspend"]
 pre_action_fade_seconds = 2.0
 
-    [idle.behavior.lock]
-    action = "lock"
-    enabled = true
-    timeout = 600.0
+[idle.behavior.lock]
+action = "lock"
+enabled = true
+timeout = 600.0
 
-    [idle.behavior.lock-and-suspend]
-    action = "lock_and_suspend"
-    enabled = true
-    timeout = 1800.0
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = true
+timeout = 1800.0
 
-    [idle.behavior.screen-off]
-    action = "screen_off"
-    enabled = true
-    timeout = 720.0
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = true
+timeout = 720.0
 
 [location]
 address = "Homs, Syria"
@@ -239,93 +239,93 @@ wallpaper = ""
 [lockscreen_widgets]
 enabled = true
 schema_version = 2
-widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1", "lockscreen-login-box@eDP-2" ]
+widget_order = ["lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1", "lockscreen-login-box@eDP-2"]
 
-    [lockscreen_widgets.grid]
-    cell_size = 16
-    major_interval = 4
-    visible = true
+[lockscreen_widgets.grid]
+cell_size = 16
+major_interval = 4
+visible = true
 
-    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
-    box_height = 196.0
-    box_width = 810.0
-    cx = 2048.0
-    cy = 1978.0
-    output = "HDMI-A-1"
-    placement_height = 2160.0
-    placement_width = 4096.0
-    rotation = 0.0
-    type = "login_box"
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+box_height = 196.0
+box_width = 810.0
+cx = 2048.0
+cy = 1978.0
+output = "HDMI-A-1"
+placement_height = 2160.0
+placement_width = 4096.0
+rotation = 0.0
+type = "login_box"
 
-        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-        background_color = "surface_variant"
-        background_opacity = 0.88
-        background_radius = 12.0
-        center_password_text = false
-        input_opacity = 1.0
-        input_radius = 6.0
-        layout = "regular"
-        show_caps_lock = true
-        show_keyboard_layout = true
-        show_login_button = true
-        show_media = true
-        show_session_buttons = true
-        show_unlock_hint = true
-        show_weather = true
+[lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+background_color = "surface_variant"
+background_opacity = 0.88
+background_radius = 12.0
+center_password_text = false
+input_opacity = 1.0
+input_radius = 6.0
+layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
 
-    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
-    box_height = 196.0
-    box_width = 720.0
-    cx = 720.0
-    cy = 781.0
-    output = "eDP-1"
-    placement_height = 900.0
-    placement_width = 1440.0
-    rotation = 0.0
-    type = "login_box"
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+box_height = 196.0
+box_width = 720.0
+cx = 720.0
+cy = 781.0
+output = "eDP-1"
+placement_height = 900.0
+placement_width = 1440.0
+rotation = 0.0
+type = "login_box"
 
-        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-        background_color = "surface_variant"
-        background_opacity = 0.88
-        background_radius = 12.0
-        center_password_text = false
-        input_opacity = 1.0
-        input_radius = 6.0
-        layout = "regular"
-        show_caps_lock = true
-        show_keyboard_layout = true
-        show_login_button = true
-        show_media = true
-        show_session_buttons = true
-        show_unlock_hint = true
-        show_weather = true
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+background_color = "surface_variant"
+background_opacity = 0.88
+background_radius = 12.0
+center_password_text = false
+input_opacity = 1.0
+input_radius = 6.0
+layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
 
-    [lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
-    box_height = 196.0
-    box_width = 720.0
-    cx = 720.0
-    cy = 781.0
-    output = "eDP-2"
-    placement_height = 0.0
-    placement_width = 0.0
-    rotation = 0.0
-    type = "login_box"
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-2"]
+box_height = 196.0
+box_width = 720.0
+cx = 720.0
+cy = 781.0
+output = "eDP-2"
+placement_height = 0.0
+placement_width = 0.0
+rotation = 0.0
+type = "login_box"
 
-        [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
-        background_color = "surface_variant"
-        background_opacity = 0.88
-        background_radius = 12.0
-        center_password_text = false
-        input_opacity = 1.0
-        input_radius = 6.0
-        layout = "regular"
-        show_caps_lock = true
-        show_keyboard_layout = true
-        show_login_button = true
-        show_media = true
-        show_session_buttons = true
-        show_unlock_hint = true
-        show_weather = true
+[lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
+background_color = "surface_variant"
+background_opacity = 0.88
+background_radius = 12.0
+center_password_text = false
+input_opacity = 1.0
+input_radius = 6.0
+layout = "regular"
+show_caps_lock = true
+show_keyboard_layout = true
+show_login_button = true
+show_media = true
+show_session_buttons = true
+show_unlock_hint = true
+show_weather = true
 
 [nightlight]
 enabled = true
@@ -375,24 +375,17 @@ playAzan = true
 twelveHourFormat = true
 
 [plugins]
-enabled = [
-    "avivbintangaringga/nix-monitor",
-    "ycf/mawaqit",
-    "cleboost/zed-provider",
-    "ashur-d/wallpaper-widget",
-    "noctalia/screen_recorder",
-    "noctalia/wallhaven"
-]
+enabled = ["avivbintangaringga/nix-monitor", "ycf/mawaqit", "cleboost/zed-provider", "ashur-d/wallpaper-widget", "noctalia/screen_recorder", "noctalia/wallhaven"]
 
-    [[plugins.source]]
-    kind = "git"
-    location = "https://github.com/noctalia-dev/official-plugins"
-    name = "official"
+[[plugins.source]]
+kind = "git"
+location = "https://github.com/noctalia-dev/official-plugins"
+name = "official"
 
-    [[plugins.source]]
-    kind = "git"
-    location = "https://github.com/noctalia-dev/community-plugins"
-    name = "community"
+[[plugins.source]]
+kind = "git"
+location = "https://github.com/noctalia-dev/community-plugins"
+name = "community"
 
 [shell]
 avatar_path = "/home/aqua/Pictures/Ash Amber - 2.png"
@@ -418,40 +411,40 @@ screen_time_enabled = true
 settings_show_advanced = true
 telemetry_enabled = false
 
-    [shell.animation]
-    enabled = true
-    speed = 1.0
+[shell.animation]
+enabled = true
+speed = 1.0
 
-    [shell.launcher]
-    app_grid = true
-    auto_paste = "auto"
-    categories = true
-    compact = false
-    fetch_exchange_rates = true
-    pinned = [ "dev.zed.Zed", "brave-origin", "com.mitchellh.ghostty" ]
-    provider_prefix = "/"
-    show_icons = true
-    sort_by_usage = false
+[shell.launcher]
+app_grid = true
+auto_paste = "auto"
+categories = true
+compact = false
+fetch_exchange_rates = true
+pinned = ["dev.zed.Zed", "brave-origin", "com.mitchellh.ghostty"]
+provider_prefix = "/"
+show_icons = true
+sort_by_usage = false
 
-        # Arbitrary Shell Command
+# Arbitrary Shell Command
 
-        [shell.launcher.dmenu.entry.command]
-        label = "Command"
-        prefix = "cmd"
-        glyph = "terminal"
-        global = false
-        freeform = true
-        exec = '{query}'
+[shell.launcher.dmenu.entry.command]
+label = "Command"
+prefix = "cmd"
+glyph = "terminal"
+global = false
+freeform = true
+exec = "{query}"
 
-        # NixOS System Maintenance
+# NixOS System Maintenance
 
-        [shell.launcher.dmenu.entry.nixos]
-        label = "NixOS Management"
-        prefix = "nix"
-        glyph = "terminal"
-        global = false
+[shell.launcher.dmenu.entry.nixos]
+label = "NixOS Management"
+prefix = "nix"
+glyph = "terminal"
+global = false
 
-        command = '''
+command = '''
         printf "%s\t%s\n" \
           "Check Config"    "Evaluate and run checks" \
           "Build Config"    "Build without activation" \
@@ -462,7 +455,7 @@ telemetry_enabled = false
           "Package Search"  "Interactive nix package search"
         '''
 
-        exec = '''
+exec = '''
         case "{selection}" in
           Check*)   cmd="sys-check" ;;
           Build*)   cmd="sys-build" ;;
@@ -477,7 +470,7 @@ telemetry_enabled = false
         ghostty -e fish -lc "$cmd; exec fish"
         '''
 
-        # Local AI (uncomment with home/programs/ai/local.nix)
+# Local AI (uncomment with home/programs/ai/local.nix)
 #
 #         [shell.launcher.dmenu.entry.ai]
 #         label = "Local AI"
@@ -504,129 +497,129 @@ telemetry_enabled = false
 #         esac
 #         '''
 
-        # Nix Package Search
+# Nix Package Search
 
-        [shell.launcher.dmenu.entry.search]
-        label = "Nix Package Search"
-        prefix = "search"
-        glyph = "search"
-        global = false
-        freeform = true
-        exec = "ghostty -e fish -lc 'sys-search $argv[1]; exec fish' -- \"{query}\""
+[shell.launcher.dmenu.entry.search]
+label = "Nix Package Search"
+prefix = "search"
+glyph = "search"
+global = false
+freeform = true
+exec = "ghostty -e fish -lc 'sys-search $argv[1]; exec fish' -- \"{query}\""
 
-        # Configuration Editing
+# Configuration Editing
 
-        [shell.launcher.dmenu.entry.edit_nix]
-        label = "Edit Nix Config"
-        prefix = "edit"
-        glyph = "file-code"
-        global = false
-        command = 'printf "Zed (GUI)\tOpen nix-config in Zed\n"'
-        exec = 'zeditor /saved/nixos-config'
+[shell.launcher.dmenu.entry.edit_nix]
+label = "Edit Nix Config"
+prefix = "edit"
+glyph = "file-code"
+global = false
+command = 'printf "Zed (GUI)\tOpen nix-config in Zed\n"'
+exec = "zeditor /saved/nixos-config"
 
-        # Window Controls
+# Window Controls
 
-        [shell.launcher.dmenu.entry.kill_window]
-        label = "Kill Active Window"
-        prefix = "kill"
-        glyph = "circle-x"
-        global = false
-        command = 'printf "Kill Active Window\tClose current window\n"'
-        exec = 'niri msg action close-window'
+[shell.launcher.dmenu.entry.kill_window]
+label = "Kill Active Window"
+prefix = "kill"
+glyph = "circle-x"
+global = false
+command = 'printf "Kill Active Window\tClose current window\n"'
+exec = "niri msg action close-window"
 
-        # Noctalia Settings
+# Noctalia Settings
 
-        [shell.launcher.dmenu.entry.noctalia_settings]
-        label = "Noctalia Settings"
-        prefix = "settings"
-        glyph = "adjustments"
-        global = false
-        command = 'printf "Noctalia Settings\tOpen settings panel\n"'
-        exec = 'noctalia msg settings-open'
+[shell.launcher.dmenu.entry.noctalia_settings]
+label = "Noctalia Settings"
+prefix = "settings"
+glyph = "adjustments"
+global = false
+command = 'printf "Noctalia Settings\tOpen settings panel\n"'
+exec = "noctalia msg settings-open"
 
-        # Wallpaper Picker
+# Wallpaper Picker
 
-        [shell.launcher.dmenu.entry.wall]
-        label = "Wallpaper"
-        prefix = "wall"
-        glyph = "photo"
-        global = false
-        command = 'printf "Wallpaper Picker\tOpen Noctalia wallpaper panel\n"'
-        exec = 'noctalia msg panel-toggle wallpaper'
+[shell.launcher.dmenu.entry.wall]
+label = "Wallpaper"
+prefix = "wall"
+glyph = "photo"
+global = false
+command = 'printf "Wallpaper Picker\tOpen Noctalia wallpaper panel\n"'
+exec = "noctalia msg panel-toggle wallpaper"
 
-        # Interactive Sub-Menu: Audio Volume
+# Interactive Sub-Menu: Audio Volume
 
-        [shell.launcher.dmenu.entry.volume]
-        label = "Audio Volume"
-        prefix = "vol"
-        glyph = "volume"
-        global = false
-        command = 'printf "Set Audio Volume\tOpen interactive volume picker\n"'
-        exec = 'LEVEL="$(printf "%s\n" 25% 50% 75% 100% 125% 150% | noctalia dmenu -p "Set Sink Volume")"; [ -n "$LEVEL" ] && noctalia msg volume-set "$LEVEL"'
+[shell.launcher.dmenu.entry.volume]
+label = "Audio Volume"
+prefix = "vol"
+glyph = "volume"
+global = false
+command = 'printf "Set Audio Volume\tOpen interactive volume picker\n"'
+exec = 'LEVEL="$(printf "%s\n" 25% 50% 75% 100% 125% 150% | noctalia dmenu -p "Set Sink Volume")"; [ -n "$LEVEL" ] && noctalia msg volume-set "$LEVEL"'
 
-        # Interactive Sub-Menu: Power Profiles
+# Interactive Sub-Menu: Power Profiles
 
-        [shell.launcher.dmenu.entry.power_profile]
-        label = "Power Profile"
-        prefix = "power"
-        glyph = "bolt"
-        global = false
-        command = 'printf "Change Power Profile\tSelect performance or saver mode\n"'
-        exec = 'MODE="$(printf "%s\n" performance balanced power-saver | noctalia dmenu -p "Power Profile")"; [ -n "$MODE" ] && noctalia msg power-set "$MODE"'
+[shell.launcher.dmenu.entry.power_profile]
+label = "Power Profile"
+prefix = "power"
+glyph = "bolt"
+global = false
+command = 'printf "Change Power Profile\tSelect performance or saver mode\n"'
+exec = 'MODE="$(printf "%s\n" performance balanced power-saver | noctalia dmenu -p "Power Profile")"; [ -n "$MODE" ] && noctalia msg power-set "$MODE"'
 
-        # Built-in Launcher Providers
+# Built-in Launcher Providers
 
-        [shell.launcher.providers.calculator]
-        global = true
-        prefix = "calc"
+[shell.launcher.providers.calculator]
+global = true
+prefix = "calc"
 
-        [shell.launcher.providers.emoji]
-        global = false
-        prefix = "emo"
+[shell.launcher.providers.emoji]
+global = false
+prefix = "emo"
 
-        [shell.launcher.providers.session]
-        global = false
-        prefix = "session"
+[shell.launcher.providers.session]
+global = false
+prefix = "session"
 
-        [shell.launcher.providers.wallpaper]
-        global = false
-        prefix = "wallpaper"
+[shell.launcher.providers.wallpaper]
+global = false
+prefix = "wallpaper"
 
-        [shell.launcher.providers.windows]
-        global = false
-        prefix = "win"
+[shell.launcher.providers.windows]
+global = false
+prefix = "win"
 
-    [shell.panel]
-    borders = true
-    clipboard_placement = "attached"
-    control_center_placement = "attached"
-    floating_layer = "overlay"
-    launcher_placement = "floating"
-    launcher_position = "center"
-    list_item_background = true
-    open_near_click_clipboard = false
-    open_near_click_control_center = false
-    open_near_click_launcher = false
-    open_near_click_session = true
-    open_near_click_wallpaper = false
-    polkit_placement = "attached"
-    session_placement = "attached"
-    session_position = "bottom_center"
-    shadow = true
-    transparency_mode = "soft"
-    wallpaper_placement = "floating"
-    wallpaper_position = "center"
+[shell.panel]
+borders = true
+clipboard_placement = "attached"
+control_center_placement = "attached"
+floating_layer = "overlay"
+launcher_placement = "floating"
+launcher_position = "center"
+list_item_background = true
+open_near_click_clipboard = false
+open_near_click_control_center = false
+open_near_click_launcher = false
+open_near_click_session = true
+open_near_click_wallpaper = false
+polkit_placement = "attached"
+session_placement = "attached"
+session_position = "bottom_center"
+shadow = true
+transparency_mode = "soft"
+wallpaper_placement = "floating"
+wallpaper_position = "center"
 
-    [shell.screen_corners]
-    enabled = true
-    size = 1
+[shell.screen_corners]
+enabled = true
+size = 1
 
-    [shell.screenshot]
-    directory = "/home/aqua/Pictures/Screenshots"
+[shell.screenshot]
+directory = "/home/aqua/Pictures/Screenshots"
 
-    [shell.shadow]
-    alpha = 1.0
-    direction = "center"
+[shell.shadow]
+alpha = 1.0
+direction = "center"
 
 [theme]
 builtin = "Catppuccin"
@@ -635,11 +628,11 @@ pure_black_dark = false
 source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
-    [theme.templates]
-    builtin_ids = [ "btop", "cava", "gtk3", "gtk4", "ghostty", "niri" ]
-    community_ids = [ "brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode" ]
-    enable_builtin_templates = true
-    enable_community_templates = true
+[theme.templates]
+builtin_ids = ["btop", "cava", "gtk3", "gtk4", "ghostty", "niri"]
+community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode"]
+enable_builtin_templates = true
+enable_community_templates = true
 
 [wallpaper]
 directory = "/home/aqua/Pictures/Wallpapers"
@@ -647,30 +640,30 @@ edge_smoothness = 0.050000000000000003
 enabled = true
 fill_color = "primary"
 fill_mode = "crop"
-transition = [ "honeycomb" ]
+transition = ["honeycomb"]
 transition_duration = 2000
 transition_on_startup = false
 
-    [wallpaper.automation]
-    enabled = true
-    interval_seconds = 1800
-    order = "random"
-    recursive = false
+[wallpaper.automation]
+enabled = true
+interval_seconds = 1800
+order = "random"
+recursive = false
 
-    [wallpaper.default]
-    path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+[wallpaper.default]
+path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
 
-    [wallpaper.last]
-    path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+[wallpaper.last]
+path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
 
-    [wallpaper.monitors.HDMI-A-1]
-    path = "/home/aqua/Pictures/Wallpapers/SCENE [01].jpg"
+[wallpaper.monitors.HDMI-A-1]
+path = "/home/aqua/Pictures/Wallpapers/SCENE [01].jpg"
 
-    [wallpaper.monitors.eDP-1]
-    path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+[wallpaper.monitors.eDP-1]
+path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
 
-    [wallpaper.monitors.eDP-2]
-    path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
+[wallpaper.monitors.eDP-2]
+path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
 
 [widget.active_window]
 display = "icon_only"
