@@ -169,6 +169,11 @@ in
             mode = "0700";
           }
           {
+            # Hermes identity, OAuth, memories, sessions, skills and plugins.
+            directory = ".hermes";
+            mode = "0700";
+          }
+          {
             # Retain the Electron profile, including local UI preferences.
             directory = ".config/t3code-v2";
             mode = "0700";

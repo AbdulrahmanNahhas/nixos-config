@@ -1,5 +1,7 @@
 {
   config,
+  inputs,
+  pkgs,
   username,
   ...
 }:
@@ -23,6 +25,19 @@
   };
 
   programs.home-manager.enable = true;
+
+  # Hide persistence backing paths as well as their home-directory mounts.
+  services.hermes-agent.extraPlugins = [
+    (pkgs.runCommand "hermes-plugin-bubblewrap" { } ''
+      mkdir -p "$out"
+      cp -r ${inputs.hermes-official-plugins}/bubblewrap/. "$out/"
+      chmod -R u+w "$out"
+      substituteInPlace "$out/sandbox.py" \
+        --replace-fail \
+          'resolved = list(bubblewrap_home.denied_home_paths(home))' \
+          'resolved = ["/saved", *bubblewrap_home.denied_home_paths(home)]'
+    '')
+  ];
 
   # Decrypted at activation by sops-nix; the link contains no secret material.
   home.file.".config/nix/nix.conf".source =

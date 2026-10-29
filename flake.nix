@@ -9,6 +9,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent/ee7e0f517232fb619c72e49d7e648436bddc598e";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    # Reviewed catalog revision; install only its Bubblewrap plugin.
+    hermes-official-plugins = {
+      url = "github:NousResearch/hermes-official-plugins/da8d32406253f1028f587912764bce5a9a416949";
+      flake = false;
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
