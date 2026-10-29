@@ -22,11 +22,11 @@ contact_shadow = true
 enabled = true
 end = []
 font_weight = 400
-margin_edge = 5
+margin_edge = 0
 margin_ends = 305
 margin_opposite_edge = 150
 padding = 10
-panel_overlap = 0
+panel_overlap = 2
 position = "right"
 radius = 80
 reserve_space = false
@@ -41,7 +41,7 @@ widget_spacing = 15
 accordion = false
 accordion_direction = "end"
 enabled = true
-fill = "surface_variant"
+fill = "surface_container"
 id = "g1"
 members = ["keyboard_layout", "launcher"]
 opacity = 0.5
@@ -51,42 +51,42 @@ widget_spacing = 14
 [bar.default]
 auto_hide = false
 background_opacity = 0.8
-border = "outline"
+border = "outline_variant"
 border_width = 0.0
 capsule = false
-capsule_fill = "surface_variant"
+capsule_fill = "surface_container"
 capsule_foreground = "on_surface"
 capsule_opacity = 0.8
 capsule_radius = 10
 capsule_thickness = 0.85
 center = ["nix-monitor", "tray", "notifications", "bar", "clock", "session"]
-concave_edge_corners = false
-contact_shadow = false
+concave_edge_corners = true
+contact_shadow = true
 enabled = true
-end = ["audio_visualizer", "bluetooth", "brightness", "volume", "network", "battery", "control-center"]
+end = ["audio_visualizer", "ram", "bluetooth", "brightness", "volume", "network", "battery", "control-center"]
 font_family = "GeistMono Nerd Font Mono"
 font_weight = 500
 hover_highlight = true
 layer = "top"
-margin_edge = 3
-margin_ends = 6
+margin_edge = 0
+margin_ends = 0
 margin_opposite_edge = 0
 padding = 10
 panel_overlap = 0
 position = "bottom"
-radius = 15
-radius_bottom_left = 15
-radius_bottom_right = 15
-radius_top_left = 15
-radius_top_right = 15
+radius = 80
+radius_bottom_left = 0
+radius_bottom_right = 0
+radius_top_left = 80
+radius_top_right = 80
 reserve_space = true
 scale = 1.2500000111758709
-shadow = false
+shadow = true
 show_on_workspace_switch = true
 smart_auto_hide = false
-start = ["group:g1", "workspaces", "clipboard", "recorder"]
+start = ["group:g1", "workspaces", "clipboard", "recorder", "privacy"]
 thickness = 40
-widget_spacing = 15
+widget_spacing = 10
 
 [[bar.default.capsule_group]]
 accordion = true
@@ -105,7 +105,9 @@ widget_spacing = 14
 warning_threshold = 20
 
 [control_center]
+circular_avatar = false
 hidden_tabs = []
+show_avatar_border = false
 show_shortcut_labels = true
 sidebar = "compact"
 sidebar_section = "compact"
@@ -165,7 +167,7 @@ shadow = true
 [desktop_widgets.widget.desktop-widget-0000000000000004]
 box_height = 256.0
 box_width = 160.0
-cx = 96.000007629394531
+cx = 96.0
 cy = 706.0
 output = "eDP-1"
 placement_height = 900.0
@@ -234,31 +236,33 @@ enabled = true
 fingerprint = true
 monitors = []
 tint_intensity = 0.84999999999999998
+transition = ["honeycomb"]
 wallpaper = ""
 
 [lockscreen_widgets]
 enabled = true
 schema_version = 2
-widget_order = ["lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1", "lockscreen-login-box@eDP-2"]
+widget_order = ["lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1", "lockscreen-login-box@eDP-2", "lockscreen-widget-0000000000000001"]
 
 [lockscreen_widgets.grid]
-cell_size = 16
+cell_size = 24
 major_interval = 4
 visible = true
 
 [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
 box_height = 196.0
 box_width = 810.0
-cx = 2048.0
-cy = 1978.0
+cx = 960.0
+cy = 989.0
 output = "HDMI-A-1"
-placement_height = 2160.0
-placement_width = 4096.0
+placement_height = 1080.0
+placement_width = 1920.0
 rotation = 0.0
 type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
-background_color = "surface_variant"
+show_password_reveal = true
+background_color = "surface_container"
 background_opacity = 0.88
 background_radius = 12.0
 center_password_text = false
@@ -277,7 +281,7 @@ show_weather = true
 box_height = 196.0
 box_width = 720.0
 cx = 720.0
-cy = 781.0
+cy = 772.0
 output = "eDP-1"
 placement_height = 900.0
 placement_width = 1440.0
@@ -285,7 +289,8 @@ rotation = 0.0
 type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
-background_color = "surface_variant"
+show_password_reveal = true
+background_color = "surface_container"
 background_opacity = 0.88
 background_radius = 12.0
 center_password_text = false
@@ -312,7 +317,8 @@ rotation = 0.0
 type = "login_box"
 
 [lockscreen_widgets.widget."lockscreen-login-box@eDP-2".settings]
-background_color = "surface_variant"
+show_password_reveal = true
+background_color = "surface_container"
 background_opacity = 0.88
 background_radius = 12.0
 center_password_text = false
@@ -327,10 +333,27 @@ show_session_buttons = true
 show_unlock_hint = true
 show_weather = true
 
+[lockscreen_widgets.widget.lockscreen-widget-0000000000000001]
+box_height = 320.0
+box_width = 544.0
+cx = 720.0
+cy = 378.0
+output = "eDP-1"
+placement_height = 900.0
+placement_width = 1440.0
+rotation = 0.0
+type = "clock"
+
+[lockscreen_widgets.widget.lockscreen-widget-0000000000000001.settings]
+background = false
+center_text = true
+clock_style = "digital"
+shadow = true
+
 [nightlight]
 enabled = true
 force = true
-temperature_day = 5000
+temperature_day = 3000
 temperature_night = 2500
 
 [osd]
@@ -354,11 +377,9 @@ panel_open_near_click = false
 show_update_check_notification = true
 update_command = "nh os switch /saved/nixos-config --update"
 
-[plugin_settings."cleboost/zed-provider"]
-db_path = "/home/aqua/.local/share/zed/db/0-stable/db.sqlite"
-
-[plugin_settings."mindnbytes/nix-status"]
-flake_dir = "/saved/nixos-config"
+[plugin_settings."noctalia/screen_recorder"]
+directory = "/home/aqua/Videos/Recordings"
+video_qp = 40
 
 [plugin_settings."noctalia/wallhaven"]
 api_key = ""
@@ -375,7 +396,7 @@ playAzan = true
 twelveHourFormat = true
 
 [plugins]
-enabled = ["avivbintangaringga/nix-monitor", "ycf/mawaqit", "cleboost/zed-provider", "ashur-d/wallpaper-widget", "noctalia/screen_recorder", "noctalia/wallhaven"]
+enabled = ["avivbintangaringga/nix-monitor", "ycf/mawaqit", "ashur-d/wallpaper-widget", "noctalia/screen_recorder", "noctalia/wallhaven", "alexander/screen-toolkit"]
 
 [[plugins.source]]
 kind = "git"
@@ -388,7 +409,7 @@ location = "https://github.com/noctalia-dev/community-plugins"
 name = "community"
 
 [shell]
-avatar_path = "/home/aqua/Pictures/Ash Amber - 2.png"
+avatar_path = "/home/aqua/Pictures/avatar/Matsumoto.png"
 button_borders = true
 card_borders = true
 clipboard_auto_paste = "auto"
@@ -396,7 +417,7 @@ clipboard_confirm_clear_history = true
 clipboard_enabled = true
 clipboard_history_max_entries = 200
 clipboard_keep_from_closed_apps = true
-corner_radius_scale = 0.0
+corner_radius_scale = 2.0
 external_ip_enabled = false
 font_family = "Geist"
 input_borders = true
@@ -409,6 +430,8 @@ popup_borders = true
 popup_shadows = true
 screen_time_enabled = true
 settings_show_advanced = true
+settings_window_translucent = true
+show_close_buttons = false
 telemetry_enabled = false
 
 [shell.animation]
@@ -418,13 +441,17 @@ speed = 1.0
 [shell.launcher]
 app_grid = true
 auto_paste = "auto"
-categories = true
+categories = false
 compact = false
 fetch_exchange_rates = true
-pinned = ["dev.zed.Zed", "brave-origin", "com.mitchellh.ghostty"]
+layout = "simple"
+pinned = ["dev.zed.Zed", "brave-origin", "com.mitchellh.ghostty", "hermes", "codex-desktop", "mullvad-browser", "dev.zed.Delta"]
 provider_prefix = "/"
+show_app_actions = true
 show_icons = true
 sort_by_usage = false
+track_usage = false
+width = 600
 
 # Arbitrary Shell Command
 
@@ -594,10 +621,10 @@ borders = true
 clipboard_placement = "attached"
 control_center_placement = "attached"
 floating_layer = "overlay"
-launcher_placement = "floating"
+launcher_placement = "attached"
 launcher_position = "center"
-list_item_background = true
-open_near_click_clipboard = false
+list_item_background = false
+open_near_click_clipboard = true
 open_near_click_control_center = false
 open_near_click_launcher = false
 open_near_click_session = true
@@ -623,14 +650,15 @@ direction = "center"
 
 [theme]
 builtin = "Catppuccin"
+community_palette = "Oxocarbon"
 mode = "dark"
 pure_black_dark = false
 source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
-builtin_ids = ["btop", "cava", "gtk3", "gtk4", "ghostty", "niri"]
-community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode"]
+builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "niri"]
+community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode", "yazi"]
 enable_builtin_templates = true
 enable_community_templates = true
 
@@ -651,19 +679,34 @@ order = "random"
 recursive = false
 
 [wallpaper.default]
-path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+path = "/home/aqua/Pictures/Wallpapers/Scene - 019.jpg"
 
 [wallpaper.last]
-path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+path = "/home/aqua/Pictures/Wallpapers/Scene - 019.jpg"
 
 [wallpaper.monitors.HDMI-A-1]
-path = "/home/aqua/Pictures/Wallpapers/SCENE [01].jpg"
+path = "/home/aqua/Pictures/Wallpapers/Scene - 152.png"
 
 [wallpaper.monitors.eDP-1]
-path = "/home/aqua/Pictures/Wallpapers/_/Your Name [1] (ANIME) (MOVIE) (EYE) (PRIVATE) (GIRL).png"
+path = "/home/aqua/Pictures/Wallpapers/Scene - 019.jpg"
 
 [wallpaper.monitors.eDP-2]
 path = "/home/aqua/Pictures/Wallpapers/wallhaven-5ymjz9.png"
+
+[[wallpaper.favorite]]
+path = "/home/aqua/Pictures/Wallpapers/Scene - 017.jpg"
+
+[[wallpaper.favorite]]
+palette_source = "wallpaper"
+path = "/home/aqua/Pictures/Wallpapers/Scene - 075.png"
+theme_mode = "dark"
+wallpaper_scheme = "m3-content"
+
+[[wallpaper.favorite]]
+path = "/home/aqua/Pictures/Wallpapers/Scene - 103.png"
+
+[[wallpaper.favorite]]
+path = "/home/aqua/Pictures/Wallpapers/NixOS - 001.png"
 
 [widget.active_window]
 display = "icon_only"
@@ -677,13 +720,14 @@ capsule = false
 centered = true
 color_1 = "primary"
 color_2 = "secondary"
-enabled = true
+enabled = false
 mirrored = true
 scale = 1.1500000000000001
 show_when_idle = true
 width = 65
 
 [widget.bar]
+anchor = true
 dynamicIcon = true
 showElapsed = true
 type = "ycf/mawaqit:bar"
@@ -711,7 +755,7 @@ enabled = true
 [widget.clock]
 anchor = false
 capsule = false
-capsule_fill = "surface_variant"
+capsule_fill = "surface_container"
 capsule_foreground = "on_surface"
 capsule_opacity = 0.71999999999999997
 capsule_padding = 6
@@ -771,18 +815,39 @@ capsule = false
 enabled = true
 hide_when_no_unread = true
 
+[widget.privacy]
+icon_spacing = 9
+interactive = false
+
+[widget.ram]
+show_glyph = false
+
 [widget.recorder]
 type = "noctalia/screen_recorder:recorder"
 
 [widget.session]
 capsule = false
-capsule_fill = "surface_variant"
+capsule_fill = "surface_container"
 capsule_foreground = "on_surface"
 capsule_radius = 14
-custom_image = "/home/aqua/Pictures/nixos.png"
+custom_image = "/home/aqua/Pictures/NixOS.png"
 custom_image_colorize = true
 enabled = true
 scale = 0.85000000000000009
+
+[widget.taskbar]
+capsule = true
+capsule_radius = 15
+hide_empty_workspaces = true
+inactive_opacity = 0.5
+item_spacing = 10
+minimal = true
+only_active_workspace = true
+show_active_indicator = false
+show_window_title = true
+show_workspace_label = false
+window_title_max_width = 128
+workspace_group_capsule = false
 
 [widget.tray]
 capsule = false
@@ -809,6 +874,7 @@ type = "ashur-d/wallpaper-widget:widget"
 
 [widget.workspaces]
 active_pill_size = 2.0
+capsule = false
 capsule_radius = "auto"
 enabled = true
 focused_output_only = false

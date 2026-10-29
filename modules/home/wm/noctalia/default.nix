@@ -1,5 +1,10 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 {
+  home.packages = [
+    pkgs.gpu-screen-recorder
+    pkgs.slurp
+  ];
+
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
