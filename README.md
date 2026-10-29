@@ -101,6 +101,22 @@ installation when launching by app ID. After activation and verification of the
 managed system copy, retire the test copy without deleting its app data. This
 scope cleanup is separate from system configuration activation.
 
+## Noctalia desktop and recording
+
+[Desktop settings](modules/home/wm/noctalia/config.toml) declare the bar layout,
+widgets, launcher, theme and wallpapers. The
+[Noctalia module](modules/home/wm/noctalia/default.nix) supplies
+`gpu-screen-recorder` and `slurp` for recording and region selection.
+Recordings use `Videos/Recordings`, covered by the existing `Videos` persistence.
+
+After activating the dependency change, restart Noctalia with
+`systemctl --user restart noctalia.service` so it rechecks recorder availability.
+Verify a short recording, stop it, and verify a second recording saves and plays.
+For failures, inspect `journalctl --user -b -u noctalia.service` and
+`~/.local/state/noctalia/screen_recorder/gpu-screen-recorder.log`.
+`noctalia config validate` checks the active configuration, including persisted
+settings overrides; those can differ from the repository declarations.
+
 ## Persistent state
 
 ```text
@@ -123,17 +139,6 @@ must be migrated into `/saved/home/aqua/.var/app/io.nahhasio.Linux` before first
 activation of that new persistence mount, following the migration guidance below.
 The exact list belongs in
 [`preservation.nix`](modules/nixos/storage/preservation.nix).
-
-T3 Code retains `.t3` for chat databases and settings, plus `.config/t3code-v2`
-for its desktop profile and local preferences. The live `.t3` mount was verified
-against `/saved`; the desktop profile entry still needs activation and a mount
-check. Close T3 before activating that entry; its profile may start fresh without
-migration. Chat and preference retention across reboot still needs verification.
-
-Before activating a new persistence entry, migrate existing data into the matching
-path under `/saved`. Stop the owning service while copying, preserve permissions,
-and use a coherent backup for an active database. An empty backing mount can hide
-existing state. Removing an entry leaves the old backing data in place.
 
 **Pending host acceptance:** the retained Btrfs, SMART and power-profile state
 at `/var/lib/btrfs`, `/var/lib/smartmontools` and

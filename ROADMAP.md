@@ -173,6 +173,13 @@ Check the installed Flatpak’s current key backend and migration warnings befor
 | ? Verify     | nix-ld / external binaries                                               | Runtime library compatibility inherited from external modules; inspect effective settings.                                                                      |
 | — Candidate  | [Gamescope](https://github.com/ValveSoftware/gamescope)                  | Optional gaming compositor and presentation controls; not declared.                                                                                             |
 
+Noctalia's [desktop configuration](modules/home/wm/noctalia/config.toml) now
+selects the updated bars, widgets, launcher and wallpaper preferences. Its module
+supplies the recorder and region-picker dependencies. **Pending host acceptance:**
+after activation and a Noctalia restart, verify two consecutive recordings save
+and play, then verify region selection and audio. TOML validation alone does not
+establish recording or lockscreen behavior.
+
 ## Nix tooling & workflow
 
 | Status       | Technology                                                                        | Purpose                                                                                                                                                                                       |

@@ -59,29 +59,36 @@ different revision. Check `flake.lock` and upstream source when behavior differs
 
 ## Desktop and applications
 
-| Reference                                                                        | Use                                                   |
-| -------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| [Flatpak documentation](https://docs.flatpak.org/en/latest/index.html)           | Runtimes, permissions, portals and command reference  |
-| [nix-flatpak](https://github.com/gmodena/nix-flatpak)                            | Declarative Flatpak installation and overrides        |
-| [Niri documentation](https://niri-wm.github.io/niri/)                            | Layout, input, outputs, key bindings and window rules |
-| [Noctalia documentation](https://docs.noctalia.dev/)                             | Shell, launcher, lock screen and desktop controls     |
-| [Zed documentation](https://zed.dev/docs)                                        | Editor settings, language tools, tasks and agents     |
-| [Ghostty documentation](https://ghostty.org/docs)                                | Terminal configuration and troubleshooting            |
-| [PipeWire documentation](https://docs.pipewire.org/)                             | Audio/video transport and configuration               |
-| [WirePlumber documentation](https://pipewire.pages.freedesktop.org/wireplumber/) | Media-session policy                                  |
+| Reference                                                                                              | Use                                                   |
+| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| [Flatpak documentation](https://docs.flatpak.org/en/latest/index.html)                                 | Runtimes, permissions, portals and command reference  |
+| [nix-flatpak](https://github.com/gmodena/nix-flatpak)                                                  | Declarative Flatpak installation and overrides        |
+| [Niri documentation](https://niri-wm.github.io/niri/)                                                  | Layout, input, outputs, key bindings and window rules |
+| [Noctalia documentation](https://docs.noctalia.dev/)                                                   | Shell, launcher, lock screen and desktop controls     |
+| [Noctalia screen recorder](https://github.com/noctalia-dev/official-plugins/tree/main/screen_recorder) | Recorder dependencies, settings and troubleshooting   |
+| [GPU Screen Recorder](https://git.dec05eba.com/gpu-screen-recorder/about/)                             | Capture and encoding backend                          |
+| [Zed documentation](https://zed.dev/docs)                                                              | Editor settings, language tools, tasks and agents     |
+| [Ghostty documentation](https://ghostty.org/docs)                                                      | Terminal configuration and troubleshooting            |
+| [PipeWire documentation](https://docs.pipewire.org/)                                                   | Audio/video transport and configuration               |
+| [WirePlumber documentation](https://pipewire.pages.freedesktop.org/wireplumber/)                       | Media-session policy                                  |
 
 ## AI tools and shared state
 
-| Reference                                                                                             | Use                                                |
-| ----------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| [OpenCode v2 instructions](https://opencode.ai/v2/docs/instructions)                                     | Global and project instruction loading             |
-| [OpenCode v2 skills](https://opencode.ai/v2/docs/skills/)                                                | Skill discovery, metadata and permissions          |
-| [Bubblewrap](https://github.com/containers/bubblewrap)                                                  | Sandbox construction and security boundaries       |
-| [Cherry Studio releases](https://github.com/CherryHQ/cherry-studio/releases)                             | Official versioned Linux artifacts                 |
-| [SQLite architecture](https://www.sqlite.org/serverless.html)                                           | Local database storage without a database server   |
-| [Hindsight coding integrations](https://hindsight.vectorize.io/sdks/integrations/coding-agents)            | OpenCode v2 and local daemon lifecycle              |
-| [Hindsight memory curation](https://hindsight.vectorize.io/developer/api/memories)                         | Memory inspection, correction and invalidation     |
-| [Hindsight documents](https://hindsight.vectorize.io/developer/api/documents)                             | Source records and deletion                        |
+- [Hermes Nix and Home Manager setup](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup)
+- [Hermes platform support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)
+- [Official Hermes Bubblewrap plugin](https://hermes-agent.nousresearch.com/docs/plugins/bubblewrap)
+- [Hermes credential pools and OAuth](https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-pools)
+
+| Reference                                                                                       | Use                                              |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [OpenCode v2 instructions](https://opencode.ai/v2/docs/instructions)                            | Global and project instruction loading           |
+| [OpenCode v2 skills](https://opencode.ai/v2/docs/skills/)                                       | Skill discovery, metadata and permissions        |
+| [Bubblewrap](https://github.com/containers/bubblewrap)                                          | Sandbox construction and security boundaries     |
+| [Cherry Studio releases](https://github.com/CherryHQ/cherry-studio/releases)                    | Official versioned Linux artifacts               |
+| [SQLite architecture](https://www.sqlite.org/serverless.html)                                   | Local database storage without a database server |
+| [Hindsight coding integrations](https://hindsight.vectorize.io/sdks/integrations/coding-agents) | OpenCode v2 and local daemon lifecycle           |
+| [Hindsight memory curation](https://hindsight.vectorize.io/developer/api/memories)              | Memory inspection, correction and invalidation   |
+| [Hindsight documents](https://hindsight.vectorize.io/developer/api/documents)                   | Source records and deletion                      |
 
 Release feeds for the main components are grouped in the
 [roadmap watchlist](ROADMAP.md#release-watch). A project appearing here is a reading
