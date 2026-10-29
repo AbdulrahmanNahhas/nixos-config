@@ -27,7 +27,11 @@ There is no unit-test framework or coverage target. For configuration changes, r
 
 ## Documentation Maintenance
 
-Update affected documentation with each behavior change:
+Do not update `README.md`, `ROADMAP.md` or `REFERENCES.md` automatically after each edit. Change them only when explicitly requested or when a change makes existing guidance materially incorrect or leaves essential operating, migration or recovery instructions missing. Update only the relevant file and section; routine package additions, small configuration tweaks and refactors do not need documentation entries.
+
+Keep these files curated, not as changelogs, package inventories or task logs. Do not add incidental details, speculative follow-up work, validation transcripts or upstream links merely because a tool or application was touched. These documentation rules take precedence over broader update-on-every-change wording elsewhere in the repository.
+
+When a documentation update is warranted, use these scopes:
 
 - `README.md`: system layout, commands, persistence and recovery.
 - `ROADMAP.md`: grouped technology status, proposed work and acceptance criteria.
@@ -56,4 +60,4 @@ issues when applicable.
 
 ## Security & State
 
-Do not commit credentials, keys, tokens, or `/saved/secrets/nix.conf`. Root is tmpfs; update the persistence section in `README.md` whenever persistent state changes. Preserve unrelated modifications in a dirty worktree.
+Do not commit credentials, keys, tokens, or `/saved/secrets/nix.conf`. Root is tmpfs; document persistence changes in `README.md` only when they affect existing persistence guidance or require essential migration or recovery instructions. Do not list every new application state directory there; the configuration owns the exact paths. Preserve unrelated modifications in a dirty worktree.
