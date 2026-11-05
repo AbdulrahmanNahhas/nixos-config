@@ -1,0 +1,35 @@
+[mgr]
+prepend_keymap = [
+  # ── Clean "g" menu: locations ─────────────────────────
+
+  { on = ["g", "1"], run = "cd ~", desc = "Home" },
+  { on = ["g", "2"], run = "cd ~/Projects", desc = "Projects" },
+  { on = ["g", "3"], run = "cd ~/Documents", desc = "Documents" },
+  { on = ["g", "4"], run = "cd ~/Downloads", desc = "Downloads" },
+  { on = ["g", "5"], run = "cd ~/.config", desc = "Config" },
+
+  { on = ["g", "l"], run = "plugin lazygit", desc = "Git: Open Lazygit" },
+
+  # ── Remove duplicate built-ins from "g" menu ──────────
+
+  { on = ["g", "h"], run = "noop" },
+  { on = ["g", "d"], run = "noop" },
+  { on = ["g", "c"], run = "noop" },
+
+  # ── Friendly file operations ───────────────────────────
+
+  { on = "<C-c>", run = "yank", desc = "Copy selected files" },
+  { on = "<C-x>", run = "yank --cut", desc = "Cut selected files" },
+  { on = "<C-v>", run = "paste", desc = "Paste files" },
+  { on = "<Delete>", run = "remove", desc = "Move to trash" },
+
+  # ── Direct shortcuts ──────────────────────────────────
+
+  { on = "E", run = "shell --orphan -- zeditor %h", desc = "Zed · Selected item", for = "linux" },
+  { on = "!", run = "shell \"$SHELL\" --block", desc = "Shell · Here", for = "unix" },
+
+  # ── Copy helpers ──────────────────────────────────────
+
+  { on = ["c", "p"], run = "copy path", desc = "Copy · Absolute path" },
+  { on = ["c", "d"], run = "copy dirpath", desc = "Copy · Parent directory" },
+]
