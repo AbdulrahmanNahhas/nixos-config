@@ -81,8 +81,6 @@ different revision. Check `flake.lock` and upstream source when behavior differs
 
 | Reference                                                                                       | Use                                              |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| [OpenCode v2 instructions](https://opencode.ai/v2/docs/instructions)                            | Global and project instruction loading           |
-| [OpenCode v2 skills](https://opencode.ai/v2/docs/skills/)                                       | Skill discovery, metadata and permissions        |
 | [Bubblewrap](https://github.com/containers/bubblewrap)                                          | Sandbox construction and security boundaries     |
 | [Cherry Studio releases](https://github.com/CherryHQ/cherry-studio/releases)                    | Official versioned Linux artifacts               |
 | [SQLite architecture](https://www.sqlite.org/serverless.html)                                   | Local database storage without a database server |
