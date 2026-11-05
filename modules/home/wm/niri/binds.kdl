@@ -19,8 +19,12 @@ binds {
         spawn "ghostty"
     }
 
-    Mod+E repeat=false hotkey-overlay-title="Files" {
-        spawn "nautilus"
+    Mod+Return repeat=false hotkey-overlay-title="Terminal" {
+        spawn "ghostty"
+    }
+
+    Mod+E  repeat=false hotkey-overlay-title="Files" {
+        spawn "ghostty" "-e" "yazi";
     }
 
     Mod+Z repeat=false hotkey-overlay-title="Zed Editor" {
