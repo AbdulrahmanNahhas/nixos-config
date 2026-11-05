@@ -159,11 +159,20 @@ window-rule {
     opacity 1.00
 }
 
+// Ghostty — normal terminal (50%)
 window-rule {
-    match app-id="^com.mitchellh.ghostty$"
-    opacity 0.90
+    match app-id=r#"^com\.mitchellh\.ghostty$"#
+    opacity 1.0
     background-effect { blur true; }
+    default-column-width { proportion 0.5; }
 }
+
+// Yazi inside Ghostty — full width (100%)
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"# title="^Yazi"
+    default-column-width { proportion 1.0; }
+}
+
 
 window-rule {
     match app-id="brave-rust-book.cs.brown.edu__-Default"
@@ -174,11 +183,7 @@ window-rule {
 window-rule {
     match app-id="dev.zed.Zed"
     match app-id="codex-desktop"
-    opacity 0.90
-    background-effect { blur true; }
-}
-
-window-rule {
+    match app-id="dev.noctalia.Noctalia"
     match app-id="dev.zed.Delta"
     opacity 0.90
     background-effect { blur true; }
