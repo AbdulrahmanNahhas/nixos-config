@@ -1,8 +1,17 @@
 # App IDs are the single source for installation, exceptions, and saved Flatpak data.
 {
+  "com.stremio.Stremio" = {
+    overrides.Context = {
+      devices = [ "dri" ];
+      filesystems = [
+        "xdg-download"
+        "xdg-run/stremio:create"
+        "xdg-run/pipewire-0:ro"
+      ];
+    };
+  };
   "com.heroicgameslauncher.hgl" = {
     overrides.Context = {
-      # Wine games need XWayland and shared IPC even on a Wayland desktop.
       sockets = [
         "wayland"
         "x11"
@@ -16,8 +25,13 @@
         "dri"
         "input"
       ];
-      # Keep Heroic games in its sandbox home for derived persistence.
-      filesystems = [ "/run/udev:ro" ];
+      filesystems = [
+        "/run/udev:ro"
+        "/saved/games/heroic"
+        # Steam integration
+        "/home/aqua/.steam"
+        "/home/aqua/.local/share/Steam"
+      ];
     };
   };
   "com.github.ADBeveridge.Raider" = { };

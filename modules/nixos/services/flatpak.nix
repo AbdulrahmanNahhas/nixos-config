@@ -18,7 +18,7 @@ let
     "!xdg-config/gh"
     "!xdg-config/BraveSoftware"
     "!xdg-data/keyrings"
-    "!xdg-data/opencode"
+    # "!xdg-data/opencode"
     "!xdg-run/keyring"
   ];
   appOverrides =
