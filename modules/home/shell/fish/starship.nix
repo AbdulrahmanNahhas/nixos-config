@@ -24,17 +24,24 @@ _: {
       format = "$username$hostname$directory($git_branch$git_commit$git_status$git_state[](fg:git_bg) )$nix_shell$container$fill$rust$nodejs$python$cmd_duration$jobs$sudo$status$time$line_break$character";
       palettes = {
         moonlit = {
-          ink = "#191b26";
-          text = "#dce1ef";
-          muted = "#a0a8bd";
-          surface = "#292d3e";
-          lavender = "#c4b5fd";
-          blue = "#b9d6fb";
-          path_bg = "#25354d";
-          mint = "#a7dfbc";
-          git_bg = "#253c34";
-          amber = "#f1cf91";
-          red = "#f29aa5";
+          # Terminal / Ghostty ANSI colors
+
+          ink = "black";
+          text = "white";
+          muted = "bright-black";
+
+          # Surfaces / Backgrounds
+          surface = "black";
+          path_bg = "blue";
+          git_bg = "green";
+
+          # Accents
+          lavender = "bright-purple";
+          blue = "bright-blue";
+          mint = "bright-green";
+          amber = "bright-yellow";
+          red = "bright-red";
+
         };
       };
       username = {
@@ -50,7 +57,7 @@ _: {
         format = "[](fg:surface)[$ssh_symbol$hostname]($style)[](fg:surface) ";
       };
       directory = {
-        style = "bold fg:blue bg:path_bg";
+        style = "bold fg:ink bg:path_bg";
         format = "[](fg:path_bg)[󰉋 $path]($style)[$read_only](fg:red bg:path_bg)[](fg:path_bg) ";
         home_symbol = "~";
         read_only = " ";
@@ -61,7 +68,7 @@ _: {
       };
       git_branch = {
         symbol = "";
-        style = "fg:mint bg:git_bg";
+        style = "fg:ink bg:git_bg";
         format = "[](fg:git_bg)[$symbol $branch]($style)";
         truncation_length = 22;
         truncation_symbol = "…";
@@ -73,7 +80,7 @@ _: {
         format = "[ @$hash]($style)";
       };
       git_status = {
-        style = "fg:mint bg:git_bg";
+        style = "fg:ink bg:git_bg";
         format = "([ $all_status$ahead_behind]($style))";
         conflicted = "=$count ";
         stashed = "*$count ";
@@ -87,7 +94,7 @@ _: {
         diverged = "↑$ahead_count ↓$behind_count ";
       };
       git_state = {
-        style = "bold fg:amber bg:git_bg";
+        style = "bold fg:ink bg:git_bg";
         format = "[ $state( $progress_current/$progress_total)]($style)";
       };
       nix_shell = {
@@ -145,7 +152,7 @@ _: {
       time = {
         disabled = false;
         time_format = "%I:%M%P";
-        style = "fg:muted bg:surface";
+        style = "fg:text bg:surface";
         format = "[](fg:surface)[󰥔 $time]($style)[](fg:surface)";
       };
       character = {
