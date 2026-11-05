@@ -178,11 +178,11 @@ in
             directory = ".config/t3code-v2";
             mode = "0700";
           }
-          {
-            # OpenCode provider credentials (auth.json) and session history.
-            directory = ".local/share/opencode";
-            mode = "0700";
-          }
+          # {
+          #   # OpenCode provider credentials (auth.json) and session history.
+          #   directory = ".local/share/opencode";
+          #   mode = "0700";
+          # }
 
           # Git & Forge CLI Tools
           {
