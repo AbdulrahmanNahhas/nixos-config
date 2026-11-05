@@ -1,40 +1,51 @@
 {
+  config,
   lib,
   pkgs,
   username,
   ...
 }:
 let
+  # NixOS-generated desktop sessions.
+  # Automatically includes Niri, Budgie, and future DEs.
+  sessionsDir = "${config.services.displayManager.sessionData.desktops}/share";
+
   tuigreet = pkgs.writeShellScript "tuigreet-start" ''
+    # Clean Plymouth handoff.
     if ${pkgs.plymouth}/bin/plymouth --ping 2>/dev/null; then
       ${pkgs.plymouth}/bin/plymouth quit --wait
     fi
 
+    # Prepare a clean TTY.
     export TERM=linux
-    ${lib.getExe' pkgs.util-linux "setterm"} --reset 2>/dev/null || true
+
+    ${lib.getExe' pkgs.util-linux "setterm"} \
+      --reset 2>/dev/null || true
+
     ${lib.getExe' pkgs.util-linux "setterm"} \
       --foreground white \
       --background black \
       --cursor on \
       --clear=all 2>/dev/null || true
 
-    # Limit the menu to real users; nixbld UIDs start at 30001.
+    # Minimal login with Wayland session selection.
     exec ${lib.getExe pkgs.tuigreet} \
-      --greeting ${lib.escapeShellArg "SYSTEM // SECURE LOGIN"} \
+      --greeting ${lib.escapeShellArg "N I X O S"} \
       --time \
-      --time-format ${lib.escapeShellArg "%A, %d %B  ·  %H:%M"} \
-      --user ${username} \
+      --time-format ${lib.escapeShellArg "%A  /  %d %B  /  %H:%M"} \
+      --user ${lib.escapeShellArg username} \
       --user-menu \
       --user-menu-min-uid 1000 \
       --user-menu-max-uid 29999 \
       --asterisks \
-      --asterisks-char "•" \
+      --asterisks-char "*" \
       --width 56 \
-      --window-padding 2 \
+      --window-padding 3 \
       --container-padding 2 \
-      --prompt-padding 1 \
+      --prompt-padding 2 \
       --greet-align center \
-      --theme ${lib.escapeShellArg "border=white;text=white;time=gray;title=white;greet=white;prompt=gray;input=bright-white;action=gray;button=white;container=black"} \
+      --theme ${lib.escapeShellArg "border=gray;text=white;time=gray;title=bright-white;greet=bright-white;prompt=gray;input=bright-white;action=gray;button=bright-white;container=black"} \
+      --sessions ${lib.escapeShellArg "${sessionsDir}/wayland-sessions"} \
       --cmd ${lib.escapeShellArg "${pkgs.niri}/bin/niri-session"} \
       --power-shutdown ${lib.escapeShellArg "systemctl poweroff"} \
       --power-reboot ${lib.escapeShellArg "systemctl reboot"}
@@ -44,8 +55,6 @@ in
   services.greetd = {
     enable = true;
     restart = true;
-
-    # Upstream way to run a TUI greeter: wires up the TTY and stdio on tty1.
     useTextGreeter = true;
 
     settings.default_session = {
@@ -54,23 +63,26 @@ in
     };
   };
 
-  # Recover from a crashed greeter without creating an unbounded restart loop.
+  # Bounded crash recovery.
   systemd.services.greetd = {
     serviceConfig = {
       Restart = lib.mkForce "always";
       RestartSec = "1s";
     };
+
     unitConfig = {
       StartLimitBurst = 5;
       StartLimitIntervalSec = 30;
     };
   };
 
-  # Unlock the login keyring for apps launched in the greetd session.
+  # GNOME Keyring integration.
   security.pam.services.greetd.enableGnomeKeyring = true;
 
-  # Bypass the nested PAM call that causes 90-second login stalls on Shadow.
-  # Keep greetd PAM; supply the runtime directory normally added by pam_systemd.
+  # Existing workaround for the 90-second login stall.
+  # Temporary compatibility measure; not a recommended
+  # permanent configuration because it bypasses PAM
+  # for systemd user managers.
   systemd.services."user@" = {
     environment.XDG_RUNTIME_DIR = "/run/user/%i";
     serviceConfig.PAMName = lib.mkForce "";
