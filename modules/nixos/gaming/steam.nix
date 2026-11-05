@@ -5,8 +5,9 @@
   programs = {
     steam = {
       enable = true;
-      extraCompatPackages = with pkgs; [ proton-ge-bin ];
-      protontricks.enable = true;
+      extraCompatPackages = with pkgs; [
+        proton-ge-bin
+      ];
     };
     gamemode.enable = true;
     xwayland.enable = true;
@@ -16,5 +17,9 @@
     "d /saved/games 0755 ${username} users -"
   ];
 
-  environment.systemPackages = with pkgs; [ xwayland-satellite ];
+  environment.systemPackages = with pkgs; [
+    xwayland-satellite
+    mangohud
+    vulkan-tools
+  ];
 }
