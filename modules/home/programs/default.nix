@@ -6,5 +6,7 @@
     ./delta.nix
     ./secrets.nix
     ./zed
+    ./helix
+    ./yazi
   ];
 }
