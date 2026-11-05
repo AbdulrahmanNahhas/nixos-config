@@ -19,10 +19,10 @@
   };
 
   # Use opencode providers login to configure a provider.
-  programs.opencode = {
-    enable = true;
-    context = ./AGENTS.md;
-  };
+  # programs.opencode = {
+  #   enable = true;
+  #   context = ./AGENTS.md;
+  # };
 
   # Delta looks for project-level instructions in its config directory.
   xdg.configFile."delta/AGENTS.md".source = ./AGENTS.md;
@@ -34,10 +34,10 @@
       type = "custom";
       command = lib.getExe pkgs.codex-acp;
     };
-    OpenCode = {
-      type = "custom";
-      command = lib.getExe pkgs.opencode;
-      args = [ "acp" ];
-    };
+    # OpenCode = {
+    #   type = "custom";
+    #   command = lib.getExe pkgs.opencode;
+    #   args = [ "acp" ];
+    # };
   };
 }
