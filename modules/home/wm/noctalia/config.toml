@@ -657,8 +657,8 @@ source = "wallpaper"
 wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
-builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "niri"]
-community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "opencode", "yazi"]
+builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "niri", "helix"]
+community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "yazi"]
 enable_builtin_templates = true
 enable_community_templates = true
 
