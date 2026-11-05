@@ -36,6 +36,13 @@
     cores = 4;
   };
 
+  # Together with the 4 GiB local-build budget, leave desktop headroom.
+  systemd.slices.nix-build.sliceConfig = {
+    MemoryHigh = "5G";
+    MemoryMax = "6G";
+    MemorySwapMax = "2G";
+  };
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;

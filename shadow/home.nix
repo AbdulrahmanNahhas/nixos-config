@@ -26,6 +26,13 @@
 
   programs.home-manager.enable = true;
 
+  # Together with the 6 GiB Nix budget, leave headroom on this 16 GiB host.
+  systemd.user.slices.build.Slice = {
+    MemoryHigh = "3G";
+    MemoryMax = "4G";
+    MemorySwapMax = "2G";
+  };
+
   # Hide persistence backing paths as well as their home-directory mounts.
   services.hermes-agent.extraPlugins = [
     (pkgs.runCommand "hermes-plugin-bubblewrap" { } ''
