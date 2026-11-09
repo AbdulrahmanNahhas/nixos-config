@@ -88,7 +88,7 @@ An empty backing mount can hide existing data. Single-device scrub detects damag
 | ? Verify     | AMD microcode + PRIME / RTD3                                               | Hardware-dependent and inherited settings; confirm effective options and runtime behavior.                                                            |
 | ✓ Configured | [Power Profiles Daemon + AMD P-state](modules/nixos/services/power.nix)    | Desktop power profiles and CPU energy preference; UPower supplies battery state.                                                                      |
 | — Candidate  | TLP / TuneD / auto-cpufreq                                                 | Alternative policy backends; compare only if the current backend has a measured gap.                                                                  |
-| ✓ Configured | [systemd service sandboxing](modules/nixos/services/kavita.nix)            | Kavita has explicit restrictions; service hardening is applied per service.                                                                           |
+| — Candidate  | [BookOrbit service sandboxing](modules/nixos/services/bookorbit.nix)       | Disabled draft with container restrictions; review configuration and secrets before enabling.                                                         |
 
 <a id="battery-baseline"></a>
 

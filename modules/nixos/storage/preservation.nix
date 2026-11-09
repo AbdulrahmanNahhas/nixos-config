@@ -92,6 +92,7 @@ in
           group = "systemd-journal";
           mode = "2755";
         }
+        "/var/lib/bookorbit"
         {
           # Persist private state; systemd manages the public link and runtime owner.
           directory = "/var/lib/private/dnscrypt-proxy";
