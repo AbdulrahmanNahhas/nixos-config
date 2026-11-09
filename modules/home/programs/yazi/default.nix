@@ -1,5 +1,20 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
+
 let
+  # ── External Yazi configuration ────────────────────────
+
+  settings = fromTOML (builtins.readFile ./yazi.toml);
+
+  # ── Custom Yatline ─────────────────────────────────────
+  #
+  # Based on the Yatline package from Nixpkgs.
+  #
+  # Patches:
+  #   1. Rounded status/header end caps.
+  #   2. Yazi 26.9.1 Url API compatibility.
+  #
+  # Keep these patches until upstream supports them.
+
   yatlineRounded = pkgs.runCommand "yatline-rounded-0.5.0" { } ''
     mkdir -p "$out"
     cp -r ${pkgs.yaziPlugins.yatline}/. "$out/"
@@ -12,51 +27,112 @@ let
     path = pathlib.Path(sys.argv[1])
     source = path.read_text()
 
-    left = "return ui.Line({ section_a_line, section_b_line, section_c_line })"
-    right = "return ui.Line({ section_c_line, section_b_line, section_a_line })"
+    # ── 1. Rounded separators ──────────────────────────
 
-    assert source.count(left) == 1, "Unsupported Yatline left-side layout"
-    assert source.count(right) == 1, "Unsupported Yatline right-side layout"
+    left = (
+        "return ui.Line({ section_a_line, "
+        "section_b_line, section_c_line })"
+    )
 
-    # Add a left-facing cap before the first visible component.
+    right = (
+        "return ui.Line({ section_c_line, "
+        "section_b_line, section_a_line })"
+    )
+
+    assert source.count(left) == 1, (
+        "Unsupported Yatline left-side layout"
+    )
+
+    assert source.count(right) == 1, (
+        "Unsupported Yatline right-side layout"
+    )
+
+    # Left-facing cap before the first visible section.
+
     source = source.replace(left, """
             set_mode_style(cx.active.mode)
+
             local bg = #section_a_components > 0 and Yatline.config.style_a.bg
                 or #section_b_components > 0 and Yatline.config.style_b.bg
                 or Yatline.config.style_c.bg
+
             local cap = ui.Span("")
+
             if bg ~= "reset" then
                 cap = ui.Span(Yatline.config.section_separator.open):fg(bg)
             end
-            return ui.Line({ cap, section_a_line, section_b_line, section_c_line })
+
+            return ui.Line({
+                cap,
+                section_a_line,
+                section_b_line,
+                section_c_line,
+            })
     """.strip())
 
-    # Add a right-facing cap after the last visible component.
+    # Right-facing cap after the last visible section.
+
     source = source.replace(right, """
             set_mode_style(cx.active.mode)
+
             local bg = #section_a_components > 0 and Yatline.config.style_a.bg
                 or #section_b_components > 0 and Yatline.config.style_b.bg
                 or Yatline.config.style_c.bg
+
             local cap = ui.Span("")
+
             if bg ~= "reset" then
                 cap = ui.Span(Yatline.config.section_separator.close):fg(bg)
             end
-            return ui.Line({ section_c_line, section_b_line, section_a_line, cap })
+
+            return ui.Line({
+                section_c_line,
+                section_b_line,
+                section_a_line,
+                cap,
+            })
     """.strip())
+
+    # ── 2. Yazi 26.9.1 API compatibility ───────────────
+    #
+    # Deprecated:
+    #   Url.is_search
+    #
+    # Replacement:
+    #   Url.spec.is_search
+    #
+    # Yatline 0.5.0 contains three affected references.
+    # Assert the count to catch unexpected upstream changes.
+
+    old = ".is_search"
+    new = ".spec.is_search"
+
+    assert source.count(old) == 3, (
+        "Unexpected Yatline Url.is_search references"
+    )
+
+    source = source.replace(old, new)
+
+    # ── Write patched plugin ───────────────────────────
 
     path.write_text(source)
     PY
   '';
+
 in
 {
-
   programs.yazi = {
     enable = true;
 
-    # External configuration files.
-    settings = fromTOML (builtins.readFile ./yazi.toml);
+    # ── General configuration ────────────────────────────
+
+    settings = settings;
+
+    # ── Keybindings ──────────────────────────────────────
 
     keymap = fromTOML (builtins.readFile ./keymap.toml);
+
+    # ── Plugins ──────────────────────────────────────────
 
     plugins = {
       # File-level Git status indicators.
@@ -65,17 +141,23 @@ in
         setup = true;
       };
 
-      # Git branch and repository status for Yatline.
+      # Git repository information for Yatline.
       yatline-githead = pkgs.yaziPlugins.yatline-githead;
+
+      # Git interface.
       lazygit = pkgs.yaziPlugins.lazygit;
+
+      # Archive handling.
       ouch = pkgs.yaziPlugins.ouch;
+
+      # ── Yatline status/header bars ────────────────────
 
       yatline = {
         package = yatlineRounded;
         setup = true;
 
         settings = {
-          # ── Rounded separators ──────────
+          # ── Rounded separators ────────────────────────
 
           section_separator = {
             open = "";
@@ -97,7 +179,7 @@ in
             outer = 1;
           };
 
-          # ── Ghostty / Noctalia colors ───
+          # ── Ghostty / Noctalia colors ─────────────────
 
           style_a = {
             fg = "black";
@@ -121,7 +203,7 @@ in
 
           show_background = false;
 
-          # ── Display ─────────────────────
+          # ── Display ───────────────────────────────────
 
           display_header_line = true;
           display_status_line = true;
@@ -132,15 +214,14 @@ in
             "status"
           ];
 
-          # ── TOP BAR ─────────────────────
+          # ── Top bar ───────────────────────────────────
 
           header_line = {
             left = {
               section_a = [ ];
               section_b = [ ];
 
-              # Full current directory.
-              # Uses the low-emphasis style.
+              # Current directory.
               section_c = [
                 {
                   type = "string";
@@ -157,8 +238,7 @@ in
             right = {
               section_a = [ ];
 
-              # Git repository status.
-              # Empty outside Git repositories.
+              # Git branch and repository status.
               section_b = [
                 {
                   type = "coloreds";
@@ -166,7 +246,7 @@ in
                 }
               ];
 
-              # Clock.
+              # Current time.
               section_c = [
                 {
                   type = "string";
@@ -177,11 +257,11 @@ in
             };
           };
 
-          # ── BOTTOM BAR ──────────────────
+          # ── Bottom bar ────────────────────────────────
 
           status_line = {
             left = {
-              # NORMAL / SELECT / UNSET
+              # NORMAL / SELECT / UNSET.
               section_a = [
                 {
                   type = "string";
@@ -189,7 +269,7 @@ in
                 }
               ];
 
-              # Current file or directory.
+              # Selected file/directory.
               section_b = [
                 {
                   type = "string";
@@ -213,7 +293,7 @@ in
             };
 
             right = {
-              # File position, e.g. 2/6.
+              # Current file position.
               section_a = [
                 {
                   type = "string";
@@ -221,7 +301,7 @@ in
                 }
               ];
 
-              # Search and filter information.
+              # Active search and filter.
               section_b = [
                 {
                   type = "string";
@@ -242,8 +322,11 @@ in
       };
     };
 
-    # Initialize Githead after Yatline.
-    # Keep repository information compact.
+    # ── Githead initialization ───────────────────────────
+    #
+    # Home Manager initializes configured plugins
+    # before appending this initLua content.
+
     initLua = ''
       require("yatline-githead"):setup({
         order = {
@@ -256,38 +339,46 @@ in
 
         show_numbers = true,
 
+        -- Branch
         show_branch = true,
         branch_prefix = "",
         branch_symbol = " ",
         branch_color = "brightblue",
         branch_borders = "",
 
+        -- Hide extra repository details
         show_remote_branch = false,
         show_tag = false,
         show_commit = false,
         show_stashes = false,
         show_state = false,
 
+        -- Remote tracking
         show_behind_ahead_remote = true,
         ahead_remote_symbol = "↑",
         behind_remote_symbol = "↓",
         ahead_remote_color = "brightgreen",
         behind_remote_color = "brightred",
 
+        -- Staged changes
         show_staged = true,
         staged_symbol = "+",
         staged_color = "brightgreen",
 
+        -- Unstaged changes
         show_unstaged = true,
         unstaged_symbol = "~",
         unstaged_color = "brightyellow",
 
+        -- Untracked files
         show_untracked = true,
         untracked_symbol = "?",
         untracked_color = "brightred",
       })
     '';
 
+    # No hardcoded flavor:
+    # Noctalia generates Yazi's dynamic theme.
     flavors = { };
   };
 }
