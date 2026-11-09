@@ -15,9 +15,11 @@
     };
 
     preservation.url = "github:nix-community/preservation";
-    # Pin the unreleased overrides.writeMode = "replace" support.
-    nix-flatpak.url = "github:gmodena/nix-flatpak/0f392e302963bce69787c495aa95ef1d50dda889";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -81,7 +83,7 @@
         };
 
         modules = [
-          ./${host.hostname}
+          ./configuration.nix
         ];
       };
 
