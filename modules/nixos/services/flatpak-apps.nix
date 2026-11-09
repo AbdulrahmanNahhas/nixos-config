@@ -1,15 +1,5 @@
 # App IDs are the single source for installation, exceptions, and saved Flatpak data.
 {
-  "com.stremio.Stremio" = {
-    overrides.Context = {
-      devices = [ "dri" ];
-      filesystems = [
-        "xdg-download"
-        "xdg-run/stremio:create"
-        "xdg-run/pipewire-0:ro"
-      ];
-    };
-  };
   "com.heroicgameslauncher.hgl" = {
     overrides.Context = {
       sockets = [
@@ -106,22 +96,6 @@
       };
     };
   };
-  "com.jeffser.Nocturne" = {
-    overrides = {
-      Context = {
-        filesystems = [
-          "~/.config/dconf:ro"
-          "xdg-music"
-        ];
-        shared = [ "!network" ];
-      };
-    };
-  };
-  "moe.tsuna.tsukimi" = {
-    overrides = {
-      Context.filesystems = [ "~/.config/dconf:ro" ];
-    };
-  };
   "dev.geopjr.Archives" = { };
   "org.libreoffice.LibreOffice" = {
     overrides = {
@@ -134,11 +108,6 @@
         "xdg-run/gvfsd"
         "~/.local/state/noctalia:ro" # Read-only Noctalia theme state.
       ];
-    };
-  };
-  "io.github.alainm23.planify" = {
-    overrides = {
-      Context.filesystems = [ "~/.config/dconf:ro" ];
     };
   };
   "org.gnome.World.Secrets" = {
