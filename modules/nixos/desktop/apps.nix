@@ -8,12 +8,9 @@
 
   environment.systemPackages = with pkgs; [
     nautilus
-    gnome-text-editor
     loupe
-    showtime
     papers
     resources
     gnome-disk-utility
-    gnome-calendar
   ];
 }
