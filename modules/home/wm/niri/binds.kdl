@@ -32,7 +32,7 @@ binds {
     }
 
     Mod+B repeat=false hotkey-overlay-title="Web Browser" {
-        spawn "brave-origin"
+        spawn "firefox"
     }
 
     Mod+V repeat=false hotkey-overlay-title="Clipboard" {

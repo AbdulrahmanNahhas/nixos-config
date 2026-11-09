@@ -191,9 +191,9 @@ in
 
           # Web Browser
           {
-            directory = ".config/BraveSoftware/Brave-Origin";
+            directory = ".config/mozilla";
             mode = "0700";
-          } # Brave history, bookmarks, extensions, sessions, and cookies
+          } # Firefox history, bookmarks, extensions, sessions, and cookies
 
         ]
         # Flatpak Application Data
@@ -203,11 +203,6 @@ in
           mode = "0700";
         }) (builtins.attrNames (lib.filterAttrs (_: app: app.persist or true) flatpakApps))
         ++ [
-
-          {
-            directory = ".config/rust-book-brave";
-            mode = "0700";
-          }
 
           # Editor / IDE State
           ".local/share/zed"

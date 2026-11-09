@@ -445,7 +445,7 @@ categories = false
 compact = false
 fetch_exchange_rates = true
 layout = "simple"
-pinned = ["dev.zed.Zed", "brave-origin", "com.mitchellh.ghostty", "codex-desktop", "mullvad-browser", "dev.zed.Delta"]
+pinned = ["dev.zed.Zed", "firefox", "com.mitchellh.ghostty", "codex-desktop", "mullvad-browser", "dev.zed.Delta"]
 provider_prefix = "/"
 show_app_actions = true
 show_icons = true
@@ -658,7 +658,7 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
 builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "niri", "helix"]
-community_ids = ["brave-origin", "libreoffice", "zed", "bat", "lazygit", "yazi"]
+community_ids = ["libreoffice", "zed", "bat", "pywalfox", "lazygit", "yazi"]
 enable_builtin_templates = true
 enable_community_templates = true
 

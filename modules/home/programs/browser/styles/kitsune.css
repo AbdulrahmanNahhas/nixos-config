@@ -1,0 +1,9 @@
+#navigator-toolbox {
+  border-top: 3px solid #ff79c6 !important;
+}
+
+/* DEBUG: uncomment to prove the file loads (toolbar turns red), then remove again
+*/
+/*#navigator-toolbox {
+  background: red !important;
+}*/

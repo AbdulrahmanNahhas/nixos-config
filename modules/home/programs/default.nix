@@ -2,7 +2,7 @@
   imports = [
     ./ghostty
     ./ai
-    ./brave.nix
+    ./browser
     ./delta.nix
     ./secrets.nix
     ./zed
