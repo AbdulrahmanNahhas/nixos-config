@@ -134,22 +134,12 @@
       };
     };
   };
-  "im.riot.Riot" = {
-    origin = "flathub";
+  "org.gnome.Fractal" = {
     overrides = {
-      Environment = {
-        ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-        XDG_CURRENT_DESKTOP = "GNOME";
+      Context = {
+        # GTK4 requires GPU acceleration for GSK rendering & video media
+        devices = [ "dri" ];
       };
-      Context.devices = [ "dri" ]; # GPU-accelerated Electron rendering.
-      # Allow Element to use the host GNOME Keyring Secret Service.
-      "Session Bus Policy" = {
-        "org.freedesktop.secrets" = "talk";
-      };
-      Context.filesystems = [
-        "~/.config/dconf:ro"
-        "xdg-run/pipewire-0"
-      ];
     };
   };
   "cx.modal.Reflection" = {
