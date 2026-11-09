@@ -10,7 +10,7 @@ Personal NixOS and Home Manager configuration for Aqua's Razer Blade 14
 | Area         | Setup                                                              |
 | ------------ | ------------------------------------------------------------------ |
 | Base         | NixOS unstable, pinned flake inputs, Home Manager                  |
-| Desktop      | Niri, Noctalia, greetd/tuigreet, Ghostty, Fish                     |
+| Desktop      | Niri, Noctalia, Noctalia greeter, Ghostty, Fish                    |
 | Graphics     | AMD Radeon 880M for the desktop; NVIDIA RTX 5060 for offload       |
 | Storage      | LUKS2 + Btrfs, Disko layout, Preservation, temporary root          |
 | Network      | NetworkManager with iwd, local DNSCrypt resolver, inbound firewall |

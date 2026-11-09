@@ -1,3 +1,4 @@
+{ username, ... }:
 {
   services.displayManager.defaultSession = "niri";
 
@@ -6,6 +7,17 @@
     MOZ_ENABLE_WAYLAND = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "auto";
   };
+
+  services.displayManager.noctalia-greeter = {
+    enable = true;
+
+    settings = {
+      session.default = "niri";
+      user.default = username;
+    };
+  };
+
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   programs.niri.enable = true;
 }
