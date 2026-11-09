@@ -78,19 +78,6 @@ _: {
       end
     '';
 
-    book_library = ''
-      switch $argv[1]
-        case on
-          sudo systemctl start kavita --no-pager
-        case off
-          sudo systemctl stop kavita --no-pager
-        case status
-          sudo systemctl status kavita.service --no-pager
-        case '*'
-          echo "Usage: book_library on|off|status"
-      end
-    '';
-
     wallpaper = ''
       set -l base_dir ~/Pictures/Wallpapers
 

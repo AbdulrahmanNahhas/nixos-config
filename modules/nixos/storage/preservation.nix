@@ -92,7 +92,6 @@ in
           group = "systemd-journal";
           mode = "2755";
         }
-        "/var/lib/kavita"
         {
           # Persist private state; systemd manages the public link and runtime owner.
           directory = "/var/lib/private/dnscrypt-proxy";
