@@ -74,11 +74,6 @@ different revision. Check `flake.lock` and upstream source when behavior differs
 
 ## AI tools and shared state
 
-- [Hermes Nix and Home Manager setup](https://hermes-agent.nousresearch.com/docs/getting-started/nix-setup)
-- [Hermes platform support](https://hermes-agent.nousresearch.com/docs/getting-started/platform-support)
-- [Official Hermes Bubblewrap plugin](https://hermes-agent.nousresearch.com/docs/plugins/bubblewrap)
-- [Hermes credential pools and OAuth](https://hermes-agent.nousresearch.com/docs/user-guide/features/credential-pools)
-
 | Reference                                                                                       | Use                                              |
 | ----------------------------------------------------------------------------------------------- | ------------------------------------------------ |
 | [Bubblewrap](https://github.com/containers/bubblewrap)                                          | Sandbox construction and security boundaries     |

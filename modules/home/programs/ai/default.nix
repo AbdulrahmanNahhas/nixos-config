@@ -4,8 +4,6 @@
   ...
 }:
 {
-  imports = [ ./hermes.nix ];
-
   # Local AI is parked; re-enable with its Noctalia launcher.
   # llama-cpp-cuda rebuilds locally on Nixpkgs updates.
   # imports = [ ./local.nix ];
