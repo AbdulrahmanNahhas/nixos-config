@@ -17,7 +17,7 @@
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     sessionVariables = {
-      EDITOR = "nano";
+      EDITOR = "hx";
       VISUAL = "zeditor --wait";
     };
   };
