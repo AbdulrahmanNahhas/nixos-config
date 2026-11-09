@@ -191,10 +191,9 @@ in
 
           # Web Browser
           {
-            directory = ".config/mozilla";
+            directory = ".config/mozilla"; # not .mozilla
             mode = "0700";
           } # Firefox history, bookmarks, extensions, sessions, and cookies
-
         ]
         # Flatpak Application Data
         # Derive app data from the catalog; theme extensions have no app data.
@@ -203,7 +202,6 @@ in
           mode = "0700";
         }) (builtins.attrNames (lib.filterAttrs (_: app: app.persist or true) flatpakApps))
         ++ [
-
           # Editor / IDE State
           ".local/share/zed"
           ".config/zed"
