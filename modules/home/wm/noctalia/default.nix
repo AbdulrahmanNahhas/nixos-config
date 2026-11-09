@@ -3,6 +3,11 @@
   home.packages = [
     pkgs.gpu-screen-recorder
     pkgs.slurp
+    (pkgs.writeShellApplication {
+      name = "wallpaper-tag";
+      runtimeInputs = [ pkgs.coreutils ];
+      text = builtins.readFile ./wallpaper-tag.sh;
+    })
   ];
 
   programs.noctalia = {

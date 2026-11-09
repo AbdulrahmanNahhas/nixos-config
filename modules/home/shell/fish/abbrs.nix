@@ -2,7 +2,7 @@ _: {
   programs.fish.shellAbbrs = {
     # Offload: nv blender or nv flatpak run org.blender.Blender.
     nv = "nvidia-offload";
-    wp = "wallpaper";
+    wp = "wallpaper-tag";
 
     # NixOS System Management
     nx-rebuild = "sys-switch";

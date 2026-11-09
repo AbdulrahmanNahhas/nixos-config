@@ -126,7 +126,20 @@ in
 
     # ── General configuration ────────────────────────────
 
-    settings = settings;
+    settings = settings // {
+      open = settings.open // {
+        prepend_rules = [
+          {
+            url = "${config.home.homeDirectory}/Pictures/Wallpapers/**/*.{jpg,jpeg,png,webp,avif,gif}";
+            use = [
+              "wallpaper"
+              "system"
+            ];
+          }
+        ]
+        ++ settings.open.prepend_rules;
+      };
+    };
 
     # ── Keybindings ──────────────────────────────────────
 

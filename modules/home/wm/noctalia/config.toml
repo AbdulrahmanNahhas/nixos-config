@@ -199,7 +199,7 @@ action = "control_center"
 
 [hot_corners.top_left]
 action = "command"
-command = "noctalia msg wallpaper-random"
+command = "wallpaper-tag next"
 
 [hot_corners.top_right]
 action = "command"
@@ -673,7 +673,7 @@ transition_duration = 2000
 transition_on_startup = false
 
 [wallpaper.automation]
-enabled = true
+enabled = false
 interval_seconds = 1800
 order = "random"
 recursive = false

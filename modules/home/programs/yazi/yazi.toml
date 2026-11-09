@@ -35,6 +35,10 @@ system = [
   { run = "xdg-open %s1", orphan = true, desc = "System · Default application", for = "linux" },
 ]
 
+wallpaper = [
+  { run = "noctalia msg wallpaper-set %s1", orphan = true, desc = "Set as wallpaper", for = "linux" },
+]
+
 [open]
 prepend_rules = [
   # Directories
@@ -48,7 +52,7 @@ prepend_rules = [
   { mime = "text/*", use = ["helix", "zed", "system"] },
 
   # Media
-  { mime = "image/*", use = ["system"] },
+  { mime = "image/*", use = ["system", "wallpaper"] },
   { mime = "video/*", use = ["system"] },
   { mime = "audio/*", use = ["system"] },
 
