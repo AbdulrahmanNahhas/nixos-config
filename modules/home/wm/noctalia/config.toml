@@ -203,7 +203,7 @@ command = "wallpaper-tag next"
 
 [hot_corners.top_right]
 action = "command"
-command = "noctalia msg panel-toggle launcher /"
+command = "desktop-menu"
 
 [idle]
 behavior_order = ["lock", "screen-off", "lock-and-suspend"]
@@ -564,15 +564,15 @@ global = false
 command = 'printf "Noctalia Settings\tOpen settings panel\n"'
 exec = "noctalia msg settings-open"
 
-# Wallpaper Picker
+# Wallpaper Tags
 
-[shell.launcher.dmenu.entry.wall]
-label = "Wallpaper"
-prefix = "wall"
+[shell.launcher.dmenu.entry.wallpaper_tags]
+label = "Wallpaper Filters"
+prefix = "walltag"
 glyph = "photo"
 global = false
-command = 'printf "Wallpaper Picker\tOpen Noctalia wallpaper panel\n"'
-exec = "noctalia msg panel-toggle wallpaper"
+command = 'printf "Wallpaper Filters\tFilter by name or tag and cycle in order\n"'
+exec = "desktop-menu wallpapers"
 
 # Interactive Sub-Menu: Audio Volume
 

@@ -8,6 +8,10 @@
       runtimeInputs = [ pkgs.coreutils ];
       text = builtins.readFile ./wallpaper-tag.sh;
     })
+    (pkgs.writeShellApplication {
+      name = "desktop-menu";
+      text = builtins.readFile ./desktop-menu.sh;
+    })
   ];
 
   programs.noctalia = {

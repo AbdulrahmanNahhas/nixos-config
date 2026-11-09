@@ -12,7 +12,7 @@ binds {
 
     // Copilot key sends Super+Shift+F23.
     Mod+Shift+F23 repeat=false hotkey-overlay-title="Commands" {
-        spawn "noctalia" "msg" "panel-toggle" "launcher" "/"
+        spawn "desktop-menu"
     }
 
     Mod+T repeat=false hotkey-overlay-title="Terminal" {
