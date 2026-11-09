@@ -1,5 +1,16 @@
 # App IDs are the single source for installation, exceptions, and saved Flatpak data.
 {
+  "com.bilingify.readest" = {
+    overrides = {
+      Context = {
+        devices = [ "dri" ];
+        filesystems = [
+          "xdg-documents"
+          "xdg-download"
+        ];
+      };
+    };
+  };
   "com.heroicgameslauncher.hgl" = {
     overrides.Context = {
       sockets = [
