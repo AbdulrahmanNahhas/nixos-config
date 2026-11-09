@@ -104,6 +104,8 @@ let
   };
 in
 {
+  xdg.enable = true;
+
   xdg = {
     terminal-exec = {
       enable = true;
