@@ -26,6 +26,8 @@
   programs.devenv = {
     enable = true;
     enableNushellIntegration = true;
+    # An extra prefix would overflow Starship's full-width header.
+    settings.shell.prompt_prefix = false;
   };
 
   # Zed loads direnv directly; native devenv owns terminal activation.
