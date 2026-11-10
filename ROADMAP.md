@@ -60,7 +60,9 @@ forward existing work; it does not authorize activation, migration or enrollment
 - [ ] **Accept the revised login and desktop stack on the host.** Verify the
       Noctalia greeter and cursor, both Niri and secondary Umbriel sessions, keyring
       unlock, lock/wake, application launchers, Firefox
-      profiles, wallpaper controls, portals, native Flatpak font/icon discovery and screen recording. **Complete when:**
+      profiles, wallpaper controls, portals, native Flatpak font/icon discovery and screen recording.
+      Include the Rofi action menu, Nushell login-shell migration and Ghostty/Zed terminals, NH confirmation/rollback
+      workflow, Travel restore and Focus/Presentation restore. **Complete when:**
       a fresh login and reboot succeed, desktop controls work, and two consecutive
       recordings save and play. Repository build success alone is insufficient.
 

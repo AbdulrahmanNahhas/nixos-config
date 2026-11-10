@@ -44,14 +44,14 @@ when preparing an uncommitted change. Builds do not activate a configuration.
 After reviewing the diff and successful build, temporarily activate when ready:
 
 ```sh
-sudo nh os test /saved/nixos-config
+nh os test /saved/nixos-config --ask
 ```
 
 Check the affected behavior while keeping an authenticated terminal and a
 known-good boot generation available. After acceptance, make it persistent:
 
 ```sh
-sudo nh os switch /saved/nixos-config
+nh os switch /saved/nixos-config --ask
 ```
 
 Boot, kernel and driver changes require a reboot test. A build or temporary
