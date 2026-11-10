@@ -237,7 +237,7 @@ in
       font_size = 18;
       font_family = "GeistMono Nerd Font Propo";
       shell = {
-        program = "fish";
+        program = "nu";
       };
       env = {
         TERM_PROGRAM = "zed";

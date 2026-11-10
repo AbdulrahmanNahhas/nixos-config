@@ -6,7 +6,8 @@
   ...
 }:
 {
-  programs.fish.enable = true;
+  programs.nushell.enable = true;
+  environment.shells = [ pkgs.nushell ];
 
   # Change the encrypted hash; passwd changes disappear after reboot.
   users = {
@@ -23,7 +24,7 @@
           "networkmanager"
         ]
         ++ lib.optional config.programs.gamemode.enable "gamemode";
-        shell = pkgs.fish;
+        shell = pkgs.nushell;
       };
     };
   };

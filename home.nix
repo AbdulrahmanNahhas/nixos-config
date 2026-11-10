@@ -15,7 +15,9 @@
     ./home/desktop/bookmarks.nix
     ./home/desktop/launchers.nix
 
-    ./home/terminal/fish
+    ./home/terminal/starship.nix
+    ./home/terminal/tools.nix
+    ./home/terminal/nushell.nix
     ./home/terminal/ghostty
     ./home/terminal/yazi
     ./home/terminal/fastfetch.nix

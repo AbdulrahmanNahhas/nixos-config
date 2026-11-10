@@ -31,7 +31,7 @@ _: {
         "super+shift+v=paste_from_clipboard"
       ];
 
-      shell-integration = "fish";
+      shell-integration = "detect";
     };
   };
 }
