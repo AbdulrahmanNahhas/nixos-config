@@ -1,0 +1,199 @@
+[input.keyboard]
+layout = "us,ara"
+options = "grp:alt_shift_toggle"
+
+[input.touchpad]
+click_method = "clickfinger"
+disable_while_typing = true
+natural_scroll = true
+scroll_method = "two_finger"
+tap = true
+tap_button_map = "left_right_middle"
+
+[input.cursor]
+size = 26
+theme = "Bibata-Modern-Ice"
+
+[layout]
+extent_presets = [0.33333, 0.5, 0.66667]
+gap = 8
+mode = "scrolling"
+
+[layout.scrolling]
+center_focused = "never"
+center_underfull_strip = false
+default_extent_fraction = 0.5
+
+[appearance]
+border_width = 2
+corner_radius = 16
+prefer_no_csd = true
+
+[output.eDP-1]
+mode = "2880x1800@120"
+scale = 2.0
+vrr = "always"
+
+[keybinds]
+
+# Shell
+"Mod+Tab" = { action = "overview-toggle", repeat = false }
+"Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+"Mod+D" = { action = "spawn desktop-menu", repeat = false }
+"Mod+Shift+F23" = { action = "spawn desktop-menu", repeat = false }
+"Mod+T" = { action = "spawn ghostty", repeat = false }
+"Mod+Return" = { action = "spawn ghostty", repeat = false }
+"Mod+E" = { action = "spawn ghostty -e yazi", repeat = false }
+"Mod+Z" = { action = "spawn zeditor", repeat = false }
+"Mod+B" = { action = "spawn firefox", repeat = false }
+"Mod+V" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
+"Mod+W" = { action = "spawn noctalia msg panel-toggle ashur-d/wallpaper-widget:hub", repeat = false }
+"Mod+Ctrl+W" = { action = "spawn noctalia msg panel-toggle wallpaper", repeat = false }
+"Mod+Comma" = { action = "spawn noctalia msg panel-toggle settings", repeat = false }
+"Mod+N" = { action = "spawn noctalia msg panel-toggle control-center notifications", repeat = false }
+"Mod+X" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
+"Mod+Shift+Slash" = { action = "cheatsheet-toggle", repeat = false }
+
+# Session and security
+"Mod+Alt+L" = { action = "spawn noctalia msg session lock", repeat = false, allow_when_inhibited = true }
+"Mod+Shift+E" = { action = "session-quit", repeat = false }
+"Mod+Escape" = { action = "shortcuts-inhibit-toggle", repeat = false, allow_when_inhibited = true }
+"Mod+Shift+P" = { action = "dpms-off", repeat = false }
+
+# Audio and media
+"XF86AudioRaiseVolume" = { action = "spawn wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 3%+", allow_when_locked = true }
+"XF86AudioLowerVolume" = { action = "spawn wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-", allow_when_locked = true }
+"XF86AudioMute" = { action = "spawn wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle", allow_when_locked = true }
+"XF86AudioMicMute" = { action = "spawn wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle", allow_when_locked = true }
+"XF86AudioPause" = { action = "spawn playerctl play-pause", allow_when_locked = true }
+"XF86AudioPlay" = { action = "spawn playerctl play-pause", allow_when_locked = true }
+"XF86AudioPrev" = { action = "spawn playerctl previous", allow_when_locked = true }
+"XF86AudioNext" = { action = "spawn playerctl next", allow_when_locked = true }
+
+# Brightness
+"XF86MonBrightnessUp" = { action = "spawn brightnessctl --device amdgpu_bl1 set 5%+", allow_when_locked = true }
+"XF86MonBrightnessDown" = { action = "spawn brightnessctl --device amdgpu_bl1 set 5%-", allow_when_locked = true }
+
+# Window state
+"Mod+Q" = { action = "window-close", repeat = false }
+"Mod+F" = { action = "window-toggle-maximize", repeat = false }
+"Mod+Shift+F" = { action = "window-toggle-fullscreen", repeat = false }
+"Mod+Shift+B" = { action = "spawn noctalia msg bar-toggle", repeat = false }
+"Mod+Shift+T" = { action = "window-toggle-floating", repeat = false }
+"Mod+Shift+V" = { action = "window-focus-switch-floating", repeat = false }
+"Mod+Shift+W" = { action = "column-toggle-tabbed", repeat = false }
+
+# Window focus
+"Mod+Left" = "window-focus-left"
+"Mod+Right" = "window-focus-right"
+"Mod+Down" = "window-focus-down"
+"Mod+Up" = "window-focus-up"
+
+# Move columns
+"Mod+Shift+Left" = "column-move-left"
+"Mod+Shift+Right" = "column-move-right"
+
+# Column positions
+"Mod+Home" = "column-focus-first"
+"Mod+End" = "column-focus-last"
+"Mod+Ctrl+Home" = "column-move-to-first"
+"Mod+Ctrl+End" = "column-move-to-last"
+
+# Workspaces
+"Mod+Shift+Down" = "workspace-next"
+"Mod+Shift+Up" = "workspace-previous"
+"Mod+Ctrl+Page_Down" = "column-move-to-workspace-next"
+"Mod+Ctrl+Page_Up" = "column-move-to-workspace-previous"
+"Mod+U" = "workspace-next"
+"Mod+I" = "workspace-previous"
+"Mod+Ctrl+U" = "column-move-to-workspace-next"
+"Mod+Ctrl+I" = "column-move-to-workspace-previous"
+"Mod+Shift+U" = "workspace-move-down"
+"Mod+Shift+I" = "workspace-move-up"
+"Mod+Page_Down" = "workspace-next"
+"Mod+Page_Up" = "workspace-previous"
+"Mod+Shift+Page_Down" = "workspace-move-down"
+"Mod+Shift+Page_Up" = "workspace-move-up"
+
+# Numbered workspaces
+"Mod+1" = "workspace-switch 1"
+"Mod+2" = "workspace-switch 2"
+"Mod+3" = "workspace-switch 3"
+"Mod+4" = "workspace-switch 4"
+"Mod+5" = "workspace-switch 5"
+"Mod+6" = "workspace-switch 6"
+"Mod+7" = "workspace-switch 7"
+"Mod+8" = "workspace-switch 8"
+"Mod+9" = "workspace-switch 9"
+"Mod+Shift+1" = "column-move-to-workspace 1"
+"Mod+Shift+2" = "column-move-to-workspace 2"
+"Mod+Shift+3" = "column-move-to-workspace 3"
+"Mod+Shift+4" = "column-move-to-workspace 4"
+"Mod+Shift+5" = "column-move-to-workspace 5"
+"Mod+Shift+6" = "column-move-to-workspace 6"
+"Mod+Shift+7" = "column-move-to-workspace 7"
+"Mod+Shift+8" = "column-move-to-workspace 8"
+"Mod+Shift+9" = "column-move-to-workspace 9"
+
+# Column grouping and tabs
+"Mod+Alt+Left" = "window-consume-or-expel-left"
+"Mod+Alt+Right" = "window-consume-or-expel-right"
+"Mod+Alt+Down" = "window-move-down"
+"Mod+Alt+Up" = "window-move-up"
+"Mod+Ctrl+Tab" = "column-focus-tab-next"
+"Mod+Ctrl+Shift+Tab" = "column-focus-tab-previous"
+
+# Size and positioning
+"Mod+R" = "window-cycle-primary-extent"
+"Mod+C" = "column-center"
+"Mod+Minus" = "window-modify-primary-extent -0.1"
+"Mod+Equal" = "window-modify-primary-extent 0.1"
+"Mod+Shift+Minus" = "window-modify-secondary-extent -0.1"
+"Mod+Shift+Equal" = "window-modify-secondary-extent 0.1"
+
+# External monitors
+"Mod+Ctrl+Down" = "output-focus-down"
+"Mod+Ctrl+Up" = "output-focus-up"
+"Mod+Ctrl+Left" = "output-focus-left"
+"Mod+Ctrl+Right" = "output-focus-right"
+"Mod+Ctrl+H" = "output-focus-left"
+"Mod+Ctrl+J" = "output-focus-down"
+"Mod+Ctrl+K" = "output-focus-up"
+"Mod+Ctrl+L" = "output-focus-right"
+"Mod+Shift+Ctrl+Left" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+Down" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+Up" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+Right" = "column-move-to-output-right"
+"Mod+Shift+Ctrl+H" = "column-move-to-output-left"
+"Mod+Shift+Ctrl+J" = "column-move-to-output-down"
+"Mod+Shift+Ctrl+K" = "column-move-to-output-up"
+"Mod+Shift+Ctrl+L" = "column-move-to-output-right"
+
+# Mouse-wheel navigation
+"Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
+"Mod+Ctrl+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
+"Mod+Ctrl+WheelUp" = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
+"Mod+Shift+WheelDown" = { action = "window-focus-right", cooldown_ms = 100 }
+"Mod+Shift+WheelUp" = { action = "window-focus-left", cooldown_ms = 100 }
+"Mod+Ctrl+Shift+WheelDown" = { action = "column-move-right", cooldown_ms = 100 }
+"Mod+Ctrl+Shift+WheelUp" = { action = "column-move-left", cooldown_ms = 100 }
+
+# Screenshots
+"Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Ctrl+Print" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+"Alt+Print" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+"XF86Launch1" = { action = "spawn noctalia msg screenshot-region", repeat = false }
+"Ctrl+XF86Launch1" = { action = "spawn noctalia msg screenshot-fullscreen", repeat = false }
+"Alt+XF86Launch1" = { action = "spawn noctalia msg screenshot-window", repeat = false }
+
+# Umbriel-specific controls
+"Alt+Tab" = { action = "window-focus-last", repeat = false }
+"Mod+Ctrl+Space" = { action = "workspace-set-layout toggle", repeat = false }
+"Mod+P" = { action = "window-toggle-pinned", repeat = false }
+"Mod+grave" = { action = "scratchpad-toggle", repeat = false }
+"Mod+Shift+grave" = { action = "window-toggle-scratchpad", repeat = false }
+
+# Optional until Noctalia generates the theme.
+[include.optional]
+files = ["~/.config/umbriel/noctalia.toml"]

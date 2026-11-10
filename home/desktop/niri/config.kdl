@@ -1,6 +1,4 @@
-// Main niri configuration.
-// Additional key bindings live in binds.kdl.
-// Noctalia generates noctalia.kdl automatically.
+// Shortcuts live in binds.kdl; Noctalia generates noctalia.kdl.
 
 // Input
 
@@ -25,7 +23,7 @@ input {
     }
 }
 
-// Layout
+// Layout and appearance
 
 layout {
     background-color "transparent"
@@ -40,8 +38,6 @@ layout {
     }
 
     default-column-width { proportion 0.5; }
-
-    // border { off; }
 
     focus-ring {
         width 2
@@ -103,13 +99,11 @@ animations {
         spring damping-ratio=0.80 stiffness=450 epsilon=0.0001
     }
 
-    // GLITCH POP OPEN
-    // Low damping causes severe overshoot; high stiffness makes it jitter instantly.
+    // Low damping intentionally adds overshoot.
     window-open {
         spring damping-ratio=0.32 stiffness=1300 epsilon=0.0001
     }
 
-    // GLITCH SNAP CLOSE
     window-close {
         spring damping-ratio=0.38 stiffness=1500 epsilon=0.0001
     }
@@ -128,7 +122,7 @@ animations {
     }
 }
 
-// Window behavior
+// Window rules
 
 window-rule {
     open-floating false
@@ -159,7 +153,7 @@ window-rule {
     opacity 1.00
 }
 
-// Ghostty — normal terminal (50%)
+// Ghostty opens at half width.
 window-rule {
     match app-id=r#"^com\.mitchellh\.ghostty$"#
     opacity 1.0
@@ -167,12 +161,11 @@ window-rule {
     default-column-width { proportion 0.5; }
 }
 
-// Yazi inside Ghostty — full width (100%)
+// Yazi opens at full width.
 window-rule {
     match app-id=r#"^com\.mitchellh\.ghostty$"# title="^Yazi"
     default-column-width { proportion 1.0; }
 }
-
 
 window-rule {
     match app-id="brave-rust-book.cs.brown.edu__-Default"
@@ -189,7 +182,7 @@ window-rule {
     background-effect { blur true; }
 }
 
-// Recent-window switcher
+// Window switcher
 
 recent-windows {
     binds {
@@ -224,7 +217,7 @@ output "eDP-1" {
     variable-refresh-rate
 }
 
-// Included configuration
+// Shortcuts and theme
 
 include "binds.kdl"
 

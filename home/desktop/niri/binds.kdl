@@ -1,13 +1,16 @@
 binds {
-    // Core shell
+    // Shell
 
-    // Visual view of all workspaces and windows.
     Mod+Tab repeat=false hotkey-overlay-title="Window Overview" {
         toggle-overview
     }
 
     Mod+Space repeat=false hotkey-overlay-title="Applications" {
         spawn "noctalia" "msg" "panel-toggle" "launcher"
+    }
+
+    Mod+D repeat=false hotkey-overlay-title="Commands" {
+        spawn "desktop-menu"
     }
 
     // Copilot key sends Super+Shift+F23.
@@ -23,8 +26,8 @@ binds {
         spawn "ghostty"
     }
 
-    Mod+E  repeat=false hotkey-overlay-title="Files" {
-        spawn "ghostty" "-e" "yazi";
+    Mod+E repeat=false hotkey-overlay-title="Files" {
+        spawn "ghostty" "-e" "yazi"
     }
 
     Mod+Z repeat=false hotkey-overlay-title="Zed Editor" {
@@ -63,7 +66,6 @@ binds {
         show-hotkey-overlay
     }
 
-
     // Session and security
 
     Mod+Alt+L repeat=false allow-inhibiting=false hotkey-overlay-title="Lock Screen" {
@@ -84,8 +86,7 @@ binds {
         power-off-monitors
     }
 
-
-    // Audio
+    // Audio and media
 
     XF86AudioRaiseVolume allow-when-locked=true {
         spawn "wpctl" "set-volume" "-l" "1.0" "@DEFAULT_AUDIO_SINK@" "3%+"
@@ -119,7 +120,6 @@ binds {
         spawn "playerctl" "next"
     }
 
-
     // Brightness
 
     // Select AMD’s backlight; automatic selection may choose NVIDIA.
@@ -130,7 +130,6 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "brightnessctl" "--device" "amdgpu_bl1" "set" "5%-"
     }
-
 
     // Window state
 
@@ -150,12 +149,10 @@ binds {
         spawn "noctalia" "msg" "bar-toggle"
     }
 
-    // Everything opens tiled, but this remains available for exceptional cases.
     Mod+Shift+T repeat=false hotkey-overlay-title="Toggle Floating" {
         toggle-window-floating
     }
 
-    // Useful after manually floating a window.
     Mod+Shift+V repeat=false hotkey-overlay-title="Focus Floating or Tiled" {
         switch-focus-between-floating-and-tiling
     }
@@ -164,10 +161,9 @@ binds {
         toggle-column-tabbed-display
     }
 
+    // Window focus
 
-    // Focus
-
-    // Arrow keys: horizontal window focus, vertical workspace navigation.
+    // Arrow keys focus windows; Shift+Up/Down switches workspaces.
     Mod+Left {
         focus-column-left
     }
@@ -177,33 +173,22 @@ binds {
     }
 
     Mod+Down {
-        focus-workspace-down
+        focus-window-down
     }
 
     Mod+Up {
-        focus-workspace-up
+        focus-window-up
     }
 
-
-    // Move windows and columns
-
+    // Move columns
 
     Mod+Shift+Left hotkey-overlay-title=null {
         move-column-left
     }
 
-    Mod+Shift+Down {
-        move-column-to-workspace-down
-    }
-
-    Mod+Shift+Up {
-        move-column-to-workspace-up
-    }
-
     Mod+Shift+Right hotkey-overlay-title=null {
         move-column-right
     }
-
 
     // Column positions
 
@@ -223,8 +208,23 @@ binds {
         move-column-to-last
     }
 
-
     // Workspaces
+
+    Mod+Shift+Down {
+        focus-workspace-down
+    }
+
+    Mod+Shift+Up {
+        focus-workspace-up
+    }
+
+    Mod+Ctrl+Page_Down hotkey-overlay-title="Move Column to Next Workspace" {
+        move-column-to-workspace-down
+    }
+
+    Mod+Ctrl+Page_Up hotkey-overlay-title="Move Column to Previous Workspace" {
+        move-column-to-workspace-up
+    }
 
     Mod+U hotkey-overlay-title="Next Workspace" {
         focus-workspace-down
@@ -259,14 +259,6 @@ binds {
         focus-workspace-up
     }
 
-    Mod+Ctrl+Down hotkey-overlay-title=null {
-        move-column-to-workspace-down
-    }
-
-    Mod+Ctrl+Up hotkey-overlay-title=null {
-        move-column-to-workspace-up
-    }
-
     Mod+Shift+Page_Down hotkey-overlay-title=null {
         move-workspace-down
     }
@@ -274,7 +266,6 @@ binds {
     Mod+Shift+Page_Up hotkey-overlay-title=null {
         move-workspace-up
     }
-
 
     // Numbered workspaces
 
@@ -298,14 +289,13 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
+    // Column grouping and tabs
 
-    // Tabs and column grouping
-
-    // Super + Alt + Left/Right to stack into or pop out of adjacent columns
+    // Join or split adjacent columns.
     Mod+Alt+Left { consume-or-expel-window-left; }
     Mod+Alt+Right { consume-or-expel-window-right; }
 
-    // Super + Alt + Up/Down to reorder windows vertically inside the stack
+    // Reorder windows within a column.
     Mod+Alt+Down { move-window-down; }
     Mod+Alt+Up { move-window-up; }
 
@@ -313,8 +303,10 @@ binds {
         expel-window-from-column
     }
 
+    Mod+Ctrl+Tab hotkey-overlay-title="Next Tab" { focus-window-down; }
+    Mod+Ctrl+Shift+Tab hotkey-overlay-title="Previous Tab" { focus-window-up; }
 
-    // Width and positioning
+    // Size and positioning
 
     Mod+R hotkey-overlay-title="Cycle Column Width" {
         switch-preset-column-width
@@ -332,7 +324,7 @@ binds {
         center-visible-columns
     }
 
-    // Column Width (Horizontal)
+    // Column width.
     Mod+Minus {
         set-column-width "-10%"
     }
@@ -341,7 +333,7 @@ binds {
         set-column-width "+10%"
     }
 
-    // Window Height (Vertical)
+    // Window height.
     Mod+Shift+Minus hotkey-overlay-title="Decrease Window Height" {
         set-window-height "-10%"
     }
@@ -350,10 +342,17 @@ binds {
         set-window-height "+10%"
     }
 
-
-    // Occasional external-monitor support
+    // External monitors
 
     // Keep external-monitor bindings hidden on the usual single-output setup.
+    Mod+Ctrl+Down hotkey-overlay-title=null {
+        focus-monitor-down
+    }
+
+    Mod+Ctrl+Up hotkey-overlay-title=null {
+        focus-monitor-up
+    }
+
     Mod+Ctrl+Left hotkey-overlay-title=null {
         focus-monitor-left
     }
@@ -410,7 +409,6 @@ binds {
         move-column-to-monitor-right
     }
 
-
     // Mouse-wheel navigation
 
     Mod+WheelScrollDown cooldown-ms=150 {
@@ -444,9 +442,6 @@ binds {
     Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=100 {
         move-column-left
     }
-
-
-    // Screen recording
 
     // Screenshots
 
