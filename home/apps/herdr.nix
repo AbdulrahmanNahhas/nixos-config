@@ -1,10 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = [
-    # TODO(temporary): remove when Herdr declares zstd for the Cargo hook.
-    (pkgs.herdr-desktop.overrideAttrs (old: {
-      buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.zstd ];
-    }))
+    pkgs.herdr-desktop
     pkgs.herdr-core
   ];
 

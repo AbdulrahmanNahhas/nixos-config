@@ -122,9 +122,8 @@ Firefox extensions are declared in [main](home/apps/firefox/profiles/main.nix),
 | [Statix](https://github.com/oppiliappan/statix) / [deadnix](https://github.com/astro/deadnix)         | Nix analysis                                    | CLI                            | [Nix / packages](home/packages.nix)                                                                 | Explicitly selected check tools                                                            |
 | [Bubblewrap](https://github.com/containers/bubblewrap)                                                | Process sandboxing                              | CLI                            | [Nix / packages](home/packages.nix)                                                                 | Non-setuid binary for Zed agent sandboxing                                                 |
 
-The [Codex CLI](home/apps/ai/default.nix) reuses Desktop's compatible prebuilt
-binary. [Herdr](home/apps/herdr.nix) temporarily adds the missing zstd dependency;
-remove that override when Nixpkgs supplies it.
+The [Codex CLI and ACP](home/apps/ai/default.nix) and
+[Herdr](home/apps/herdr.nix) use the standard Nixpkgs packages.
 
 Before activating Herdr persistence, close Herdr and migrate existing
 `~/.config/herdr-app` and `~/.local/state/herdr-core` into their saved locations;
