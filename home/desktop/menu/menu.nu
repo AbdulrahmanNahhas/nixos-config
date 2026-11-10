@@ -3,6 +3,28 @@ use catalog.nu *
 use actions.nu run-action
 use apps.nu applications
 
+export def toggle-menu [initial: string = 'root'] {
+    let runtime = (menu-runtime)
+    let pid_file = ($runtime + '.pid')
+    let closing = ($runtime + '.close')
+    if ($pid_file | path exists) {
+        let parsed = (open --raw $pid_file | str trim | parse --regex '^(?<pid>[0-9]+)$')
+        let pid = ($parsed | get -o pid.0 | default '0' | into int)
+        let process = ($'/proc/($pid)' | path join cmdline)
+        if ($process | path exists) {
+            let args = (open --raw $process | split row (char nul))
+            # Only signal the Rofi process running our native menu mode.
+            if 'shadow-menu' in $args and ($args.0 | path basename | str contains 'rofi') {
+                '' | save --force $closing
+                kill $pid
+                return
+            }
+        }
+    }
+    if ($closing | path exists) { rm $closing }
+    desktop-menu $initial
+}
+
 def escape-markup [text: string] {
     $text | str replace --all '&' '&amp;' | str replace --all '<' '&lt;' | str replace --all '>' '&gt;'
 }
@@ -42,6 +64,9 @@ def action-icon [action: record, groups: table] {
 }
 
 export def desktop-menu [initial: string = 'root'] {
+    let runtime = (menu-runtime)
+    let pid_file = ($runtime + '.pid')
+    let closing = ($runtime + '.close')
     let catalog = (actions | append (applications))
     let groups = (categories)
     if $initial not-in (['root' 'search'] | append ($groups | get id)) { error make {msg: $"Unknown menu: ($initial)"} }
@@ -86,8 +111,9 @@ export def desktop-menu [initial: string = 'root'] {
         let icon_color = ($theme_flags | get -o 3 | default '' | parse --regex '(?m)^\s*fg:\s*(?<color>#[0-9a-fA-F]{6})' | get -o color.0 | default '#d8dee9')
         let selected_icon_color = ($theme_flags | get -o 3 | default '' | parse --regex '(?m)^\s*accent-fg:\s*(?<color>#[0-9a-fA-F]{6})' | get -o color.0 | default '#16161e')
         let result = (with-env {SHADOW_MENU_ROOT: (if $route == 'root' { '1' } else { '0' }), SHADOW_MENU_TITLE: $title, SHADOW_MENU_ICON_COLOR: $icon_color, SHADOW_MENU_SELECTED_ICON_COLOR: $selected_icon_color} {
-            $text | ^rofi -modi shadow-menu -show shadow-menu -plugin-path $env.SHADOW_MENU_PLUGIN -show-icons -matching normal -no-sort -eh (if $grid { 2 } else { $row_height }) -selected-row $remembered -kb-custom-1 'Alt+s' -kb-custom-2 '' -kb-custom-3 'Alt+Left' ...$theme_flags ...$layout_flags -theme+listview+lines $visible_rows -theme+button-back+content $back_label -theme+button-accept+content $accept_label | complete
+            $text | ^rofi -pid $pid_file -modi shadow-menu -show shadow-menu -plugin-path $env.SHADOW_MENU_PLUGIN -show-icons -matching normal -no-sort -eh (if $grid { 2 } else { $row_height }) -selected-row $remembered -kb-custom-1 'Alt+s' -kb-custom-2 '' -kb-custom-3 'Alt+Left' ...$theme_flags ...$layout_flags -theme+listview+lines $visible_rows -theme+button-back+content $back_label -theme+button-accept+content $accept_label | complete
         })
+        if ($closing | path exists) { rm $closing; return }
         if $result.exit_code != 0 { error make {msg: $"Rofi failed: ($result.stderr)"} }
         let response = ($result.stdout | str trim)
         if $response == 'key:2' { if $route == 'root' { return }; $route = 'root'; continue }

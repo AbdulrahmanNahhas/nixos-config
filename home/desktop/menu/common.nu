@@ -1,5 +1,10 @@
 const MENU_THEME = path self desktop.rasi
 
+export def menu-runtime [] {
+    let uid = (^id -u | str trim)
+    ($env.XDG_RUNTIME_DIR? | default ($env.TMPDIR? | default '/tmp')) | path join $"shadow-menu-($uid)"
+}
+
 export def state-dir [] {
     let base = ($env.XDG_STATE_HOME? | default ($env.HOME | path join '.local/state'))
     $base | path join noctalia shadow

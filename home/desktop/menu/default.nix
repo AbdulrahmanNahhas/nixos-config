@@ -58,7 +58,7 @@ in
 {
   home.packages = [
     shadow
-    (compatibility "desktop-menu" "menu")
+    (compatibility "desktop-menu" "toggle")
     (compatibility "wallpaper-tag" "wallpaper")
   ];
   # Retire obsolete GUI overrides when this Home Manager generation is activated.

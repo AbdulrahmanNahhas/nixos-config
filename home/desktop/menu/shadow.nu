@@ -1,7 +1,7 @@
 use catalog.nu actions
 use apps.nu applications
 use common.nu confirm
-use menu.nu desktop-menu
+use menu.nu [desktop-menu toggle-menu]
 use actions.nu run-action
 use system.nu *
 use power.nu [travel focus-mode]
@@ -24,6 +24,7 @@ export def --wrapped main [...args: string] {
     let command = ($args.0? | default 'menu')
     let rest = ($args | skip 1)
     match $command {
+        toggle => { toggle-menu ($rest.0? | default 'root') }
         menu => { desktop-menu ($rest.0? | default 'root') }
         status => {
             let result = (system-status)

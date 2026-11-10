@@ -16,7 +16,7 @@ in
     cursorTheme = { inherit (cursor) package name; };
 
     settings = {
-      appearance.scheme = "Catppuccin";
+      appearance.scheme = "Ayu";
       cursor.size = cursor.size;
       session.default = "niri";
       user.default = username;

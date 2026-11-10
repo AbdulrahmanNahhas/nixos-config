@@ -51,6 +51,9 @@ vrr = "always"
 "Super+Shift+F23" = { action = "spawn desktop-menu", repeat = false }
 "Super+F23" = { action = "spawn desktop-menu", repeat = false }
 "F23" = { action = "spawn desktop-menu", repeat = false }
+"Super+Shift+XF86Assistant" = { action = "spawn desktop-menu", repeat = false }
+"Super+XF86Assistant" = { action = "spawn desktop-menu", repeat = false }
+"Super+Shift+XF86TouchpadOff" = { action = "spawn desktop-menu", repeat = false }
 "XF86Assistant" = { action = "spawn desktop-menu", repeat = false }
 "Mod+T" = { action = "spawn ghostty", repeat = false }
 "Mod+Return" = { action = "spawn ghostty", repeat = false }
