@@ -199,7 +199,8 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "preservation": "preservation",
-        "sops-nix": "sops-nix"
+        "sops-nix": "sops-nix",
+        "x-plymouth": "x-plymouth"
       }
     },
     "sops-nix": {
@@ -234,6 +235,21 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "x-plymouth": {
+      "locked": {
+        "lastModified": 1794180571,
+        "narHash": "sha256-QpdewfuQppejsfXotUlV1EOcfZaFmrE2JORXZSLICAI=",
+        "owner": "x-tech-laboratories",
+        "repo": "X-Plymouth",
+        "rev": "0b9122db046a4f8b2228f2ac0dc33a8f698fba4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "x-tech-laboratories",
+        "repo": "X-Plymouth",
         "type": "github"
       }
     }

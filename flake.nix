@@ -16,6 +16,7 @@
 
     preservation.url = "github:nix-community/preservation";
     nix-flatpak.url = "github:gmodena/nix-flatpak";
+    x-plymouth.url = "github:x-tech-laboratories/X-Plymouth";
     nixos-hardware = {
       url = "github:NixOS/nixos-hardware/master";
       inputs.nixpkgs.follows = "nixpkgs";

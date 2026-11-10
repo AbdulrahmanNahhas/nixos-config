@@ -1,5 +1,13 @@
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
+  imports = [ inputs.x-plymouth.nixosModules.default ];
+
+  # Graphical LUKS prompt and recent boot statuses below the pulsing logo.
+  x-plymouth = {
+    variant = "dark";
+    statusLines = 5;
+  };
+
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -9,17 +17,6 @@
 
     # Track new hardware support; reboot-test NVIDIA and suspend on each bump.
     kernelPackages = pkgs.linuxPackages_latest;
-
-    # Graphical LUKS prompt and boot progress; Esc still reveals diagnostics.
-    plymouth = {
-      enable = true;
-      theme = "motion";
-      themePackages = [
-        (pkgs.adi1090x-plymouth-themes.override {
-          selected_themes = [ "motion" ];
-        })
-      ];
-    };
 
     # Local hardening and hardware workarounds.
     kernelParams = [
