@@ -55,18 +55,11 @@
     enable = true;
     flake = "/saved/nixos-config";
     clean = {
-      enable = true;
-      dates = "Fri 03:00";
-      extraArgs = "--keep 3 --keep-since 3d --no-gcroots";
+      # Cleanup is interactive through shadow nix clean, with NH --ask.
+      enable = false;
     };
   };
 
-  # Give interactive work priority over scheduled cleanup.
-  systemd.services.nh-clean.serviceConfig = {
-    Nice = 19;
-    CPUSchedulingPolicy = "idle";
-    IOSchedulingClass = "idle";
-  };
   # Defer store deduplication on battery; security updates stay scheduled.
   systemd.services.nix-optimise = {
     unitConfig.ConditionACPower = true;

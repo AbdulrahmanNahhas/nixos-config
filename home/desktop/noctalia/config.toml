@@ -12,46 +12,12 @@ enabled = true
 tint_intensity = 0.28
 
 [bar]
-order = ["default", "Utilities"]
-
-[bar.Utilities]
-background_opacity = 0.8
-border_width = 2.0
-capsule_thickness = 0.75
-center = ["wallpaper", "wallhaven_2", "group:g1", "widget_2", "caffeine"]
-contact_shadow = true
-enabled = true
-end = []
-font_weight = 400
-margin_edge = 0
-margin_ends = 305
-margin_opposite_edge = 150
-padding = 10
-panel_overlap = 2
-position = "right"
-radius = 80
-reserve_space = false
-scale = 1.4
-shadow = false
-smart_auto_hide = true
-start = []
-thickness = 50
-widget_spacing = 15
-
-[[bar.Utilities.capsule_group]]
-accordion = false
-accordion_direction = "end"
-enabled = true
-fill = "surface_container"
-id = "g1"
-members = ["keyboard_layout", "launcher"]
-opacity = 0.5
-padding = 7.0
-widget_spacing = 14
+order = ["default"]
 
 [bar.default]
 auto_hide = false
-background_opacity = 0.95
+background_opacity = 1.0
+compositor_blur = false
 border = "outline_variant"
 border_width = 0.0
 capsule = false
@@ -85,8 +51,8 @@ scale = 1.2500000111758709
 shadow = true
 show_on_workspace_switch = true
 smart_auto_hide = false
-start = ["group:g1", "workspaces", "clipboard", "recorder", "privacy"]
-thickness = 40
+start = ["group:g1", "workspaces", "umbriel_companion", "clipboard", "recorder", "privacy"]
+thickness = 35
 widget_spacing = 10
 
 [[bar.default.capsule_group]]
@@ -151,9 +117,9 @@ visualization_mode = "all"
 wave_thickness = 1.0
 
 [desktop_widgets.widget.desktop-widget-0000000000000002]
-box_height = 64.0
-box_width = 224.0
-cx = 1312.0
+box_height = 96.0
+box_width = 288.0
+cx = 1280.0
 cy = 802.0
 output = "eDP-1"
 placement_height = 900.0
@@ -169,10 +135,10 @@ format = "{:%I:%M %p}"
 shadow = true
 
 [desktop_widgets.widget.desktop-widget-0000000000000004]
-box_height = 256.0
-box_width = 160.0
-cx = 96.0
-cy = 706.0
+box_height = 128.0
+box_width = 352.0
+cx = 192.0
+cy = 786.0
 output = "eDP-1"
 placement_height = 900.0
 placement_width = 1440.0
@@ -180,6 +146,9 @@ rotation = 0.0
 type = "media_player"
 
 [desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+album_art_background = true
+album_art_blur = 24
+audio_visualizer = true
 background = false
 background_opacity = 0.0
 background_padding = 0
@@ -196,7 +165,8 @@ delay_ms = 120
 enabled = true
 
 [hot_corners.bottom_left]
-action = "launcher"
+action = "command"
+command = "desktop-menu applications"
 
 [hot_corners.bottom_right]
 action = "control_center"
@@ -379,10 +349,10 @@ show_when_idle = true
 enabled = true
 force = true
 temperature_day = 2500
-temperature_night = 2500
+temperature_night = 2400
 
 [osd]
-background_opacity = 0.88
+background_opacity = 1.0
 offset_x = 20
 offset_y = 12
 orientation = "horizontal"
@@ -390,23 +360,13 @@ position = "bottom_center"
 position_vertical = "bottom_right"
 scale = 1.0
 
-[plugin_settings."ashur-d/wallpaper-widget"]
-close_on_apply = true
-hub_layer = "overlay"
-wallpaper_dir = "/home/aqua/Pictures/Wallpapers"
-
 [plugin_settings."avivbintangaringga/nix-monitor"]
-clean_command = "sudo nix store optimise"
-optimize_command = "nh clean all --keep 5 --keep-since 14d"
+clean_command = "shadow nix clean"
+optimize_command = "shadow nix optimise"
 panel_open_near_click = false
 show_update_check_notification = true
-update_command = "nh os switch /saved/nixos-config --update"
-
-[plugin_settings."cleboost/zed-provider"]
-db_path = "/home/aqua/.local/share/zed/db/0-stable/db.sqlite"
-
-[plugin_settings."mindnbytes/nix-status"]
-flake_dir = "/saved/nixos-config"
+update_command = "shadow nix update"
+panel_card_opacity = 100
 
 [plugin_settings."noctalia/screen_recorder"]
 directory = "/home/aqua/Videos/Recordings"
@@ -429,7 +389,7 @@ playAzan = true
 twelveHourFormat = true
 
 [plugins]
-enabled = ["avivbintangaringga/nix-monitor", "ycf/mawaqit", "ashur-d/wallpaper-widget", "noctalia/screen_recorder", "noctalia/wallhaven", "alexander/screen-toolkit", "noctalia/umbriel-companion"]
+enabled = ["avivbintangaringga/nix-monitor", "ycf/mawaqit", "noctalia/screen_recorder", "noctalia/wallhaven", "alexander/screen-toolkit", "noctalia/umbriel-companion"]
 
 [[plugins.source]]
 kind = "git"
@@ -463,12 +423,12 @@ popup_borders = true
 popup_shadows = true
 screen_time_enabled = true
 settings_show_advanced = true
-settings_window_translucent = true
+settings_window_translucent = false
 show_close_buttons = false
 telemetry_enabled = false
 umbriel_audio_provider_enabled = true
-umbriel_overview_close_on_launch_enabled = true
-umbriel_overview_type_to_launch_enabled = true
+umbriel_overview_close_on_launch_enabled = false
+umbriel_overview_type_to_launch_enabled = false
 
 [shell.animation]
 enabled = true
@@ -502,77 +462,6 @@ glyph = "terminal"
 global = false
 freeform = true
 exec = "{query}"
-
-# NixOS System Maintenance
-
-[shell.launcher.dmenu.entry.nixos]
-label = "NixOS Management"
-prefix = "nix"
-glyph = "terminal"
-global = false
-
-command = '''
-        printf "%s\t%s\n" \
-          "Check Config"    "Evaluate and run checks" \
-          "Build Config"    "Build without activation" \
-          "Switch Config"   "Build and activate configuration" \
-          "Test Config"     "Build and test configuration without boot entry" \
-          "Garbage Collect" "Remove unused store paths" \
-          "Update Flake"    "Update flake.lock inputs" \
-          "Package Search"  "Interactive nix package search"
-        '''
-
-exec = '''
-        case "{selection}" in
-          Check*)   cmd="sys-check" ;;
-          Build*)   cmd="sys-build" ;;
-          Switch*)  cmd="sys-switch" ;;
-          Test*)    cmd="sys-test" ;;
-          Garbage*) cmd="sys-clean" ;;
-          Update*)  cmd="sys-update" ;;
-          Package*) cmd="sys-search" ;;
-          *) exit 0 ;;
-        esac
-
-        ghostty -e fish -lc "$cmd; exec fish"
-        '''
-
-# Local AI (uncomment with home/programs/ai/local.nix)
-#
-#         [shell.launcher.dmenu.entry.ai]
-#         label = "Local AI"
-#         prefix = "ai"
-#         glyph = "cpu"
-#         global = false
-#
-#         command = '''
-#         printf "%s\t%s\n" \
-#           "Start"  "Start llama-swap on 127.0.0.1:8080" \
-#           "Chat"   "Open the local chat UI in the browser" \
-#           "Stop"   "Stop llama-swap and free the GPU" \
-#           "Unload" "Unload models, keep the router running" \
-#           "Status" "Show running models and follow the log"
-#         '''
-#
-#         exec = '''
-#         case "{selection}" in
-#           Start*)  fish -c "ai on" ;;
-#           Chat*)   fish -c "ai on; ai chat" ;;
-#           Stop*)   fish -c "ai off" ;;
-#           Unload*) fish -c "ai unload" ;;
-#           Status*) ghostty -e fish -lc "ai status; ai logs" ;;
-#         esac
-#         '''
-
-# Nix Package Search
-
-[shell.launcher.dmenu.entry.search]
-label = "Nix Package Search"
-prefix = "search"
-glyph = "search"
-global = false
-freeform = true
-exec = "ghostty -e fish -lc 'sys-search $argv[1]; exec fish' -- \"{query}\""
 
 # Configuration Editing
 
@@ -673,9 +562,9 @@ polkit_placement = "attached"
 session_placement = "attached"
 session_position = "center"
 shadow = true
-transparency_mode = "soft"
-wallpaper_placement = "attached"
-wallpaper_position = "bottom_center"
+transparency_mode = "solid"
+wallpaper_placement = "floating"
+wallpaper_position = "center"
 
 [shell.screen_corners]
 enabled = true
@@ -746,7 +635,7 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
 builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "helix", "niri", "umbriel"]
-community_ids = ["sonora", "pywalfox", "zed", "steam", "bat", "herdr-app", "lazygit", "starship", "yazi"]
+community_ids = ["sonora", "pywalfox", "zed", "steam", "bat", "herdr-app", "lazygit", "starship", "yazi", "rofi"]
 enable_builtin_templates = true
 enable_community_templates = true
 
@@ -873,6 +762,10 @@ capsule_radius = 70
 enabled = true
 glyph = "command"
 
+[widget.launcher.actions]
+left = "exec desktop-menu"
+right = "exec desktop-menu applications"
+
 [widget.media]
 album_art_only = true
 art_size = 30
@@ -907,9 +800,6 @@ hide_when_no_unread = true
 icon_spacing = 9
 interactive = false
 
-[widget.pulse]
-type = "lowcache/claude-companion:pulse"
-
 [widget.ram]
 show_glyph = false
 
@@ -921,10 +811,10 @@ capsule = false
 capsule_fill = "surface_container"
 capsule_foreground = "on_surface"
 capsule_radius = 14
-custom_image = "/home/aqua/Pictures/NixOS.png"
+custom_image = ""
 custom_image_colorize = true
 enabled = true
-scale = 0.85000000000000009
+scale = 1.0
 
 [widget.taskbar]
 capsule = true
@@ -960,9 +850,6 @@ type = "noctalia/wallhaven:wallhaven"
 capsule = false
 enabled = true
 
-[widget.widget_2]
-type = "ashur-d/wallpaper-widget:widget"
-
 [widget.workspaces]
 active_pill_size = 2.0
 capsule = false
@@ -976,3 +863,9 @@ labels_only_when_occupied = false
 pill_scale = 1.0
 show_labels = true
 style = "regular"
+
+[widget.umbriel_companion]
+type = "noctalia/umbriel-companion:bar"
+display_mode = "layout"
+show_layout_name = false
+scroll_cycles_layout = true

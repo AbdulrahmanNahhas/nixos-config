@@ -1,0 +1,42 @@
+* {
+    bg: #16161e;
+    bg-alt: #20212b;
+    fg: #d8dee9;
+    muted: #9198ad;
+    accent: #c4a7e7;
+    accent-fg: #16161e;
+    background-color: transparent;
+    text-color: @fg;
+    font: "GeistMono Nerd Font 12";
+}
+window { width: 700px; border: 1px; border-color: @accent; border-radius: 14px; background-color: @bg; }
+mainbox { padding: 14px; spacing: 12px; children: [ inputbar, listview, actionbar, textbox-current-entry ]; }
+/* Supplies Rofi's selection callback to the native mode without adding visible UI. */
+textbox-current-entry { enabled: false; }
+inputbar { spacing: 12px; padding: 12px; border-radius: 8px; background-color: @bg-alt; children: [ prompt, entry ]; }
+prompt { text-color: @accent; }
+entry { placeholder: "Type to filter…"; }
+textbox { text-color: @fg; font: "GeistMono Nerd Font 9"; }
+listview { expand: true; lines: 12; fixed-height: true; scrollbar: true; spacing: 4px; }
+scrollbar { width: 3px; handle-color: @accent; handle-width: 3px; }
+element { padding: 10px 12px; border-radius: 9px; spacing: 14px; children: [ element-icon, element-text ]; }
+element selected { background-color: @accent; text-color: @accent-fg; }
+element-text { vertical-align: 0.5; text-color: inherit; }
+element-icon { size: 34px; }
+actionbar { expand: false; orientation: horizontal; spacing: 8px; padding: 10px 0px 0px; border: 1px 0px 0px; border-color: @bg-alt; children: [ button-back, button-clear, spacer, button-accept ]; }
+spacer { expand: true; }
+button-back, button-clear, button-accept { expand: false; padding: 8px 10px; border-radius: 6px; background-color: @bg-alt; text-color: @fg; font: "GeistMono Nerd Font 9"; }
+button-back {
+    content: "Esc  Back";
+    action: "kb-custom-3";
+}
+button-clear {
+    content: "Ctrl+A  Clear";
+    action: "kb-clear-line";
+}
+button-accept {
+    content: "Enter  Run";
+    action: "kb-accept-entry";
+    background-color: @accent;
+    text-color: @accent-fg;
+}

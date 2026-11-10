@@ -6,7 +6,7 @@ binds {
     }
 
     Mod+Space repeat=false hotkey-overlay-title="Applications" {
-        spawn "noctalia" "msg" "panel-toggle" "launcher"
+        spawn "desktop-menu"
     }
 
     Mod+D repeat=false hotkey-overlay-title="Commands" {
@@ -42,11 +42,11 @@ binds {
         spawn "noctalia" "msg" "panel-toggle" "clipboard"
     }
 
-    Mod+W repeat=false hotkey-overlay-title="Wallpapers Cinema" {
-        spawn "noctalia" "msg" "panel-toggle" "ashur-d/wallpaper-widget:hub"
+    Mod+Ctrl+B repeat=false hotkey-overlay-title="Cycle bar layout" {
+        spawn "shadow" "layout" "cycle"
     }
 
-    Mod+Ctrl+W repeat=false hotkey-overlay-title="Wallpapers" {
+    Mod+W repeat=false hotkey-overlay-title="Wallpapers" {
         spawn "noctalia" "msg" "panel-toggle" "wallpaper"
     }
 
@@ -163,7 +163,7 @@ binds {
 
     // Window focus
 
-    // Arrow keys focus windows; Shift+Up/Down switches workspaces.
+    // Left/right focus columns; up/down switch workspace rows.
     Mod+Left {
         focus-column-left
     }
@@ -173,14 +173,14 @@ binds {
     }
 
     Mod+Down {
-        focus-window-down
+        focus-workspace-down
     }
 
     Mod+Up {
-        focus-window-up
+        focus-workspace-up
     }
 
-    // Move columns
+    // Move columns horizontally
 
     Mod+Shift+Left hotkey-overlay-title=null {
         move-column-left
@@ -210,12 +210,12 @@ binds {
 
     // Workspaces
 
-    Mod+Shift+Down {
-        focus-workspace-down
+    Mod+Shift+Down hotkey-overlay-title="Move Window to Workspace Below" {
+        move-window-to-workspace-down
     }
 
-    Mod+Shift+Up {
-        focus-workspace-up
+    Mod+Shift+Up hotkey-overlay-title="Move Window to Workspace Above" {
+        move-window-to-workspace-up
     }
 
     Mod+Ctrl+Page_Down hotkey-overlay-title="Move Column to Next Workspace" {
@@ -224,39 +224,6 @@ binds {
 
     Mod+Ctrl+Page_Up hotkey-overlay-title="Move Column to Previous Workspace" {
         move-column-to-workspace-up
-    }
-
-    Mod+U hotkey-overlay-title="Next Workspace" {
-        focus-workspace-down
-    }
-
-    Mod+I hotkey-overlay-title="Previous Workspace" {
-        focus-workspace-up
-    }
-
-    Mod+Ctrl+U hotkey-overlay-title="Move to Next Workspace" {
-        move-column-to-workspace-down
-    }
-
-    Mod+Ctrl+I hotkey-overlay-title="Move to Previous Workspace" {
-        move-column-to-workspace-up
-    }
-
-    Mod+Shift+U {
-        move-workspace-down
-    }
-
-    Mod+Shift+I {
-        move-workspace-up
-    }
-
-    // Page keys remain as discoverable aliases.
-    Mod+Page_Down hotkey-overlay-title=null {
-        focus-workspace-down
-    }
-
-    Mod+Page_Up hotkey-overlay-title=null {
-        focus-workspace-up
     }
 
     Mod+Shift+Page_Down hotkey-overlay-title=null {
@@ -295,9 +262,9 @@ binds {
     Mod+Alt+Left { consume-or-expel-window-left; }
     Mod+Alt+Right { consume-or-expel-window-right; }
 
-    // Reorder windows within a column.
-    Mod+Alt+Down { move-window-down; }
-    Mod+Alt+Up { move-window-up; }
+    // Reach vertically stacked windows without switching workspace rows.
+    Mod+Alt+Down { focus-window-down; }
+    Mod+Alt+Up { focus-window-up; }
 
     Mod+Period hotkey-overlay-title="Remove from Column" {
         expel-window-from-column
@@ -361,22 +328,6 @@ binds {
         focus-monitor-right
     }
 
-    Mod+Ctrl+H hotkey-overlay-title=null {
-        focus-monitor-left
-    }
-
-    Mod+Ctrl+J hotkey-overlay-title=null {
-        focus-monitor-down
-    }
-
-    Mod+Ctrl+K hotkey-overlay-title=null {
-        focus-monitor-up
-    }
-
-    Mod+Ctrl+L hotkey-overlay-title=null {
-        focus-monitor-right
-    }
-
     Mod+Shift+Ctrl+Left hotkey-overlay-title=null {
         move-column-to-monitor-left
     }
@@ -393,55 +344,25 @@ binds {
         move-column-to-monitor-right
     }
 
-    Mod+Shift+Ctrl+H hotkey-overlay-title=null {
-        move-column-to-monitor-left
-    }
+    // Two-axis wheel and touchpad navigation. Shift moves the column.
 
-    Mod+Shift+Ctrl+J hotkey-overlay-title=null {
-        move-column-to-monitor-down
-    }
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+Shift+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+    Mod+Shift+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollLeft cooldown-ms=150 { focus-column-left; }
+    Mod+Shift+WheelScrollLeft cooldown-ms=150 { move-column-left; }
+    Mod+WheelScrollRight cooldown-ms=150 { focus-column-right; }
+    Mod+Shift+WheelScrollRight cooldown-ms=150 { move-column-right; }
 
-    Mod+Shift+Ctrl+K hotkey-overlay-title=null {
-        move-column-to-monitor-up
-    }
-
-    Mod+Shift+Ctrl+L hotkey-overlay-title=null {
-        move-column-to-monitor-right
-    }
-
-    // Mouse-wheel navigation
-
-    Mod+WheelScrollDown cooldown-ms=150 {
-        focus-workspace-down
-    }
-
-    Mod+WheelScrollUp cooldown-ms=150 {
-        focus-workspace-up
-    }
-
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 {
-        move-column-to-workspace-down
-    }
-
-    Mod+Ctrl+WheelScrollUp cooldown-ms=150 {
-        move-column-to-workspace-up
-    }
-
-    Mod+Shift+WheelScrollDown cooldown-ms=100 {
-        focus-column-right
-    }
-
-    Mod+Shift+WheelScrollUp cooldown-ms=100 {
-        focus-column-left
-    }
-
-    Mod+Ctrl+Shift+WheelScrollDown cooldown-ms=100 {
-        move-column-right
-    }
-
-    Mod+Ctrl+Shift+WheelScrollUp cooldown-ms=100 {
-        move-column-left
-    }
+    Mod+TouchpadScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+Shift+TouchpadScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+TouchpadScrollUp cooldown-ms=150 { focus-workspace-up; }
+    Mod+Shift+TouchpadScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+TouchpadScrollLeft cooldown-ms=150 { focus-column-left; }
+    Mod+Shift+TouchpadScrollLeft cooldown-ms=150 { move-column-left; }
+    Mod+TouchpadScrollRight cooldown-ms=150 { focus-column-right; }
+    Mod+Shift+TouchpadScrollRight cooldown-ms=150 { move-column-right; }
 
     // Screenshots
 

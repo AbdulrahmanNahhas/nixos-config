@@ -8,6 +8,7 @@
     ./home/desktop/umbriel
     ./home/desktop/niri
     ./home/desktop/noctalia
+    ./home/desktop/menu
     ./home/desktop/gtk.nix
     ./home/desktop/xdg.nix
     ./home/desktop/dconf.nix

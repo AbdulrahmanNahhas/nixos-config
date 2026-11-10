@@ -29,6 +29,12 @@ border_width = 2
 corner_radius = 16
 prefer_no_csd = true
 
+[appearance.blur]
+enabled = true
+optimized = true
+passes = 2
+radius = 5
+
 [output.eDP-1]
 mode = "2880x1800@120"
 scale = 2.0
@@ -37,18 +43,22 @@ vrr = "always"
 [keybinds]
 
 # Shell
+"Mod+Ctrl+B" = { action = "spawn shadow layout cycle", repeat = false }
 "Mod+Tab" = { action = "overview-toggle", repeat = false }
-"Mod+Space" = { action = "spawn noctalia msg panel-toggle launcher", repeat = false }
+"Mod+Space" = { action = "spawn desktop-menu", repeat = false }
 "Mod+D" = { action = "spawn desktop-menu", repeat = false }
-"Mod+Shift+F23" = { action = "spawn desktop-menu", repeat = false }
+# Copilot may arrive as the modifier chord, a consumed-Shift chord, or F23.
+"Super+Shift+F23" = { action = "spawn desktop-menu", repeat = false }
+"Super+F23" = { action = "spawn desktop-menu", repeat = false }
+"F23" = { action = "spawn desktop-menu", repeat = false }
+"XF86Assistant" = { action = "spawn desktop-menu", repeat = false }
 "Mod+T" = { action = "spawn ghostty", repeat = false }
 "Mod+Return" = { action = "spawn ghostty", repeat = false }
 "Mod+E" = { action = "spawn ghostty -e yazi", repeat = false }
 "Mod+Z" = { action = "spawn zeditor", repeat = false }
 "Mod+B" = { action = "spawn firefox", repeat = false }
 "Mod+V" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
-"Mod+W" = { action = "spawn noctalia msg panel-toggle ashur-d/wallpaper-widget:hub", repeat = false }
-"Mod+Ctrl+W" = { action = "spawn noctalia msg panel-toggle wallpaper", repeat = false }
+"Mod+W" = { action = "spawn noctalia msg panel-toggle wallpaper", repeat = false }
 "Mod+Comma" = { action = "spawn noctalia msg panel-toggle settings", repeat = false }
 "Mod+N" = { action = "spawn noctalia msg panel-toggle control-center notifications", repeat = false }
 "Mod+X" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
@@ -86,8 +96,8 @@ vrr = "always"
 # Window focus
 "Mod+Left" = "window-focus-left"
 "Mod+Right" = "window-focus-right"
-"Mod+Down" = "window-focus-down"
-"Mod+Up" = "window-focus-up"
+"Mod+Down" = "workspace-next"
+"Mod+Up" = "workspace-previous"
 
 # Move columns
 "Mod+Shift+Left" = "column-move-left"
@@ -100,18 +110,10 @@ vrr = "always"
 "Mod+Ctrl+End" = "column-move-to-last"
 
 # Workspaces
-"Mod+Shift+Down" = "workspace-next"
-"Mod+Shift+Up" = "workspace-previous"
+"Mod+Shift+Down" = "window-move-to-workspace-next"
+"Mod+Shift+Up" = "window-move-to-workspace-previous"
 "Mod+Ctrl+Page_Down" = "column-move-to-workspace-next"
 "Mod+Ctrl+Page_Up" = "column-move-to-workspace-previous"
-"Mod+U" = "workspace-next"
-"Mod+I" = "workspace-previous"
-"Mod+Ctrl+U" = "column-move-to-workspace-next"
-"Mod+Ctrl+I" = "column-move-to-workspace-previous"
-"Mod+Shift+U" = "workspace-move-down"
-"Mod+Shift+I" = "workspace-move-up"
-"Mod+Page_Down" = "workspace-next"
-"Mod+Page_Up" = "workspace-previous"
 "Mod+Shift+Page_Down" = "workspace-move-down"
 "Mod+Shift+Page_Up" = "workspace-move-up"
 
@@ -138,8 +140,8 @@ vrr = "always"
 # Column grouping and tabs
 "Mod+Alt+Left" = "window-consume-or-expel-left"
 "Mod+Alt+Right" = "window-consume-or-expel-right"
-"Mod+Alt+Down" = "window-move-down"
-"Mod+Alt+Up" = "window-move-up"
+"Mod+Alt+Down" = "window-focus-down"
+"Mod+Alt+Up" = "window-focus-up"
 "Mod+Ctrl+Tab" = "column-focus-tab-next"
 "Mod+Ctrl+Shift+Tab" = "column-focus-tab-previous"
 
@@ -156,28 +158,20 @@ vrr = "always"
 "Mod+Ctrl+Up" = "output-focus-up"
 "Mod+Ctrl+Left" = "output-focus-left"
 "Mod+Ctrl+Right" = "output-focus-right"
-"Mod+Ctrl+H" = "output-focus-left"
-"Mod+Ctrl+J" = "output-focus-down"
-"Mod+Ctrl+K" = "output-focus-up"
-"Mod+Ctrl+L" = "output-focus-right"
 "Mod+Shift+Ctrl+Left" = "column-move-to-output-left"
 "Mod+Shift+Ctrl+Down" = "column-move-to-output-down"
 "Mod+Shift+Ctrl+Up" = "column-move-to-output-up"
 "Mod+Shift+Ctrl+Right" = "column-move-to-output-right"
-"Mod+Shift+Ctrl+H" = "column-move-to-output-left"
-"Mod+Shift+Ctrl+J" = "column-move-to-output-down"
-"Mod+Shift+Ctrl+K" = "column-move-to-output-up"
-"Mod+Shift+Ctrl+L" = "column-move-to-output-right"
 
-# Mouse-wheel navigation
+# Two-axis wheel and touchpad navigation. Shift moves the column.
 "Mod+WheelDown" = { action = "workspace-next", cooldown_ms = 150 }
+"Mod+Shift+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
 "Mod+WheelUp" = { action = "workspace-previous", cooldown_ms = 150 }
-"Mod+Ctrl+WheelDown" = { action = "column-move-to-workspace-next", cooldown_ms = 150 }
-"Mod+Ctrl+WheelUp" = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
-"Mod+Shift+WheelDown" = { action = "window-focus-right", cooldown_ms = 100 }
-"Mod+Shift+WheelUp" = { action = "window-focus-left", cooldown_ms = 100 }
-"Mod+Ctrl+Shift+WheelDown" = { action = "column-move-right", cooldown_ms = 100 }
-"Mod+Ctrl+Shift+WheelUp" = { action = "column-move-left", cooldown_ms = 100 }
+"Mod+Shift+WheelUp" = { action = "column-move-to-workspace-previous", cooldown_ms = 150 }
+"Mod+WheelLeft" = { action = "window-focus-left", cooldown_ms = 150 }
+"Mod+Shift+WheelLeft" = { action = "column-move-left", cooldown_ms = 150 }
+"Mod+WheelRight" = { action = "window-focus-right", cooldown_ms = 150 }
+"Mod+Shift+WheelRight" = { action = "column-move-right", cooldown_ms = 150 }
 
 # Screenshots
 "Print" = { action = "spawn noctalia msg screenshot-region", repeat = false }
@@ -193,6 +187,14 @@ vrr = "always"
 "Mod+P" = { action = "window-toggle-pinned", repeat = false }
 "Mod+grave" = { action = "scratchpad-toggle", repeat = false }
 "Mod+Shift+grave" = { action = "window-toggle-scratchpad", repeat = false }
+
+# Ghostty supplies its own background alpha; keep text fully opaque.
+[[window_rule]]
+opacity = 1.0
+blur = true
+blur_optimized = true
+[window_rule.match]
+app_id = '^com\.mitchellh\.ghostty$'
 
 # Optional until Noctalia generates the theme.
 [include.optional]

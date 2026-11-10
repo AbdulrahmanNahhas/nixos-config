@@ -1,0 +1,104 @@
+# Edit bar sizes/widget order here. The shared bar style lives in config.toml.
+# Changes take effect after rebuilding and choosing a layout again.
+# Opacity is controlled separately by: shadow opacity solid|soft|toggle.
+
+[defaults.dock]
+position = "bottom"
+icon_size = 44
+show_running = true
+launcher_position = "none"
+pinned = ["firefox", "dev.zed.Zed", "com.mitchellh.ghostty", "codex-desktop", "org.signal.Signal"]
+
+[bottom.bar]
+position = "bottom"
+thickness = 35
+margin_edge = 0
+margin_ends = 0
+margin_opposite_edge = 0
+# Avoid shadow/concave geometry insets on attached edges.
+shadow = false
+contact_shadow = false
+concave_edge_corners = false
+
+[gnome.bar]
+position = "top"
+thickness = 32
+scale = 1.20
+radius = 40
+radius_top_left = 0
+radius_top_right = 0
+radius_bottom_left = 40
+radius_bottom_right = 40
+start = ["launcher", "workspaces", "active_window"]
+center = ["nix-monitor", "bar", "umbriel_companion", "clock"] # bar = Mawaqit
+end = ["tray", "notifications", "bluetooth", "volume", "network", "battery", "control-center", "session"]
+
+[gnome.dock]
+layer = "overlay"
+show_dots = true
+main_axis_padding = 8
+cross_axis_padding = 2
+item_spacing = 8
+margin_edge = 0
+margin_ends = 0
+radius = 25
+radius_top_left = 25
+radius_top_right = 25
+radius_bottom_left = 25
+radius_bottom_right = 25
+reserve_space = false
+inactive_opacity = 0.50
+magnification = true
+magnification_scale = 1.40
+# Use Smart mode instead of regular auto-hide.
+auto_hide = false
+smart_auto_hide = true
+
+[right.bar]
+# Match the bottom preset: attached body without shadow/concave insets.
+shadow = false
+contact_shadow = false
+concave_edge_corners = false
+position = "right"
+thickness = 35
+scale = 1.20
+margin_edge = 0
+margin_ends = 0
+margin_opposite_edge = 0
+radius = 0
+radius_top_left = 0
+radius_bottom_left = 0
+radius_top_right = 0
+radius_bottom_right = 0
+reserve_space = true
+start = ["launcher", "workspaces", "umbriel_companion"]
+center = ["clock"]
+end = ["notifications", "volume", "network", "battery", "control-center", "session"]
+
+# GNOME and right share these widget changes over the bottom layout in config.toml.
+[defaults.desktop_widgets.grid]
+cell_size = 24
+
+[defaults.desktop_widgets.widget.desktop-widget-0000000000000004]
+box_height = 256.0
+box_width = 160.0
+cx = 96.0
+cy = 754.0
+
+[defaults.desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+background = true
+background_opacity = 1.0
+background_padding = 10
+background_radius = 15
+
+[gnome.desktop_widgets.widget.desktop-widget-0000000000000002]
+box_height = 64.0
+box_width = 192.0
+cx = 1328.0
+cy = 866.0
+
+[right.desktop_widgets.widget.desktop-widget-0000000000000002]
+box_height = 72.0
+box_width = 240.0
+cx = 136.0
+cy = 42.0
