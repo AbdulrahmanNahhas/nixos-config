@@ -137,7 +137,12 @@ while :; do
     clipboard) exec noctalia msg panel-toggle clipboard ;;
     terminal) exec ghostty ;;
     files) exec ghostty -e yazi ;;
-    close) exec niri msg action close-window ;;
+    close)
+      case "${XDG_CURRENT_DESKTOP:-}" in
+        *umbriel*|*Umbriel*) exec umbriel msg window-close ;;
+        *) exec niri msg action close-window ;;
+      esac
+      ;;
     settings) exec noctalia msg settings-open ;;
   esac
   query=''
