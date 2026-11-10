@@ -8,7 +8,7 @@
 
     userChrome = ../styles/main.css;
 
-    extensions.packages = with inputs.firefox-addons.packages.${pkgs.system}; [
+    extensions.packages = with inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
       pywalfox
       stylus
       darkreader
