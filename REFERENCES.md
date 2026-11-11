@@ -1,282 +1,57 @@
-# System and tools
+# References and notes
 
-[Project guide](README.md) · [Major work](ROADMAP.md)
+[Project guide](README.md) · [Technology roadmap](ROADMAP.md)
 
-Inventory of deliberately selected components and tools in this repository.
-**Declared** is the default status in the tables: configuration exists, but this
-is not a live installation audit or a claim that every app is used daily.
-Exceptions are marked **Disabled**, **Beta** or **Candidate** in the notes.
-Versions and exact permissions belong in the linked configuration.
+Decisions, release watches and useful sources—not a package inventory or a second
+checklist. The roadmap owns technologies and adoption status; configuration owns
+exact packages and settings. Notes here do not establish live verification.
 
-Technology describes the interface and, where verified, its implementation.
-**GUI · unverified** means the framework has not been established. Packaging
-(Nix/Flatpak) does not identify a UI framework. Alternative and preference notes
-record actual decisions; an empty replacement note does not imply endorsement
-or a request to replace a tool.
+## Release watches
 
-## OS and configuration
+| Topic                | Preference or decision                                                                                                                          | Source                                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Flatpak v2           | Waiting for v2; follow upstream before deciding whether anything needs changing. No release date or specific benefit assumed.                   | [Releases](https://github.com/flatpak/flatpak/releases) · [Issues](https://github.com/flatpak/flatpak/issues)       |
 
-### Foundation and storage
+## Caveats worth keeping
 
-| Component                                                                                            | Purpose                              | Technology / interface   | Configuration                                                                     | Notes                                                                        |
-| ---------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------ | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [NixOS / Nixpkgs](https://nixos.org/manual/nixos/stable/)                                            | Operating system and packages        | Nix modules; Linux       | [Flake](flake.nix), [entry point](configuration.nix)                              | Unstable, pinned by lock file; allowUnfree enabled                           |
-| [Nix](https://nixos.org/manual/nix/stable/)                                                          | Builds, store and dependencies       | CLI; daemon; flakes      | [Settings](system/base/nix.nix)                                                   | Build cgroups and memory limits; scheduled optimisation                      |
-| [Home Manager](https://nix-community.github.io/home-manager/)                                        | Personal environment                 | Nix modules              | [Home entry point](home.nix)                                                      | Integrated into NixOS activation                                             |
-| [nh](https://github.com/nix-community/nh)                                                            | Build, test, switch and clean        | CLI                      | [Nix settings](system/base/nix.nix)                                               | Retention policy is declared here                                            |
-| [Linux / systemd](https://www.freedesktop.org/software/systemd/man/latest/)                          | Kernel, init and service lifecycle   | Kernel; units; CLI       | [Boot](system/storage/boot.nix), [base](system/base/nix.nix)                      | Latest kernel package set; systemd initrd                                    |
-| [systemd-boot / Plymouth](https://www.freedesktop.org/software/systemd/man/latest/systemd-boot.html) | Boot selection and graphical startup | UEFI loader; boot splash | [Boot](system/storage/boot.nix)                                                   | [X-Plymouth](https://github.com/x-tech-laboratories/X-Plymouth) dark theme with five recent boot statuses declared; reboot verification pending. Secure Boot remains [planned evaluation](ROADMAP.md#security) |
-| [Disko](https://github.com/nix-community/disko)                                                      | Disk and filesystem declarations     | Nix; CLI                 | [Disks](system/storage/disks.nix)                                                 | LUKS, Btrfs, EFI and encrypted swap; formatting is destructive               |
-| [Btrfs](https://btrfs.readthedocs.io/)                                                               | Persistent filesystem                | Kernel filesystem; CLI   | [Disks](system/storage/disks.nix), [maintenance](system/storage/maintenance.nix)  | Subvolumes, scheduled scrub; snapshots are not configured                    |
-| [Preservation](https://github.com/nix-community/preservation)                                        | State over temporary root            | Nix; bind mounts         | [Persistence](system/storage/persistence.nix)                                     | Exact saved paths live here; Downloads stays temporary                       |
-| [smartmontools](https://www.smartmontools.org/)                                                      | Drive health                         | Daemon; CLI              | [Maintenance](system/storage/maintenance.nix)                                     | Retained SMART state; host warning delivery needs acceptance                 |
-| zRAM / disk swap / TRIM                                                                              | Memory overflow and SSD maintenance  | Kernel; system services  | [Maintenance](system/storage/maintenance.nix), [power](system/services/power.nix) | Prefer zRAM before encrypted disk swap                                       |
-| [Gitleaks](https://github.com/gitleaks/gitleaks)                                                     | Repository secret detection          | CLI; flake check         | [Flake](flake.nix), [rules](.gitleaks.toml)                                       | Public DNSCrypt verification key has a narrow exception                      |
+- **Application state:** changing a persistence mount can hide existing data.
+  Follow the [migration guidance](README.md#persistence-and-secrets) before activation.
+- **Signal:** key-storage migration remains unverified. Preserve the closed profile
+  and keyring before changing its backend; never reset the profile to force success.
+- **Reflection:** the beta does not guarantee future data migration. Don't make it
+  the only copy of important notes. [Upstream](https://modal.cx/reflection/).
+- **Nahhasio:** the signed alpha remote's descriptor is pinned, not each app update.
+  Preserve existing profile data when migrating. [Upstream](https://github.com/AbdulrahmanNahhas/nahhasio).
+- **OpenRazer:** the service is disabled as a workaround; having a controller UI
+  installed does not mean device control works. [Configuration](system/hardware/openrazer.nix).
+- **Editor toolchains:** selecting a language server or formatter does not install
+  every project dependency. [Development environment](home/apps/environment.nix).
+- **Sandbox permissions:** packaging alone says nothing about effective isolation;
+  inspect the [Flatpak policy](system/desktop/flatpak/policy.nix) and per-app exceptions.
+- **File shredding:** don't assume secure erasure on SSDs or copy-on-write filesystems.
 
-### Hardware and power
+## Useful sources
 
-| Component                                                                                                                        | Purpose                           | Technology / interface     | Configuration                                                                  | Notes                                                                             |
-| -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------------------------- | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| [nixos-hardware](https://github.com/NixOS/nixos-hardware)                                                                        | Laptop-specific defaults          | Nix modules                | [System imports](configuration.nix), [detection](system/hardware/detected.nix) | Razer Blade 14 RZ09-0530                                                          |
-| AMD graphics / NVIDIA                                                                                                            | Desktop rendering and GPU offload | GPU drivers; Vulkan/OpenGL | [Graphics](system/hardware/graphics.nix)                                       | AMD desktop preference; NVIDIA open driver; offload and sleep require host checks |
-| [OpenRazer](https://openrazer.github.io/)                                                                                        | Razer device support              | Kernel modules; daemon     | [OpenRazer](system/hardware/openrazer.nix)                                     | **Disabled:** temporary workaround; controller UI remains packaged                |
-| [BlueZ](https://www.bluez.org/)                                                                                                  | Bluetooth                         | Daemon; CLI                | [Bluetooth](system/hardware/bluetooth.nix)                                     | Radio disabled at boot                                                            |
-| [power-profiles-daemon](https://gitlab.freedesktop.org/upower/power-profiles-daemon) / [UPower](https://upower.freedesktop.org/) | Power profiles and battery status | D-Bus services             | [Power](system/services/power.nix)                                             | Noctalia selects profiles; competing power backends disabled                      |
-| [fwupd](https://fwupd.org/)                                                                                                      | Firmware updates                  | Daemon; CLI                | [Peripherals](system/hardware/peripherals.nix)                                 | Enabled; scanners, modem manager and unused phone integrations disabled           |
+| Need                                 | Start here                                                                                                                                                                                         |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Learn Nix                            | [nix.dev](https://nix.dev/) · [Nix language tutorial](https://nix.dev/tutorials/nix-language) · [Nix Pills](https://nixos.org/guides/nix-pills/)                                                   |
+| Understand modules and options       | [Module-system tutorial](https://nix.dev/tutorials/module-system/) · [NixOS manual](https://nixos.org/manual/nixos/stable/) · [Home Manager manual](https://nix-community.github.io/home-manager/) |
+| Find packages, options and functions | [NixOS Search](https://search.nixos.org/) · [MyNixOS](https://mynixos.com/) · [Noogle](https://noogle.dev/)                                                                                        |
+| Follow upstream changes              | [NixOS release notes](https://nixos.org/manual/nixos/unstable/release-notes.html) · [Nix release notes](https://nix.dev/manual/nix/latest/release-notes.html)                                      |
+| Discover projects                    | [Awesome Nix](https://github.com/nix-community/awesome-nix) · [Nix Software](https://nixsoftware.org/en) · [Nixmap](https://vimjoyer.com/nixmap/)                                                  |
+| Ask or investigate                   | [NixOS Discourse](https://discourse.nixos.org/) · [NixOS Wiki](https://wiki.nixos.org/) · [Nixpkgs issues](https://github.com/NixOS/nixpkgs/issues)                                                |
+| Desktop integration                  | [Noctalia docs](https://docs.noctalia.dev/) · [Niri docs](https://niri-wm.github.io/niri/) · [XDG portal docs](https://flatpak.github.io/xdg-desktop-portal/)                                      |
+| Gaming compatibility                 | [ProtonDB](https://www.protondb.com/) · [PCGamingWiki](https://www.pcgamingwiki.com/)                                                                                                              |
 
-### Networking and security
+Community recipes and search results may describe different versions. Check the
+owning configuration and upstream documentation before copying settings.
 
-| Component                                                     | Purpose                                 | Technology / interface    | Configuration                                                                         | Notes                                                                             |
-| ------------------------------------------------------------- | --------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| [NetworkManager](https://networkmanager.dev/docs/)            | Network connections                     | Daemon; `nmcli`; D-Bus    | [NetworkManager](system/networking/networkmanager.nix)                                | Local DNS resolver; randomized Wi-Fi MAC policy                                   |
-| [dnscrypt-proxy](https://github.com/DNSCrypt/dnscrypt-proxy)  | Encrypted DNS resolution                | Daemon                    | [DNS](system/networking/dns.nix)                                                      | Resolver policy and public verification key live here                             |
-| NixOS firewall                                                | Inbound network policy                  | System networking rules   | [Firewall](system/networking/firewall.nix)                                            | Inspect declarations before opening ports                                         |
-| [WireGuard](https://www.wireguard.com/)                       | VPN tunnel                              | Network protocol          | [Secret provisioning](system/security/secrets.nix)                                    | Import file is prepared; active connection is not established by this declaration |
-| [OpenSSH](https://www.openssh.com/)                           | Remote access                           | CLI; daemon               | [SSH](system/services/ssh.nix)                                                        | **Disabled:** OpenSSH server explicitly off                                       |
-| [sudo-rs](https://github.com/trifectatechfoundation/sudo-rs)  | Privileged commands                     | Rust CLI; PAM             | [Hardening](system/security/hardening.nix)                                            | Declared privilege-escalation implementation                                      |
-| [AppArmor](https://apparmor.net/)                             | Mandatory access controls               | Kernel security; profiles | [Hardening](system/security/hardening.nix)                                            | Enablement does not imply all apps are confined                                   |
-| [USBGuard](https://usbguard.github.io/)                       | USB device authorization                | Daemon; CLI               | [Hardening](system/security/hardening.nix)                                            | Explicit built-in device allowlist                                                |
-| [SOPS / sops-nix](https://github.com/Mic92/sops-nix)          | Encrypted secrets and runtime templates | CLI; Nix; systemd         | [System secrets](system/security/secrets.nix)                                         | Ciphertext in Git; plaintext rendered at runtime                                  |
-| [GNOME Keyring](https://gitlab.gnome.org/GNOME/gnome-keyring) | Desktop credential storage              | Secret Service; PAM       | [Desktop apps](system/desktop/integration.nix), [session](system/desktop/session.nix) | Fresh-login unlock and app integration need host acceptance                       |
+## Find exact declarations
 
-### Desktop infrastructure
+- [System features](configuration.nix) · [User features](home.nix)
+- [User packages](home/packages.nix) · [Flatpak catalog](system/desktop/flatpak/apps.nix)
+- [Gaming](gaming/) · [Desktop commands](home/desktop/menu/shadow.nu)
+- [Disabled service drafts](configuration.nix) · [AI experiments](home/apps/ai/default.nix)
 
-| Component                                                                                                   | Purpose                                       | Technology / interface       | Configuration                                                                                               | Notes                                                                                     |
-| ----------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| [Niri](https://niri-wm.github.io/niri/)                                                                     | Tiling Wayland compositor                     | Native compositor; KDL       | [Session](system/desktop/session.nix), [user settings](home/desktop/niri/)                                  | Key bindings and window rules remain user configuration                                   |
-| [Umbriel](https://docs.noctalia.dev/umbriel/) | Secondary desktop session | Native Wayland; wlroots | [System](system/desktop/umbriel.nix), [user settings](home/desktop/umbriel/) | Select Umbriel in the greeter; shares Noctalia and the user cursor; dedicated screen-sharing portal |
-| [Noctalia](https://github.com/noctalia-dev/noctalia)                                                        | Shell, launcher, lock, wallpaper and controls | Native Wayland / OpenGL ES   | [Shell](home/desktop/noctalia/), [settings](home/desktop/noctalia/config.toml)                              | Editable [layout presets](home/desktop/noctalia/layouts.toml) via `shadow layout`; solid panels by default, `shadow opacity` selects translucency; Umbriel Companion on the main bar; Ghostty-only optimized window blur on Umbriel                |
-| Noctalia greeter | Graphical login | Noctalia session integration | [Session](system/desktop/session.nix) | Ayu scheme; cursor follows the user Bibata theme and size; Niri remains default |
-| [PipeWire](https://docs.pipewire.org/) / [WirePlumber](https://pipewire.pages.freedesktop.org/wireplumber/) | Audio, video routing and session policy       | System services              | [Audio](system/services/audio.nix)                                                                          | Verify calls, recording and resume on the host                                            |
-| XDG portals / GVfs / dconf                                                                                  | Desktop integration and settings              | D-Bus; GTK integration       | [System apps](system/desktop/integration.nix), [XDG](home/desktop/xdg.nix), [dconf](home/desktop/dconf.nix) | Effective portal routing needs live checks                                                |
-| [Flatpak](https://docs.flatpak.org/) / [nix-flatpak](https://github.com/gmodena/nix-flatpak)                | Managed application distribution              | CLI; sandbox; portals        | [Policy](system/desktop/flatpak/default.nix), [catalog](system/desktop/flatpak/apps.nix)                    | System installation; daily updates at low I/O priority; reviewed per-app exceptions       |
-| [AppImage integration](https://nixos.org/manual/nixos/stable/)                                              | Run AppImage applications                     | Binary format integration    | [AppImage](system/desktop/appimage.nix)                                                                     | Support declaration, not an inventory of downloaded AppImages                             |
-| GTK theme / icons / cursor                                                                                  | Consistent desktop appearance                 | adw-gtk3; MoreWaita; Bibata  | [GTK](home/desktop/gtk.nix), [Flatpak themes](system/desktop/flatpak/theming.nix)                           | Native Nixpkgs Flatpak font/icon discovery; no FUSE mounts                                |
-| Fonts                                                                                                       | Desktop and terminal typography               | Font packages                | [Fonts](system/desktop/fonts.nix)                                                                           | Adwaita, Geist/JetBrains Nerd Fonts, Inter, Vazirmatn, IBM Plex, Amiri and Noto fallbacks |
-
-## Applications and tools
-
-**Nix** means a package or program declared through NixOS/Home Manager. **Flatpak**
-entries are all owned by the [app catalog](system/desktop/flatpak/apps.nix), which
-also owns origin, permissions and profile persistence. Unless noted otherwise,
-the origin is `flathub-verified`. **Custom** means a repository-owned command.
-
-### Browsers
-
-| Tool                                           | Purpose                    | Interface / technology | Managed by                           | Notes                                                                                 |
-| ---------------------------------------------- | -------------------------- | ---------------------- | ------------------------------------ | ------------------------------------------------------------------------------------- |
-| [Firefox](https://www.mozilla.org/firefox/)    | General and media browsing | GUI; Gecko             | [Nix / profiles](home/apps/firefox/) | Default `main` profile; separate `kitsune` media profile and launcher; replaces Brave |
-| [Mullvad Browser](https://mullvad.net/browser) | Privacy-oriented browsing  | GUI; Firefox-derived   | [Nix / packages](home/packages.nix)  | Separate from the configured Firefox profiles                                         |
-
-Firefox extensions are declared in [main](home/apps/firefox/profiles/main.nix),
-[Kitsune](home/apps/firefox/profiles/kitsune.nix) and [shared policies](home/apps/firefox/default.nix):
-
-| Extension                                                                                                               | Purpose                                   | Interface / technology | Managed by           | Notes                                                                    |
-| ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------------------- | -------------------- | ------------------------------------------------------------------------ |
-| [uBlock Origin](https://github.com/gorhill/uBlock)                                                                      | Content blocking                          | WebExtension           | Firefox policy       | Force-installed in both profiles                                         |
-| [Dark Reader](https://darkreader.org/)                                                                                  | Dark page appearance                      | WebExtension           | firefox-addons input | Both profiles                                                            |
-| [Stylus](https://github.com/openstyles/stylus)                                                                          | Site-specific CSS                         | WebExtension           | firefox-addons input | Both profiles                                                            |
-| [Return YouTube Dislike](https://returnyoutubedislike.com/)                                                             | Dislike estimates                         | WebExtension           | firefox-addons input | Both profiles                                                            |
-| [Pywalfox](https://github.com/Frewacom/pywalfox)                                                                        | Browser theme integration                 | WebExtension           | firefox-addons input | Main; Noctalia template selected; native-host behavior not verified here |
-| [Refined GitHub](https://github.com/refined-github/refined-github)                                                      | GitHub interface improvements             | WebExtension           | firefox-addons input | Main                                                                     |
-| [ProtonDB for Steam](https://github.com/tryton-vanmeer/ProtonDB-for-Steam) / [SteamDB](https://steamdb.info/extension/) | Steam compatibility and store information | WebExtensions          | firefox-addons input | Kitsune                                                                  |
-| [MAL-Sync](https://github.com/MALSync/MALSync)                                                                          | Media tracking integration                | WebExtension           | firefox-addons input | Kitsune                                                                  |
-| [SponsorBlock](https://sponsor.ajay.app/)                                                                               | Skip sponsored video segments             | WebExtension           | firefox-addons input | Kitsune                                                                  |
-
-### Editors, development and AI
-
-| Tool                                                                                                  | Purpose                                         | Interface / technology         | Managed by                                                                                          | Notes                                                                                      |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [Herdr](https://github.com/herdrdev/herdr-app) / [herdr-core](https://github.com/herdrdev/herdr-core) | Persistent terminals and coding-agent workspace | GUI; GPUI / Ghostty; `hc` CLI  | [Nix / Herdr](home/apps/herdr.nix)                                                                  | Telemetry disabled; app settings and core state persisted privately; core starts on demand |
-| [Zed](https://github.com/zed-industries/zed/blob/main/crates/gpui/README.md)                          | Main graphical editor                           | GUI; Rust / GPUI               | [Nix / Zed](home/apps/zed/)                                                                         | FHS package; AMD Vulkan selection; project environments own toolchains                     |
-| [Helix](https://helix-editor.com/)                                                                    | Terminal editing                                | TUI                            | [Nix / Helix](home/apps/helix/)                                                                     | Default `EDITOR=hx`; Noctalia theme                                                        |
-| [Delta](https://github.com/zed-industries/awesome-gpui)                                               | Coding with agents                              | GUI; GPUI ecosystem            | [Official flake](https://github.com/zed-industries/delta-nix), [configuration](home/apps/delta.nix) | Zed Industries application, not the Git diff pager                                         |
-| [Codex CLI](https://github.com/openai/codex)                                                          | Terminal coding agent                           | CLI / TUI                      | [Nix / AI](home/apps/ai/default.nix)                                                                | Shared instruction source; mutable runtime configuration                                   |
-| [Codex Desktop Linux wrapper](https://github.com/ilysenko/codex-desktop-linux)                        | Desktop coding-agent client                     | GUI; framework unverified here | [Community flake](home/apps/codex-desktop.nix)                                                      | Community wrapper of signed Linux artifact; usage-reporting ping disabled                  |
-| codex-acp                                                                                             | Connect Zed to Codex                            | ACP subprocess                 | [Nix / AI](home/apps/ai/default.nix)                                                                | Packaged binary; shares Codex state                                                        |
-| [devenv](https://devenv.sh/) / [direnv](https://direnv.net/)                                          | Project environments                            | CLI; shell/editor integration  | [Nix / environment](home/apps/environment.nix)                                                      | devenv owns terminal activation; Zed loads direnv directly                                 |
-| [Git](https://git-scm.com/)                                                                           | Version control                                 | CLI                            | [Nix / system packages](system/base/packages.nix)                                                   | Repository-local workflows                                                                 |
-| [GitHub CLI](https://cli.github.com/)                                                                 | Forge operations                                | CLI                            | [Nix / packages](home/packages.nix)                                                                 | `gh`                                                                                       |
-| [Lazygit](https://github.com/jesseduffield/lazygit)                                                   | Interactive Git                                 | TUI                            | [Nix / packages](home/packages.nix)                                                                 | Also exposed through Yazi                                                                  |
-| [nixd](https://github.com/nix-community/nixd) / [nixfmt](https://github.com/NixOS/nixfmt)             | Nix language server and formatting              | LSP; CLI                       | [Nix / packages](home/packages.nix)                                                                 | Shared editor tooling                                                                      |
-| [Statix](https://github.com/oppiliappan/statix) / [deadnix](https://github.com/astro/deadnix)         | Nix analysis                                    | CLI                            | [Nix / packages](home/packages.nix)                                                                 | Explicitly selected check tools                                                            |
-| [Bubblewrap](https://github.com/containers/bubblewrap)                                                | Process sandboxing                              | CLI                            | [Nix / packages](home/packages.nix)                                                                 | Non-setuid binary for Zed agent sandboxing                                                 |
-
-The [Codex CLI and ACP](home/apps/ai/default.nix) and
-[Herdr](home/apps/herdr.nix) use the standard Nixpkgs packages.
-
-Before activating Herdr persistence, close Herdr and migrate existing
-`~/.config/herdr-app` and `~/.local/state/herdr-core` into their saved locations;
-mounting empty saved directories would hide the current data.
-
-Language-server and formatter selections are owned by
-[Zed languages](home/apps/zed/languages.nix), [LSP settings](home/apps/zed/lsp.nix)
-and [Helix](home/apps/helix/default.nix). These include Oxfmt/Oxlint, nixd, JDTLS,
-clangd and Tombi on the Zed side, and formatter commands such as Stylua, Taplo and
-shfmt in Helix. Selecting a command does not install it into every project;
-project environments must supply the relevant runtimes and tools.
-
-### Terminal and navigation
-
-| Tool                                                                                                       | Purpose                            | Interface / technology           | Managed by                                                    | Notes                                                             |
-| ---------------------------------------------------------------------------------------------------------- | ---------------------------------- | -------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [Ghostty](https://github.com/ghostty-org/ghostty)                                                          | Terminal emulator                  | GUI; GTK on Linux; GPU rendering | [Nix / Ghostty](home/terminal/ghostty/)                       | Nushell terminal and declared login shell; Starship prompt; Noctalia theme                               |
-| [Nushell](https://www.nushell.sh/) | Structured shell and desktop helpers | CLI; Nushell | [Nu](home/terminal/nushell.nix) | Declared login shell and Ghostty/Zed terminal shell; Starship, Atuin, zoxide, native devenv and native Nu completion for shadow; activation and fresh-login acceptance pending |
-| [Rofi](https://github.com/davatorium/rofi) | Desktop action menu and optional app launcher | Native Wayland; C | [Menu](home/desktop/menu/default.nix) | Desktop launcher trial; Super+Space / Copilot / bar button toggle the menu; search includes GIO desktop apps and actions; app grid follows Noctalia pins; stable submenu sizing; Noctalia still supplies colors and notifications |
-| [Starship](https://starship.rs/)                                                                           | Shell prompt                       | CLI; prompt renderer             | [Nix / prompt](home/terminal/starship.nix)               | Rounded two-line prompt with runtime versions, status and clock aligned right; devenv prefix disabled to preserve prompt width                                           |
-| [Atuin](https://atuin.sh/)                                                                                 | Searchable shell history           | TUI; local history database      | [Nix / Fish](home/terminal/tools.nix)                  | Automatic sync disabled; owns Ctrl-R                              |
-| [fzf](https://github.com/junegunn/fzf)                                                                     | Interactive filtering              | TUI                              | [Terminal tools](home/terminal/tools.nix)                  | Explicit interactive filter; Nu owns Tab and Atuin owns Ctrl+R           |
-| [zoxide](https://github.com/ajeetdsouza/zoxide)                                                            | Directory jumping                  | CLI; shell integration           | [Terminal tools](home/terminal/tools.nix)                  | Navigation history                                                |
-| [Yazi](https://yazi-rs.github.io/)                                                                         | File navigation                    | TUI; Lua plugins                 | [Nix / Yazi](home/terminal/yazi/)                             | Yatline, Githead, Git, Lazygit and Ouch; wallpaper opener         |
-| [Fastfetch](https://github.com/fastfetch-cli/fastfetch)                                                    | System overview                    | CLI                              | [Nix / Fastfetch](home/terminal/fastfetch.nix)                | Configured; automatic Ghostty startup invocation is commented out |
-| [eza](https://github.com/eza-community/eza)                                                                | File listings and trees            | CLI                              | [Nix / packages](home/packages.nix)                           | Run eza explicitly; native Nu ls remains structured                       |
-| [bat](https://github.com/sharkdp/bat)                                                                      | Highlighted file output            | CLI                              | [Nix / packages](home/packages.nix)                           | Noctalia theme integration selected                               |
-| [fd](https://github.com/sharkdp/fd) / [ripgrep](https://github.com/BurntSushi/ripgrep)                     | File and text search               | CLI                              | [Nix / packages](home/packages.nix)                           | `fd`, `rg`                                                        |
-| [Chafa](https://hpjansson.org/chafa/)                                                                      | Terminal image rendering           | CLI                              | [Nix / packages](home/packages.nix)                           | Image previews                                                    |
-| [dust](https://github.com/bootandy/dust) / [duf](https://github.com/muesli/duf)                            | Disk usage and capacity            | CLI / terminal tables            | [Nix / packages](home/packages.nix)                           | Complement filesystem diagnostics                                 |
-| [procs](https://github.com/dalance/procs) / [btop](https://github.com/aristocratos/btop)                   | Process and resource inspection    | CLI / TUI                        | [Nix / packages](home/packages.nix)                           | Interactive monitoring via btop                                   |
-| [Ouch](https://github.com/ouch-org/ouch) / zip / unzip                                                     | Archive handling                   | CLI                              | [Nix / packages](home/packages.nix)                           | Explicit CLI commands, Yazi and theme packaging                      |
-| [curl](https://curl.se/) / [xh](https://github.com/ducaale/xh)                                             | HTTP requests and downloads        | CLI                              | [System](system/base/packages.nix), [home](home/packages.nix) | Both deliberately available                                       |
-| dig / [Nmap](https://nmap.org/)                                                                            | DNS and network inspection         | CLI                              | [Nix / packages](home/packages.nix)                           | Diagnostics                                                       |
-| [usbutils](https://github.com/gregkh/usbutils) / [pciutils](https://mj.ucw.cz/sw/pciutils/)                | Hardware inspection                | CLI                              | [Nix / system packages](system/base/packages.nix)             | `lsusb`, `lspci`                                                  |
-| [wl-clipboard](https://github.com/bugaevc/wl-clipboard)                                                    | Wayland clipboard access           | CLI                              | [Nix / system packages](system/base/packages.nix)             | `wl-copy`, `wl-paste`                                             |
-| [age](https://github.com/FiloSottile/age) / [SOPS](https://getsops.io/docs/) / [GnuPG](https://gnupg.org/) | File encryption and secret editing | CLI                              | [Nix / packages](home/packages.nix)                           | Tools; system provisioning is listed above                        |
-
-### Desktop utilities and productivity
-
-| Tool                                                                                         | Purpose                             | Interface / technology         | Managed by                                  | Notes                                                                |
-| -------------------------------------------------------------------------------------------- | ----------------------------------- | ------------------------------ | ------------------------------------------- | -------------------------------------------------------------------- |
-| [Files / Nautilus](https://apps.gnome.org/Nautilus/)                                         | Graphical file management           | GUI; GTK                       | [Nix / packages](home/packages.nix)         | GVfs integration                                                     |
-| [Loupe](https://apps.gnome.org/Loupe/)                                                       | Image viewing                       | GUI; GTK                       | [Nix / packages](home/packages.nix)         | System image viewer                                                  |
-| [Papers](https://apps.gnome.org/Papers/)                                                     | Document viewing                    | GUI; GTK                       | [Nix / packages](home/packages.nix)         | System document viewer                                               |
-| [Resources](https://apps.gnome.org/Resources/)                                               | System resource monitoring          | GUI; GTK                       | [Nix / packages](home/packages.nix)         | Graphical counterpart to terminal monitors                           |
-| [Polychromatic](https://polychromatic.app/)                                                  | Razer peripheral controls           | GUI; framework unverified here | [Nix / packages](home/packages.nix)         | Packaged, but OpenRazer service is disabled                          |
-| [brightnessctl](https://github.com/Hummer12007/brightnessctl)                                | Display brightness control          | CLI                            | [Nix / Niri](home/desktop/niri/default.nix) | Used by desktop bindings                                             |
-| [Disks](https://apps.gnome.org/DiskUtility/)                                                 | Disk inspection and management      | GUI; GTK                       | [Nix / packages](home/packages.nix)         | Device-changing actions require care                                 |
-| [Obsidian](https://docs.obsidian.md/community-directory/submission-requirements-for-plugins) | Markdown notes and knowledge        | GUI; Electron                  | [Nix / packages](home/packages.nix)         | Vault data must remain persistent                                    |
-| [LibreOffice](https://www.libreoffice.org/)                                                  | Documents, sheets and presentations | GUI; VCL / GTK3 integration    | Flatpak                                     | Per-app GTK3 theme; document and font access                         |
-| [Reflection](https://modal.cx/reflection/)                                                   | Collaborative local-first notes     | GUI; GTK / p2panda             | Flatpak; `flathub-beta`                     | **Beta:** preview; upstream does not guarantee future data migration |
-| [Secrets](https://apps.gnome.org/Secrets/)                                                   | KeePass password databases          | GUI; GTK                       | Flatpak                                     | Separate from GNOME Keyring's Secret Service                         |
-| [Raider](https://github.com/ADBeveridge/raider)                                              | File shredding                      | GUI; GTK4                      | Flatpak                                     | Do not assume secure erasure guarantees on SSDs or snapshots         |
-| [Archives](https://archives.geopjr.dev/)                                                     | Save websites for offline access    | GUI; framework unverified      | Flatpak                                     | Website archiving, not a general compressed-file manager             |
-| [Impression](https://apps.gnome.org/Impression/)                                             | Write bootable disk images          | GUI; GTK                       | Flatpak                                     | UDisks-mediated device access                                        |
-
-### Communication and feeds
-
-| Tool                                                                         | Purpose            | Interface / technology | Managed by         | Notes                                                               |
-| ---------------------------------------------------------------------------- | ------------------ | ---------------------- | ------------------ | ------------------------------------------------------------------- |
-| [Signal](https://github.com/SignalApp/Signal-Desktop/blob/main/package.json) | Private messaging  | GUI; Electron          | Flatpak; `flathub` | Key-storage migration rehearsal remains [open](ROADMAP.md#security) |
-| [Telegram Desktop](https://github.com/telegramdesktop/tdesktop)              | Messaging          | GUI; Qt / C++          | Flatpak            | App-specific permissions in catalog                                 |
-| [Fractal](https://gitlab.gnome.org/World/fractal)                            | Matrix messaging   | GUI; Rust / GTK4       | Flatpak            | Replaces Element; GPU rendering follows the shared policy           |
-| [Tuba](https://apps.gnome.org/Tuba/)                                         | Fediverse client   | GUI; GTK               | Flatpak            | Social networking                                                   |
-| [NewsFlash](https://apps.gnome.org/en-GB/NewsFlash/)                         | RSS / feed reading | GUI; GTK               | Flatpak            | Appearance through portals; host dconf file access removed          |
-
-### Reading, media and capture
-
-| Tool                                                                       | Purpose                       | Interface / technology         | Managed by                                          | Notes                                                                                                    |
-| -------------------------------------------------------------------------- | ----------------------------- | ------------------------------ | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [Readest](https://github.com/readest/readest)                              | Ebook reading                 | GUI; Tauri / Next.js           | Flatpak                                             | Documents and Downloads access                                                                           |
-| [Foliate](https://github.com/johnfactotum/foliate)                         | Ebook reading                 | GUI; GTK4 / GJS / WebKitGTK    | Flatpak                                             | Speech Dispatcher socket access; no replacement decision between readers recorded                        |
-| [PDF Arranger](https://github.com/pdfarranger/pdfarranger)                 | Rearrange and edit PDF pages  | GUI; Python / GTK              | Flatpak                                             | Separate from the document viewer                                                                        |
-| [Cine](https://github.com/diegopvlk/Cine)                                  | Local video playback          | GUI; GTK4 / libadwaita / mpv   | Flatpak                                             | Network disabled by local override                                                                       |
-| [Upscaler](https://gitlab.gnome.org/World/Upscaler)                        | Image enlargement             | GUI; framework unverified here | Flatpak                                             | Pictures access; network disabled                                                                        |
-| [Ear Tag](https://apps.gnome.org/EarTag/)                                  | Audio metadata editing        | GUI; GTK                       | Flatpak                                             | Music and Downloads access; network disabled                                                             |
-| [Video Trimmer](https://apps.gnome.org/VideoTrimmer/)                      | Cut video fragments           | GUI; GTK                       | Flatpak                                             | Focused editing tool                                                                                     |
-| [FFmpeg](https://ffmpeg.org/)                                              | Audio/video processing        | CLI                            | [Nix / packages](home/packages.nix)                 | Conversion and inspection                                                                                |
-| [GPU Screen Recorder](https://git.dec05eba.com/gpu-screen-recorder/about/) | Capture and encode the screen | CLI; GPU encoding              | [Nix / Noctalia](home/desktop/noctalia/default.nix) | Shell-driven recording; repeat-recording acceptance still pending                                        |
-| [slurp](https://github.com/emersion/slurp)                                 | Select screen regions         | Wayland selection overlay      | [Nix / Noctalia](home/desktop/noctalia/default.nix) | Recording/capture dependency                                                                             |
-| [Nahhasio](https://github.com/AbdulrahmanNahhas/nahhasio)                  | Personal media catalog/client | GUI; framework unverified here | Flatpak; signed `nahhasio-alpha` remote             | Alpha branch; pinned repository descriptor, not pinned app version; profile migration must preserve data |
-
-### Gaming
-
-The [gaming folder](gaming/) owns system integration, personal tools and shortcuts,
-Steam persistence and Heroic/overlay Flatpak declarations. GPU drivers remain in
-the shared hardware configuration.
-
-| Tool                                                                                                                   | Purpose                                     | Interface / technology | Managed by                         | Notes                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ---------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
-| [Steam / Proton](https://store.steampowered.com/about/)                                                                | Game library and Windows compatibility      | GUI; game runtime      | [Nix / Steam](gaming/system.nix)   | Xwayland support; per-game compatibility needs testing                                     |
-| [Heroic](https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher) | Epic, GOG and Amazon launcher | GUI; Electron | [Gaming Flatpaks](gaming/flatpak-apps.nix) | Persistent library, Steam integration and filtered GameMode access |
-| [Proton-GE](https://github.com/GloriousEggroll/proton-ge-custom)                                                       | Additional Windows-game compatibility       | Game runtime           | [Nix / Steam](gaming/system.nix)   | Declared alongside Steam                                                                   |
-| [GameMode](https://github.com/FeralInteractive/gamemode)                                                               | Game performance requests                   | Daemon; CLI            | [Nix / Steam](gaming/system.nix)   | Enabled; actual use is per game                                                            |
-| [MangoHud](https://github.com/flightlessmango/MangoHud) / [Vulkan tools](https://github.com/KhronosGroup/Vulkan-Tools) | Graphics monitoring and diagnostics | Overlay; CLI | [Nix / gaming](gaming/home.nix) | Native HUD is opt-in per game |
-| [Xwayland Satellite](https://github.com/Supreeeme/xwayland-satellite)                                                  | X11 application compatibility under Wayland | Display integration    | [Nix / Steam](gaming/system.nix)   | Packaged alongside Xwayland support                                                        |
-| [MangoHud Flatpak layer](https://github.com/flightlessmango/MangoHud#flatpak) | Overlay inside Heroic's sandbox | Vulkan/OpenGL layer | [Gaming Flatpaks](gaming/flatpak-apps.nix) | Branch 26.08 matches the observed Heroic runtime; review when it changes |
-| Game launchers                                                                                                         | Direct access to selected games             | Desktop entries        | [Custom / gaming](gaming/home.nix) | Hogwarts Legacy, FF7 Remake Intergrade and Clair Obscur; entries do not prove installation |
-
-### Repository commands
-
-| Command                                            | Purpose                             | Interface / technology    | Configuration                                               | Notes                                                               |
-| -------------------------------------------------- | ----------------------------------- | ------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------- |
-| `shadow` | Unified desktop and system management | Nushell; Nix / nh; Noctalia IPC | [Dispatcher](home/desktop/menu/shadow.nu), [completion](home/desktop/menu/completions.nu) | Shared CLI/menu actions; NH confirmations, cleanup preview and rollback; native Nu subcommand completion |
-| `build-run`                                        | Bound local compiler workloads      | Shell; systemd user scope | [Environment](home/apps/environment.nix)                    | Uses the dedicated build slice                                      |
-| `secret`                                           | Manage encrypted repository secrets | Shell; SOPS               | [Secret helper](home/secrets.nix)                           | Plaintext stays outside the repository                              |
-| `desktop-menu`                                     | Search desktop actions and submenus | Nushell; Rofi      | [Menu](home/desktop/menu/menu.nu)               | Title/category search with contiguous terms, categories and explicit state-changing confirmations                   |
-| `wallpaper-tag`                             | Filter and cycle wallpapers         | Nushell; Noctalia IPC        | [Wallpaper command](home/desktop/menu/wallpaper.nu) | Name/tag filters, ordered cycling, shuffle bag and menu-managed history; existing Noctalia picker retained |
-
-### Disabled work and candidates
-
-| Component                                                                      | Intended role                 | Technology / interface                        | Source                                              | Status and decision                                                               |
-| ------------------------------------------------------------------------------ | ----------------------------- | --------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------- |
-| BookOrbit                                                                      | Reading/library service       | Podman containers; PostgreSQL / pgvector; web | [Draft](system/services/bookorbit.nix)              | **Disabled:** placeholder URL and secret declarations need review before enabling |
-| Local AI stack                                                                 | Local model serving           | llama.cpp CUDA; llama-swap; CLI / HTTP        | [Draft](home/apps/ai/local.nix)                     | **Disabled:** no imported local service; CUDA build cost noted in source          |
-| OpenCode                                                                       | Alternative coding agent      | CLI / TUI                                     | [Commented configuration](home/apps/ai/default.nix) | **Disabled:** not enabled by the shared instruction source                        |
-| [Lanzaboote](https://nix-community.github.io/lanzaboote/)                      | Secure Boot                   | Signed boot artifacts                         | [Roadmap](ROADMAP.md#security)                      | **Candidate:** evaluation precedes enrollment                                     |
-| [Restic](https://restic.readthedocs.io/) / [Borg](https://www.borgbackup.org/) | Independent encrypted backups | CLI; backup repositories                      | [Roadmap](ROADMAP.md#recovery-and-reliability)      | **Candidates:** backend and destination not selected                              |
-| TLP / TuneD / auto-cpufreq                                                     | Alternative power policy      | System services                               | [Current policy](system/services/power.nix)         | **Candidates:** retain PPD unless controlled measurements justify a change        |
-
-Removed tools are available in Git history. They do not remain in the current
-inventory merely because an old document mentioned them.
-
-## Manuals and learning
-
-| Resource                                                                                                                                                                                                               | Use                                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| [nix.dev](https://nix.dev/) · [Nix manual](https://nixos.org/manual/nix/stable) · [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable)                                                                            | Language, store, packaging and module behavior; compare with the pinned unstable revision |
-| [Options](https://search.nixos.org/options) · [Packages](https://search.nixos.org/packages) · [NixOS Wiki](https://wiki.nixos.org/)                                                                                    | Find declarations and recipes; verify against pinned sources                              |
-| [Nixmap](https://vimjoyer.com/nixmap/) · [Nix Software](https://nixsoftware.org/en) · [Awesome Nix](https://github.com/nix-community/awesome-nix) · [nix-community](https://github.com/nix-community)                  | Learning paths and discovery; a link is not an installation decision                      |
-| [NetworkManager.conf](https://www.networkmanager.dev/docs/api/latest/NetworkManager.conf.html) · [DNSCrypt example](https://github.com/DNSCrypt/dnscrypt-proxy/blob/master/dnscrypt-proxy/example-dnscrypt-proxy.toml) | Networking configuration reference                                                        |
-| [Zed documentation](https://zed.dev/docs) · [Ghostty documentation](https://ghostty.org/docs) · [Noctalia documentation](https://docs.noctalia.dev/)                                                                   | Application settings and integration                                                      |
-
-Maintain rows with their owning declaration. Verify technology claims against
-upstream, keep versions in configuration, and record alternative searches only
-when Ash actually requests them. Major transitions belong in the roadmap.
-
-The `shadow` command ([entry point](home/desktop/menu/shadow.nu)) exposes `menu`,
-`actions`, `status --json`, `nix`, `wallpaper`, `mode`, `layout`, and `opacity`. Layout selection,
-wallpaper history/shuffle state, and reversible mode snapshots live under the already
-persisted `~/.local/state/noctalia/shadow`; Nushell history also stays under Noctalia
-state. No new persistence mount is introduced.
-
-Travel mode saves display modes, brightness and the power profile before applying
-60 Hz on the internal display, 30% brightness and power-saver. `shadow mode restore`
-restores the snapshot, including after a partial failure. NVIDIA is observed through
-sysfs; it is not forcibly disabled. Display controls use Niri IPC or
-wlr-output-management where the running compositor supports it. Host acceptance
-and battery savings remain unverified.
-
-`shadow mode focus` saves notification state and enables Do Not Disturb.
-`shadow mode presentation` also starts a named user sleep/idle inhibitor;
-`shadow mode focus-restore` restores the saved notification state and releases it.
-Desktop-session changes log out to the greeter, where Niri or Umbriel can be
-selected; open application windows are not migrated.
+Update this document only for lasting notes, important release watches or useful
+sources—not routine settings, package changes or task progress.
