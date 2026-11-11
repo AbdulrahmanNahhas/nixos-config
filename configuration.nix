@@ -34,6 +34,7 @@
     ./system/networking/firewall.nix
 
     ./system/security/hardening.nix
+    ./system/security/clamav.nix
     ./system/security/secrets.nix
 
     ./system/desktop/umbriel.nix

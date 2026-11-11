@@ -6,6 +6,12 @@ Decisions, release watches and useful sources—not a package inventory or a sec
 checklist. The roadmap owns technologies and adoption status; configuration owns
 exact packages and settings. Notes here do not establish live verification.
 
+## OS and configuration
+
+| Tool                               | Purpose                                            | Technology / interface | Management / status                           | Notes                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------- | -------------------------------------------------- | ---------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [ClamAV](https://docs.clamav.net/) | Manual malware scans of USB drives and other files | C/C++; CLI             | [NixOS](system/security/clamav.nix); declared | Automatic signature updates; scanner daemon, scheduled scans and on-access scanning disabled. Signatures persist across reboots. Run `sudo systemctl start clamav-freshclam.service` before the first scan, then `clamscan --recursive --infected /path/to/usb`. Reports detections without deleting files. |
+
 ## Release watches
 
 | Topic                | Preference or decision                                                                                                                          | Source                                                                                                              |

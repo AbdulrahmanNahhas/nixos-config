@@ -63,6 +63,13 @@ in
         }
         "/var/lib/flatpak"
         {
+          # Retain virus signatures instead of downloading them after every boot.
+          directory = "/var/lib/clamav";
+          user = "clamav";
+          group = "clamav";
+          mode = "0755";
+        }
+        {
           directory = "/var/lib/bluetooth";
           user = "root";
           group = "root";
