@@ -112,7 +112,7 @@ export def desktop-menu [initial: string = 'root'] {
         let icon_color = ($theme_flags | get -o 3 | default '' | parse --regex '(?m)^\s*fg:\s*(?<color>#[0-9a-fA-F]{6})' | get -o color.0 | default '#d8dee9')
         let selected_icon_color = ($theme_flags | get -o 3 | default '' | parse --regex '(?m)^\s*accent-fg:\s*(?<color>#[0-9a-fA-F]{6})' | get -o color.0 | default '#16161e')
         let result = (with-env {SHADOW_MENU_ROOT: (if $route == 'root' { '1' } else { '0' }), SHADOW_MENU_TITLE: $title, SHADOW_MENU_ICON_COLOR: $icon_color, SHADOW_MENU_SELECTED_ICON_COLOR: $selected_icon_color} {
-            $text | ^rofi -pid $pid_file -modi shadow-menu -show shadow-menu -plugin-path $env.SHADOW_MENU_PLUGIN -show-icons -matching normal -no-sort -eh (if $grid { 2 } else { $row_height }) -selected-row $remembered -kb-custom-1 'Alt+s' -kb-custom-2 '' -kb-cancel '' -kb-custom-3 'Escape,Alt+Left' ...$theme_flags ...$layout_flags -theme+listview+lines $visible_rows -theme+button-back+content $back_label -theme+button-accept+content $accept_label | complete
+            $text | ^rofi -pid $pid_file -modi shadow-menu -show shadow-menu -show-icons -matching normal -no-sort -eh (if $grid { 2 } else { $row_height }) -selected-row $remembered -kb-custom-1 'Alt+s' -kb-custom-2 '' -kb-cancel '' -kb-custom-3 'Escape,Alt+Left' ...$theme_flags ...$layout_flags -theme+listview+lines $visible_rows -theme+button-back+content $back_label -theme+button-accept+content $accept_label | complete
         })
         if ($closing | path exists) { rm $closing; return }
         if $result.exit_code != 0 { error make {msg: $"Rofi failed: ($result.stderr)"} }

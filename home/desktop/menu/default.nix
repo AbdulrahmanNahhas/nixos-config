@@ -38,7 +38,6 @@ let
       use ${./.}/shadow.nu
       def --wrapped main [...args: string] {
         $env.PATH = ($env.PATH | prepend (${builtins.toJSON runtime} | split row ':'))
-        $env.SHADOW_MENU_PLUGIN = '${mode}/lib/rofi'
         $env.SHADOW_NOCTALIA_BASE = '${../noctalia/config.toml}'
         $env.SHADOW_NOCTALIA_LAYOUTS = '${../noctalia/layouts.toml}'
         shadow ...$args
@@ -70,7 +69,10 @@ in
   # Noctalia owns generated colors; this theme owns layout and the fallback palette.
   programs.rofi = {
     enable = true;
-    plugins = [ pkgs.rofi-calc ];
+    plugins = [
+      mode
+      pkgs.rofi-calc
+    ];
     theme = ./desktop.rasi;
     settings = {
       modi = "drun,run";
