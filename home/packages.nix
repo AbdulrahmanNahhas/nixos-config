@@ -39,6 +39,7 @@
     ffmpeg # Audio/video conversion & processing
 
     # Nix development
+    flake-checker
     deadnix
     nixd
     nixfmt
@@ -65,4 +66,6 @@
     obsidian
     mullvad-browser
   ];
+
+  home.sessionVariables.FLAKE_CHECKER_NO_TELEMETRY = "true";
 }
