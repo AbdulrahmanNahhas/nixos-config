@@ -12,7 +12,8 @@
         show_banner = false;
         edit_mode = "emacs";
         completions = {
-          algorithm = "fuzzy";
+          # Match the typed prefix instead of letters scattered across commands.
+          algorithm = "prefix";
           case_sensitive = false;
           sort = "smart";
         };
