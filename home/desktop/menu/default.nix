@@ -10,7 +10,9 @@ let
     mode
     pkgs.fastfetch
     pkgs.nushell
-    pkgs.rofi
+    config.programs.rofi.finalPackage
+    pkgs.libqalculate
+    pkgs.wl-clipboard
     pkgs.coreutils
     pkgs.git
     pkgs.nh
@@ -68,6 +70,7 @@ in
   # Noctalia owns generated colors; this theme owns layout and the fallback palette.
   programs.rofi = {
     enable = true;
+    plugins = [ pkgs.rofi-calc ];
     theme = ./desktop.rasi;
     settings = {
       modi = "drun,run";
@@ -75,6 +78,7 @@ in
       matching = "normal";
       scroll-method = 1;
       cycle = false;
+      click-to-exit = true;
       kb-clear-line = "Control+a,Control+w";
       kb-move-front = "Control+Home";
       sorting-method = "fzf";
