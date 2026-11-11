@@ -297,22 +297,70 @@ in
       sandbox_permissions = {
         allow_unsandboxed = false;
         network_hosts = [
+          # Nix / NixOS
+          "nixos.org"
+          "cache.nixos.org"
+          "releases.nixos.org"
+          "channels.nixos.org"
+          "hydra.nixos.org"
+          "search.nixos.org"
+          "nix.dev"
+          "noogle.dev"
+          "devenv.sh"
+          "nix-community.github.io"
+          "nix-community.cachix.org"
+          "cache.numtide.com"
+          "flakehub.com"
+
+          # GitHub
           "github.com"
+          "github.io"
+          "api.github.com"
           "raw.githubusercontent.com"
-          "oxc.rs"
-          "zed.dev"
+          "codeload.github.com"
+          "objects.githubusercontent.com"
+          "release-assets.githubusercontent.com"
+          "github-releases.githubusercontent.com"
+          "gist.githubusercontent.com"
+          "docs.github.com"
+
+          # Git Hosting
           "gitlab.com"
-          "wikipedia.org"
+          "codeberg.org"
+          "git.sr.ht"
+
+          # Rust / Cargo
+          "www.rust-lang.org"
+          "rustup.rs"
+          "static.rust-lang.org"
+          "doc.rust-lang.org"
           "docs.rs"
           "crates.io"
-          "doc.rust-lang.org"
-          "search.nixos.org"
-          "noogle.dev"
-          "developer.mozilla.org"
+          "index.crates.io"
+          "static.crates.io"
+
+          # JavaScript / TypeScript
+          "nodejs.org"
           "typescriptlang.org"
-          "npmjs.com"
+          "www.typescriptlang.org"
+          "www.npmjs.com"
           "registry.npmjs.org"
+          "pnpm.io"
+          "yarnpkg.com"
+          "registry.yarnpkg.com"
+          "cdn.jsdelivr.net"
+          "unpkg.com"
+          "oxc.rs"
+
+          # Development Tools
+          "zed.dev"
+          "docs.noctalia.dev"
+          "www.freedesktop.org"
+
+          # Documentation / References
+          "developer.mozilla.org"
           "en.cppreference.com"
+          "wikipedia.org"
         ];
       };
     };
