@@ -1,7 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
+#include <pango/pangocairo.h>
 #include <rofi/mode-private.h>
 #include <rofi/rofi-icon-fetcher.h>
-#include <pango/pangocairo.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,7 +31,8 @@ extern void rofi_view_reload(void);
 static gboolean watch_input(gpointer data) {
   State *state = data;
   const void *view = rofi_view_get_active();
-  if (!view) return G_SOURCE_CONTINUE;
+  if (!view)
+    return G_SOURCE_CONTINUE;
   const char *input = rofi_view_get_user_input(view);
   char *query = g_strdup(input ? input : "");
   gboolean empty = *g_strstrip(query) == '\0';
@@ -52,7 +53,8 @@ static void free_row(gpointer data) {
   g_free(row->search);
   g_free(row->label);
   g_free(row->icon);
-  if (row->surface) cairo_surface_destroy(row->surface);
+  if (row->surface)
+    cairo_surface_destroy(row->surface);
   g_free(row);
 }
 
@@ -85,7 +87,8 @@ static int init(Mode *mode) {
     }
     Row *row = g_new0(Row, 1);
     row->kind = g_strdup(fields[0]);
-    if (strcmp(row->kind, "nav") == 0) state->navigation_count++;
+    if (strcmp(row->kind, "nav") == 0)
+      state->navigation_count++;
     row->display = decode(fields[1]);
     row->search = decode(fields[2]);
     row->label = decode(fields[3]);
@@ -94,14 +97,17 @@ static int init(Mode *mode) {
     g_strfreev(fields);
   }
   free(line);
-  if (state->root) state->watch = g_timeout_add(50, watch_input, state);
+  if (state->root)
+    state->watch = g_timeout_add(50, watch_input, state);
   return state->rows->len > 0;
 }
 
 static void destroy(Mode *mode) {
   State *state = mode->private_data;
-  if (!state) return;
-  if (state->watch) g_source_remove(state->watch);
+  if (!state)
+    return;
+  if (state->watch)
+    g_source_remove(state->watch);
   g_ptr_array_free(state->rows, TRUE);
   g_strfreev(state->words);
   g_free(state);
@@ -110,7 +116,8 @@ static void destroy(Mode *mode) {
 
 static unsigned int count(const Mode *mode) {
   const State *state = mode->private_data;
-  return state->root && state->empty ? state->navigation_count : state->rows->len;
+  return state->root && state->empty ? state->navigation_count
+                                     : state->rows->len;
 }
 
 static char *preprocess(Mode *mode, const char *input) {
@@ -132,10 +139,14 @@ static int match(const Mode *mode, rofi_int_matcher **tokens G_GNUC_UNUSED,
                  unsigned int index) {
   const State *state = mode->private_data;
   const Row *row = g_ptr_array_index(state->rows, index);
-  if (state->empty) return !state->root || strcmp(row->kind, "nav") == 0;
-  if (strcmp(row->kind, "back") == 0) return FALSE;
-  // Root categories stay navigation; typed queries search the complete action catalog.
-  if (state->root && strcmp(row->kind, "nav") == 0) return FALSE;
+  if (state->empty)
+    return !state->root || strcmp(row->kind, "nav") == 0;
+  if (strcmp(row->kind, "back") == 0)
+    return FALSE;
+  // Root categories stay navigation; typed queries search the complete action
+  // catalog.
+  if (state->root && strcmp(row->kind, "nav") == 0)
+    return FALSE;
   char *search = g_utf8_casefold(row->search, -1);
   gboolean found = TRUE;
   for (char **word = state->words; word && *word; word++) {
@@ -152,14 +163,16 @@ static char *display(const Mode *mode, unsigned int index, int *flags,
                      GList **attributes G_GNUC_UNUSED, int get_entry) {
   State *state = mode->private_data;
   const Row *row = g_ptr_array_index(state->rows, index);
-  // The current-entry widget is notified on every keyboard/mouse selection change.
+  // The current-entry widget is notified on every keyboard/mouse selection
+  // change.
   if (get_entry && attributes == NULL && state->selected != index) {
     if (state->selected < state->rows->len)
       paint_icon(g_ptr_array_index(state->rows, state->selected), FALSE);
     state->selected = index;
     paint_icon(g_ptr_array_index(state->rows, index), TRUE);
   }
-  // MARKUP is part of Rofi's row-state ABI, but its enum is not installed publicly.
+  // MARKUP is part of Rofi's row-state ABI, but its enum is not installed
+  // publicly.
   *flags |= 8;
   return get_entry ? g_strdup(row->display) : NULL;
 }
@@ -171,25 +184,34 @@ static char *completion(const Mode *mode, unsigned int index) {
 }
 
 static void paint_icon(Row *row, gboolean selected) {
-  if (!row->surface) return;
+  if (!row->surface)
+    return;
   unsigned int height = row->icon_size;
   cairo_t *cr = cairo_create(row->surface);
-  // Render above the logical size so HiDPI outputs never upscale a small bitmap.
+  // Render above the logical size so HiDPI outputs never upscale a small
+  // bitmap.
   cairo_scale(cr, 4.0, 4.0);
   cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
   cairo_paint(cr);
   cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
   PangoLayout *layout = pango_cairo_create_layout(cr);
-  PangoFontDescription *font = pango_font_description_from_string("GeistMono Nerd Font");
+  PangoFontDescription *font =
+      pango_font_description_from_string("GeistMono Nerd Font");
   pango_font_description_set_absolute_size(font, height * 0.85 * PANGO_SCALE);
   pango_layout_set_font_description(layout, font);
   pango_layout_set_text(layout, row->icon, -1);
   PangoRectangle bounds;
   pango_layout_get_pixel_extents(layout, &bounds, NULL);
   unsigned int r = 216, g = 222, b = 233;
-  const char *color = g_getenv(selected ? "SHADOW_MENU_SELECTED_ICON_COLOR" : "SHADOW_MENU_ICON_COLOR");
-  if (selected) { r = 22; g = 22; b = 30; }
-  if (color) sscanf(color, "#%2x%2x%2x", &r, &g, &b);
+  const char *color = g_getenv(selected ? "SHADOW_MENU_SELECTED_ICON_COLOR"
+                                        : "SHADOW_MENU_ICON_COLOR");
+  if (selected) {
+    r = 22;
+    g = 22;
+    b = 30;
+  }
+  if (color)
+    sscanf(color, "#%2x%2x%2x", &r, &g, &b);
   cairo_set_source_rgb(cr, r / 255.0, g / 255.0, b / 255.0);
   cairo_move_to(cr, ((double)height - bounds.width) / 2.0 - bounds.x,
                 ((double)height - bounds.height) / 2.0 - bounds.y);
@@ -204,7 +226,8 @@ static cairo_surface_t *icon(const Mode *mode, unsigned int index,
                              unsigned int height) {
   const State *state = mode->private_data;
   Row *row = g_ptr_array_index(state->rows, index);
-  if (!row->icon || !*row->icon || height == 0) return NULL;
+  if (!row->icon || !*row->icon || height == 0)
+    return NULL;
   if (g_str_has_prefix(row->icon, "theme:")) {
     if (!row->icon_uid || row->icon_size != height) {
       row->icon_size = height;
@@ -212,10 +235,13 @@ static cairo_surface_t *icon(const Mode *mode, unsigned int index,
     }
     return rofi_icon_fetcher_get(row->icon_uid);
   }
-  if (row->surface && row->icon_size == height) return row->surface;
-  if (row->surface) cairo_surface_destroy(row->surface);
+  if (row->surface && row->icon_size == height)
+    return row->surface;
+  if (row->surface)
+    cairo_surface_destroy(row->surface);
   row->icon_size = height;
-  row->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, height * 4, height * 4);
+  row->surface =
+      cairo_image_surface_create(CAIRO_FORMAT_ARGB32, height * 4, height * 4);
   paint_icon(row, state->selected == index);
   return row->surface;
 }
@@ -226,8 +252,10 @@ static char *message(const Mode *mode G_GNUC_UNUSED) {
 
 static ModeMode result(Mode *mode, int event, char **input G_GNUC_UNUSED,
                        unsigned int index) {
-  if (event & MENU_CUSTOM_COMMAND) printf("key:%d\n", event & MENU_LOWER_MASK);
-  else if ((event & MENU_OK) && index < count(mode)) printf("%u\n", index);
+  if (event & MENU_CUSTOM_COMMAND)
+    printf("key:%d\n", event & MENU_LOWER_MASK);
+  else if ((event & MENU_OK) && index < count(mode))
+    printf("%u\n", index);
   return MODE_EXIT;
 }
 
@@ -247,13 +275,21 @@ G_MODULE_EXPORT Mode mode = {
 };
 
 #ifdef SHADOW_MODE_TEST
-uint32_t rofi_icon_fetcher_query(const char *name G_GNUC_UNUSED, const int size G_GNUC_UNUSED) { return 0; }
-cairo_surface_t *rofi_icon_fetcher_get(const uint32_t uid G_GNUC_UNUSED) { return NULL; }
+uint32_t rofi_icon_fetcher_query(const char *name G_GNUC_UNUSED,
+                                 const int size G_GNUC_UNUSED) {
+  return 0;
+}
+cairo_surface_t *rofi_icon_fetcher_get(const uint32_t uid G_GNUC_UNUSED) {
+  return NULL;
+}
 void *rofi_view_get_active(void) { return NULL; }
-const char *rofi_view_get_user_input(const void *view G_GNUC_UNUSED) { return ""; }
+const char *rofi_view_get_user_input(const void *view G_GNUC_UNUSED) {
+  return "";
+}
 void rofi_view_reload(void) {}
 int main(void) {
-  State state = {.rows = g_ptr_array_new(), .root = TRUE, .navigation_count = 1};
+  State state = {
+      .rows = g_ptr_array_new(), .root = TRUE, .navigation_count = 1};
   Row nav = {.kind = "nav", .search = "NixOS"};
   Row back = {.kind = "back", .search = "Back"};
   Row test = {.kind = "action", .search = "Test temporarily nix NixOS"};
@@ -264,8 +300,8 @@ int main(void) {
   g_ptr_array_add(state.rows, &check);
   Mode test_mode = {.private_data = &state};
   const char *queries[] = {"", "test", "NIXOS test", "tset", "  ", NULL};
-  const int expected[][4] = {{1, 0, 0, 0}, {0, 0, 1, 0}, {0, 0, 1, 0},
-                             {0, 0, 0, 0}, {1, 0, 0, 0}};
+  const int expected[][4] = {
+      {1, 0, 0, 0}, {0, 0, 1, 0}, {0, 0, 1, 0}, {0, 0, 0, 0}, {1, 0, 0, 0}};
   for (int q = 0; queries[q]; q++) {
     g_free(preprocess(&test_mode, queries[q]));
     g_assert_cmpuint(count(&test_mode), ==, state.empty ? 1 : 4);
@@ -274,7 +310,8 @@ int main(void) {
   }
   state.root = FALSE;
   g_free(preprocess(&test_mode, ""));
-  for (unsigned int i = 0; i < 4; i++) g_assert_true(match(&test_mode, NULL, i));
+  for (unsigned int i = 0; i < 4; i++)
+    g_assert_true(match(&test_mode, NULL, i));
   int flags = 0;
   g_free(display(&test_mode, 2, &flags, NULL, TRUE));
   g_assert_cmpuint(state.selected, ==, 2);
@@ -282,7 +319,8 @@ int main(void) {
   g_assert_cmpuint(state.selected, ==, 3);
   g_strfreev(state.words);
   g_ptr_array_free(state.rows, TRUE);
-  puts("PASS: root visibility, global search, exact token matching, case folding, multiword search and query clearing");
+  puts("PASS: root visibility, global search, exact token matching, case "
+       "folding, multiword search and query clearing");
   return 0;
 }
 #endif

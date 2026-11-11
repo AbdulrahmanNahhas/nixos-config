@@ -80,6 +80,22 @@
         '';
       };
 
+      devShells.${system}.menu = pkgs.mkShell {
+        inputsFrom = [ (import ./home/desktop/menu/rofi-mode.nix { inherit pkgs; }) ];
+        packages = [ pkgs.clang-tools ];
+        shellHook = ''
+          if [ -d home/desktop/menu ]; then
+            # clangd reads one argument per line; reuse the build's dependency flags.
+            printf '%s\n' -std=c11 -Wall -Wextra \
+              -isystem ${pkgs.lib.getDev pkgs.stdenv.cc.libc}/include \
+              $(pkg-config --cflags gio-unix-2.0 rofi pangocairo) \
+              > home/desktop/menu/compile_flags.txt
+          else
+            echo 'Run nix develop .#menu from the repository root to refresh clangd flags.'
+          fi
+        '';
+      };
+
       nixosConfigurations.${host.hostname} = nixpkgs.lib.nixosSystem {
         inherit system;
 

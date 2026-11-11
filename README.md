@@ -7,19 +7,19 @@ Ash's declarative NixOS and Home Manager configuration for a Razer Blade 14
 
 ## Find the configuration
 
-| Path                                              | Responsibility                                                      |
-| ------------------------------------------------- | ------------------------------------------------------------------- |
-| [flake.nix](flake.nix) / [flake.lock](flake.lock) | Dependencies, pinned revisions, host output, formatter and checks   |
-| [configuration.nix](configuration.nix)            | Explicit system imports and Home Manager wiring                     |
-| [home.nix](home.nix)                              | Explicit user imports, identity and defaults                        |
-| [system/](system/)                                | Base, hardware, storage, networking, security, desktop and services |
-| [home/desktop/](home/desktop/)                    | Desktop behavior, appearance and integration                        |
-| [home/terminal/](home/terminal/)                  | Shell, terminal and terminal navigation                             |
-| [home/apps/](home/apps/)                          | Applications, editors and development integration                   |
-| [gaming/](gaming/) | Steam, Heroic, overlays, shortcuts and gaming persistence, with separate system/home entry files |
-| [home/packages.nix](home/packages.nix)            | User packages without dedicated configuration                       |
-| [encrypted-secrets/](encrypted-secrets/)          | SOPS ciphertext                                                     |
-| [AGENTS.md](AGENTS.md)                            | Repository working rules                                            |
+| Path                                              | Responsibility                                                                                   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [flake.nix](flake.nix) / [flake.lock](flake.lock) | Dependencies, pinned revisions, host output, formatter and checks                                |
+| [configuration.nix](configuration.nix)            | Explicit system imports and Home Manager wiring                                                  |
+| [home.nix](home.nix)                              | Explicit user imports, identity and defaults                                                     |
+| [system/](system/)                                | Base, hardware, storage, networking, security, desktop and services                              |
+| [home/desktop/](home/desktop/)                    | Desktop behavior, appearance and integration                                                     |
+| [home/terminal/](home/terminal/)                  | Shell, terminal and terminal navigation                                                          |
+| [home/apps/](home/apps/)                          | Applications, editors and development integration                                                |
+| [gaming/](gaming/)                                | Steam, Heroic, overlays, shortcuts and gaming persistence, with separate system/home entry files |
+| [home/packages.nix](home/packages.nix)            | User packages without dedicated configuration                                                    |
+| [encrypted-secrets/](encrypted-secrets/)          | SOPS ciphertext                                                                                  |
+| [AGENTS.md](AGENTS.md)                            | Repository working rules                                                                         |
 
 Start with the two root entry files. Related settings live together; scripts,
 styles and icons stay beside their feature. Disabled imports are drafts, not
@@ -40,6 +40,12 @@ nh os build /saved/nixos-config
 
 New files must be visible to Git for flake evaluation; use `git add -N <path>`
 when preparing an uncommitted change. Builds do not activate a configuration.
+
+For the menu's C helpers, run `nix develop .#menu --command true` from the
+repository root to generate clangd's local include flags. Repeat after updating
+Nixpkgs, then restart Zed's C language server if diagnostics remain stale. The
+generated `home/desktop/menu/compile_flags.txt` contains local Nix store paths and
+is ignored by Git; no system build or activation is needed.
 
 After reviewing the diff and successful build, temporarily activate when ready:
 
