@@ -635,7 +635,7 @@ wallpaper_scheme = "m3-tonal-spot"
 
 [theme.templates]
 builtin_ids = ["btop", "gtk3", "gtk4", "ghostty", "helix", "niri", "umbriel"]
-community_ids = ["sonora", "pywalfox", "zed", "steam", "bat", "herdr-app", "lazygit", "starship", "yazi", "rofi"]
+community_ids = ["sonora", "pywalfox", "zed", "steam", "bat", "herdr-app", "lazygit", "starship", "yazi", "rofi", "cosmic"]
 enable_builtin_templates = true
 enable_community_templates = true
 

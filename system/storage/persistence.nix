@@ -42,12 +42,6 @@ in
           inInitrd = true;
           configureParent = true;
         }
-        # Git global config
-        {
-          file = "/home/${username}/.gitconfig";
-          how = "symlink";
-        }
-
         # GTK application settings
         {
           file = "/home/${username}/.config/dconf/user";

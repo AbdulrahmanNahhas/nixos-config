@@ -22,6 +22,7 @@ let
 
     ${pkgs.python3}/bin/python3 - "$out/main.lua" <<'PY'
     import pathlib
+    import re
     import sys
 
     path = pathlib.Path(sys.argv[1])
@@ -111,7 +112,8 @@ let
         "Unexpected Yatline Url.is_search references"
     )
 
-    source = source.replace(old, new)
+    source = re.sub(r"(?<!\.spec)\.is_search", new, source)
+    assert ".spec.spec.is_search" not in source
 
     # ── Write patched plugin ───────────────────────────
 

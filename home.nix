@@ -48,6 +48,10 @@
 
   programs.home-manager.enable = true;
 
+  # Keep mutable Git settings in their existing persistent backing file.
+  xdg.configFile."git/config".source =
+    config.lib.file.mkOutOfStoreSymlink "/saved/home/${username}/.gitconfig";
+
   # Together with the 6 GiB Nix budget, leave headroom on this 16 GiB host.
   systemd.user.slices.build.Slice = {
     MemoryHigh = "3G";

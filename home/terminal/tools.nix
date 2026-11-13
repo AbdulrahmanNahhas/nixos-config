@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ config, inputs, ... }:
 {
   imports = [ inputs.nix-index-database.homeModules.default ];
 
@@ -12,6 +12,7 @@
         auto_sync = false;
         update_check = false;
         secrets_filter = true;
+        logs.dir = "${config.xdg.stateHome}/atuin/logs";
       };
     };
     fzf = {
