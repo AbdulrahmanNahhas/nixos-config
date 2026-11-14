@@ -14,7 +14,7 @@ export def --wrapped main [...args: string] {
         print 'shadow status [--json]         Running system, battery, GPU and storage summary'
         print 'shadow actions                 Action catalog as JSON'
         print 'shadow nix ACTION [ARGS]       check/build/test/switch/boot/update/input/generations/rollback/clean-preview/clean/search/options/optimise'
-        print 'shadow layout [NAME]           bottom/gnome/right/cycle; omit NAME for picker'
+        print 'shadow layout [NAME]           main/traditional/cycle/refresh; omit NAME for picker'
         print 'shadow opacity [MODE]          solid/soft/toggle; omit MODE for picker'
         print 'shadow mode NAME               travel/restore/focus/presentation/focus-restore'
         print 'shadow wallpaper ACTION [KIND] picker/status/list/select/all/next/previous/random/history'

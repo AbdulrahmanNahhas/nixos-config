@@ -3,7 +3,7 @@ use catalog.nu [actions categories]
 def complete-command [] { [menu status actions nix layout opacity mode wallpaper run] }
 def complete-menu [] { [root search] | append (categories | get id) }
 def complete-nix [] { actions | where kind in [nix search] | get args | each { first } | uniq }
-def complete-layout [] { [bottom gnome right cycle] }
+def complete-layout [] { [main traditional cycle refresh] }
 def complete-opacity [] { [solid soft toggle] }
 def complete-mode [] { [travel restore focus presentation focus-restore] }
 def complete-wallpaper [] { [picker status list select all next previous random history] }

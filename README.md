@@ -82,6 +82,9 @@ survival across reboot. Flatpak profile selection comes from the
 persistent location. A per-user Flatpak installation can take precedence over a
 managed system copy; verify the intended installation before retiring a test copy.
 
+When enabling native Firefox Web Apps, also migrate existing user launchers before
+activating the new applications-directory mount declared in [persistence](system/storage/persistence.nix).
+
 Commit encrypted secrets only. The deployment age identity belongs at
 `/saved/var/lib/sops-nix/key.txt`; provision it independently before deploying
 secret consumers. Back it up separately: generating another identity cannot

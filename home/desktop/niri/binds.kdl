@@ -42,8 +42,20 @@ binds {
         spawn "noctalia" "msg" "panel-toggle" "clipboard"
     }
 
-    Mod+Ctrl+B repeat=false hotkey-overlay-title="Cycle bar layout" {
+    Mod+Ctrl+B repeat=false hotkey-overlay-title="Toggle Main / Traditional Layout" {
         spawn "shadow" "layout" "cycle"
+    }
+
+    Mod+Ctrl+1 repeat=false hotkey-overlay-title="Main Layout" {
+        spawn "shadow" "layout" "main"
+    }
+
+    Mod+Ctrl+2 repeat=false hotkey-overlay-title="Traditional Layout" {
+        spawn "shadow" "layout" "traditional"
+    }
+
+    Mod+Ctrl+W repeat=false hotkey-overlay-title="Wallhaven Browser" {
+        spawn "noctalia" "msg" "panel-toggle" "noctalia/wallhaven:browser"
     }
 
     Mod+W repeat=false hotkey-overlay-title="Wallpapers" {
@@ -51,7 +63,7 @@ binds {
     }
 
     Mod+Comma repeat=false hotkey-overlay-title="Settings" {
-        spawn "noctalia" "msg" "panel-toggle" "settings"
+        spawn "noctalia" "msg" "settings-toggle"
     }
 
     Mod+N repeat=false hotkey-overlay-title="Notifications" {

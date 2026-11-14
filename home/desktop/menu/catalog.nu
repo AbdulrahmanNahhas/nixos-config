@@ -27,7 +27,7 @@ export def actions [] {
         [wallpaper-history wallpapers 'Wallpaper history' 'Restore an image used through these controls' wallpaper [history] false false]
         [wallpaper-folder wallpapers 'Open wallpaper folder' 'Browse the original files in Yazi' folder [Pictures Wallpapers] false false]
         [panel-opacity appearance 'Panel opacity' 'Solid backgrounds, or translucent panels with blur' opacity [] false false]
-        [bar-layout appearance 'Bar layout' 'Bottom bar, GNOME top bar + dock, or right sidebar' layout [] false false]
+        [bar-layout appearance 'Desktop layout' 'Main: attached panels · Traditional: bottom taskbar and centered panels' layout [] false false]
         [theme appearance 'Toggle light / dark' 'Change Noctalia appearance' exec [noctalia msg theme-mode-toggle] false false]
         [settings appearance Settings 'Open Noctalia settings' exec [noctalia msg settings-open] false false]
         [nightlight appearance 'Toggle night light' 'Warmer display colors' exec [noctalia msg nightlight-toggle] false false]

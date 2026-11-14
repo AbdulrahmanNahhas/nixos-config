@@ -3,3 +3,8 @@
 /*#navigator-toolbox {
   background: red !important;
 }*/
+
+/* Native Web Apps only: no navigation toolbar or hover strip. */
+:root[taskbartab] #navigator-toolbox {
+  display: none !important;
+}

@@ -1,3 +1,5 @@
+use layout.nu whatsapp-launchers
+
 const BASE = path self ../noctalia/config.toml
 
 export def applications [] {
@@ -7,7 +9,7 @@ export def applications [] {
     let pinned = ($overrides | get -o shell.launcher.pinned | default $base.shell.launcher.pinned | each {|id| $id | str replace --regex '\.desktop$' '' })
     let result = (^shadow-apps list | complete)
     if $result.exit_code != 0 { error make {msg: $result.stderr} }
-    $result.stdout | lines | where $it != '' | each {|line|
+    let entries = ($result.stdout | lines | where $it != '' | each {|line|
         let fields = ($line | split row (char tab) | each {|value| $value | decode base64 | decode utf-8 })
         let desktop = $fields.0
         let pin = ($pinned | enumerate | where item == ($desktop | str replace --regex '\.desktop$' '') | get -o index.0 | default 100000)
@@ -17,5 +19,8 @@ export def applications [] {
             kind: application, args: [$desktop], terminal: false, confirm: false,
             icon: $"theme:($fields.3)", keywords: $fields.4, pin: $pin
         }
-    } | sort-by pin label
+    })
+    # Keep one main-profile launcher; native IDs remain available to the taskbar.
+    let duplicates = if 'app:whatsapp-web.desktop' in $entries.id { whatsapp-launchers } else { [] }
+    $entries | where {|entry| $entry.args.0 not-in $duplicates } | sort-by pin label
 }

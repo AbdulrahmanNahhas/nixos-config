@@ -43,6 +43,8 @@ vrr = "always"
 [keybinds]
 # Shell
 "Mod+Ctrl+B" = { action = "spawn shadow layout cycle", repeat = false }
+"Mod+Ctrl+1" = { action = "spawn shadow layout main", repeat = false }
+"Mod+Ctrl+2" = { action = "spawn shadow layout traditional", repeat = false }
 "Mod+Tab" = { action = "overview-toggle", repeat = false }
 "Mod+Space" = { action = "spawn desktop-menu", repeat = false }
 "Mod+D" = { action = "spawn desktop-menu", repeat = false }
@@ -61,7 +63,8 @@ vrr = "always"
 "Mod+B" = { action = "spawn firefox", repeat = false }
 "Mod+V" = { action = "spawn noctalia msg panel-toggle clipboard", repeat = false }
 "Mod+W" = { action = "spawn noctalia msg panel-toggle wallpaper", repeat = false }
-"Mod+Comma" = { action = "spawn noctalia msg panel-toggle settings", repeat = false }
+"Mod+Ctrl+W" = { action = "spawn noctalia msg panel-toggle noctalia/wallhaven:browser", repeat = false }
+"Mod+Comma" = { action = "spawn noctalia msg settings-toggle", repeat = false }
 "Mod+N" = { action = "spawn noctalia msg panel-toggle control-center notifications", repeat = false }
 "Mod+X" = { action = "spawn noctalia msg panel-toggle session", repeat = false }
 "Mod+Shift+Slash" = { action = "cheatsheet-toggle", repeat = false }

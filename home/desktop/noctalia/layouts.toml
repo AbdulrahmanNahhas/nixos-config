@@ -1,6 +1,5 @@
-# Edit bar sizes/widget order here. The shared bar style lives in config.toml.
-# Changes take effect after rebuilding and choosing a layout again.
-# Opacity is controlled separately by: shadow opacity solid|soft|toggle.
+# Shared styles live in config.toml; these presets own layout and placement.
+# Rebuild, then choose a layout again. Opacity: shadow opacity solid|soft|toggle.
 
 [defaults.dock]
 position = "bottom"
@@ -9,96 +8,225 @@ show_running = true
 launcher_position = "none"
 pinned = ["firefox", "dev.zed.Zed", "com.mitchellh.ghostty", "codex-desktop", "org.signal.Signal"]
 
-# GNOME and right share these widget changes over the bottom layout in config.toml.
 [defaults.desktop_widgets.grid]
 cell_size = 24
+visible = false
 
-[defaults.desktop_widgets.widget.desktop-widget-0000000000000004]
+[defaults.widget.clock]
+enabled = true
+tooltip_format = "{:%A, %d %B %Y}"
+
+[defaults.widget.active_window]
+display = "icon_only"
+icon_size = 16
+min_length = 0
+show_empty_label = false
+
+[defaults.widget.launcher]
+custom_image = "/home/aqua/Pictures/NixOS.png"
+custom_image_colorize = true
+scale = 1.0
+
+[defaults.widget.umbriel_companion]
+scale = 1.0
+
+[defaults.widget.taskbar]
+scale = 1.0
+icon_scale = 1.0
+capsule = false
+group_by_workspace = false
+show_running = true
+only_active_workspace = false
+show_active_indicator = true
+show_window_title = false
+minimal = true
+inactive_opacity = 0.65
+pinned_opacity = 0.65
+item_spacing = 8
+
+[main.panel]
+placement = "attached"
+position = "auto"
+
+[main.bar]
+position = "top"
+thickness = 32
+scale = 1.10
+start = ["group:main-app", "workspaces"]
+center = ["nix-monitor", "bar", "umbriel_companion"]  # bar = Mawaqit
+end = ["tray", "notifications", "privacy", "bluetooth", "volume", "network", "battery", "control-center", "session"]
+
+[[main.bar.capsule_group]]
+id = "main-app"
+members = ["launcher", "active_window"]
+enabled = true
+accordion = false
+fill = "surface_container"
+foreground = "on_surface"
+opacity = 0.0
+border_width = 0.0
+padding = 0.0
+radius = 8.0
+widget_spacing = 8
+
+[main.dock]
+enabled = true
+layer = "overlay"
+show_dots = true
+main_axis_padding = 8
+cross_axis_padding = 4
+item_spacing = 8
+margin_edge = 0
+margin_ends = 0
+radius = 20
+radius_top_left = 20
+radius_top_right = 20
+radius_bottom_left = 0
+radius_bottom_right = 0
+shadow = false
+concave_edge_corners = false
+reserve_space = false
+inactive_opacity = 0.65
+magnification = true
+magnification_scale = 1.25
+auto_hide = false
+smart_auto_hide = true
+
+[main.widget.clock]
+enabled = false
+format = "{:%H:%M}"
+
+[main.widget.active_window]
+icon_size = 18
+
+[main.desktop_widgets]
+widget_order = ["desktop-widget-0000000000000002", "desktop-widget-0000000000000004"]
+
+[main.desktop_widgets.widget.desktop-widget-0000000000000002]
+box_height = 64.0
+box_width = 224.0
+cx = 1304.0
+cy = 848.0
+
+[main.desktop_widgets.widget.desktop-widget-0000000000000004]
 box_height = 256.0
 box_width = 160.0
 cx = 96.0
 cy = 754.0
 
-[defaults.desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+[main.desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+layout = "vertical"
 background = true
 background_opacity = 1.0
 background_padding = 10
 background_radius = 15
 
-[bottom.bar]
+[traditional.panel]
+placement = "floating"
+position = "center"
+
+[traditional.bar]
 position = "bottom"
-thickness = 35
-margin_edge = 0
-margin_ends = 0
-margin_opposite_edge = 0
-# Avoid shadow/concave geometry insets on attached edges.
-shadow = false
-contact_shadow = false
-concave_edge_corners = false
+thickness = 50
+scale = 1.15
+concave_edge_corners = true
+padding = 12
+widget_spacing = 10
+radius_top_left = 16
+radius_top_right = 16
+start = ["group:traditional-menu", "taskbar"]
+center = ["notifications"]
+end = ["tray", "privacy", "volume", "network", "battery", "clock", "session"]
 
-[gnome.bar]
-position = "top"
-thickness = 32
-scale = 1.20
-radius = 40
-radius_top_left = 0
-radius_top_right = 0
-radius_bottom_left = 40
-radius_bottom_right = 40
-start = ["launcher", "workspaces", "active_window"]
-center = ["nix-monitor", "bar", "umbriel_companion", "clock"]  # bar = Mawaqit
-end = ["tray", "notifications", "bluetooth", "volume", "network", "battery", "control-center", "session"]
+[[traditional.bar.capsule_group]]
+id = "traditional-menu"
+members = ["launcher", "umbriel_companion"]
+enabled = true
+accordion = true
+fill = "surface_container"
+foreground = "on_surface"
+border = "outline_variant"
+border_width = 1.0
+opacity = 1.0
+padding = 6.0
+radius = 10.0
+widget_spacing = 10
 
-[gnome.dock]
-layer = "overlay"
-show_dots = true
-main_axis_padding = 8
-cross_axis_padding = 2
-item_spacing = 8
-margin_edge = 0
-margin_ends = 0
-radius = 25
-radius_top_left = 25
-radius_top_right = 25
-radius_bottom_left = 25
-radius_bottom_right = 25
-reserve_space = false
-inactive_opacity = 0.50
-magnification = true
-magnification_scale = 1.40
-# Use Smart mode instead of regular auto-hide.
-auto_hide = false
-smart_auto_hide = true
+[traditional.dock]
+enabled = false
 
-[gnome.desktop_widgets.widget.desktop-widget-0000000000000002]
-box_height = 64.0
-box_width = 192.0
-cx = 1328.0
-cy = 866.0
+[traditional.widget.clock]
+format = "{:%H:%M}"
 
-[right.bar]
-# Match the bottom preset: attached body without shadow/concave insets.
-shadow = false
-contact_shadow = false
-concave_edge_corners = false
-position = "right"
-thickness = 35
-scale = 1.20
-margin_edge = 0
-margin_ends = 0
-margin_opposite_edge = 0
-radius = 0
-radius_top_left = 0
-radius_bottom_left = 0
-radius_top_right = 0
-radius_bottom_right = 0
-reserve_space = true
-start = ["launcher", "workspaces", "umbriel_companion"]
-center = ["clock"]
-end = ["notifications", "volume", "network", "battery", "control-center", "session"]
+# Taskbar icons are sized independently of the bar height (about 33px here).
+[traditional.widget.taskbar]
+icon_scale = 1.8
+item_spacing = 10
+pinned = ["firefox", "com.system76.CosmicFiles", "dev.zed.Zed", "com.mitchellh.ghostty", "codex-desktop", "whatsapp-web", "org.signal.Signal"]
 
-[right.desktop_widgets.widget.desktop-widget-0000000000000002]
-box_height = 72.0
+[traditional.widget.launcher]
+scale = 1.4
+
+[traditional.widget.umbriel_companion]
+scale = 1.4
+
+[traditional.desktop_widgets]
+widget_order = ["desktop-weather", "desktop-calendar", "desktop-widget-0000000000000004"]
+
+# Centers use the internal display's 1440×900 logical-pixel reference size.
+# Noctalia remaps these coordinates when the output dimensions change.
+[traditional.desktop_widgets.widget.desktop-weather]
+type = "weather"
+output = "eDP-1"
+placement_width = 1440.0
+placement_height = 900.0
 box_width = 240.0
+box_height = 184.0
 cx = 136.0
-cy = 42.0
+cy = 292.0
+rotation = 0.0
+
+[traditional.desktop_widgets.widget.desktop-weather.settings]
+show_forecast = true
+forecast_days = 6
+background = true
+background_color = "surface"
+background_opacity = 1.0
+background_radius = 8
+background_padding = 12
+shadow = false
+
+[traditional.desktop_widgets.widget.desktop-calendar]
+type = "calendar"
+output = "eDP-1"
+placement_width = 1440.0
+placement_height = 900.0
+box_width = 240.0
+box_height = 268.0
+cx = 136.0
+cy = 534.0
+rotation = 0.0
+
+[traditional.desktop_widgets.widget.desktop-calendar.settings]
+show_events = false
+show_week_numbers = true
+background = true
+background_color = "surface"
+background_opacity = 1.0
+background_radius = 8
+background_padding = 12
+
+[traditional.desktop_widgets.widget.desktop-widget-0000000000000004]
+box_height = 248.0
+box_width = 176.0
+cx = 1336.0
+cy = 420.0
+
+[traditional.desktop_widgets.widget.desktop-widget-0000000000000004.settings]
+layout = "vertical"
+background = true
+album_art_background = false
+background_opacity = 1.0
+background_padding = 12
+background_radius = 8
+shadow = false

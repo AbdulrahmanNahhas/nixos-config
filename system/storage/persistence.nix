@@ -185,6 +185,8 @@ in
             directory = ".config/mozilla"; # not .mozilla
             mode = "0700";
           } # Firefox history, bookmarks, extensions, sessions, and cookies
+          # Native Firefox Web App desktop IDs; icons stay inside the profiles.
+          ".local/share/applications"
         ]
         # Flatpak Application Data
         # Derive app data from the catalog; theme extensions have no app data.

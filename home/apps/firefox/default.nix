@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   # Shared browser settings
@@ -70,7 +70,7 @@ in
         UrlbarInterventions = false;
       };
 
-      # Force-install uBlock Origin in both profiles.
+      # Force-install uBlock Origin in every profile.
       ExtensionSettings = {
         "uBlock0@raymondhill.net" = {
           installation_mode = "force_installed";
@@ -81,9 +81,26 @@ in
     };
   };
 
-  # Shared settings, merged into both profiles.
-  programs.firefox.profiles.main.settings = commonSettings;
+  # Shared settings, merged into every profile.
+  programs.firefox.profiles.main.settings = commonSettings // {
+    "browser.taskbarTabs.enabled" = true;
+  };
   programs.firefox.profiles.kitsune.settings = commonSettings;
+
+  # Bootstrap only: Firefox owns the eventual native desktop ID and icon.
+  xdg.desktopEntries.whatsapp-web = {
+    name = "WhatsApp";
+    genericName = "WhatsApp Web App";
+    comment = "WhatsApp Web using the main Firefox profile";
+    exec = "${config.programs.firefox.finalPackage}/bin/firefox -P main --taskbar-tab whatsapp --new-window https://web.whatsapp.com --container 0";
+    icon = "whatsapp";
+    terminal = false;
+    startupNotify = true;
+    categories = [
+      "Network"
+      "InstantMessaging"
+    ];
+  };
 
   # Dedicated Kitsune launcher.
   xdg.desktopEntries.firefox-kitsune = {
