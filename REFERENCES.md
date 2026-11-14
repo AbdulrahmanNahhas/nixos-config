@@ -68,16 +68,43 @@ Ghostty's Noctalia theme; the community hook that rewrites `starship.toml` is di
 
 ### Document tools
 
-| Tool                                                       | Purpose                                     | Technology / interface | Management / status                                              | Notes                                                                            |
-| ---------------------------------------------------------- | ------------------------------------------- | ---------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [PDF Arranger](https://github.com/pdfarranger/pdfarranger) | Merge, split, reorder, rotate and crop PDFs | Python; GTK3; pikepdf  | [Flatpak](system/desktop/flatpak/apps.nix); selected PDF utility | Papers remains the PDF viewer and default; no standalone PDF CLI tools selected. |
+| Tool                                              | Purpose                                       | Technology / interface  | Management / status                                                               | Notes                                                                                      |
+| ------------------------------------------------- | --------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| [PdfCraft](https://github.com/storytold/pdfcraft) | PDF reading, annotation and page organization | Rust; egui/eframe; wgpu | [Flatpak](system/desktop/flatpak/apps.nix); declared trial, replaces PDF Arranger | Papers remains the viewer and default; editing and portal workflows await host acceptance. |
 
 Foliate is the selected ebook reader and EPUB/CBZ default, managed through the
 [Flatpak catalog](system/desktop/flatpak/apps.nix). It uses JavaScript,
 GTK4/libadwaita and WebKitGTK. Readest is no longer declared; Papers remains the
 PDF and CBR default. Foliate does not advertise CBR support. [Foliate upstream](https://github.com/johnfactotum/foliate).
 
-LibreOffice is no longer declared; choosing another office suite is deferred.
+### ArtCraft applications
+
+[Craft configuration](system/desktop/flatpak/craft.nix) owns the app declarations,
+shared sandbox settings and official remote.
+
+| Tool                                                  | Purpose                            | Technology / interface  | Management / status                                                | Notes                                                                                                     |
+| ----------------------------------------------------- | ---------------------------------- | ----------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| [WordCraft](https://github.com/storytold/wordcraft)   | Word processing and DOCX documents | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Alpha; verify document round trips. LibreOffice was removed and is not preferred by the user.             |
+| [GridCraft](https://github.com/storytold/gridcraft)   | Spreadsheets and XLSX workbooks    | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Alpha; independently verify important calculations and file fidelity.                                     |
+| [DeckCraft](https://github.com/storytold/deckcraft)   | Slide presentations                | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Alpha; test the deck and external display before presenting. Audio access enabled.                        |
+| [PhotoCraft](https://github.com/storytold/photocraft) | Layered image editing              | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Early alpha; Loupe remains the image default. GIMP is not preferred by the user.                          |
+| [FilmCraft](https://github.com/storytold/filmcraft)   | Timeline video editing             | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Alpha; audio and Videos-folder access for projects and referenced media. Cine and Video Trimmer retained. |
+| [CADCraft](https://github.com/storytold/cadcraft)     | CAD drafting                       | Rust; egui/eframe; wgpu | [Flatpak catalog](system/desktop/flatpak/apps.nix); declared trial | Pre-alpha; edit copies because unsupported drawing content may be lost on save.                           |
+
+These six apps and PdfCraft use the [official ArtCraft OCI remote](https://getartcraft.com/linux),
+with its descriptor and trust key pinned in the [remote declaration](system/desktop/flatpak/craft.nix).
+The existing declarative service manages installation and daily updates, with private
+D-Bus sessions for headless OCI authentication. No launcher or parallel user
+installation is selected. Upstream's `stable` branch still contains
+alpha applications. App profiles are persisted through the catalog.
+
+All seven request native Wayland, allow GPU rendering, deny network and host-command
+execution through `org.freedesktop.Flatpak`, and inherit the existing private-path,
+keyring and device restrictions. File access uses portals except FilmCraft's Videos
+grant; direct CUPS and Avahi access are denied, so printing may be limited. File
+picking, saving, reopening projects and live Wayland behavior need host acceptance.
+Keep project media in persistent storage; profile persistence does not save external
+work automatically. No adoption or successful host verification is implied.
 
 ## Release watches
 

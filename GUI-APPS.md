@@ -24,6 +24,22 @@ and background services are excluded. Trials and defaults are marked below.
 | [COSMIC Viewer](https://github.com/pop-os/cosmic-viewer)                         | Image viewer / editor | Rust; libcosmic/Iced        | [Nix packages](home/packages.nix); trial, Loupe remains default           |
 | [COSMIC file-picker portal](https://github.com/pop-os/xdg-desktop-portal-cosmic) | Desktop integration   | Rust; libcosmic; XDG portal | [System integration](system/desktop/integration.nix); FileChooser backend |
 
+## egui / eframe — Rust
+
+| Application                                           | Category             | Technology                             | Configuration / status                                                                                 |
+| ----------------------------------------------------- | -------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [WordCraft](https://github.com/storytold/wordcraft)   | Word processor       | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); alpha trial                                                |
+| [PhotoCraft](https://github.com/storytold/photocraft) | Layered image editor | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); early-alpha trial; Loupe remains default                   |
+| [FilmCraft](https://github.com/storytold/filmcraft)   | Video editor         | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); alpha trial                                                |
+| [PdfCraft](https://github.com/storytold/pdfcraft)     | PDF workbench        | Rust; egui/eframe; wgpu, OpenGL option | [Flatpak](system/desktop/flatpak/apps.nix); alpha trial; replaces PDF Arranger, Papers remains default |
+| [DeckCraft](https://github.com/storytold/deckcraft)   | Presentations        | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); alpha trial                                                |
+| [CADCraft](https://github.com/storytold/cadcraft)     | CAD drafting         | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); pre-alpha trial                                            |
+| [GridCraft](https://github.com/storytold/gridcraft)   | Spreadsheets         | Rust; egui/eframe; wgpu                | [Flatpak](system/desktop/flatpak/apps.nix); alpha trial                                                |
+
+[Craft configuration](system/desktop/flatpak/craft.nix) groups these apps, their
+shared sandbox and official OCI remote. Restricted permissions and native Wayland requested.
+See [inventory notes](REFERENCES.md#artcraft-applications) for limitations and acceptance status.
+
 ## Zig
 
 | Application                     | Category | Technology                                     | Configuration / status                                              |
@@ -67,10 +83,9 @@ and background services are excluded. Trials and defaults are marked below.
 
 ## GTK3
 
-| Application                                                | Category        | Technology            | Configuration / status                                           |
-| ---------------------------------------------------------- | --------------- | --------------------- | ---------------------------------------------------------------- |
-| [GNOME Disks](https://apps.gnome.org/DiskUtility/)         | Disk management | C; GTK3               | [Nix packages](home/packages.nix)                                |
-| [PDF Arranger](https://github.com/pdfarranger/pdfarranger) | PDF utilities   | Python; GTK3; pikepdf | [Flatpak](system/desktop/flatpak/apps.nix); selected PDF utility |
+| Application                                        | Category        | Technology | Configuration / status            |
+| -------------------------------------------------- | --------------- | ---------- | --------------------------------- |
+| [GNOME Disks](https://apps.gnome.org/DiskUtility/) | Disk management | C; GTK3    | [Nix packages](home/packages.nix) |
 
 ## Electron
 

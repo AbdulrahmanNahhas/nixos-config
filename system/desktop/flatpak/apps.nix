@@ -1,8 +1,8 @@
 # Installation, permissions and profile persistence share this catalog.
 (import ../../../gaming/flatpak-apps.nix)
+// (import ./craft.nix).apps
 // {
   "com.github.ADBeveridge.Raider" = { };
-  "com.github.jeromerobert.pdfarranger" = { };
   "dev.geopjr.Tuba" = { };
   "io.nahhasio.Linux" = {
     origin = "nahhasio-alpha";
