@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   home.packages = [
     pkgs.gpu-screen-recorder
@@ -10,9 +15,9 @@
     systemd.enable = true;
   };
 
-  # The COSMIC community template generates its theme through a Python hook.
+  # jq for Sonora's theme hook.
   systemd.user.services.noctalia.Service.Environment = [
-    "PATH=${pkgs.python3}/bin:${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
+    "PATH=${lib.makeBinPath [ pkgs.jq ]}:${config.home.profileDirectory}/bin:/run/wrappers/bin:/run/current-system/sw/bin"
   ];
 
   # Read the runtime configuration rendered by sops-nix.

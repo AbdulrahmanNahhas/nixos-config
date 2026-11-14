@@ -41,7 +41,6 @@ scale = 2.0
 vrr = "always"
 
 [keybinds]
-
 # Shell
 "Mod+Ctrl+B" = { action = "spawn shadow layout cycle", repeat = false }
 "Mod+Tab" = { action = "overview-toggle", repeat = false }
@@ -196,9 +195,10 @@ vrr = "always"
 opacity = 1.0
 blur = true
 blur_optimized = true
+
 [window_rule.match]
 app_id = '^com\.mitchellh\.ghostty$'
 
 # Optional until Noctalia generates the theme.
 [include.optional]
-files = ["~/.config/umbriel/noctalia.toml"]
+files = ["noctalia.toml"]

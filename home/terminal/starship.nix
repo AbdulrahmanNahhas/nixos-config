@@ -6,6 +6,7 @@ _: {
       add_newline = false;
       palette = "moonlit";
       format = "$username$hostname$directory($git_branch$git_commit$git_status$git_state[](fg:git_bg) )$nix_shell$container$fill$rust$nodejs$bun$deno$python$java$golang$package$cmd_duration$jobs$sudo$status$time$line_break$character";
+      # ANSI colors already follow Ghostty/Noctalia; do not rewrite this Nix-owned file.
       palettes = {
         moonlit = {
           # Terminal / Ghostty ANSI colors

@@ -5,7 +5,7 @@
   fonts.fontDir.enable = true;
   environment.pathsToLink = [ "/share/icons" ];
   environment.systemPackages = with pkgs; [
-    morewaita-icon-theme
+    papirus-icon-theme
     adwaita-icon-theme
     hicolor-icon-theme
     bibata-cursors

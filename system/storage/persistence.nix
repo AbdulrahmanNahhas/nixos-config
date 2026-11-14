@@ -246,6 +246,10 @@ in
           ".local/share/evolution"
           ".config/evolution"
 
+          # COSMIC application preferences and recent state.
+          ".config/cosmic"
+          ".local/state/cosmic"
+
           # Desktop Session State
           {
             # Noctalia runtime state and setup wizard flags
@@ -273,6 +277,16 @@ in
           # Audio Per-App State
           ".local/state/wireplumber" # Audio volumes and default device selections
           ".local/state/pipewire"
+
+          # Sonora settings, accounts and library state.
+          {
+            directory = ".config/sonora";
+            mode = "0700";
+          }
+          {
+            directory = ".local/share/sonora";
+            mode = "0700";
+          }
 
           # Obsidian
           ".config/obsidian" # App preferences. Note: Vaults live in ~/Documents
@@ -367,12 +381,6 @@ in
       user = username;
       group = "users";
       mode = "0755";
-    };
-    # Repair existing LibreOffice data ownership.
-    "/home/${username}/.var/app/org.libreoffice.LibreOffice".Z = {
-      user = username;
-      group = "users";
-      mode = "0700";
     };
 
     # Isolated secret runtime directory used by explicit out-of-store home configurations.

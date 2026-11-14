@@ -1,8 +1,8 @@
 { config, lib, ... }:
 let
-  # Set MIME defaults; desktop/apps.nix installs the GNOME handlers.
+  # Packages and Flatpaks are declared by their owning app configurations.
   handlers = {
-    "brave-origin.desktop" = [
+    "firefox.desktop" = [
       "text/html"
       "application/xhtml+xml"
       "application/x-extension-htm"
@@ -13,26 +13,15 @@ let
       "x-scheme-handler/http"
       "x-scheme-handler/https"
       "x-scheme-handler/about"
-      "x-scheme-handler/chrome"
-      "x-scheme-handler/unknown"
     ];
 
-    "org.gnome.Nautilus.desktop" = [ "inode/directory" ];
+    "com.system76.CosmicFiles.desktop" = [ "inode/directory" ];
 
-    # Flatpak archive manager; Nautilus would extract instead of browsing.
-    "dev.geopjr.Archives.desktop" = [
-      "application/zip"
-      "application/x-7z-compressed"
-      "application/x-tar"
-      "application/x-compressed-tar"
-      "application/x-bzip-compressed-tar"
-      "application/x-xz-compressed-tar"
-      "application/x-rar"
-    ];
-
-    "org.gnome.TextEditor.desktop" = [
+    "com.system76.CosmicEdit.desktop" = [
       "text/plain"
       "text/markdown"
+      "application/json"
+      "application/x-zerosize"
     ];
 
     "org.gnome.Loupe.desktop" = [
@@ -77,6 +66,12 @@ let
       "audio/webm"
     ];
 
+    "com.github.johnfactotum.Foliate.desktop" = [
+      "application/epub+zip"
+      "application/vnd.comicbook+zip"
+      "application/x-cbz"
+    ];
+
     "org.gnome.Papers.desktop" = [
       "application/pdf"
       "application/x-bzpdf"
@@ -86,20 +81,7 @@ let
       "application/postscript"
       "application/x-djvu"
       "image/vnd.djvu"
-      "application/x-cbz"
       "application/x-cbr"
-    ];
-
-    "org.libreoffice.LibreOffice.desktop" = [
-      "application/msword"
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      "application/vnd.ms-excel"
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      "application/vnd.ms-powerpoint"
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-      "application/vnd.oasis.opendocument.text"
-      "application/vnd.oasis.opendocument.spreadsheet"
-      "application/vnd.oasis.opendocument.presentation"
     ];
   };
 in

@@ -10,6 +10,7 @@
     ./home/desktop/noctalia
     ./home/desktop/menu
     ./home/desktop/gtk.nix
+
     ./home/desktop/xdg.nix
     ./home/desktop/dconf.nix
     ./home/desktop/bookmarks.nix
@@ -29,6 +30,7 @@
     ./home/apps/zed
     ./home/apps/helix
     ./home/apps/delta.nix
+    ./home/apps/sonora.nix
     ./home/apps/ai
 
     ./gaming/home.nix

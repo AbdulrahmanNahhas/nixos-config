@@ -1,11 +1,8 @@
 # Installation, permissions and profile persistence share this catalog.
 (import ../../../gaming/flatpak-apps.nix)
 // {
-  "com.bilingify.readest".overrides.Context.filesystems = [
-    "xdg-documents"
-    "xdg-download"
-  ];
   "com.github.ADBeveridge.Raider" = { };
+  "com.github.jeromerobert.pdfarranger" = { };
   "dev.geopjr.Tuba" = { };
   "io.nahhasio.Linux" = {
     origin = "nahhasio-alpha";
@@ -45,23 +42,12 @@
     ];
     shared = [ "!network" ];
   };
-  "dev.geopjr.Archives" = { };
-  "org.libreoffice.LibreOffice".overrides = {
-    # VCL uses GTK3 here; GTK4 applications follow portal appearance settings.
-    Environment.GTK_THEME = "adw-gtk3-dark";
-    Context.filesystems = [
-      "xdg-documents"
-      "xdg-download"
-      "xdg-config/fontconfig:ro"
-      "xdg-run/gvfsd"
-      "~/.local/state/noctalia:ro"
-    ];
-  };
+
   "org.gnome.World.Secrets" = { };
   "com.github.johnfactotum.Foliate".overrides.Context.filesystems = [
     "xdg-run/speech-dispatcher:ro"
   ];
-  "com.github.jeromerobert.pdfarranger" = { };
+
   "org.gnome.gitlab.YaLTeR.VideoTrimmer" = { };
   "org.signal.Signal" = {
     origin = "flathub";

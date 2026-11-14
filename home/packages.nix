@@ -20,7 +20,7 @@
     # Archives
 
     ouch # Compress/extract almost any archive
-    zip # Used by noctalia's libreoffice theme template to build its .oxt
+    zip
     unzip
 
     # Networking
@@ -53,10 +53,12 @@
     bubblewrap
 
     # Desktop utilities
-    nautilus
+    cosmic-files
+    cosmic-edit
+    cosmic-monitor
+    cosmic-viewer # Review alongside Loupe before changing the image default
     loupe
     papers
-    resources
     gnome-disk-utility
     polychromatic
 
@@ -66,6 +68,14 @@
     obsidian
     mullvad-browser
   ];
+
+  # Override the package's XDG autostart entry; keep manual device control available.
+  xdg.configFile."autostart/polychromatic-autostart.desktop".text = ''
+    [Desktop Entry]
+    Type=Application
+    Name=Polychromatic Autostart
+    Hidden=true
+  '';
 
   home.sessionVariables.FLAKE_CHECKER_NO_TELEMETRY = "true";
 }

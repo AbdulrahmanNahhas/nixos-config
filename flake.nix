@@ -38,6 +38,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Keep upstream's dependency pins to match its prebuilt binary cache.
+    sonora.url = "github:sonorahq/sonora/stable";
+
     delta = {
       url = "github:zed-industries/delta-nix";
       inputs.nixpkgs.follows = "nixpkgs";
