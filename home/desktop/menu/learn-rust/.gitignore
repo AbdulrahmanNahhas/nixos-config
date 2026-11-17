@@ -1,0 +1,5 @@
+/target/
+/.quest-progress
+/.quest-progress.tmp
+/.quest-progress.lock
+/.cargo-home/

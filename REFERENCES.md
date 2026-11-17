@@ -136,6 +136,7 @@ work automatically. No adoption or successful host verification is implied.
 
 | Need                                 | Start here                                                                                                                                                                                         |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Learn Rust through this menu         | [Menu Quest](home/desktop/menu/learn-rust/README.md) (Rust CLI exercises; separate Nix shell, no production replacement) · [Rust Book](https://doc.rust-lang.org/book/)                            |
 | Learn Nix                            | [nix.dev](https://nix.dev/) · [Nix language tutorial](https://nix.dev/tutorials/nix-language) · [Nix Pills](https://nixos.org/guides/nix-pills/)                                                   |
 | Understand modules and options       | [Module-system tutorial](https://nix.dev/tutorials/module-system/) · [NixOS manual](https://nixos.org/manual/nixos/stable/) · [Home Manager manual](https://nix-community.github.io/home-manager/) |
 | Find packages, options and functions | [NixOS Search](https://search.nixos.org/) · [MyNixOS](https://mynixos.com/) · [Noogle](https://noogle.dev/)                                                                                        |
