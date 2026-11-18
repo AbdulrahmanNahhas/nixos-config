@@ -84,41 +84,42 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 animations {
     workspace-switch {
-        spring damping-ratio=0.66 stiffness=420 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1200 epsilon=0.001
     }
 
     horizontal-view-movement {
-        spring damping-ratio=0.74 stiffness=390 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1100 epsilon=0.001
     }
 
     window-movement {
-        spring damping-ratio=0.60 stiffness=350 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1100 epsilon=0.001
     }
 
     window-resize {
-        spring damping-ratio=0.80 stiffness=450 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1200 epsilon=0.001
     }
 
-    // Low damping intentionally adds overshoot.
     window-open {
-        spring damping-ratio=0.32 stiffness=1300 epsilon=0.0001
+        duration-ms 120
+        curve "ease-out-expo"
     }
 
     window-close {
-        spring damping-ratio=0.38 stiffness=1500 epsilon=0.0001
+        duration-ms 90
+        curve "ease-out-quad"
     }
 
     overview-open-close {
-        spring damping-ratio=0.72 stiffness=580 epsilon=0.0001
+        spring damping-ratio=1.0 stiffness=1200 epsilon=0.001
     }
 
     screenshot-ui-open {
-        duration-ms 170
+        duration-ms 110
         curve "ease-out-quad"
     }
 
     config-notification-open-close {
-        spring damping-ratio=0.70 stiffness=680 epsilon=0.001
+        spring damping-ratio=1.0 stiffness=1200 epsilon=0.001
     }
 }
 
