@@ -52,6 +52,10 @@
     # Zed's agent requires a non-setuid bwrap on PATH for OS sandboxing.
     bubblewrap
 
+    # Virtual machines
+    vm-curator
+    qemu
+
     # Desktop utilities
     cosmic-files
     cosmic-edit

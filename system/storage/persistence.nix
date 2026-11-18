@@ -195,6 +195,12 @@ in
           mode = "0700";
         }) (builtins.attrNames (lib.filterAttrs (_: app: app.persist or true) flatpakApps))
         ++ [
+          # VM library storage is selected separately in the application.
+          {
+            directory = ".config/vm-curator";
+            mode = "0700";
+          }
+
           # Editor / IDE State
           ".local/share/zed"
           ".config/zed"
